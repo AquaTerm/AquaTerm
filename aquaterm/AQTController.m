@@ -75,8 +75,6 @@ extern void aqtLineDrawingTest(id sender);
 - (void)setWindowPos:(NSWindow *)plotWindow
 {
    cascadingPoint = [plotWindow cascadeTopLeftFromPoint:cascadingPoint];
-   NSLog(@"cascadingPoint = %@", NSStringFromPoint(cascadingPoint));
-
 }
 
 #pragma mark === AQTConnectionProtocol ===

@@ -220,7 +220,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-DAQT_APP";
+				OTHER_CFLAGS = "-DAQT_APP -DTIMING";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AquaTerm;
 				SECTORDER_FLAGS = "";
@@ -552,6 +552,13 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
+		CB92C704056404CC00D208BA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = NSDebug.h;
+			path = /System/Library/Frameworks/Foundation.framework/Versions/C/Headers/NSDebug.h;
+			refType = 0;
+		};
 		CBA3D83E053D784200D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -585,6 +592,7 @@ http://aquaterm.sourceforge.net</string>
 		};
 		CBC8D54B04F2258500EBD329 = {
 			children = (
+				CB92C704056404CC00D208BA,
 				CBC8D54C04F225E200EBD329,
 			);
 			isa = PBXGroup;

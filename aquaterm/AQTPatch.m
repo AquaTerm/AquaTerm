@@ -14,7 +14,7 @@
 {
   if (self = [super initWithPoints:points pointCount:pc]) // color:aColor])
   {
-    [self setLinewidth:0.0];
+    [self setLinewidth:0.5];
   }
   return self;
 }

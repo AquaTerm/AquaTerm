@@ -159,7 +159,6 @@
 {
    if (_client == aClient)
    {
-      // NSLog(@"Invalidating client");
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];
@@ -201,7 +200,6 @@
       NS_DURING
          [_client processEvent:event];
       NS_HANDLER
-         // NSLog([localException name]);
          if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
             [self invalidateClient:_client]; // invalidate client
          else

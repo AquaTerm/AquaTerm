@@ -34,7 +34,6 @@
          if ([_server conformsToProtocol:@protocol(AQTConnectionProtocol)])
          {
             int a,b,c;
-            // NSLog(@"Conforming!");
             [_server retain];
             [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
             [_server getServerVersionMajor:&a minor:&b rev:&c];
@@ -83,9 +82,6 @@
    else
    {
       NSLog(@"Server error: %@", msg);   
-/*
-      NSLog(@"Server error, no handler installed\nTrying to reconnect");
-*/
    }
 }
 

@@ -83,12 +83,6 @@
 {
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
-#ifdef TIMING
-   static float totalTime = 0.0;
-   float thisTime;
-   NSDate *startTime = [NSDate date];
-#endif
-   NSRect debugRect;
 
    // Model object is responsible for background...
    [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
@@ -97,22 +91,7 @@
    while ((graphic = [enumerator nextObject]))
    {
       [graphic renderInRect:dirtyRect];
-#ifdef DEBUG_BOUNDS
-      [[NSColor greenColor] set];
-      debugRect = [graphic bounds];
-      [NSBezierPath strokeRect:debugRect];
-#endif
    }
-#ifdef DEBUG_BOUNDS
-   [[NSColor redColor] set];
-   debugRect = [self bounds];
-   [NSBezierPath strokeRect:debugRect];
-#endif
-#ifdef TIMING
-   thisTime = -[startTime timeIntervalSinceNow];
-   totalTime += thisTime;
-   NSLog(@"Render time: %f for %d objects. Total: %f", thisTime, [modelObjects count], totalTime);
-#endif
 }
 @end
 
@@ -147,36 +126,37 @@
    // Create glyphs and convert to path
    //
    [tmpPath moveToPoint:pos];
+
    for(i=0; i<strLen; i++)
    {
-      // FIXME: Honor attributes here (NSSuperscriptAttributeName)
       NSGlyph theGlyph;
       NSSize offset;
       NSDictionary *attrDict = [string attributesAtIndex:i effectiveRange:nil];
       // underlining
 
- if(underlineState == NO)
+      if(underlineState == NO)
       {
-        if ([attrDict valueForKey:NSUnderlineStyleAttributeName])
-        {
-          leftUnderlineEdge = pos.x;
-          underlineState = YES;
-        }
+         if ([attrDict valueForKey:NSUnderlineStyleAttributeName])
+         {
+            leftUnderlineEdge = pos.x;
+            underlineState = YES;
+         }
       }
       else
       {
-        if (![attrDict valueForKey:NSUnderlineStyleAttributeName])
-        {
-          [tmpPath appendBezierPathWithRect:NSMakeRect(leftUnderlineEdge, -1.0, pos.x - leftUnderlineEdge, 0.5)];
-          underlineState = NO;
-          [tmpPath moveToPoint:pos];
-        }
+         if (![attrDict valueForKey:NSUnderlineStyleAttributeName])
+         {
+            [tmpPath appendBezierPathWithRect:NSMakeRect(leftUnderlineEdge, -1.0, pos.x - leftUnderlineEdge, 0.5)];
+            underlineState = NO;
+            [tmpPath moveToPoint:pos];
+         }
       }
       
       // subscript
       newSubscriptState = [[attrDict valueForKey:NSSuperscriptAttributeName] intValue];
       newSubscriptState = newSubscriptState>1?1:newSubscriptState;
       newSubscriptState = newSubscriptState<-1?-1:newSubscriptState; 
+      // FIXME: this is way too ugly... 
       switch (subscriptState)
       {
          case 0:
@@ -302,7 +282,7 @@
             }
             break;
          default:
-            NSLog(@"Only -1, 0, and 1 allowed");
+            NSLog(@"Subscript parameter error, only -1, 0, and 1 allowed");
             break;
       }
       subscriptState = newSubscriptState;
@@ -507,10 +487,6 @@
    int i;
    int  objectCount = [modelObjects count];
 
-   NSLog(@"removeObjectsInRect");
-#if 0
-   NSDate *startTime=  [NSDate date];
-#endif
    targetRect = NSInsetRect(targetRect, -0.5, -0.5); // Try to be smart...
 
    if(objectCount == 0)
@@ -541,10 +517,6 @@
       }
    }
    [self setBounds:newBounds];
-#if 0
-   NSLog(@"Time taken: %f", -[startTime timeIntervalSinceNow]);
-#endif
 }
-
 @end
 

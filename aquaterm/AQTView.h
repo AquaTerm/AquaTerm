@@ -15,6 +15,7 @@
   AQTModel *model;
   BOOL _isProcessingEvents; /*" Holds state of mouse input."*/
   NSCursor *crosshairCursor;  /*" Holds an alternate cursor for use with mouse input."*/
+  BOOL _enableTiming;
 }
 - (void)setModel:(AQTModel *)newModel;
 - (AQTModel *)model;

@@ -18,6 +18,13 @@
    crosshairCursor = [[NSCursor alloc] initWithImage:curImg hotSpot:NSMakePoint(7,7)];
    [curImg release];
    [self setIsProcessingEvents:NO];
+#ifdef TIMING
+   if (getenv("AQUATERM_REPORT_TIMING") != (char *)NULL)
+   {
+      _enableTiming = YES;
+   }
+#endif
+   
 }
 
 -(void)dealloc
@@ -58,7 +65,6 @@
 
 - (void)setIsProcessingEvents:(BOOL)flag
 {
-   // NSLog(@"%@ acceptEvents=%@", [model title], flag?@"YES":@"NO");
    _isProcessingEvents = flag;
    [[self window] invalidateCursorRectsForView:self];
 }
@@ -109,13 +115,9 @@
 {
    if ([self isProcessingEvents])
    {
-   point = [self convertPoint:point fromView:nil];
-#ifdef DEBUG_BOUNDS
-      NSLog(@"viewPoint: %@ ---> canvasPoint: %@", NSStringFromPoint(point),
-            NSStringFromPoint([self convertPointToCanvasCoordinates:point]));
-#endif
+      point = [self convertPoint:point fromView:nil];
       point = [self convertPointToCanvasCoordinates:point];
-   [[[self window] delegate] processEvent:[NSString stringWithFormat:@"1:%@:%d", NSStringFromPoint(point), button]];
+      [[[self window] delegate] processEvent:[NSString stringWithFormat:@"1:%@:%d", NSStringFromPoint(point), button]];
    }
 }
 
@@ -127,12 +129,6 @@
 
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
-#ifdef DEBUG_BOUNDS
-   NSLog(@"viewFrame: %@ ---> canvasFrame: %@", NSStringFromRect([self bounds]),
-         NSStringFromRect([self convertRectToCanvasCoordinates:[self bounds]]));
-   NSLog(@"canvasFrame: %@ ---> viewFrame: %@", NSStringFromRect(NSMakeRect(0,0,[model canvasSize].width, [model canvasSize].height)),
-         NSStringFromRect([self convertRectToViewCoordinates:NSMakeRect(0,0,[model canvasSize].width, [model canvasSize].height)]));
-#endif
    [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:2];
 }   
 
@@ -146,7 +142,6 @@
       NSPoint pos = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
       NSRect viewBounds = [self bounds];
       char aKey = [[theEvent characters] UTF8String][0];;
-      // NSLog([theEvent characters]);
       if (!NSPointInRect(pos, viewBounds))
       {
          // Just crop it to be inside [self bounds];
@@ -171,7 +166,12 @@
    NSRect dirtyCanvasRect;
    NSAffineTransform *transform = [NSAffineTransform transform];
 
-
+#ifdef TIMING
+   static float totalTime = 0.0;
+   float thisTime;
+   NSDate *startTime;
+#endif
+   
    [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone]; // FIXME: user prefs
    [[NSGraphicsContext currentContext] setShouldAntialias:YES]; // FIXME: user prefs
    NSRectClip(dirtyRect);
@@ -189,9 +189,22 @@
    [transform invert];
    dirtyCanvasRect.origin = [transform transformPoint:dirtyRect.origin];
    dirtyCanvasRect.size = [transform transformSize:dirtyRect.size];
-
-   [model renderInRect:dirtyCanvasRect]; // <--- expects aRect in canvas coords, _not_ view coords
-
+#ifdef TIMING
+   if (_enableTiming)
+   {
+      startTime = [NSDate date];
+   }
+   [model renderInRect:dirtyCanvasRect]; 
+   if (_enableTiming)
+   {
+      thisTime = -[startTime timeIntervalSinceNow];
+      totalTime += thisTime;
+      NSLog(@"Render time: %f for %d objects. Total: %f", thisTime, [[model modelObjects] count], totalTime);
+   }
+#else
+   [model renderInRect:dirtyCanvasRect]; // expects aRect in canvas coords, _not_ view coords
+#endif
+   
 #ifdef DEBUG_BOUNDS
    NSLog(@"dirtyRect: %@", NSStringFromRect(dirtyRect));
    NSLog(@"dirtyCanvasRect: %@", NSStringFromRect(dirtyCanvasRect));
