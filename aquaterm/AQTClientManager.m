@@ -135,15 +135,19 @@
 - (BOOL)launchServer
 {
    NSURL *appURL;
-
+   OSStatus status;
+   
    if (getenv("AQUATERM_PATH") == (char *)NULL) {
-      // No, search for it in standard locations
+      // No, search for it based on creator code, choose latest version
       NSURL *tmpURL;
-      appURL = (LSFindApplicationForInfo(NULL, NULL, (CFStringRef)@"AquaTerm.app", NULL, (CFURLRef *)&tmpURL) == noErr)?tmpURL:nil;
+      status = LSFindApplicationForInfo('AqTS', NULL, NULL, NULL, (CFURLRef *)&tmpURL);
+      appURL = (status == noErr)?tmpURL:nil;
+      [appURL autorelease];
    } else {
       appURL = [NSURL fileURLWithPath:[NSString stringWithCString:getenv("AQUATERM_PATH")]];
    }
-   return (LSOpenCFURLRef((CFURLRef)appURL, NULL) == noErr);
+   status = LSOpenCFURLRef((CFURLRef)appURL, NULL);
+   return (status == noErr);
 }
 
 - (void)terminateConnection
