@@ -177,6 +177,11 @@ void aqtGetColor(float *r, float *g, float *b)
    [_adapter getColorRed:r green:g blue:b];
 }
 
+void aqtGetBackgroundColor(float *r, float *g, float *b)
+{
+   [_adapter getBackgroundColorRed:r green:g blue:b];
+}
+
 /*" Text handling "*/
  void aqtSetFontname(const char *newFontname)
 {
