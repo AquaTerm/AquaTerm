@@ -1,0 +1,7 @@
+This is a simple example showing how to use matwrap (http://lnc.usc.edu/~holt/matwrap) to generate an octave/AQT binding from the C example.
+matwrap is assumed to be installed in /usr/local/bin/, you have to change TOP if you installed it elsewhere.
+The makefile also assumes that it is run in the adapters/octave directory.
+
+Note that you must have built octave with dynamic loading for this to work. 
+You also need to add "-framework Cocoa" to 'ldflags' in mkoctfile.  
+

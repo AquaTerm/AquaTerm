@@ -344,7 +344,7 @@ void aqtAddLine(float x1, float y1, float x2, float y2)
   [adapter appendPath:path];
 }
 
-void aqtAddPolygon(float *x, float *y, int n, bool isFilled)
+void aqtAddPolygon(float *x, float *y, int n, int isFilled)
 {
   int i;
   NSBezierPath *path = [NSBezierPath bezierPath];
@@ -364,7 +364,7 @@ void aqtAddPolygon(float *x, float *y, int n, bool isFilled)
   }
 }
 
-void aqtAddCircle(float x, float y, float radius, bool isFilled)
+void aqtAddCircle(float x, float y, float radius, int isFilled)
 {
   NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(x-radius, y-radius, 2*radius, 2*radius)];
   if (isFilled)
