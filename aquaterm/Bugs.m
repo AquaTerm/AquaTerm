@@ -54,5 +54,21 @@ void aqtDebug(id sender)
   [adapter openPlotWithIndex:2];
   [adapter setPlotSize:NSMakeSize(600,400)];
   [adapter setPlotTitle:@"Testing"];
+  [adapter setFontsize:24];
+  // Some styling is possible
+  {
+     NSMutableAttributedString *attrStr = [[[NSMutableAttributedString alloc] initWithString:@"0123456789XXXX"] autorelease];
+     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(1,3)];
+     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(4,2)];
+     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(7,1)];
+     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(8,2)];
+     [adapter addLabel:attrStr position:NSMakePoint(200, 200) angle:0.0 align:AQTAlignLeft];
+     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:0] range:NSMakeRange(0, 11)];
+     [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(0,3)];
+     [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(4,1)];
+     [adapter addLabel:attrStr position:NSMakePoint(200, 300) angle:0.0 align:AQTAlignLeft];
+     [adapter addLabel:attrStr position:NSMakePoint(100, 200) angle:90.0 align:AQTAlignCenter];
+  }
+  
   [adapter renderPlot];
 }

@@ -121,7 +121,11 @@
 -(void)_aqtLabelUpdateCache
 {
    int i = 0;
-   NSFont *aFont = [NSFont fontWithName:fontName size:fontSize];
+   float subFontAdjust = 0.6;
+   float subBaseAdjust = 0.3;
+   NSFont *normalFont = [NSFont fontWithName:fontName size:fontSize];
+   NSFont *subFont = [NSFont fontWithName:fontName size:fontSize*subFontAdjust];
+   NSFont *aFont = normalFont;
    NSString *text = [string string]; // Yuck!
    int strLen = [text length];
    NSAffineTransform *aTransform = [NSAffineTransform transform];
@@ -130,7 +134,11 @@
    NSPoint adjust = NSZeroPoint;
    NSPoint pos = NSZeroPoint;
    float leftUnderlineEdge;
+   float leftSubEdge, rightSubEdge;
    BOOL underlineState = NO;
+   int newSubscriptState;
+   int subscriptState = 0;
+   float baselineOffset = 0.0;
    //
    // appendBezierPathWithGlyph needs a valid context...
    //
@@ -141,13 +149,13 @@
    [tmpPath moveToPoint:pos];
    for(i=0; i<strLen; i++)
    {
-      // FIXME: Honor attributes here (NSSuperscriptAttributeName, NSUnderlineStyleAttributeName)
-      NSGlyph theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
-     NSDictionary *attrDict = [string attributesAtIndex:i effectiveRange:nil];     
-      NSSize offset = [aFont advancementForGlyph:theGlyph];
-      [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+      // FIXME: Honor attributes here (NSSuperscriptAttributeName)
+      NSGlyph theGlyph;
+      NSSize offset;
+      NSDictionary *attrDict = [string attributesAtIndex:i effectiveRange:nil];
       // underlining
-      if(underlineState == NO)
+
+ if(underlineState == NO)
       {
         if ([attrDict valueForKey:NSUnderlineStyleAttributeName])
         {
@@ -159,13 +167,145 @@
       {
         if (![attrDict valueForKey:NSUnderlineStyleAttributeName])
         {
-          [tmpPath appendBezierPathWithRect:NSMakeRect(leftUnderlineEdge, -1.0, pos.x + offset.width - leftUnderlineEdge, 0.5)];
+          [tmpPath appendBezierPathWithRect:NSMakeRect(leftUnderlineEdge, -1.0, pos.x - leftUnderlineEdge, 0.5)];
           underlineState = NO;
+          [tmpPath moveToPoint:pos];
         }
       }
-      pos.x += offset.width;
-      pos.y += offset.height;
-      [tmpPath moveToPoint:pos];
+      
+      // subscript
+      newSubscriptState = [[attrDict valueForKey:NSSuperscriptAttributeName] intValue];
+      newSubscriptState = newSubscriptState>1?1:newSubscriptState;
+      newSubscriptState = newSubscriptState<-1?-1:newSubscriptState; 
+      switch (subscriptState)
+      {
+         case 0:
+            switch (newSubscriptState)
+            {
+               case 0:
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  // [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  leftSubEdge = pos.x;
+                  break;
+               case 1:
+                  aFont = subFont;
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  baselineOffset = [normalFont ascender]-fontSize*subBaseAdjust;
+                  [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  rightSubEdge = MAX(pos.x, rightSubEdge);
+                  break;
+               case -1:
+                  aFont = subFont;
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  baselineOffset = -fontSize*subBaseAdjust;
+                  [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  rightSubEdge = MAX(pos.x, rightSubEdge);
+                  break;
+            }
+            break;
+         case 1:
+            switch (newSubscriptState)
+            {
+               case 0:
+                  aFont = normalFont;
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  baselineOffset = 0.0;
+                  pos.x = rightSubEdge;
+                  [tmpPath moveToPoint:pos];
+                  [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  leftSubEdge = pos.x;
+                  break;
+               case 1:
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  rightSubEdge = MAX(pos.x, rightSubEdge);
+                  break;
+               case -1:
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  baselineOffset = -fontSize*subBaseAdjust;
+                  pos.x = leftSubEdge;
+                  [tmpPath moveToPoint:pos];
+                  [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  rightSubEdge = MAX(pos.x, rightSubEdge);
+                  break;
+            }            
+            break;
+         case -1:
+            switch (newSubscriptState)
+            {
+               case 0:
+                  aFont = normalFont;
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  baselineOffset = 0.0;
+                  pos.x = rightSubEdge;
+                  [tmpPath moveToPoint:pos];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  leftSubEdge = pos.x;
+                  break;
+               case 1:
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  baselineOffset = [normalFont ascender]-fontSize*subBaseAdjust;
+                  pos.x = leftSubEdge;
+                  [tmpPath moveToPoint:pos];
+                  [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  rightSubEdge = MAX(pos.x, rightSubEdge);
+                  break;
+               case -1:
+                  theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+                  offset = [aFont advancementForGlyph:theGlyph];
+                  [tmpPath relativeMoveToPoint:NSMakePoint(0.0, baselineOffset)];
+                  [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+                  pos.x += offset.width;
+                  pos.y += offset.height;
+                  [tmpPath moveToPoint:pos];
+                  rightSubEdge = MAX(pos.x, rightSubEdge);
+                  break;
+            }
+            break;
+         default:
+            NSLog(@"Only -1, 0, and 1 allowed");
+            break;
+      }
+      subscriptState = newSubscriptState;
    }
    [[AQTGraphic sharedScratchPad] unlockFocus];
    tmpSize = [tmpPath bounds].size;
