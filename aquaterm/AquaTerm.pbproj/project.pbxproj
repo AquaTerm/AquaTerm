@@ -70,6 +70,7 @@
 			children = (
 				CB91259C07CB4A92001D5EAF,
 				CBC4B44B05E4C784001BE8D7,
+				CB12640507CB5F5A00EF1763,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -265,6 +266,20 @@
 			path = INSTALL;
 			refType = 4;
 			sourceTree = "<group>";
+		};
+		CB12640507CB5F5A00EF1763 = {
+			explicitFileType = wrapper.framework;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = AquaTerm.framework;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CB12640607CB5F5A00EF1763 = {
+			fileRef = CB12640507CB5F5A00EF1763;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		CB138D3E05722C2E00D208BA = {
 			children = (
@@ -543,7 +558,6 @@
 				INFOPLIST_FILE = "AquaTermFwk-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.1;
-				OPTIMIZATION_CFLAGS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-framework Foundation -framework AppKit";
 				OTHER_REZFLAGS = "";
@@ -556,7 +570,7 @@
 			isa = PBXNativeTarget;
 			name = AQTFwk;
 			productName = AquaTermFwk;
-			productReference = CB91251307CB3BDE001D5EAF;
+			productReference = CB12640507CB5F5A00EF1763;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
 <plist version=\"1.0\">
@@ -579,14 +593,6 @@
 </plist>
 ";
 			productType = "com.apple.product-type.framework";
-		};
-		CB91251307CB3BDE001D5EAF = {
-			explicitFileType = wrapper.framework;
-			includeInIndex = 0;
-			isa = PBXFileReference;
-			path = AquaTerm.framework;
-			refType = 3;
-			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		CB91251407CB3BDE001D5EAF = {
 			isa = PBXFileReference;
@@ -981,7 +987,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				GCC_PREPROCESSOR_DEFINITIONS = "AQT_APP DEBUG";
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
 				INSTALL_PATH = "$(USER_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = /tmp/AquaTerm.dst/usr/local/lib;
@@ -1211,6 +1217,7 @@
 				CBC4B44605E4C784001BE8D7,
 				CBC4B44705E4C784001BE8D7,
 				CB91259D07CB4A92001D5EAF,
+				CB12640607CB5F5A00EF1763,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
