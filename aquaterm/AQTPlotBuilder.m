@@ -176,6 +176,7 @@
 
 - (void)setLinewidth:(float)newLinewidth
 {
+   [self _flushPolygonBuffer]; // FIXME: expose flush methods in API?
    if (newLinewidth != _linewidth)
    {
       [self _flushPolylineBuffer];
@@ -241,6 +242,7 @@
    [_model release];
    _model = newModel;
    [self _aqtPlotBuilderSetDefaultValues]; // FIXME: colormap etc. too
+   [self _flushBuffers];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
    _shouldAppend = NO;
    [self render];
@@ -305,6 +307,7 @@
 
 - (void)moveToPoint:(NSPoint)point
 {
+   [self _flushPolygonBuffer]; // FIXME: expose flush methods in API?
    if (_polylinePointCount > 1)
    {
       // Only flush if this creates a disjoint path,
@@ -356,16 +359,12 @@
 //
 - (void)moveToVertexPoint:(NSPoint)point
 {
+   [self _flushPolylineBuffer]; // FIXME: expose flush methods in API?
    if (_polygonPointCount > 1)
    {
-      // Only flush if this creates a disjoint path,
-      // if the point is just the latest endpoint, skip it
-      if (!NSEqualPoints(point, _polygonPoints[_polygonPointCount-1]))
-      {
-         [self _flushPolygonBuffer];
-         _polygonPoints[0]=point;
-         _polygonPointCount = 1;
-      }
+      [self _flushPolygonBuffer];
+      _polygonPoints[0]=point;
+      _polygonPointCount = 1;
    }
    else
    {
