@@ -237,7 +237,10 @@ for (i=0; i<32; i++)
 [adapter addLabel:@"bits" atPoint:NSMakePoint(330, 180) angle:0.0 align:AQTAlignCenter];
 [adapter addImageWithBitmap:rgbImage size:NSMakeSize(2,2) bounds:NSMakeRect(360, 190, 40, 15)];
 [adapter addLabel:@"fit bounds" atPoint:NSMakePoint(380, 180) angle:0.0 align:AQTAlignCenter];
+[adapter setImageTransformM11:9.23880 m12:3.82683 m21:-3.82683 m22:9.23880 tX:494.6 tY:186.9];
+[adapter addTransformedImageWithBitmap:rgbImage size:NSMakeSize(2,2) clipRect:NSMakeRect(0, 0, 600, 400)];
 [adapter addLabel:@"scale, rotate & translate" atPoint:NSMakePoint(500, 180) angle:0.0 align:AQTAlignCenter];
+[adapter resetImageTransform]; // clean up
 
 // Text
 [adapter takeColorFromColormapEntry:1];
@@ -279,12 +282,10 @@ pos = NSMakePoint(540.5, 75.5);
 
 // Some styling is possible
 {
-  NSMutableAttributedString *attrStr = [[[NSMutableAttributedString alloc] initWithString:@"Underline, Super23- and sub45-script"] autorelease];
+  NSMutableAttributedString *attrStr = [[[NSMutableAttributedString alloc] initWithString:@"Underline, super- and subscript123"] autorelease];
   [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(0,9)];
-  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(16,1)];
-  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:2] range:NSMakeRange(17,1)];
-  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(27,1)];
-  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-2] range:NSMakeRange(28,1)];
+  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(31,1)];
+  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(32,2)];
   [adapter addLabel:attrStr atPoint:NSMakePoint(320, 75) angle:0.0 align:AQTAlignLeft];  
 }
 [adapter takeColorFromColormapEntry:2];
