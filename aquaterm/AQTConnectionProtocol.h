@@ -1,4 +1,4 @@
 @protocol AQTConnectionProtocol
--(id)addAQTClient:(byref id)aClient; // Name? ProcessID?
--(BOOL)removeAQTClient:(byref id)aClient; // Name? ProcessID?
+-(id)addAQTClientWithId:(bycopy NSString *)identifier name:(bycopy NSString *)name pid:(int)procId;
+-(oneway void)removeAQTClientWithId:(bycopy NSString *)identifier;
 @end
