@@ -45,6 +45,7 @@
 -(void)awakeFromNib
 {
   doConnection = [[NSConnection defaultConnection] retain];
+  [doConnection setIndependentConversationQueueing:YES];	// FAQ: Needed to sync calls!!!!
   [doConnection setRootObject:builder];
 
   if([doConnection registerName:@"aquatermServer"] == NO)
