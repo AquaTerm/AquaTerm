@@ -120,9 +120,9 @@
    int i = 0;
    float subFontAdjust = 0.6;
    float subBaseAdjust = 0.3;
-   NSFont *normalFont = [NSFont fontWithName:fontName size:fontSize];
-   NSFont *subFont = [NSFont fontWithName:fontName size:fontSize*subFontAdjust];
-   NSFont *aFont = normalFont;
+   NSFont *normalFont; 
+   NSFont *subFont; 
+   NSFont *aFont; 
    NSString *text = [string string]; // Yuck!
    int strLen = [text length];
    NSAffineTransform *aTransform = [NSAffineTransform transform];
@@ -137,6 +137,16 @@
    int subscriptState = 0;
    int firstChar = 0;
    float baselineOffset = 0.0;
+   // 
+   // Make sure we get a valid font....
+   //
+   normalFont = [NSFont fontWithName:fontName size:fontSize];
+   if (normalFont==nil) {
+      // Fall back to a system font
+      normalFont = [NSFont systemFontOfSize:fontSize];
+   }
+   subFont = [NSFont fontWithName:[normalFont fontName] size:fontSize*subFontAdjust];
+   aFont = normalFont;
    //
    // appendBezierPathWithGlyph needs a valid context...
    //
