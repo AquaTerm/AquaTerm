@@ -23,7 +23,9 @@
 {
   if (self = [super init])
   {
-    image = [anImage copy];
+    [anImage retain];
+    [image release];
+    image = anImage;
   }
   return self;
 }
@@ -54,10 +56,17 @@
 
 -(void)renderInRect:(NSRect)boundsRect
 {
-  NSRect iBounds = NSMakeRect(0,0,0,0);
-  iBounds.size = [image size];
-  // FIXME: Scaling not implemented
-  [image drawInRect:[self bounds] fromRect:iBounds operation:NSCompositeSourceOver fraction:1.0];
-
+  NSSize docSize = NSMakeSize(842,595); // FIXME!!! Should refer to document size instead
+  NSAffineTransform *localTransform = [NSAffineTransform transform];
+  NSRect scaledBounds = [self bounds];
+  float xScale = boundsRect.size.width/docSize.width;
+  float yScale = boundsRect.size.height/docSize.height;
+  //
+  // Get the transform due to view resizing
+  //
+  [localTransform scaleXBy:xScale yBy:yScale];
+  scaledBounds.size = [localTransform transformSize:scaledBounds.size];
+  scaledBounds.origin = [localTransform transformPoint:scaledBounds.origin]; 
+  [image drawInRect:scaledBounds fromRect:NSMakeRect(0,0,[image size].width,[image size].height) operation:NSCompositeSourceOver fraction:1.0];
 }
 @end

@@ -88,11 +88,12 @@ Set the font for the subsequent strings added to the model
 - (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withRGBColor:(bycopy NSColor *)color;
 /* Add a polygon (filled bezierpath), with the given color, to the model */
 
-- (oneway void) addBitmap:(bycopy NSData *)imageData  bounds:(NSRect)theBounds;
+- (oneway void) addBitmap:(bycopy NSData *)imageData size:(NSSize)theSize bounds:(NSRect)theBounds;
 /* Add a raw bitmap (unsigned char) with each byte corresponding to an entry in the indexed colormap */
 
 - (oneway void) addImage:(bycopy NSData *)imageData  bounds:(NSRect)theBounds;
 /*
+*** Obsolete, will go away in next official release *** 
 Add an image. The imageData must be such that an NSImage can be created from:
 NSImage *anImage = [[NSImage alloc] initWithData:imageData];
 */

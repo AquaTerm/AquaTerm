@@ -191,20 +191,53 @@ static inline void NOOP_(id x, ...) {;}
 }
 
 // Bitmap and image handling
-- (oneway void) addBitmap:(bycopy NSData *)imageData  bounds:(NSRect)theBounds
+- (oneway void) addBitmap:(bycopy NSData *)imageData size:(NSSize)bitmapSize bounds:(NSRect)bitmapBounds
 {
+  AQTImage *tempImage;
+  NSBitmapImageRep *repDst = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
+                                                                     pixelsWide:bitmapSize.width
+                                                                     pixelsHigh:bitmapSize.height
+                                                                  bitsPerSample:8
+                                                                samplesPerPixel:3
+                                                                       hasAlpha:NO
+                                                                       isPlanar:YES
+                                                                 colorSpaceName:NSCalibratedRGBColorSpace
+                                                                    bytesPerRow:0
+                                                                   bitsPerPixel:0];
+  NSImage *newImage = [[NSImage alloc] initWithSize:bitmapSize];
+  NSImage *tiffImage = [[NSImage alloc] initWithData:imageData];
+  [newImage addRepresentation:repDst];
+  [newImage lockFocusOnRepresentation:repDst];
+  [tiffImage compositeToPoint:NSMakePoint( 0.0, 0.0) operation:NSCompositeSourceOver];
+  [newImage unlockFocus];
+  // [newImage setFlipped:YES];
+  tempImage = [[AQTImage alloc] initWithImage:newImage];
+  [tempImage setBounds:bitmapBounds];
+  [model addObject:tempImage];
+  [tempImage release];
+  [newImage release];
+  [tiffImage release];
 }
 
 - (oneway void) addImage:(bycopy NSData *)imageData  bounds:(NSRect)theBounds
 {
-  AQTImage *tempImage;
-  NSImage *anImage = [[NSImage alloc] initWithData:imageData];
-  [anImage setFlipped:YES];
-  tempImage = [[AQTImage alloc] initWithImage:anImage];
-  [tempImage setBounds:theBounds];
+/*
+ AQTImage *tempImage;
+  // NSData *tmpData = [NSData dataWithContentsOfFile:@"/Users/per/Pictures/m31.jpg"];
+  // fake some data from file instead:
+  
+   tempImage = [[AQTImage alloc] initWithData:imageData bounds:theBounds];
+  // NSImage *anImage = [[NSImage alloc] initWithData:imageData];
+  // [anImage setFlipped:YES];
+  // [anImage setDataRetained:YES];
+  // tempImage = [[AQTImage alloc] initWithImage:anImage];
+  // [tempImage setBounds:theBounds];
   [model addObject:tempImage];
   [tempImage release];
-  [anImage release];
+  // [anImage release];
+*/
+  NSLog(@"(void)addImage::   Warning, this method is obsolete and will be removed!");
+  
 }
 
 - (oneway void)addImageFromFile:(bycopy NSString *)filename
