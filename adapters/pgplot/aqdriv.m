@@ -10,16 +10,8 @@ static inline void NOOP_(id x, ...) {;}
 #define LOG  NOOP_
 #endif	/* LOGGING */
 
-#define BUFMAX 50
-
-typedef struct {
-  float r;
-  float g;
-  float b;
-} PGPColor;
-
-static NSAutoreleasePool *arpool;   // Objective-C autorelease pool
-static id adapter;        		    // Adapter object
+static NSAutoreleasePool *arpool;    // Objective-C autorelease pool
+static id adapter;                   // Adapter object
 
 //
 // Allow aqdriv to be calleable by FORTRAN using the two commonest
@@ -63,11 +55,6 @@ static int currentPlot = 0;
 // ----------------------------------------------------------------
 void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 {
-  //static int edgeCount = 0; // Keep track of polygon sides
-  //static int pixPtr = 0;
-  //int i;
-  static int tmpCol=11;
-  static PGPColor cm[256];
   //
   // Branch on the specified PGPLOT opcode.
   //
@@ -105,7 +92,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       LOG(@"IFUNC=3, Return device resolution");
       rbuf[0] = 72.0;     // Device x-resolution in pixels/inch
       rbuf[1] = 72.0;     // Device y-resolution in pixels/inch
-      rbuf[2] = 1.0;		// Device coordinates per pixel
+      rbuf[2] = 1.0;	  // Device coordinates per pixel
       *nbuf = 3;
       break;
 
@@ -176,7 +163,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       {
         initAdapter();
       }
-        rbuf[0] = 1.0; // The number used to select this device
+      rbuf[0] = 1.0; // The number used to select this device
       rbuf[1] = 1.0;
       *nbuf = 2;
       break;
@@ -201,34 +188,25 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       {
         initAdapter();
       }
-      //[adapter openGraph:currentPlot size:NSMakeSize(rbuf[0], rbuf[1])];
+      [adapter setColormapEntry:0 red:0.0 green:0.0 blue:0.0]; // Background color
+      [adapter setColormapEntry:1 red:1.0 green:1.0 blue:1.0]; 
+      [adapter setColormapEntry:2 red:1.0 green:0.0 blue:0.0];
+      [adapter setColormapEntry:3 red:0.0 green:1.0 blue:0.0];
+      [adapter setColormapEntry:4 red:0.0 green:0.0 blue:1.0];
+      [adapter setColormapEntry:5 red:0.0 green:1.0 blue:1.0];
+      [adapter setColormapEntry:6 red:1.0 green:0.0 blue:1.0];
+      [adapter setColormapEntry:7 red:1.0 green:1.0 blue:0.0];
+      [adapter setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
+      [adapter setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
+      [adapter setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
+      [adapter setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
+      [adapter setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
+      [adapter setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
+      [adapter setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
+      [adapter setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
+
       [adapter openPlotIndex:currentPlot size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
-      cm[0].r = 1.0; cm[0].g = 1.0; cm[0].b = 1.0;
-      cm[1].r = 0.0; cm[1].g = 0.0; cm[1].b = 0.0;
-      cm[2].r = 1.0; cm[2].g = 0.0; cm[2].b = 0.0;
-      cm[3].r = 0.0; cm[3].g = 1.0; cm[3].b = 0.0;
-      cm[4].r = 0.0; cm[4].g = 0.0; cm[4].b = 1.0;
-      cm[5].r = 0.0; cm[5].g = 1.0; cm[5].b = 1.0;
-      cm[6].r = 1.0; cm[6].g = 0.0; cm[6].b = 1.0;
-      cm[7].r = 1.0; cm[7].g = 1.0; cm[7].b = 0.0;
-      /*
-       [self setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
-       [self setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
-       [self setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
-       [self setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
-       [self setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
-       [self setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
-       [self setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
-       [self setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
-       */
-      /*
-       for (i=2;i<255;i++)
-       {
-         cm[i].r=((float)i)/255.0;
-         cm[i].g=0.0;
-         cm[i].b=0.0;
-       }
-       */
+      [adapter takeBackgroundColorFromColormapEntry:0];
     }
       break;
 
@@ -266,16 +244,14 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       {
         // clear screen
       }
-        [adapter closePlot];
+      [adapter closePlot];
       break;
 
       //--- IFUNC=15, Select color index --------------------------------------
 
     case 15:
       LOG(@"IFUNC=15, Select color index %d", (int)rbuf[0]);
-      tmpCol = (int)rbuf[0];
-      //[adapter setColorIndex:rbuf[0]];
-      [adapter setColorRed:cm[tmpCol].r green:cm[tmpCol].g blue:cm[tmpCol].b];
+      [adapter takeColorFromColormapEntry:(int)rbuf[0]];
       break;
 
       //--- IFUNC=16, Flush buffer. -------------------------------------------
@@ -319,7 +295,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         chr[0] = key;
 
     }
-    break;
+      break;
 
       //--- IFUNC=18, Erase alpha screen. -------------------------------------
       // (Not implemented: no alpha screen)
@@ -361,7 +337,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         }
       }
     }
-    break;
+      break;
 
       //--- IFUNC=21, Set color representation. -------------------------------
 
@@ -369,15 +345,13 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     {
       int index = (int)rbuf[0];
       LOG(@"IFUNC=21, Set color representation for index %d", (int)rbuf[0]);
-      // [adapter setColormapEntry:(int)rbuf[0] red:rbuf[1] green:rbuf[2] blue:rbuf[3]];
-      if (index < 256)
+      [adapter setColormapEntry:index red:rbuf[1] green:rbuf[2] blue:rbuf[3]];
+      if(index == 0) // Background color was changed
       {
-        cm[index].r = rbuf[1];
-        cm[index].g = rbuf[2];
-        cm[index].b = rbuf[3];
+        [adapter takeBackgroundColorFromColormapEntry:0];
       }
     }
-      break;
+    break;
 
       //--- IFUNC=22, Set line width. -----------------------------------------
 
@@ -385,7 +359,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       LOG(@"IFUNC=22, Set line width");
       [adapter setLinewidth:(72.0*rbuf[0]*0.005)];    // rbuf[0] is in units of 0.005 inch
       break;
-
+      
       //--- IFUNC=23, Escape --------------------------------------------------
       // (Not implemented: ignored)
     case 23:
@@ -399,11 +373,10 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       NSPoint corners[4];
       LOG(@"IFUNC=24, Rectangle Fill");
       //[adapter fillRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
-      //NSLog(@"Filling Rect(%f, %f, %f, %f) with indexed color %d",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1],tmpCol);
-      if (tmpCol == 0)
+      if (TRUE /* tmpCol == 0 */) // FIXME: Always remove objects behind a filled rect, nicht wahr?
       {
         // First, remove objects _completely_ hidden behind rectangles drawn in background color...
-        NSLog(@"Erasing Rect(%f, %f, %f, %f)",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1]);
+        LOG(@"Erasing Rect(%f, %f, %f, %f)",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1]);
         [adapter eraseRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
       }
       corners[0]=NSMakePoint(rbuf[0], rbuf[1]);
@@ -460,18 +433,15 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
           // NSLog(@"Pixels... n=%f data=%f, %f, %f, ...", rbuf[0], rbuf[1], rbuf[2], rbuf[3]);
           for (i = 1; i<=n;i++)
           {
-            unsigned char red = (unsigned char)(255*cm[(int)rbuf[i]].r);
-            unsigned char green = (unsigned char)(255*cm[(int)rbuf[i]].g);
-            unsigned char blue = (unsigned char)(255*cm[(int)rbuf[i]].b);
+            float red, green, blue;
+            [adapter getColormapEntry:(int)rbuf[i] red:&red green:&green blue:&blue];
 
-            *dataPtr = red;
+            *dataPtr = (unsigned char)(255*red);
             dataPtr++;
-            *dataPtr = green;
+            *dataPtr = (unsigned char)(255*green);
             dataPtr++;
-            *dataPtr = blue;
+            *dataPtr = (unsigned char)(255*blue);
             dataPtr++;
-            //NSLog(@"pixCount: %d", dataPtr-pixPtr);
-            //NSLog(@"Last rgb = (%u, %u, %u)", red, green, blue);
           }
         }
           break;
@@ -495,17 +465,9 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
       //--- IFUNC=29, Query color representation ------------------------------
     case 29:
-    {
-      int index = (int)rbuf[0];
-      // NSColor *color = [adapter colormapEntry:(int)rbuf[0]];
-      // NSLog(@"IFUNC=29, Query color representation for index %d", (int)rbuf[0]);
-      rbuf[1] = cm[index].r; //[color redComponent];
-      rbuf[2] = cm[index].g;//[color greenComponent];
-      rbuf[3] = cm[index].b;//[color blueComponent];
+      [adapter getColormapEntry:(int)rbuf[0] red:&rbuf[1] green:&rbuf[2] blue:&rbuf[3]];
       *nbuf = 4;
-
-    }
-    break;
+      break;
 
       //--- IFUNC=30, Scroll rectangle ----------------------------------------
     case 30:
