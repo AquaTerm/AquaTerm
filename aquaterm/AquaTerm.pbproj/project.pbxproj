@@ -7,8 +7,6 @@
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
-				F5AB086B0175BC8B01EB16F3,
-				F5AB086C0175BC8B01EB16F3,
 				F5FEAC1401A6B3CE0143D50D,
 			);
 			isa = PBXGroup;
@@ -562,16 +560,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		F5AB086B0175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			path = GPTColorExtras.h;
-			refType = 4;
-		};
-		F5AB086C0175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			path = GPTColorExtras.m;
-			refType = 4;
 		};
 		F5AB086D0175BC8B01EB16F3 = {
 			isa = PBXFileReference;
