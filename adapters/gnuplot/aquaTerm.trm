@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.21 2003/09/01 12:39:24 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.22 2003/09/01 12:53:58 persquare Exp $
  *
  */
 
@@ -293,6 +293,10 @@ AQUA_text_angle (int angle)
 TERM_PUBLIC int 
 AQUA_set_font(const char *font) /* "font,size" */
 {
+ NSArray *parts = [[NSString stringWithCString:font] componentsSeparatedByString:@","];
+ NSLog([NSString stringWithCString:font]);
+ [adapter setFontname:[parts objectAtIndex:0]];
+ [adapter setFontsize:[[parts objectAtIndex:1] floatValue]];
 /*
   float fontWHRatio, fontSize;
   [gnuTermAccess setTextfont:font];
