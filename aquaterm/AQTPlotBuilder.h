@@ -31,7 +31,6 @@
   int _polygonPointCount;	/*" The current number of points in _polylinePoints"*/
   BOOL _hasSize; /*" A flag to indicate that size has been set at least once "*/
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
-  BOOL _shouldAppend;
   AQTAffineTransformStruct _transform;
   AQTColorMap *_colormap;
 }
@@ -78,6 +77,4 @@
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
 
-  /*" Control operations "*/
-//- (void)clearAll;
 @end

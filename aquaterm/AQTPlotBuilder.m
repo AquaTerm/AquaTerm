@@ -82,7 +82,6 @@
       [self _aqtPlotBuilderSetDefaultValues];
       _colormap = [[AQTColorMap alloc] initWithColormapSize:AQT_COLORMAP_SIZE];
       [self _aqtPlotBuilderSetModelIsDirty:NO];
-      _shouldAppend = NO;
    }
    return self;
 }
@@ -209,24 +208,6 @@
    [_model removeAllObjects];
 }
 
-/*
- - (void)clearAll 
-{
-   // Disregard any preemptive use of this method
-   if (_hasSize)
-   {
-   // Honor size, title and background color
-      AQTModel *newModel = [[AQTModel alloc] initWithCanvasSize:[_model canvasSize]];
-      [self _flushBuffers];
-      [newModel setTitle:[_model title]];
-      [newModel setColor:[_model color]];
-      [_model release];
-      _model = newModel;
-      [self _aqtPlotBuilderSetDefaultValues]; // FIXME: colormap etc. too
-      [self _aqtPlotBuilderSetModelIsDirty:YES];
-   }
-}
-*/
 //
 // AQTLabel
 //
