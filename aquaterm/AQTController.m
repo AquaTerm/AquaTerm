@@ -346,11 +346,13 @@
 {
   // make sure inspector panel is visible
   // initialize if needed
-  if (!inspector)
+/*
+ if (!inspector)
   {
     inspector = [[AQTColorInspector allocWithZone:[self zone]] init];
   }
   [inspector showWindow:self];
+*/
 }
 
 -(IBAction)help:(id)sender

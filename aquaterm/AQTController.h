@@ -19,7 +19,7 @@
   AQTView		*frontView;
   NSPopUpButton		*saveFormatPopup;
   NSBox			*extendSavePanelView;
-  AQTColorInspector 	*inspector;
+  //AQTColorInspector 	*inspector;
   NSConnection		*doConnection;
 }
 -(GPTWindowController *)controllerForView:(int)index;
