@@ -168,10 +168,6 @@ void plD_polyline_aqt(PLStream *pls, short *xa, short *ya, PLINT npts)
 
 void plD_eop_aqt(PLStream *pls)
 {
-   //  Make sure the background color is up to date
-   [adapter setBackgroundColorRed:(float)(plsc->cmap0[0].r/255.0) 
-	                        green:(float)(plsc->cmap0[0].g/255.0)
-	                         blue:(float)(plsc->cmap0[0].b/255.0)];  
    [adapter renderPlot];
 }
 
@@ -202,7 +198,10 @@ void plD_state_aqt(PLStream *pls, PLINT op)
          [adapter setLinewidth:(float)pls->width];
          break;
 
-      case PLSTATE_COLOR0:
+      case PLSTATE_COLOR0:	// this seems to work, but that isn't to say that it is done right...
+         [adapter setBackgroundColorRed:(float)(plsc->cmap0[0].r/255.0) 
+	                              green:(float)(plsc->cmap0[0].g/255.0)
+	                               blue:(float)(plsc->cmap0[0].b/255.0)];
       case PLSTATE_COLOR1:
       case PLSTATE_FILL:
 		 [adapter setColorRed:(float)(pls->curcolor.r/255.)
@@ -263,9 +262,7 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
       case PLESC_EH:                  // handle Window events
          break;
       case PLESC_GETC:                // get cursor position
-         plD_eop_aqt(pls);	// this is a hack to force AquaTerm to render the plot so
-                            // that the user actually has something to click on.
-                            // there may be a better way...
+         [adapter renderPlot]; // needed to give the user something to click on
          get_cursor((PLGraphicsIn*)ptr);
          break;
       case PLESC_SWIN:                // set window parameters
@@ -284,12 +281,11 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
 //---------------------------------------------------------------------
 
 void get_cursor(PLGraphicsIn *gin){
-	int x,y;
+	int scanned, x, y, button;
     NSString *temp;
 
 	temp = [adapter waitNextEvent];
-	sscanf([temp cString],"1:{%d, %d}:1",&x, &y);	// is this really the best way to extract
-													// the positions from the string?
+	scanned = sscanf([temp cString],"1:{%d, %d}:%d", &x, &y, &button);
 
 	// multiple FIXMEs
 	// 1) should the returned coordinates be adjusted by scale?
@@ -299,14 +295,22 @@ void get_cursor(PLGraphicsIn *gin){
 	// 3) why are the world coordinates (wX, wY) set to zero between when this 
 	//     sub-routine is called and the values are returned to the program
 	//     that made the plplot call?	
-	// 4) should the structure members state, keysym and button be set to something?
-	// 5) how would I know which sub-window was clicked in? or does plplot handle that?
-	// 6) is the translated string structure member relevant?
-	
-	gin->pX = x;
-	gin->pY = y;
-	gin->dX = (PLFLT)x;
-	gin->dY = (PLFLT)y;
+	// 4) should the structure members state and keysym be set to something?
+	// 5) is the translated string structure member relevant?
+
+	if(scanned == 3){	// check that we did actually get a reasonable event string
+		gin->button = button;
+		gin->pX = x;
+		gin->pY = y;
+		gin->dX = (PLFLT)x;
+		gin->dY = (PLFLT)y;
+	} else {	// just return zeroes if we did not
+		gin->button = 0;
+		gin->pX = 0;
+		gin->pY = 0;
+		gin->dX = 0.0;
+		gin->dY = 0.0;	
+	}
 }
 
 //---------------------------------------------------------------------
