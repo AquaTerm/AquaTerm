@@ -9,11 +9,10 @@ RELEASENAME=AquaTerm1.0.b1
 
 ## Stage the release files
 ## -----------------------
-## DISTRO_DIR=$(BUILD_DIR)/distro
-## DEST=$(DISTRO_DIR)
 PKG_ROOT=$(BUILD_DIR)/pkg_root
 DMG_ROOT=$(BUILD_DIR)/dmg_root
-ADAPT_DEST=$(DMG_ROOT)/adapters
+EXTRAS_DEST="$(DMG_ROOT)/Developer Extras"
+ADAPT_DEST=$(EXTRAS_DEST)/adapters
 ## Get the source directories
 ## --------------------------
 APPSRCDIR=$(SRCROOT)
@@ -35,11 +34,11 @@ pre: clean
 post:
 	ls -Rp $(DMG_ROOT) 
 
-app: 
-	xcodebuild -target libaqt clean
-	xcodebuild -target libaqt -buildstyle Deployment
-	xcodebuild -target AquaTerm clean
-	xcodebuild -target AquaTerm -buildstyle Deployment GCC_PREPROCESSOR_DEFINITIONS="AQT_APP"
+app:
+##	xcodebuild -target libaqt clean
+##	xcodebuild -target libaqt -buildstyle Deployment
+##	xcodebuild -target AquaTerm clean
+##	xcodebuild -target AquaTerm -buildstyle Deployment GCC_PREPROCESSOR_DEFINITIONS="AQT_APP"
 	cp -RPf $(BUILD_DIR)/AquaTerm.app $(PKG_ROOT)/.
 
 lib:
@@ -53,7 +52,7 @@ headers:
 adapters:c fortran gnuplot pgplot plplot
 
 info:
-	cp $(APPSRCDIR)/{INSTALL,ReadMe,ReleaseNotes} $(DMG_ROOT)/.
+	cp $(APPSRCDIR)/{ReadMe,ReleaseNotes} $(DMG_ROOT)/.
 
 doc:
 	@echo "Skipping docs..."
