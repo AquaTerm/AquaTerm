@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "AQTAdapter.h"
+#import "aquaterm/AQTAdapter.h"
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
@@ -28,21 +28,12 @@ static id adapter;                   // Adapter object
 #define AQDRIV aqdriv
 #endif
 
-// Testing the use of a callback function to handle errors in the server
-void errorHandler(NSString *msg)
-{
-   NSLog(msg);
-   [adapter autorelease]; // add adapter to the AutoReleasePool
-   adapter = nil;
-}
-
 void initAdapter(void)
 {
    // Either first time or an error has occurred
    [arpool release]; // clean
    arpool = [[NSAutoreleasePool alloc] init];
    adapter = [[AQTAdapter alloc] init];
-   [adapter setErrorHandler:errorHandler];
 }
 
 static int currentDevice = 0;
@@ -280,6 +271,12 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
                pos = NSPointFromString([eventData objectAtIndex:1]);
                key = [[eventData objectAtIndex:2] lossyCString][0];
                break;
+            case 42: // Error >= 42
+            case 43: //
+               // NSLog([eventData objectAtIndex:1]);
+               pos = NSZeroPoint;
+               key = '\0';
+               break;
             default:
                NSLog(@"Unknown event, discarding.");
                break;
@@ -320,7 +317,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
             }
             else
             {
-               [adapter addEdgeToPoint:NSMakePoint(rbuf[0], rbuf[1])];
+               [adapter addEdgeToVertexPoint:NSMakePoint(rbuf[0], rbuf[1])];
             }
             vCount++;
             if (vCount == vMax)

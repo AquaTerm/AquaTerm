@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.22 2003/09/01 12:53:58 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.23 2003/12/29 22:11:53 persquare Exp $
  *
  */
 
@@ -79,16 +79,16 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 /* End of entries */
 
 #define AQUA_SCALE_FACTOR 10.0                  /* Increase resolution */ 
-#define AQUA_XMAX (11.69*72*AQUA_SCALE_FACTOR)  /* = 842, paper width times screen resolution */
-#define AQUA_YMAX (8.26*72*AQUA_SCALE_FACTOR)   /* = 595, paper height times screen resolution */
-#define AQUA_VTIC (8*AQUA_SCALE_FACTOR)     
-#define AQUA_HTIC (8*AQUA_SCALE_FACTOR)
-#define AQUA_VCHAR (16*AQUA_SCALE_FACTOR)       /* default font is Times at 16 points */
-#define AQUA_HCHAR (AQUA_VCHAR*6/10)
+#define AQUA_XMAX (11.69*72.0*AQUA_SCALE_FACTOR)  /* = 842, paper width times screen resolution */
+#define AQUA_YMAX (8.26*72.0*AQUA_SCALE_FACTOR)   /* = 595, paper height times screen resolution */
+#define AQUA_VTIC (8.0*AQUA_SCALE_FACTOR)     
+#define AQUA_HTIC (8.0*AQUA_SCALE_FACTOR)
+#define AQUA_VCHAR (16.0*AQUA_SCALE_FACTOR)       /* default font is Times at 16 points */
+#define AQUA_HCHAR (AQUA_VCHAR*6.0/10.0)
 
 #define SPECIAL_COLORS 4
 #define CYCLIC_COLORS 9
-#define PM3D_COLORS (AQT_COLORMAP_SIZE - CYCLIC_COLORS - SPECIAL_COLORS - 1)
+//#define PM3D_COLORS (AQT_COLORMAP_SIZE - CYCLIC_COLORS - SPECIAL_COLORS - 1)
 
 #define GOT_AQUA_PROTO
 #endif /* TERM_PROTO */
@@ -96,9 +96,10 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #ifndef TERM_PROTO_ONLY
 
 #ifdef TERM_BODY
-#import "AQTAdapter.h"
+#import <aquaterm/AQTAdapter.h>
 
 #import <Foundation/NSAutoreleasePool.h>
+#import <Foundation/NSArray.h>
 #import <stdarg.h>
 
 /* Debugging extras */
@@ -110,9 +111,11 @@ static inline void NOOP_(id x, ...) {;}
 #define LOG  NOOP_
 #endif	/* LOGGING */
 
-static NSAutoreleasePool *arpool;   // our autorelease pool 
-static id adapter;    // local object manages the D.O. connection
-static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of gnuTermAccess)
+static NSAutoreleasePool *arpool;   
+// static NSAutoreleasePool *innerPool;
+
+static AQTAdapter *adapter;    
+static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of adapter)
 static char AQUA_title[MAX_LINE_LEN + 1];
 static t_sm_palette *aqua_palette = nil;
 //
@@ -126,7 +129,6 @@ enum AQUA_id {
   AQUA_TITLE,
   AQUA_OTHER
 };
-
 
 static struct gen_table AQUA_opts[] =
 {
@@ -177,9 +179,9 @@ AQUA_init()
 {
   float fontSize, fontWHRatio;
   LOG(@"Aqua Init");
-  if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
+  if (arpool == NULL)   
   {
-    arpool = [[NSAutoreleasePool alloc] init]; 
+    arpool = [[NSAutoreleasePool alloc] init];
     adapter = [[AQTAdapter alloc] init]; 
   }
   else 
@@ -196,6 +198,40 @@ AQUA_init()
   term->h_char = (unsigned int) AQUA_HCHAR;
   term->v_tic = (unsigned int) AQUA_VTIC;
   term->h_tic = (unsigned int) AQUA_HTIC;  
+}
+
+TERM_PUBLIC void
+AQUA_reset()
+{
+   NSLog(@"AQUA_reset");
+//  [arpool release];
+//  arpool = [[NSAutoreleasePool alloc] init]; 
+}
+
+TERM_PUBLIC void
+AQUA_text()
+{
+   [adapter renderPlot];
+}
+
+TERM_PUBLIC void
+AQUA_graphics()
+{
+  NSString *title;
+  LOG(@"Pre:  (arpool + innerpool, innerpool) =(%d, %d)", [NSAutoreleasePool autoreleasedObjectCount], 
+	[NSAutoreleasePool topAutoreleasePoolCount]);
+//  [innerPool release];
+//  innerPool = [[NSAutoreleasePool alloc] init]; 
+  LOG(@"Post: (arpool + innerpool, innerpool) =(%d, %d)",[NSAutoreleasePool autoreleasedObjectCount], 
+	[NSAutoreleasePool topAutoreleasePoolCount]);
+  if(*AQUA_title)
+  {
+     // title = [NSString stringWithCString:AQUA_title]; <-- FIXME: broken!
+     *AQUA_title = 0;
+  }
+  [adapter openPlotWithIndex:currentWindow];
+  [adapter setPlotSize:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR)];
+  [adapter setPlotTitle:[NSString stringWithFormat:@"Figure %d", currentWindow]];
   //
   // Set up the basic indexed colormap for gnuplot
   //
@@ -217,31 +253,6 @@ AQUA_init()
 }
 
 TERM_PUBLIC void
-AQUA_reset()
-{
-}
-
-TERM_PUBLIC void
-AQUA_text()
-{
-    [adapter closePlot];
-}
-
-TERM_PUBLIC void
-AQUA_graphics()
-{
-  NSString *title;
-    if(*AQUA_title)
-    {
-        title = [NSString stringWithCString:AQUA_title];
-        *AQUA_title = 0;
-    }
-    [adapter openPlotIndex:currentWindow];// size:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR) title:nil];
-    [adapter setPlotSize:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR)];
-    [adapter setPlotTitle:nil];
-}
-
-TERM_PUBLIC void
 AQUA_move(unsigned int x, unsigned int y)
 {
     [adapter moveToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
@@ -256,9 +267,14 @@ AQUA_vector(unsigned int x, unsigned int y)
 TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
-  LOG(@"AQUA_linetype(%d)", linetype);
+   static int lastType = -99;
+   LOG(@"AQUA_linetype(%d) ---> entry: %d", linetype, (linetype%CYCLIC_COLORS)+SPECIAL_COLORS);
   // Note: this operation maps linestyle -4 to -1 onto colormap entries 0 to 3
-  [adapter takeColorFromColormapEntry:(linetype%CYCLIC_COLORS)+SPECIAL_COLORS];
+   if (linetype != lastType)
+   {
+      lastType = linetype;
+      [adapter takeColorFromColormapEntry:(linetype%CYCLIC_COLORS)+SPECIAL_COLORS];
+   }
 }
 
 static float textAngle = 0.0; 
@@ -270,9 +286,9 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
   if (!strlen(str))
     return;
   [adapter  addLabel:[NSString stringWithCString: str] 
-            position:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR) 
+             atPoint:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR) 
                angle:textAngle 
-       justification:textJustify];
+               align:(textJustify | AQTAlignMiddle)];
 }
 
 TERM_PUBLIC int 
@@ -294,18 +310,15 @@ TERM_PUBLIC int
 AQUA_set_font(const char *font) /* "font,size" */
 {
  NSArray *parts = [[NSString stringWithCString:font] componentsSeparatedByString:@","];
+ float fontSize = [[parts objectAtIndex:1] floatValue];
  NSLog([NSString stringWithCString:font]);
  [adapter setFontname:[parts objectAtIndex:0]];
- [adapter setFontsize:[[parts objectAtIndex:1] floatValue]];
-/*
-  float fontWHRatio, fontSize;
-  [gnuTermAccess setTextfont:font];
+ [adapter setFontsize:fontSize];
+
   // FIXME: Does gnuplot process these values?
-  fontSize = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontSize"] floatValue];
-  fontWHRatio = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontWHRatio"] floatValue];
-  term->v_char = (unsigned int) fontSize;
-  term->h_char = (unsigned int) (fontWHRatio * fontSize);
-*/
+  term->v_char = (unsigned int) (fontSize*AQUA_SCALE_FACTOR);
+  term->h_char = (unsigned int) (fontSize*AQUA_SCALE_FACTOR*0.6); 
+  
   return (TRUE);
 }
 
@@ -340,7 +353,7 @@ AQUA_point(unsigned int x, unsigned int y, int number)
 TERM_PUBLIC void 
 AQUA_suspend(void)  /* after one plot of multiplot */
 {
-  [adapter render];
+  [adapter renderPlot];
 }
  
 TERM_PUBLIC void 
@@ -376,7 +389,7 @@ AQUA_pointsize(double pointsize)
   {
     if (palette == NULL)
     {
-        return PM3D_COLORS;
+        return ([adapter colormapSize] - CYCLIC_COLORS - SPECIAL_COLORS - 1);
     }
     else
     {
@@ -394,7 +407,8 @@ AQUA_pointsize(double pointsize)
   TERM_PUBLIC void 
   AQUA_set_color(double gray)
   {
-    int index = (int)(gray*PM3D_COLORS) + SPECIAL_COLORS + CYCLIC_COLORS;
+  	int numPM3DCol = [adapter colormapSize] - CYCLIC_COLORS - SPECIAL_COLORS - 1;
+    int index = (int)(gray*numPM3DCol) + SPECIAL_COLORS + CYCLIC_COLORS;
     [adapter takeColorFromColormapEntry:index];
   }
 
@@ -402,17 +416,11 @@ AQUA_pointsize(double pointsize)
   AQUA_filled_polygon(int pc, gpiPoint *corners)
   {
     int i;
-    NSPoint *scaledPoints = (NSPoint *)malloc(pc*sizeof(NSPoint));
-    if (scaledPoints)
-      {
-	/* Rescale the point coordinates */
-	for (i=0; i<pc; i++)
-	  {
-            scaledPoints[i]=NSMakePoint(corners[i].x / AQUA_SCALE_FACTOR, corners[i].y / AQUA_SCALE_FACTOR);	
-	  }
-	[adapter addPolygonWithPoints:scaledPoints pointCount:pc];
-	free(scaledPoints);
-      }
+	[adapter moveToVertexPoint:NSMakePoint(corners[0].x / AQUA_SCALE_FACTOR, corners[0].y / AQUA_SCALE_FACTOR)];
+	for (i=1; i<pc; i++)
+	{
+		[adapter addEdgeToVertexPoint:NSMakePoint(corners[i].x / AQUA_SCALE_FACTOR, corners[i].y / AQUA_SCALE_FACTOR)];	
+	}
   }
 #endif /* PM3D */
 

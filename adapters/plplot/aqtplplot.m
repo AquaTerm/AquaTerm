@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "AQTAdapter.h"
+#import <aquaterm/AQTAdapter.h>
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
@@ -110,7 +110,7 @@ void plD_init_aqt(PLStream *pls)
 void plD_bop_aqt(PLStream *pls)
 {
    currentPlot = currentPlot>=maxWindows?0:currentPlot;
-   [adapter openPlotIndex:currentPlot++];
+   [adapter openPlotWithIndex:currentPlot++];
    [adapter setPlotSize:NSMakeSize(AQT_Max_X, AQT_Max_Y)];
    [adapter setLinewidth:1.];
 
@@ -147,7 +147,6 @@ void plD_polyline_aqt(PLStream *pls, short *xa, short *ya, PLINT npts)
 
    for (i = 0; i < npts - 1; i++)
       plD_line_aqt(pls, xa[i], ya[i], xa[i + 1], ya[i + 1]);
-
 }
 
 //---------------------------------------------------------------------
@@ -158,7 +157,8 @@ void plD_polyline_aqt(PLStream *pls, short *xa, short *ya, PLINT npts)
 
 void plD_eop_aqt(PLStream *pls)
 {
-   [adapter render];
+   [adapter takeBackgroundColorFromColormapEntry:0];   
+   [adapter renderPlot];
 }
 
 //---------------------------------------------------------------------
@@ -210,10 +210,7 @@ void plD_state_aqt(PLStream *pls, PLINT op)
          //
          //  Make sure the background color is set to the current color map
          //
-         [adapter setBackgroundColorRed:(float)(plsc->cmap0[0].r/255.)
-                                  green:(float)(plsc->cmap0[0].g/255.)
-                                   blue:(float)(plsc->cmap0[0].b/255.)];
-
+         [adapter takeBackgroundColorFromColormapEntry:0];
          break;
 
       case PLSTATE_CMAP1:
@@ -261,19 +258,16 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
       case PLESC_GRAPH:               // switch to graphics screen
          break;
       case PLESC_FILL:                // fill polygon
-/*
- [adapter beginPolygon];
-    if(colorChange)
+         if(colorChange)
          {
             [adapter takeColorFromColormapEntry:(1-pls->curcmap)*pls->icol0 + pls->curcmap*(pls->icol1+pls->ncol0)];
             colorChange = FALSE;
          };
-         for (i = 0; i < pls->dev_npts ; i++)
+         [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0], pls->dev_y[0])];
+         for (i = 1; i < pls->dev_npts ; i++)
          {
-            [adapter addPolygonEdgeToPoint:NSMakePoint(pls->dev_x[i], pls->dev_y[i])];
+            [adapter addEdgeToVertexPoint:NSMakePoint(pls->dev_x[i], pls->dev_y[i])];
          };
-         [adapter fillPolygon];
-*/
          break;
       case PLESC_DI:                  // handle DI command
          break;
@@ -291,6 +285,7 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
 
    }
 }
+
 void proc_str (PLStream *pls, EscText *args)
 {
    PLFLT   *t = args->xform;
@@ -348,9 +343,6 @@ void proc_str (PLStream *pls, EscText *args)
    else {
       jst = 1;                                        /* center */
    }
-
-   // [adapter useJustification:jst];
-
    /*
     * Reference point (center baseline of string).
     *  If base = 0, it is aligned with the center of the text box
@@ -487,30 +479,16 @@ void proc_str (PLStream *pls, EscText *args)
       //
       //  Set the default font and color for the string before we do anything else
       //
-/*
- [s addAttribute:NSFontAttributeName
-                value:[NSFont fontWithName:[NSString stringWithCString:ofont] size:ft_ht]
-                range:NSMakeRange(0, length)];
-
-      [s addAttribute:NSForegroundColorAttributeName
-                value:[NSColor colorWithCalibratedRed:(float)(pls->curcolor.r/255.)
-                                                green:(float)(pls->curcolor.g/255.)
-                                                 blue:(float)(pls->curcolor.b/255.)
-                                                alpha:1.]
-                range:NSMakeRange(0, length)];
-*/
+      [adapter setFontname:[NSString stringWithCString:ofont]];
+      [adapter setFontsize:ft_ht/SCALE];
+      [adapter setColorRed:(float)(pls->curcolor.r/255.)
+                     green:(float)(pls->curcolor.g/255.)
+                      blue:(float)(pls->curcolor.b/255.)];
+      colorChange = YES; // FIXME: is this correct?
       //
       //  Set the font
-      for(i = 0; i < length; i++){
-         ft_scale=1.;
-         switch (fontn[i]) {
-            case 1: font = "Times-Roman";  break;
-            case 2: font = "Times-Roman";  break;
-            case 3: font = "Times-Italic"; break;
-            case 4: font = "Helvetica";    break;
-            case 5: font = "Symbol";    break;
-            default:  font = "Times-Roman";
-         }
+      for(i = 0; i < length; i++)
+      {
          //
          //  Set Greek Characters
          if(fontn[i]==5){
@@ -529,23 +507,15 @@ void proc_str (PLStream *pls, EscText *args)
          //
          //  Set Super and subscripts
 
-         if(updown[i]!=0){
-/*
- [s addAttribute:NSSuperscriptAttributeName
+         if(updown[i]!=0)
+         {
+            [s addAttribute:@"NSSuperScript"
                       value:[NSNumber numberWithInt:updown[i]]
                       range:NSMakeRange(i, 1)];
- */
-            ft_scale=.6;
          }
-
-/*
-         [s addAttribute:NSFontAttributeName
-                   value:[NSFont fontWithName:[NSString stringWithCString:font] size:ft_ht*ft_scale]
-                   range:NSMakeRange(i, 1)];
-*/
       }
-
-      [adapter addLabel:s position:NSMakePoint((float)args->x/SCALE, (float)args->y/SCALE) angle:alpha justification:jst];
+      // FIXME: is baseline correct assumption?
+      [adapter addLabel:s atPoint:NSMakePoint((float)args->x/SCALE, (float)args->y/SCALE) angle:alpha align:(jst | AQTAlignBaseline)]; 
 
       [s release];
 
