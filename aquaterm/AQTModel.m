@@ -99,6 +99,11 @@
   [modelColorMap release];
   modelColorMap = newColorMap;
 }
+-(AQTColorMap *)colormap
+{
+  return modelColorMap;
+}
+
 
 // -- updateColors: --
 // 	override parent class' implementation

@@ -21,10 +21,9 @@
     AQTGraphic *modelReference = [(GPTWindowController *)[[self window] windowController] model];
     NSRect theBounds = [self bounds];
     //
-    // Erase background and draw a stylish line around the view 
+    // Erase by drawing background color and draw a stylish line around the view 
     //
-    [[NSColor whiteColor] set]; // FIXME - the background color
-                                // we should get this value from color inspector pane
+    [[[modelReference colormap] colorForIndex:-4] set]; 
     [[NSBezierPath bezierPathWithRect:theBounds] fill];
     [[NSColor blackColor] set];
     [[NSBezierPath bezierPathWithRect:theBounds] stroke];

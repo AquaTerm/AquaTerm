@@ -14,4 +14,6 @@
 }
 -(void)setColor:(NSColor *)newColor forIndex:(int)index;
 -(NSColor *)colorForIndex:(int)index;
+-(NSArray *)colorList;
+-(void)setColorList:(NSArray *)colorList;
 @end
