@@ -421,6 +421,7 @@ Default is RoundLineCapStyle. "*/
 /*" Add a bitmap image of size bitmapSize scaled to fit destBounds, does %not apply transform. Bitmap format is 24bits per pixel in sequence RGBRGB... with 8 bits per color."*/
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
+   [_clientManager clearPlotRect:destBounds];
    [_selectedBuilder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
 }
 
