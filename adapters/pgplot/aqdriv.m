@@ -281,11 +281,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       NSLog(@"Key %c at %@", key, NSStringFromPoint(pos));
       rbuf[0] = pos.x;
       rbuf[1] = pos.y;
-      if (pos.x<10)
-        chr[0] = 'X';
-      else
-        chr[0] = key;
-
+      chr[0] = key; // FIXME: Make this upper case.
     }
       break;
 
