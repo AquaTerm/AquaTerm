@@ -16,7 +16,9 @@
    NSPoint path[MAX_PATH_POINTS];
    int pointCount;
    float linewidth;
+   int lineCapStyle; 
 }
 - (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount color:(AQTColor)aColor;
 - (void)setLinewidth:(float)lw;
+- (void)setLineCapStyle:(int)capStyle;
 @end

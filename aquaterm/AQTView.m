@@ -242,6 +242,7 @@ else
       NSBezierPath *scratch = [NSBezierPath bezierPath];
       [scratch appendBezierPathWithPoints:path count:pointCount];
       [scratch setLineJoinStyle:NSRoundLineJoinStyle];
+      [scratch setLineCapStyle:lineCapStyle];
       [scratch setLineWidth:linewidth];
       [self _setCache:scratch];
    }

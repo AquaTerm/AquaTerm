@@ -85,6 +85,7 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
 {
   int i;
   [super encodeWithCoder:coder];
+  [coder encodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder encodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
   for (i=0;i<pointCount;i++)
@@ -97,6 +98,7 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
 {
   int i;
   self = [super initWithCoder:coder];
+  [coder decodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder decodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder decodeValueOfObjCType:@encode(int) at:&pointCount];
   for (i=0;i<pointCount;i++)
@@ -109,5 +111,9 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
 - (void)setLinewidth:(float)lw
 {
   linewidth = lw;
+}
+- (void)setLineCapStyle:(int)capStyle
+{
+  lineCapStyle = capStyle;
 }
 @end
