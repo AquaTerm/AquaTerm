@@ -17,7 +17,6 @@
 #import "AQTAdapter.h"
 
 @implementation AQTPlotBuilder
-
 - (void)_aqtPlotBuilderSetDefaultValues
 {
    _color.red = 0.0;
@@ -28,6 +27,12 @@
    _linewidth = 1.0;
    _transform.m11 = 1.0;
    _transform.m22 = 1.0;
+}
+
+- (void)_aqtPlotBuilderSetModelIsDirty:(BOOL)isDirty
+{
+   _modelIsDirty = isDirty;
+   // Any coalescing of render call may be performed here (use timer)
 }
 
 - (BOOL)_flushLineSegmentBuffer
@@ -57,7 +62,7 @@
       _model = [[AQTModel alloc] initWithSize:NSZeroSize]; 
       [self _aqtPlotBuilderSetDefaultValues];
       _colormap = [[AQTColorMap alloc] initWithColormapSize:AQT_COLORMAP_SIZE];
-      _modelIsDirty = NO;
+      [self _aqtPlotBuilderSetModelIsDirty:NO];
       _shouldAppend = NO;
    }
    return self;
@@ -113,7 +118,7 @@
    if ((newColor.red != oldColor.red) || (newColor.green != oldColor.green) || (newColor.blue != oldColor.blue))
    {
       [_model setColor:newColor];
-      _modelIsDirty = YES;
+      [self _aqtPlotBuilderSetModelIsDirty:YES];
    }
 }
 
@@ -198,6 +203,7 @@
    if (_modelIsDirty)
    {
       [self _flushBuffers];
+      [self _aqtPlotBuilderSetModelIsDirty:NO];
       NS_DURING
          if (_shouldAppend == YES)
          {
@@ -231,7 +237,7 @@
    [_model release];
    _model = newModel;
    [self _aqtPlotBuilderSetDefaultValues]; // FIXME: colormap etc. too
-   _modelIsDirty = YES;
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
    _shouldAppend = NO;
    [self render];
 }
@@ -288,7 +294,7 @@
    [_model addObject:lb];
    //  NSLog([lb description]);
    [lb release];
-   _modelIsDirty = YES;
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 //
 // AQTPath
@@ -328,7 +334,7 @@
       _pointCount = 0;
       [self moveToPoint:point];
    }
-   _modelIsDirty = YES;
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
@@ -340,7 +346,7 @@
    [tmpPath setLineCapStyle:_capStyle];
    [_model addObject:tmpPath];
    [tmpPath release];
-   _modelIsDirty = YES;
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 //
 // AQTPatch
@@ -352,7 +358,7 @@
    [tmpPatch setColor:_color];
    [_model addObject:tmpPatch];
    [tmpPatch release];
-   _modelIsDirty = YES;
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
 
 }
 - (void)addFilledRect:(NSRect)aRect
@@ -380,7 +386,7 @@
    AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
    [_model addObject:tmpImage];
    [tmpImage release];
-   _modelIsDirty = YES;
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
@@ -389,6 +395,6 @@
    [tmpImage setTransform:_transform];
    [_model addObject:tmpImage];
    [tmpImage release];
-   _modelIsDirty = YES;
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 @end
