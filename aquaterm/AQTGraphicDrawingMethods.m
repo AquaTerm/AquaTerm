@@ -31,6 +31,19 @@
    return scratchPadImage;
 }
 
+- (void)setAQTColor
+{
+  static AQTColor currentColor;
+  if (!AQTEqualColors(currentColor, _color))
+  {
+    [[NSColor colorWithCalibratedRed:_color.red
+                               green:_color.green
+                                blue:_color.blue
+                               alpha:1.0] set];
+    currentColor = _color;
+  }
+}
+
 -(void)renderInRect:(NSRect)boundsRect
 {
    NSLog(@"Error: *** AQTGraphicDrawing ***");
@@ -85,8 +98,16 @@
 {
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
+#ifdef TIMING
+   static float totalTime = 0.0;
+   float thisTime;
+   NSDate *startTime = [NSDate date];
+#endif
+   NSRect debugRect;
 
    // Model object is responsible for background...
+   [self setAQTColor];
+   // FIXME: needed to synchronize colors
    [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
    NSRectFill(dirtyRect);
 
@@ -98,6 +119,11 @@
       NSFrameRect(NSInsetRect([graphic bounds], -1, -1));
 #endif
    }
+#ifdef TIMING
+   thisTime = -[startTime timeIntervalSinceNow];
+   totalTime += thisTime;
+   NSLog(@"Render time: %f for %d objects. Total: %f", thisTime, [modelObjects count], totalTime);
+#endif
 }
 @end
 
@@ -343,8 +369,8 @@
 {
    if (AQTIntersectsRect(boundsRect, [self bounds]))
    {
-      [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-      [_cache  fill];
+     [self setAQTColor];
+     [_cache  fill];
    }
 }
 @end
@@ -380,7 +406,7 @@
 {
    if (AQTIntersectsRect(boundsRect, [self bounds]))
    {
-      [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
+     [self setAQTColor];
       [_cache stroke];
       if ([self isFilled])
       {
