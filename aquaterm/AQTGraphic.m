@@ -32,7 +32,8 @@
 
 -(void)dealloc
 {
-  [super dealloc];
+   [_cache release];
+   [super dealloc];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder

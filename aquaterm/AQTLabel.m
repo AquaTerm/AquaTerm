@@ -57,9 +57,12 @@
   return self;
 }
 
+// FIXME: bounds disabled
 -(NSRect)bounds
 {
-  NSAffineTransform *tempTrans = [NSAffineTransform transform];
+  return NSMakeRect(20,20,20,20);
+/*
+ NSAffineTransform *tempTrans = [NSAffineTransform transform];
   NSRect tempBounds;
   NSPoint tempJust;
 
@@ -72,5 +75,7 @@
   tempBounds.origin.x = position.x+tempJust.x;
   tempBounds.origin.y = position.y+tempJust.y;
   return tempBounds;
+ */
+  
 }
 @end

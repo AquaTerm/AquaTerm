@@ -19,6 +19,8 @@
 //#define MAX(a, b) ((a)>(b)?(a):(b))
 
 @interface AQTGraphic (AQTGraphicDrawing)
+-(id)_cache;
+-(void)_setCache:(id)object;
 -(void)renderInRect:(NSRect)boundsRect;
 @end
 
@@ -85,6 +87,19 @@
   [[NSColor redColor] set];
   [NSBezierPath fillRect:boundsRect];
 }
+
+-(void)_setCache:(id)object
+{
+   [object retain];
+   [_cache release];
+   _cache = object;
+}
+
+-(id)_cache
+{
+   return _cache;
+}
+
 @end
 
 /**"
@@ -153,7 +168,7 @@
 @implementation AQTPath (AQTPathDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-   NSBezierPath *scratch = [NSBezierPath bezierPath];
+   NSBezierPath *scratch;// = [NSBezierPath bezierPath];
    NSAffineTransform *localTransform = [NSAffineTransform transform];
    float xScale = boundsRect.size.width/canvasSize.width;
    float yScale = boundsRect.size.height/canvasSize.height;
@@ -162,14 +177,19 @@
    //
    if (pointCount == 0)
       return;
-   [scratch appendBezierPathWithPoints:path count:pointCount];
+   if (![self _cache])
+   {
+      scratch = [NSBezierPath bezierPath];
+      [scratch appendBezierPathWithPoints:path count:pointCount];
+      [self _setCache:scratch];
+   }
    [localTransform scaleXBy:xScale yBy:yScale];
    [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
    if (isFilled)
    {
-      [[localTransform transformBezierPath:scratch] fill];
+      [[localTransform transformBezierPath:_cache] fill];
    }
-   [[localTransform transformBezierPath:scratch] stroke];	// FAQ: Needed unless we holes in the surface?
+   [[localTransform transformBezierPath:_cache] stroke];	// FAQ: Needed unless we holes in the surface?
 }
 @end
 

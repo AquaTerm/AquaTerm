@@ -23,6 +23,7 @@
       {
          path[i] = points[i];
       }
+      pointCount = pc;
       if (fill)
       {
          isFilled = YES;
@@ -77,6 +78,7 @@
    pointCount++;
 }
 
+// FIXME: bounds disabled
 -(NSRect)bounds
 {
    NSRect tempBounds = NSMakeRect(10, 10, 10, 10); //[path bounds];

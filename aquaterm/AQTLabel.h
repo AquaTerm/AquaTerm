@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
+//#import <AppKit/AppKit.h>
 #import "AQTGraphic.h"
 
 @interface AQTLabel : AQTGraphic /*" NSObject "*/
