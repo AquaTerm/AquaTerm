@@ -115,7 +115,6 @@
 				CB9E42E00586855A00D208BA,
 				F5AB089B0175CCF101EB16F3,
 				CBB06FE305740E0E00D208BA,
-				CBF30BD804D5527700EBD329,
 				080E96DDFE201D6D7F000001,
 				29B97317FDCFA39411CA2CEA,
 				29B97315FDCFA39411CA2CEA,
@@ -283,22 +282,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		CB2DDBA7056D103C00D208BA = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = AQTPlotController.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		CB2DDBA8056D103C00D208BA = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.objc;
-			path = AQTPlotController.m;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		CB2DDBAB056D10FB00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -378,6 +361,7 @@
 			inputPaths = (
 				"$(SRCROOT)/ReadMe",
 				"$(SRCROOT)/ReleaseNotes\n$(SRCROOT)/ReleaseNotes",
+				"$(SRCROOT)/makeHelp",
 			);
 			isa = PBXShellScriptBuildPhase;
 			outputPaths = (
@@ -1211,24 +1195,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		CBF30BD804D5527700EBD329 = {
-			children = (
-				CB2DDBA7056D103C00D208BA,
-				CB2DDBA8056D103C00D208BA,
-				F5FEAC1401A6B3CE0143D50D,
-				F5E99A51036446DA01EBD329,
-				F5E99A52036446DA01EBD329,
-				F5B4A77E0222A7D9014110D6,
-				F50F0B500205D1AF01AA2E68,
-				F50F0B510205D1AF01AA2E68,
-				F57A4136022288E5014110D6,
-				F57A4137022288E5014110D6,
-			);
-			isa = PBXGroup;
-			name = oldsource;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 //CB0
 //CB1
 //CB2
@@ -1239,22 +1205,6 @@
 //F52
 //F53
 //F54
-		F50F0B500205D1AF01AA2E68 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.objc;
-			path = AQTColorInspector.m;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F50F0B510205D1AF01AA2E68 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = AQTColorInspector.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F50F0B540205D23401AA2E68 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1390,22 +1340,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F57A4136022288E5014110D6 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = AQTBuilder.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F57A4137022288E5014110D6 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.objc;
-			path = AQTBuilder.m;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
 				CB7218CC06073BFF008DCEAD,
@@ -1502,14 +1436,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F5B4A77E0222A7D9014110D6 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text;
-			path = AQTProtocol.mdoc;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F5DB1B640219BFD2014110D6 = {
 			buildArgumentsString = "$(SRCROOT)/makedocs ";
 			buildPhases = (
@@ -1561,30 +1487,6 @@
 			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/AQTWindow.nib;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5E99A51036446DA01EBD329 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = AQTBaseMethods.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5E99A52036446DA01EBD329 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = AQTExtendedMethods.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5FEAC1401A6B3CE0143D50D = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = AQTProtocol.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
