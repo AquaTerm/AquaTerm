@@ -7,7 +7,6 @@
 //
 
 #import "AQTPath.h"
-#import "AQTColorMap.h"
 
 @implementation AQTPath
     /**"
@@ -15,7 +14,7 @@
     *** Since the app is a viewer we do three things with the object:
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
--(id)initWithPoints:(NSPointArray)points pointCount:(int)pc filled:(BOOL)fill color:(NSColor *)aColor colorIndex:(int)cIndex indexedColor:(BOOL)icFlag
+-(id)initWithPoints:(NSPointArray)points pointCount:(int)pc filled:(BOOL)fill color:(AQTColor)aColor
 {
    int i;
    if (self = [super init])
@@ -28,19 +27,18 @@
       {
          isFilled = YES;
       }
-      colorIndex = cIndex;
-      hasIndexedColor = icFlag;
-      if (!hasIndexedColor)
-      {
-         [self setColor:aColor];
-      }
+      [self setColor:aColor];
    }
    return self;
 }
 
 -(id)init
 {
-   return [self initWithPoints:nil pointCount:0 filled:NO color:[NSColor blackColor] colorIndex:1 indexedColor:YES];
+   AQTColor tCol;
+   tCol.red = 1.0;
+   tCol.green = 0.0;
+   tCol.blue = 1.0;
+   return [self initWithPoints:nil pointCount:0 filled:NO color:tCol];
 }
 
 -(void)dealloc
@@ -52,7 +50,6 @@
 {
    int i;
    [super encodeWithCoder:coder];
-   [coder encodeValueOfObjCType:@encode(BOOL) at:&hasIndexedColor];
    [coder encodeValueOfObjCType:@encode(BOOL) at:&isFilled];
    [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
    for (i=0;i<pointCount;i++)
@@ -65,7 +62,6 @@
 {
    int i;
    self = [super initWithCoder:coder];
-   [coder decodeValueOfObjCType:@encode(BOOL) at:&hasIndexedColor];
    [coder decodeValueOfObjCType:@encode(BOOL) at:&isFilled];
    [coder decodeValueOfObjCType:@encode(int) at:&pointCount];
    for (i=0;i<pointCount;i++)
@@ -91,14 +87,4 @@
   }
   return tempBounds;
 }
-
-// override superclass' def of updateColors:
--(void)updateColors:(AQTColorMap *)colorMap
-{
-   if (hasIndexedColor)
-   {	
-      [self setColor:[colorMap colorForIndex:colorIndex]];
-   }
-}
-
 @end

@@ -9,12 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "AQTGraphic.h"
 
-@class AQTColorMap;
-
 @interface AQTModel : AQTGraphic /*" NSObject "*/ 
 {
     NSMutableArray	*modelObjects;	/*" An array of AQTGraphic objects (leaf or collection) "*/
-    AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors so that the (single) property inspector knows the colormap of each window (model) "*/
     NSString 		*title;			/*" Associate a title with the model. Default is 'Figure n'. "*/
 }
 -(id)initWithSize:(NSSize)canvasSize;
@@ -22,8 +19,6 @@
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;
--(void)setColormap:(AQTColorMap *)newColorMap;
--(AQTColorMap *)colormap;
 -(void)setTitle:(NSString *)newTitle;
 -(NSString *)title;
 @end

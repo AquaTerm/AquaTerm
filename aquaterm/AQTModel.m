@@ -7,7 +7,6 @@
 //
 
 #import "AQTModel.h"
-#import "AQTColorMap.h"
 
 @implementation AQTModel
 /**"
@@ -98,17 +97,6 @@
   }
 }
 
--(void)setColormap:(AQTColorMap *)newColorMap
-{
-  [newColorMap retain];
-  [modelColorMap release];
-  modelColorMap = newColorMap;
-}
--(AQTColorMap *)colormap
-{
-  return modelColorMap;
-}
-
 -(void)setTitle:(NSString *)newTitle
 {
   [newTitle retain];
@@ -121,18 +109,4 @@
   return [title copy];
 }
 
-
-// -- updateColors: --
-// 	override parent class' implementation
--(void) updateColors:(AQTColorMap *)colorMap;
-{
-  AQTGraphic *graphic;
-  NSEnumerator *enumerator = [modelObjects objectEnumerator];
-
-  [self setColormap: colorMap]; // Remember map for inspector! PP
-  while ((graphic = [enumerator nextObject]))
-  {
-    [graphic updateColors:colorMap];
-  }
-}
 @end

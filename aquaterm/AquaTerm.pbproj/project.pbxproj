@@ -212,7 +212,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-DDEBUG_BOUNDS";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AquaTerm;
 				SECTORDER_FLAGS = "";
@@ -268,8 +268,6 @@ http://aquaterm.sourceforge.net</string>
 				F55D242501C11B5201A80104,
 				F55D242601C11B5201A80104,
 				F5653B8201C4B8F201A80104,
-				F50F0B520205D1AF01AA2E68,
-				F50F0B560205D23401AA2E68,
 				F59F5FCB021011D301A18598,
 				F546B4BF026B199901E9AA65,
 				F5E3AFAB026D80D2012F88DF,
@@ -303,8 +301,6 @@ http://aquaterm.sourceforge.net</string>
 				F55D242A01C11B5201A80104,
 				F55D242B01C11B5201A80104,
 				F5653B8301C4B8F201A80104,
-				F50F0B530205D1AF01AA2E68,
-				F50F0B570205D23401AA2E68,
 				F59F5FCC021011D301A18598,
 				F546B4C1026B199901E9AA65,
 				F5E3AFAC026D80D2012F88DF,
@@ -463,18 +459,6 @@ http://aquaterm.sourceforge.net</string>
 			path = AQTColorInspector.h;
 			refType = 4;
 		};
-		F50F0B520205D1AF01AA2E68 = {
-			fileRef = F50F0B510205D1AF01AA2E68;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F50F0B530205D1AF01AA2E68 = {
-			fileRef = F50F0B500205D1AF01AA2E68;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F50F0B540205D23401AA2E68 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -486,18 +470,6 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXFileReference;
 			path = AQTColorMap.m;
 			refType = 4;
-		};
-		F50F0B560205D23401AA2E68 = {
-			fileRef = F50F0B540205D23401AA2E68;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F50F0B570205D23401AA2E68 = {
-			fileRef = F50F0B550205D23401AA2E68;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F51551CC01FE762E01000102 = {
 			isa = PBXFileReference;

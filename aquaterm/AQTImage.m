@@ -46,7 +46,4 @@
   return renderBounds;
 }
 
--(void)updateColors:(AQTColorMap *)colorMap
-{
-}
 @end

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
 #import "AQTGraphic.h"
 
 #define MAX_PATH_POINTS 256
@@ -16,8 +15,7 @@
 {
    NSPoint path[MAX_PATH_POINTS];
    int pointCount;
-   BOOL hasIndexedColor; /*" TRUE => fill and stroke in _fillColor; FALSE => stroke in _strokeColor "*/
    BOOL isFilled;
 }
--(id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount filled:(BOOL)fill color:(NSColor *)aColor colorIndex:(int)cIndex indexedColor:(BOOL)icFlag;
+-(id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount filled:(BOOL)fill color:(AQTColor)aColor;
 @end

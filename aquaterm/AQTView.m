@@ -12,7 +12,7 @@
 #import "AQTModel.h"
 #import "AQTPath.h"
 #import "AQTImage.h"
-#import "AQTColorMap.h"
+//#import "AQTColorMap.h"
 
 #define AQT_MIN_FONTSIZE 9.0
 
@@ -60,13 +60,14 @@
 
 -(void)drawRect:(NSRect)aRect
 {
+  AQTColor canvasColor = [model color]; 
   NSRect theBounds = [self bounds];	// Depends on whether we're printing or drawing to screen
   if (!isPrinting)
   {
     //
     // Erase by drawing background color
     //
-    [[[model colormap] colorForIndex:-4] set];
+    [[NSColor colorWithCalibratedRed:canvasColor.red green:canvasColor.green blue:canvasColor.blue alpha:1.0] set];
     [[NSBezierPath bezierPathWithRect:theBounds] fill];
   }
   //
@@ -99,7 +100,15 @@
   while ((graphic = [enumerator nextObject]))
   {
     [graphic renderInRect:boundsRect];
+#ifdef DEBUG_BOUNDS
+     [[NSColor yellowColor] set];
+     [NSBezierPath strokeRect:[graphic bounds]];
+#endif
   }
+#ifdef DEBUG_BOUNDS
+  [[NSColor redColor] set];
+  [NSBezierPath strokeRect:[self bounds]];
+#endif
   NSLog(@"Render time: %f", -[startTime timeIntervalSinceNow]);
 }
 @end
@@ -144,7 +153,6 @@
 @implementation AQTPath (AQTPathDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-   int index;
    NSBezierPath *scratch = [NSBezierPath bezierPath];
    NSAffineTransform *localTransform = [NSAffineTransform transform];
    float xScale = boundsRect.size.width/canvasSize.width;
@@ -154,17 +162,9 @@
    //
    if (pointCount == 0)
       return;
-   //[scratch removeAllPoints];
    [scratch appendBezierPathWithPoints:path count:pointCount];
    [localTransform scaleXBy:xScale yBy:yScale];
-   [color set];
-/*
- [scratch moveToPoint:path[0]];
-   for (index = 1; index < pointCount; index++)
-   {
-      [scratch lineToPoint:path[index]];
-   }
- */
+   [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
    if (isFilled)
    {
       [[localTransform transformBezierPath:scratch] fill];

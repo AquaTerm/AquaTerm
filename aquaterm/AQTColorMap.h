@@ -13,8 +13,8 @@
 {
     NSMutableArray *indexedColormap;
 }
--(void)setColor:(NSColor *)newColor forIndex:(int)index;
--(NSColor *)colorForIndex:(int)index;
+-(void)setColor:(AQTColor)newColor forIndex:(int)index;
+-(AQTColor)colorForIndex:(int)index;
 -(NSArray *)colorList;
 -(void)setColorList:(NSArray *)colorList;
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "AQTGraphic.h"
-#import "AQTColorMap.h"
 
 @implementation AQTGraphic
     /**"
@@ -24,29 +23,32 @@
 {
     if (self = [super init])
     {
-      color = [[NSColor clearColor] retain]; // See-through color
+       _color.red = .5;
+       _color.green = .5;
+       _color.blue = .5;
     }
     return self; 
 }
 
 -(void)dealloc
 {
-  [color release];
   [super dealloc];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-  [coder encodeObject:color];
-  [coder encodeValueOfObjCType:@encode(int) at:&colorIndex];
+  [coder encodeValueOfObjCType:@encode(float) at:&_color.red];
+   [coder encodeValueOfObjCType:@encode(float) at:&_color.green];
+   [coder encodeValueOfObjCType:@encode(float) at:&_color.blue];
   [coder encodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
   self = [super init];
-  [self setColor:[coder decodeObject]];
-  [coder decodeValueOfObjCType:@encode(int) at:&colorIndex];
+  [coder decodeValueOfObjCType:@encode(float) at:&_color.red];
+  [coder decodeValueOfObjCType:@encode(float) at:&_color.green];
+  [coder decodeValueOfObjCType:@encode(float) at:&_color.blue];
   [coder decodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
   return self;
 }
@@ -62,28 +64,20 @@
   canvasSize = cs;
 }
 
--(NSColor *)color
+-(AQTColor)color
 {
-  return color;
+   return _color;
 }
 //
 //	Stubs, needs to be overridden by subclasses
-// 
--(NSRect)bounds { return NSMakeRect(0,0,0,0); }
+//
+-(NSRect)bounds {return  _bounds;}
 -(void)addObject:(AQTGraphic *)graphic {;}
 -(void)removeObject:(AQTGraphic *)graphic {;}
 -(void)removeObjectsInRect:(NSRect)targetRect {;}
 
--(void)setColor:(NSColor *)newColor
+-(void)setColor:(AQTColor)newColor
 {
-  [newColor retain];
-  [color release];
-  color = newColor;
+  _color = newColor;
 }
-
--(void)updateColors:(AQTColorMap *)colorMap
-{
-  [self setColor:[colorMap colorForIndex:colorIndex]];
-}
-
 @end

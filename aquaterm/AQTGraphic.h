@@ -7,17 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-// Aiming at removing AppKit reliance from model code
-#import <AppKit/AppKit.h>
 
-@class AQTColorMap, AQTModel;
+@class AQTModel;
+
+typedef struct _AQTColor {
+   float red;
+   float green;
+   float blue;
+} AQTColor;
 
 @interface AQTGraphic : NSObject <NSCoding>
 {
-    NSColor *color;
-  /* hasIndexedColor should be part of the subclasses that have an option! */
-    int colorIndex;	  /*" Could mean color or linestyle (dash) depending on graphic object "*/
+    AQTColor _color;
     NSSize canvasSize;
+    NSRect _bounds;
 }
 
 /*" accessor methods "*/
@@ -29,7 +32,6 @@
 -(void)removeObjectsInRect:(NSRect)targetRect;
 
 /*" color handling "*/
--(NSColor *)color;
--(void)setColor:(NSColor *)newColor;
--(void)updateColors:(AQTColorMap *)colorMap; // the new color handling code
+-(AQTColor)color;
+-(void)setColor:(AQTColor)newColor;
 @end

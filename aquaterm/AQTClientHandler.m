@@ -12,7 +12,7 @@
 #import "AQTModel.h"
 #import "AQTPath.h"
 #import "AQTLabel.h"
-#import "AQTColorMap.h"
+//#import "AQTColorMap.h"
 
 @implementation AQTClientHandler
 -(id)init
@@ -63,11 +63,11 @@
   [cm release];
   [stub release];
 */
-  AQTColorMap *cm = [[AQTColorMap alloc] init];
-  [aModel setColormap:cm];
-  [aModel updateColors:cm];
+//  AQTColorMap *cm = [[AQTColorMap alloc] init];
+//  [aModel setColormap:cm];
+//  [aModel updateColors:cm];
   [owner setModel:aModel forView:currentView];
-  [cm release];
+//  [cm release];
 }
 
 -(NSDictionary *)status
