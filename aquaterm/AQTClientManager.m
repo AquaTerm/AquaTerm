@@ -372,7 +372,11 @@
 - (void)setAcceptingEvents:(BOOL)flag  
 {
    if (errorState == YES || _activePlotKey == nil) return;
-   [[_plots objectForKey:_activePlotKey] setAcceptingEvents:flag];
+   NS_DURING
+      [[_plots objectForKey:_activePlotKey] setAcceptingEvents:flag];
+   NS_HANDLER
+      [self _aqtHandlerError:[localException name]];
+   NS_ENDHANDLER
 }
 
 - (NSString *)lastEvent  
