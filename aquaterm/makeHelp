@@ -9,21 +9,30 @@ $docpath=".";
 foreach $item (@ARGV) {   
     print  "<div id=\"contentitem\">\n";
     print "<h2>Adapter::$item</h2>";     
-    print "<h3>ReadMe</h3><code><pre>";     
-    open (filedata, "$adapterpath/$item/ReadMe");
-    print <filedata>;
-    close(filedata);
-    print "</pre></code>";
-    print "<h3>ReleaseNotes</h3><code><pre>";     
-    open (filedata, "$adapterpath/$item/ReleaseNotes");
-    print <filedata>;
-    close(filedata);
-    print "</pre></code>";
+    print "<h3>ReadMe</h3>";     
+    &escape_and_print_file("$adapterpath/$item/ReadMe");
+    print "<h3>ReleaseNotes</h3>";     
+    &escape_and_print_file("$adapterpath/$item/ReleaseNotes");
     print "</div>\n";
 }
 
 &gen_postamble;
 
+sub escape_and_print_file {
+   local($file)=@_;
+#   print $file;
+   open (filedata, $file);
+   while (<filedata>){
+      $data=$_;
+      $data =~ s/</&lt;/g;
+      $data =~ s/>/&gt;/g;
+      $data =~ s/\n/<br>/g;
+      $data =~ s/---/<pre>/g;
+      $data =~ s/===/<\/pre>/g;
+      print $data;
+   }   
+   close(filedata);
+}
 
 sub gen_preamble {
     print <<END;
@@ -31,7 +40,16 @@ sub gen_preamble {
         "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
 <html>
 <head>
-	<title>AquaTerm 1.0.a2 help</title>
+   <title>AquaTerm 1.0.a2 help</title>
+   <style type="text/css">
+   body{background: #FFFFFF; color: #000000; font-family:verdana, arial, sans-serif;}
+   #hdr{border:solid #FFFFFF; border-width:1px 0px 0px 0px; margin:1px 0 0 0; padding:16px;}
+   #contentitem{border:solid #000000; border-width:1px 0px 0px 0px; margin:1px 0 0 0; padding:16px;}
+   h1, h2, h3 {font-family:verdana, arial, sans-serif;}
+   h1 {font-size:20px;}
+   h2 {font-size:14px;}
+   h3 {font-size:12px;}
+</style>
 </head>
 <body>
 END
@@ -53,11 +71,9 @@ END
 sub gen_aqt_content {
 foreach $item ('ReadMe', 'INSTALL', 'ReleaseNotes') {   
     print  "<div id=\"contentitem\">\n";
-    print "<h2>AquaTerm::$item</h2><code><pre>";     
-    open (filedata, "$docpath/$item");
-    print <filedata>;
-    close(filedata);
-    print "</pre></code>\n</div>\n";
+    print "<h2>AquaTerm::$item</h2>";     
+    &escape_and_print_file("$docpath/$item");
+    print "\n</div>\n";
     }
 }
 

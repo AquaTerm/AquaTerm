@@ -1,19 +1,20 @@
 To install at default locations:
 1) Drag AquaTerm.app to /Applications
 2) Copy libaquaterm.1.0.0.dylib (in ./lib) to /usr/local/lib/ 
-3) Create a link libaquaterm.dylib -> libaquaterm.1.0.0.dylib
+3) Create a link libaquaterm.dylib -> libaquaterm.1.0.0.dylib using the command 
+sudo ln -s /usr/local/lib/libaquaterm.1.0.0.dylib /usr/local/lib/libaquaterm.dylib
 4) Copy the contents of ./include to /usr/local/include
 
 This is the result:
-
+---
 /usr/local/
-	include/aquaterm/
-		aquaterm.h
-		AQTAdapter.h
-	lib/
-		libaquaterm.1.0.0.dylib
-		libaquaterm.dylib -> libaquaterm.1.0.0.dylib
-
+    include/aquaterm/
+        aquaterm.h
+        AQTAdapter.h
+    lib/
+        libaquaterm.1.0.0.dylib
+        libaquaterm.dylib -> libaquaterm.1.0.0.dylib
+===
 Check out ./docs/AQTAdapter.html and AQTAdapter.h and aquaterm.h.
 Run the makefiles in C/ and fortran/
 The executables ./demo should produce the same result as menu option Debug->Testview in AquaTerm
@@ -21,13 +22,10 @@ The executables ./demo should produce the same result as menu option Debug->Test
 Full source in ./aquaterm/
 
 The following environment variables may be of interest:
-AquaTerm.app (Must be set in ~/.MacOSX/environment.plist See http://developer.apple.com/qa/qa2001/qa1067.html )
-------------
-AQUATERM_REPORT_TIMING	set this to anything to log drawing time
-
-Clients
--------
-AQUATERM_LOGLEVEL	set this in the range 0-4 to have increasing levels of logging, zero means no logging. 
-AQUATERM_PATH		set this to point to any non-standard location of AquaTerm.app e.g. /Users/you/source/build/AquaTerm.app
-GNUTERM			set this to "aqua" to make AquaTerm default output in Gnuplot
-PGPLOT_DEV		set this to "/AQT" to make AquaTerm default output in PGPLOT
+---
+AQUATERM_REPORT_TIMING  set this in ~/.MacOSX/environment.plist to anything to log drawing time
+AQUATERM_LOGLEVEL       set in the range 0-4 to have increasing levels of logging, zero means no logging. 
+AQUATERM_PATH           point to any non-standard location of AquaTerm.app e.g. /Users/you/Apps/AquaTerm.app
+GNUTERM                 set to "aqua" to make AquaTerm default output in Gnuplot
+PGPLOT_DEV              set to "/AQT" to make AquaTerm default output in PGPLOT
+===
