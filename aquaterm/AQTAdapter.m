@@ -204,8 +204,6 @@ _{43:%{x,y}:%key Error } "*/
       isRunning = [event isEqualToString:@"0"]?YES:NO;
    } while (isRunning);
    [self setAcceptingEvents:NO];
-   if ([event length]==0) 
-      NSLog(@"Got nil event");
    return event;
 }
 

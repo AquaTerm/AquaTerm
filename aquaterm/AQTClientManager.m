@@ -205,6 +205,7 @@
    // Check if plot already exists. If so, just select and clear it.
    if ([self selectPlotWithIndex:refNum] != nil) {
       newBuilder = [self clearPlot];
+      [_eventBuffer setObject:@"0" forKey:key];
       return newBuilder;
    }   
 
@@ -223,6 +224,8 @@
       // Also create a corresponding builder
       newBuilder = [[AQTPlotBuilder alloc] init];
       [_builders setObject:newBuilder forKey:key];
+      // Clear event buffer
+      [_eventBuffer setObject:@"0" forKey:key];
       [newBuilder release];
    }
    return newBuilder;
