@@ -9,8 +9,7 @@
 			children = (
 				F5AB086B0175BC8B01EB16F3,
 				F5AB086C0175BC8B01EB16F3,
-				F5AB08750175BC8B01EB16F3,
-				F580FE650177289D01EB16F3,
+				F5FEAC1401A6B3CE0143D50D,
 			);
 			isa = PBXGroup;
 			name = Extras;
@@ -274,11 +273,11 @@
 				F5AB08800175BC8B01EB16F3,
 				F5AB08810175BC8B01EB16F3,
 				F5AB08820175BC8B01EB16F3,
-				F5AB08830175BC8B01EB16F3,
 				F5AB08840175BC8B01EB16F3,
 				F5AB08850175BC8B01EB16F3,
 				F5AB08860175BC8B01EB16F3,
 				F55ADF1901930B5001957057,
+				F5FEAC1501A6B3CE0143D50D,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -387,11 +386,6 @@
 			settings = {
 			};
 		};
-		F580FE650177289D01EB16F3 = {
-			isa = PBXFileReference;
-			path = gptProtocol.mdoc;
-			refType = 4;
-		};
 		F5AB086B0175BC8B01EB16F3 = {
 			isa = PBXFileReference;
 			path = GPTColorExtras.h;
@@ -440,11 +434,6 @@
 		F5AB08740175BC8B01EB16F3 = {
 			isa = PBXFileReference;
 			path = GPTPath.m;
-			refType = 4;
-		};
-		F5AB08750175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			path = gptProtocol.h;
 			refType = 4;
 		};
 		F5AB08760175BC8B01EB16F3 = {
@@ -518,12 +507,6 @@
 		};
 		F5AB08820175BC8B01EB16F3 = {
 			fileRef = F5AB08730175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5AB08830175BC8B01EB16F3 = {
-			fileRef = F5AB08750175BC8B01EB16F3;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -715,7 +698,7 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
 	<key>NSMainNibFile</key>
-	<string>MainMenu1</string>
+	<string>MainMenu2</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
@@ -737,7 +720,7 @@
 				F5C4C2BD0199DE090143D54F,
 				F5C4C2BE0199DE090143D54F,
 				F5C4C2BF0199DE090143D54F,
-				F5C4C2C00199DE090143D54F,
+				F5FEAC1601A6B3CE0143D50D,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -804,12 +787,6 @@
 		};
 		F5C4C2BF0199DE090143D54F = {
 			fileRef = F5AB086B0175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5C4C2C00199DE090143D54F = {
-			fileRef = F5AB08750175BC8B01EB16F3;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1001,6 +978,23 @@
 			isa = PBXFileReference;
 			path = GPTInfoWindowController.m;
 			refType = 4;
+		};
+		F5FEAC1401A6B3CE0143D50D = {
+			isa = PBXFileReference;
+			path = AQTProtocol.h;
+			refType = 4;
+		};
+		F5FEAC1501A6B3CE0143D50D = {
+			fileRef = F5FEAC1401A6B3CE0143D50D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FEAC1601A6B3CE0143D50D = {
+			fileRef = F5FEAC1401A6B3CE0143D50D;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA;

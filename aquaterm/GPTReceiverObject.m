@@ -24,9 +24,9 @@
         gptConnection = [[NSConnection defaultConnection] retain];
         [gptConnection setRootObject:self];
         
-        if([gptConnection registerName:@"gnuplotServer"] == NO) 
+        if([gptConnection registerName:@"aquatermServer"] == NO) 
         {
-            NSLog(@"Error registering %s\n", @"gnuplotServer");
+            NSLog(@"Error registering %s\n", @"aquatermServer");
         }
     }
     return self;
@@ -38,40 +38,39 @@
     [super dealloc];
 }
 
-    /*" Render the current model (graph) in the current window. If the model is part of a multiplot the flag is set to NO. "*/
-- (oneway void) gptRenderRelease:(BOOL)shouldRelease
+//
+// -----------------------------------------------------------------
+//                                                                   
+// Implementation of the methods listed in the AQTProtocol protocol  
+//              
+// -----------------------------------------------------------------
+//
+
+    /*" Render the current model (graph) in the current window. 
+    If the model is part of a multiplot the flag is set to NO. "*/
+- (oneway void) renderInViewShouldRelease:(BOOL)release
 {  
     [listener setModel:gptModel forView:currentFigure];	// the listener (GPTController) will retain this object
-    /* 2001-10-09
-     * With the current implementation the instance of gptModel _must_ be released
-     * even if the data in it should be subsequently used in a multiplot...
-     * FIXME: Kludgy??? 
-     * 2001-10-10 Is it even true??? 
-     * 2001-11-07 Nope.
-     */
-    if (shouldRelease)
+    if (release)
     {
         [gptModel release];
         gptModel = [[GPTModel alloc] init];
     }
-/*
-    else
-    {
-        NSMutableArray *tmpModel = [[NSMutableArray arrayWithArray:gptModel] retain];
-        [gptModel release];
-        gptModel = tmpModel;
-    }
-*/    
 }
     /*" Add a string (label) to the model currently being built. "*/
-- (oneway void) gptPutString:(bycopy NSString *)textString AtPoint:(bycopy NSPoint)coord WithJustification:(bycopy int)mode WithLinetype:(bycopy int) linetype
+- (oneway void) addString:(bycopy NSString *)text 
+                     atPoint:(bycopy NSPoint)point 
+                     withJustification:(bycopy int)justification 
+                     withIndexedColor:(bycopy int)colorIndex
 {
-    NSDictionary *attrs = [NSDictionary dictionaryWithObject:[NSFont fontWithName:@"Times-Roman" size:16.0] /* FIXME, default font... */
-                                        forKey:NSFontAttributeName]; 
-    GPTLabel *theLabel=[[GPTLabel alloc] initWithLinestyle:linetype 
-                                            origin:coord 
-                                            justification:mode 
-                                            string:textString 
+	NSDictionary *attrs = [NSDictionary dictionaryWithObject:[NSFont fontWithName:@"Times-Roman" size:16.0] forKey:NSFontAttributeName];
+	//
+	// FIXME: The current attributes should be stored locally and [currentAttrs copy] used for last arg. below
+	// 
+    GPTLabel *theLabel=[[GPTLabel alloc] initWithLinestyle:colorIndex 
+                                            origin:point 
+                                            justification:justification 
+                                            string:text 
                                             attributes:attrs];
     
     [gptModel addObject:theLabel];
@@ -79,39 +78,74 @@
     
 }
     /*" Set the font to be used. Not implemented. "*/
-- (oneway void) gptSetFont:(bycopy in NSString *)font
+- (oneway void) setFontWithName:(bycopy NSString *)fontName size:(bycopy float)fontSize;
 {
-    NSLog(@"gptSetFont:%@", font);
+    NSLog(@"Not implemented: setFontWithName:%@ size:%f 4.1", fontName, fontSize);
 }
 
     /*" Add a path to the model currently being built "*/
-- (oneway void) gptSetPath:(bycopy NSBezierPath *)aPath WithLinetype:(bycopy int)linetype FillColor:(bycopy double) gray PathIsFilled:(bycopy BOOL)isFilled
+- (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex
 {
-    GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:linetype
+    GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:colorIndex
                                       linewidth:1.0			/* FIXME! */ 
-                                      isFilled:isFilled 
-                                      gray:gray 
+                                      isFilled:NO 
+                                      gray:0 
                                       path:aPath];	
 
     [gptModel addObject:thePath];
     [thePath release];
-  
 }
-    /*" FIXME: [wrong =>] Raises (creates if neccessary) window n as given by the command "set term aqua <n>" in gnuplot "*/
-- (oneway void) gptCurrentWindow:(int) currentWindow
+- (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color
 {
-    currentFigure = (unsigned)currentWindow;
-    // make window key and front
-    // (void)[listener selectWindow:currentFigure];	
-    NSLog(@"Current figure is %d\n",  currentFigure);	// FIXME! The window doesn't show until the plot is rendered.
+  //
+  // FIXME: The GPTPath methods does not live up to the needs of
+  // 		the methods declared in AQTProtocol.h  
+  //
+  GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:0
+                                      linewidth:1.0			/* FIXME! */ 
+                                      isFilled:NO 
+                                      gray:color 
+                                      path:aPath];	
+
+    [gptModel addObject:thePath];
+    [thePath release];
+
+}
+- (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex
+{
+  //
+  // FIXME: The GPTPath methods does not live up to the needs of
+  // 		the methods declared in AQTProtocol.h  
+  //
+    GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:colorIndex
+                                      linewidth:1.0			/* FIXME! */ 
+                                      isFilled:YES 
+                                      gray:0 
+                                      path:aPath];	
+
+    [gptModel addObject:thePath];
+    [thePath release];
+}
+- (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color
+{
+    GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:0
+                                      linewidth:1.0			/* FIXME! */ 
+                                      isFilled:YES 
+                                      gray:color 
+                                      path:aPath];	
+
+    [gptModel addObject:thePath];
+    [thePath release];
 }
 
-
-// ---- the following two are stubs -----------
-
-- (oneway void) gptPointsize:(double) pointsize
-{}
-- (oneway void) gptDidSetPointsize:(double) size
-{}
-
+    /*" FIXME: [wrong =>] Raises (creates if neccessary) window n as given by the command "set term aqua <n>" in gnuplot "*/
+- (oneway void) selectModel:(int) currentModel;
+{
+    currentFigure = (unsigned)currentModel;
+    //
+    // Q: make window key and front? A: NO, just make sure it is shown 
+    // 
+    // (void)[listener selectWindow:currentFigure];	
+    NSLog(@"Current figure is %d\n",  currentModel);	// FIXME! The window doesn't show until the plot is rendered.
+}
 @end

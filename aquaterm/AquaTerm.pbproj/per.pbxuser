@@ -5,6 +5,7 @@
 		activeTarget = 29B97326FDCFA39411CA2CEA;
 		addToTargets = (
 			29B97326FDCFA39411CA2CEA,
+			F5C4C2B30199DE090143D54F,
 		);
 		breakpoints = (
 			F55ADF1E0193133201957057,
@@ -24,10 +25,10 @@
 					ActiveTab = 0;
 					Frame = "{{0, 23}, {1241, 907}}";
 					Split0 = {
-						ActiveTab = 2;
+						ActiveTab = 3;
 						Frame = "{{284, 0}, {957, 907}}";
 						Split0 = {
-							Frame = "{{0, 250}, {957, 657}}";
+							Frame = "{{0, 320}, {957, 587}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
