@@ -36,6 +36,7 @@
 
 -(id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify
 {
+  
   return [self initWithAttributedString:[[[NSAttributedString alloc] initWithString:aString] autorelease]
                                position:aPoint
                                   angle:textAngle
@@ -46,6 +47,7 @@
 -(void)dealloc
 {
   [string release];
+  [fontName release];
   [super dealloc];
 }
 

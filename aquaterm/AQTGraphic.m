@@ -43,8 +43,6 @@
 - (void)encodeWithCoder:(NSCoder *)coder
 {
   [coder encodeValueOfObjCType:@encode(AQTColor) at:&_color];
-  // [coder encodeValueOfObjCType:@encode(float) at:&_color.green];
-  // [coder encodeValueOfObjCType:@encode(float) at:&_color.blue];
   [coder encodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
   [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
 }
@@ -53,8 +51,6 @@
 {
   self = [super init];
   [coder decodeValueOfObjCType:@encode(AQTColor) at:&_color];
-  //[coder decodeValueOfObjCType:@encode(float) at:&_color.green];
-  //[coder decodeValueOfObjCType:@encode(float) at:&_color.blue];
   [coder decodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
   [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
   return self;
