@@ -29,6 +29,30 @@ It seemlessly provides a connection to the viewer (AquaTerm.app) without any wor
 
 It also provides some utility functionality such an indexed colormap, and an optional
 error handling callback function for the client.
+
+Event handling of user input is provided through an optional callback function.
+
+#Example: HelloAquaTerm.c
+!{
+#import <Foundation/Foundation.h>
+#import "AQTAdapter.h"
+
+   int main(void)
+   {
+      NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+      AQTAdapter *adapter = [[AQTAdapter alloc] init];
+      [adapter openPlotWithIndex:1];
+      [adapter setPlotSize:NSMakeSize(600,400)];
+      [adapter addLabel:@"HelloAquaTerm!" position:NSMakePoint(300, 200) angle:0.0 justification:1];
+      [adapter renderPlot];
+      [adapter release];
+      [pool release];
+      return 0;
+   }
+}
+
+!{gcc -ObjC main.c -o aqtex -I/Users/per/include -L/Users/per/lib -lobjc -laqt -framework Foundation}
+!{gcc main.m -o aqtex -I/Users/per/include -L/Users/per/lib -laqt -framework Foundation}
 "*/
 
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
@@ -86,6 +110,7 @@ error handling callback function for the client.
    [super dealloc];
 }
 
+/*" Inform AquaTerm whether or events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events. "*/
 - (void)setAcceptingEvents:(BOOL)flag
 {
    NSEnumerator *enumObjects = [_builders objectEnumerator];
@@ -101,22 +126,30 @@ error handling callback function for the client.
    [_selectedBuilder setAcceptingEvents:flag];
 }
 
-/*" Optionally set an event handling routine"*/
+/*" Optionally set an event handling routine of the form #customEventHandler(NSString *event).
+The structure of the string event is @"type:data1:data2:..."
+Currently supported events are:
+_{event description}
+_{0 NoEvent }
+_{1:%{x,y}:%button MouseDownEvent } 
+_{2:%{x,y}:%key KeyDownEvent } "*/
 - (void)setEventHandler:(void (*)(NSString *event))fPtr
 {
   _eventHandler = fPtr;
 }
 
-/*" Optionally set an error handling routine to override default behaviour "*/
-- (void)setErrorHandler:(void (*)(NSString *msg))fPtr
+/*" Optionally set an error handling routine of the form #customErrorHandler(NSString *errMsg) to override default behaviour. "*/
+- (void)setErrorHandler:(void (*)(NSString *errMsg))fPtr
 {
   _errorHandler = fPtr;
 }
 
+/*
 - (AQTPlotBuilder *)builder
 {
   return _selectedBuilder;
 }
+*/
 
 /*" Set the current color, used for all subsequent items, using explicit RGB components. "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b
@@ -187,21 +220,25 @@ error handling callback function for the client.
   }
 }
 
+/*" Return the name of the font currently in use. "*/
 - (NSString *)fontname
 {
   return [_selectedBuilder fontname];
 }
 
+/*" Set the font to be used. Applies to all future operations. Default is Times-Roman."*/
 - (void)setFontname:(NSString *)newFontname
 {
   [_selectedBuilder setFontname:newFontname];
 }
 
+/*" Return the size of the font currently in use. "*/
 - (float)fontsize
 {
   return [_selectedBuilder fontsize];
 }
 
+/*" Set the font size in points. Applies to all future operations. Default is 14pt. "*/
 - (void)setFontsize:(float)newFontsize
 {
   [_selectedBuilder setFontsize:newFontsize];
@@ -213,18 +250,33 @@ error handling callback function for the client.
   return [_selectedBuilder linewidth];
 }
 
-/*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth. "*/
+/*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth.  Default linewidth is 1pt."*/
 - (void)setLinewidth:(float)newLinewidth
 {
   [_selectedBuilder setLinewidth:newLinewidth];
 }
 
+/*" Set the current line cap style (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same cap style.
+_{capStyle Description}
+_{0 ButtLineCapStyle}
+_{1 RoundLineCapStyle}
+_{2 SquareLineCapStyle}
+Default is RoundLineCapStyle. "*/
 - (void)setLineCapStyle:(int)capStyle
 {
   [_selectedBuilder setLineCapStyle:capStyle];
 }
 
-
+/*" Add text at coordinate given by pos, rotated by angle degrees and justified (along the rotated baseline) according to just.
+_{just Description}
+_{0 LeftJustified}
+_{1 Centered}
+_{2 RightJustified}
+The text can be either an NSString or an NSAttributedString. By using NSAttributedString a subset of the attributes defined in AppKit may be used to format the string beyond the fontface ans size. The currently supported attributes are
+_{Attribute value}
+_{@"NSSuperScript" raise-level}
+_{@"NSUnderline" 0or1}
+"*/
 - (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just
 {
   [_selectedBuilder addLabel:text position:pos angle:angle justification:just];
@@ -254,7 +306,7 @@ error handling callback function for the client.
   [_selectedBuilder addPolygonWithPoints:points pointCount:pc];
 }
 
-/*" Add a filled rectangle. Should normally be preceeded with #eraseRect: to remove any objects that will be covered by aRect."*/
+/*" Add a filled rectangle. Will attempt to remove any objects that will be covered by aRect."*/
 - (void)addFilledRect:(NSRect)aRect
 {
   [_selectedBuilder addFilledRect:aRect];
@@ -266,6 +318,7 @@ error handling callback function for the client.
   [_selectedBuilder eraseRect:aRect];
 }
 
+/*" Set a transformation matrix for images added by #)addTransformedImageWithBitmap:size:clipRect:, see NSImage documentation for details. "*/
 - (void)setImageTransformM11:(float)m11 m12:(float)m12 m21:(float)m21 m22:(float)m22 tX:(float)tX tY:(float)tY
 {
   AQTAffineTransformStruct trans;
@@ -278,6 +331,7 @@ error handling callback function for the client.
   [_selectedBuilder setImageTransform:trans];
 }
 
+/*" Set transformation matrix to unity, e.g. no transform "*/
 - (void)resetImageTransform
 {
   AQTAffineTransformStruct trans;
@@ -286,11 +340,13 @@ error handling callback function for the client.
   [_selectedBuilder setImageTransform:trans];
 }
 
+/*" Add a bitmap image of size bitmapSize scaled to fit destBounds, does %not apply transform. Bitmap format is 24bits per pixel in sequnce RGBRGBÉ "*/
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
   [_selectedBuilder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
 }
 
+/*" Add a bitmap image of size bitmapSize %honoring transform, transformed image is clipped to destBounds. Bitmap format is 24bits per pixel in sequnce RGBRGBÉ "*/
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
 {
    [_selectedBuilder addTransformedImageWithBitmap:bitmap size:bitmapSize clipRect:destBounds];
@@ -311,13 +367,14 @@ error handling callback function for the client.
   }
 }
 
+/*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
 - (NSString *)lastEvent
 {
   return [_selectedBuilder lastEvent];
 }
 
 /*" Creates a new builder instance, adds it to the list of builders and makes it the selected builder "*/
-- (void)openPlotIndex:(int)refNum 
+- (void)openPlotWithIndex:(int)refNum 
 {
    AQTPlotBuilder *newBuilder = [[AQTPlotBuilder alloc] init];
    id newHandler;
@@ -342,7 +399,7 @@ error handling callback function for the client.
 }
 
 /*" Get the builder instance for refNum and make it the selected builder. If no builder exists for refNum, the selected builder remain unchanged. Returns YES on success. "*/
-- (BOOL)selectPlot:(int)refNum
+- (BOOL)selectPlotWithIndex:(int)refNum
 {
   AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSString stringWithFormat:@"%d", refNum]];
   if(tmpBuilder)
@@ -353,6 +410,7 @@ error handling callback function for the client.
   return NO;
 }
 
+/*" Clears the current plot and resets default values. To keep plot settings, use #eraseRect: instead. "*/
 - (void)clearPlot
 {
   if (_selectedBuilder)
@@ -363,28 +421,30 @@ error handling callback function for the client.
   
 }
 
-/*" Removes the selected builder from the list of builders and sets selected builder to nil."*/
+/*" Closes the current plot but leaves viewer window on screen. Disables event handling. "*/
 - (void)closePlot
-// FIXME: The semantics have changed!!! This should CLOSE the window. NOT close the connection
+// FIXME: The semantics have changed!!! This should CLOSE the connection
 // Maybe change name to avoid confusion with old meaning...
 {
 #if(1)
-   [self render]; // Debugging 
+   [self renderPlot]; // Debugging 
 #endif
 }
 
+/*" Set the limits of the plot area. Must be set %before any drawing command following an #openPlotWithIndex: or #clearPlot command or behaviour is undefined.  "*/
 - (void)setPlotSize:(NSSize)canvasSize
 {
   [_selectedBuilder setSize:canvasSize];
 }
 
+/*" Set title to appear in window titlebar, also default name when saving. "*/
 - (void)setPlotTitle:(NSString *)title
 {
   [_selectedBuilder setTitle:title?title:@"Untitled"];
 }
 
-/*" Hand a copy of the current plot to the viewer "*/
-- (void)render 
+/*" Render the current plot in the viewer. "*/
+- (void)renderPlot 
 {
    [_selectedBuilder render];
 }

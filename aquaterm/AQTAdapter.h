@@ -19,20 +19,19 @@ enum {
   AQTSquareLineCapStyle = 2
 };
 
-
+//@protocol AQTConnectionProtocol;
 @class AQTPlotBuilder;
-@protocol AQTConnectionProtocol;
 @interface AQTAdapter : NSObject
 {
-  NSMutableDictionary *_builders;
-  // NSString *_uniqueId; 	/*" A unique string used to identify this adapter in AquaTerm "*/
-  // NSString *_procName; 	/*" Holds the name of the process who instantiated the object "*/
-  // int _procId;		/*" Holds the pid of the process who instantiated the object "*/
-  NSDistantObject <AQTConnectionProtocol> *_server;	/*" The viewer app's (AquaTerm) default connection "*/
+  /*" All instance variables are private. "*/
+  NSDistantObject <AQTConnectionProtocol> *_server; /* The viewer app's (AquaTerm) default connection */
+  NSMutableDictionary *_builders; /* The objects responsible for assembling a model object from client's calls. */
+  AQTPlotBuilder *_selectedBuilder; 	
   BOOL _serverIsLocal;
-  AQTPlotBuilder *_selectedBuilder; 	/*" The object responsible for assembling a model object from client's calls"*/
-  void (*_errorHandler)(NSString *msg);	/*" A callback function optionally installed by the client "*/
-  void (*_eventHandler)(NSString *event); /*" A callback function optionally installed by the client "*/
+  void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
+  void (*_eventHandler)(NSString *event); /* A callback function optionally installed by the client */
+  id _aqtReserved1;
+  id _aqtReserved2;
 }
 
 /*" Class initialization "*/
@@ -43,20 +42,20 @@ enum {
 
 
   /*" Control operations "*/
-- (void)openPlotIndex:(int)refNum; 
-- (BOOL)selectPlot:(int)refNum;
-- (void)clearPlot;
-- (void)closePlot;
+- (void)openPlotWithIndex:(int)refNum; 
+- (BOOL)selectPlotWithIndex:(int)refNum;
 - (void)setPlotSize:(NSSize)canvasSize;
 - (void)setPlotTitle:(NSString *)title;
-- (void)render; 
+- (void)renderPlot;
+- (void)clearPlot;
+- (void)closePlot;
 
-  /*" Interactions with user "*/
+  /*" Event handling "*/
 - (void)setAcceptingEvents:(BOOL)flag;
 - (NSString *)lastEvent;
 
 
-/*" Plot related commands "*/
+/*" Plotting related commands "*/
 
   /*" Color handling "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b;
