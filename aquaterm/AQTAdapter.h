@@ -12,6 +12,13 @@
 
 #define AQT_COLORMAP_SIZE 256
 
+enum {
+  AQTButtLineCapStyle = 0,
+  AQTRoundLineCapStyle = 1,
+  AQTSquareLineCapStyle = 2
+};
+
+
 @class AQTPlotBuilder;
 @protocol AQTConnectionProtocol, AQTClientProtocol;
 @interface AQTAdapter : NSObject
@@ -61,9 +68,14 @@
   /*" Line handling "*/
 - (float)linewidth;
 - (void)setLinewidth:(float)newLinewidth;
-- (void)addLineAtPoint:(NSPoint)point;  // AQTPath
-- (void)appendLineToPoint:(NSPoint)point;  // AQTPath
+- (void)setLineCapStyle:(int)capStyle;
+- (void)moveToPoint:(NSPoint)point;  // AQTPath
+- (void)addLineToPoint:(NSPoint)point;  // AQTPath
+- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
+
+  /*" Filled areas"*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; // AQTPatch
+- (void)addFilledRect:(NSRect)aRect;
 
   /*" Image handling "*/
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage

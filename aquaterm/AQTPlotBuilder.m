@@ -137,7 +137,13 @@
     [self flushBuffers];
     _linewidth = newLinewidth;
   }
-}	
+}
+
+- (void)setLineCapStyle:(int)capStyle
+{
+  _capStyle = capStyle;
+}
+
 - (void)eraseRect:(NSRect)aRect
 {
   [_model removeObjectsInRect:aRect];
@@ -165,17 +171,14 @@
   BOOL didFlush = NO;
   if (_pointCount > 1)
   {
-    AQTPath *tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount color:_color];
-    [tmpPath setLinewidth:_linewidth];
-    [_model addObject:tmpPath];
-    [tmpPath release];
+    [self addPolylineWithPoints:_path pointCount:_pointCount];
     didFlush = YES;
   }
   _pointCount = 0;
   return didFlush;
 }
 
-- (void)addLineAtPoint:(NSPoint)point
+- (void)moveToPoint:(NSPoint)point
 {
   if (_pointCount > 1)
   {
@@ -186,14 +189,24 @@
   _modelIsDirty = YES;
 }
 
-- (void)appendLineToPoint:(NSPoint)point
+- (void)addLineToPoint:(NSPoint)point
 {
   _path[_pointCount]=point;
   _pointCount++;
   if (_pointCount == MAX_PATH_POINTS)
   {
-    [self addLineAtPoint:point];
+    [self moveToPoint:point];
   }
+  _modelIsDirty = YES;
+}
+
+- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
+{
+  AQTPath *tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount color:_color];
+  [tmpPath setLinewidth:_linewidth];
+  [tmpPath setLineCapStyle:_capStyle];
+  [_model addObject:tmpPath];
+  [tmpPath release];
   _modelIsDirty = YES;
 }
 //
@@ -209,6 +222,17 @@
   [tmpPatch release];
   _modelIsDirty = YES;
 
+}
+- (void)addFilledRect:(NSRect)aRect
+{
+  // This could (should) be implemented by a separate class, using NSDrawFilledRect(List)
+  // to improve drawing speed. For now, use AQTPatch
+  NSPoint pointList[4]={
+    NSMakePoint(NSMinX(aRect), NSMinY(aRect)),
+    NSMakePoint(NSMaxX(aRect), NSMinY(aRect)),
+    NSMakePoint(NSMaxX(aRect), NSMaxY(aRect)),
+    NSMakePoint(NSMinX(aRect), NSMaxY(aRect))};
+  [self addPolygonWithPoints:pointList pointCount:4];
 }
 //
 // AQTImage

@@ -218,6 +218,12 @@ error handling callback function for the client.
 {
   [_builder setLinewidth:newLinewidth];
 }
+
+- (void)setLineCapStyle:(int)capStyle
+{
+  [_builder setLineCapStyle:capStyle];
+}
+
 - (void)eraseRect:(NSRect)aRect
 {
   [_builder eraseRect:aRect];
@@ -228,19 +234,29 @@ error handling callback function for the client.
   [_builder addLabel:text position:pos angle:angle justification:just];
 }
 
-- (void)addLineAtPoint:(NSPoint)point
+- (void)moveToPoint:(NSPoint)point
 {
-  [_builder addLineAtPoint:point];
+  [_builder moveToPoint:point];
 }
 
-- (void)appendLineToPoint:(NSPoint)point
+- (void)addLineToPoint:(NSPoint)point
 {
-  [_builder appendLineToPoint:point];
+  [_builder addLineToPoint:point];
+}
+
+- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
+{
+  [_builder addPolylineWithPoints:points pointCount:pc];
 }
 
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
   [_builder addPolygonWithPoints:points pointCount:pc];
+}
+
+- (void)addFilledRect:(NSRect)aRect
+{
+  [_builder addFilledRect:aRect];
 }
 
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
