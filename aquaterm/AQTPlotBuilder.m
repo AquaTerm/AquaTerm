@@ -183,8 +183,16 @@
 
 - (void)eraseRect:(NSRect)aRect
 {
-#if 0
-   NSLog(@"*** -eraseRect: disabled ***"); // FIXME: move to server
+#if 1
+   NS_DURING
+      [_handler removeGraphicsInRect:aRect];
+   NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+         // [self _serverError]; // FIXME: Grab from AQTAdapterPrivateMethods
+         NSLog(@"Server error");
+      else
+         [localException raise];
+   NS_ENDHANDLER
 #else
    [_model removeObjectsInRect:aRect];
    _modelIsDirty = YES; // FIXME: This may not always be true.

@@ -158,6 +158,11 @@
    }
 }
 
+/* This is a "housekeeping" method, to avoid buildup of hidden objects, does not imply redraw(?) */
+- (void)removeGraphicsInRect:(NSRect)aRect
+{
+   [model removeObjectsInRect:aRect]; // updates bounds automatically.
+}
 
 -(BOOL)invalidateClient:(id)aClient
 {
