@@ -10,6 +10,7 @@
 #import "GPTWindowController.h"
 #import "GPTReceiverObject.h"
 #import "GPTView.h"
+#import "AQTPrintView.h"
 
 @implementation GPTController
     /**"
@@ -121,9 +122,82 @@
     "**/
 -(IBAction)print:(id)sender 
 {
-    // FIXME: this is just a printout of the screen image...
-    [[NSPrintOperation printOperationWithView:[[frontWindow windowController] viewOutlet]] runOperation];
+    AQTPrintView *printView;
+    NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; // [self printInfo];
+    NSSize paperSize = [printInfo paperSize];
+    NSPrintOperation *printOp;
+    
+    paperSize.width -= ([printInfo leftMargin] + [printInfo rightMargin]);
+    paperSize.height -= ([printInfo topMargin] + [printInfo bottomMargin]);
+    if ([printInfo orientation] == NSPortraitOrientation)
+    {
+      paperSize.height = (AQUA_YMAX * paperSize.width) / AQUA_XMAX;
+    }
+    else
+    {
+      paperSize.width = (AQUA_XMAX * paperSize.height) / AQUA_YMAX;
+    }
+    
+    printView = [[AQTPrintView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height) model:[[frontWindow windowController] model]];
+    printOp = [NSPrintOperation printOperationWithView:printView];
+    (void)[printOp runOperationModalForWindow:frontWindow delegate:nil didRunSelector:NULL contextInfo:NULL];
+    [printView release];
 }
+
+- (IBAction)saveFigureAs:(id)sender
+{
+  NSSavePanel *savePanel = [NSSavePanel savePanel];
+  [savePanel setRequiredFileType: @"pdf"];
+  [savePanel beginSheetForDirectory:nil 
+                               file:nil 
+                     modalForWindow:frontWindow 
+                      modalDelegate:self 
+                     didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:) 
+                        contextInfo:NULL
+  ];
+}
+
+- (void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+  //
+  // Save figure to pasteboard as PDF (FIXME: format should be set in dialog)
+  //
+  NSData *data;
+  NSString *filename;
+  AQTPrintView *printView;
+  
+  if (NSFileHandlingPanelOKButton == returnCode)
+  {
+    printView = [[AQTPrintView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX) model:[[frontWindow windowController] model]];
+    //
+    // save the image as a pdf file with the name returned by the sheet
+    //
+    filename = [theSheet filename];
+    data = [printView dataWithPDFInsideRect: [printView bounds]];
+    [data writeToFile: filename atomically: NO];
+    [printView release];
+  }
+}
+
+- (IBAction)copy:(id)sender
+{
+  //
+  // Copy figure to pasteboard as EPS (FIXME: format should be set in prefs)
+  //
+  AQTPrintView *printView = [[AQTPrintView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX) model:[[frontWindow windowController] model]];
+  NSData *data = [printView dataWithEPSInsideRect:[printView bounds]];
+  NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+  [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, NSStringPboardType, nil] owner:nil];
+  if (YES !=[pasteboard setData:data forType:NSStringPboardType])
+    NSLog(@"write to pasteboard failed");
+/* --- what's wrong with this?
+  data = [printView dataWithEPSInsideRect: [printView bounds]];
+  [printView writeEPSInsideRect:[printView bounds] toPasteboard:[NSPasteboard generalPasteboard]]; 
+*/  
+  [printView release];
+}
+
+
 -(IBAction)debugInfo:(id)sender
 {
   NSLog(@"Debug log: %@", [[receiverObject connection] remoteObjects]);

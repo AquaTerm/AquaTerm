@@ -25,5 +25,8 @@
 -(GPTWindowController *)controllerForView:(unsigned)index;
 -(void)setFrontWindow:(NSWindow *)mainWindow;
 -(IBAction)print:(id)sender; 
+-(IBAction)saveFigureAs:(id)sender;
+-(void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (IBAction)copy:(id)sender;
 -(IBAction)debugInfo:(id)sender;
 @end

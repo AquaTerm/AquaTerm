@@ -2,7 +2,7 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {print = id; }; 
+            ACTIONS = {copy = id; debugInfo = id; print = id; saveFigureAs = id; }; 
             CLASS = GPTController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 

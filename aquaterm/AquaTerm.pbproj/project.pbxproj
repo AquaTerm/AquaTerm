@@ -283,6 +283,7 @@
 				F55D242501C11B5201A80104,
 				F55D242601C11B5201A80104,
 				F5653B8201C4B8F201A80104,
+				F53901BF01DF8C78014110A7,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -311,6 +312,7 @@
 				F55D242A01C11B5201A80104,
 				F55D242B01C11B5201A80104,
 				F5653B8301C4B8F201A80104,
+				F53901C001DF8C78014110A7,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -370,6 +372,40 @@
 //F52
 //F53
 //F54
+		F53901BD01DF8C78014110A7 = {
+			isa = PBXFileReference;
+			path = AQTPrintView.h;
+			refType = 4;
+		};
+		F53901BE01DF8C78014110A7 = {
+			isa = PBXFileReference;
+			path = AQTPrintView.m;
+			refType = 4;
+		};
+		F53901BF01DF8C78014110A7 = {
+			fileRef = F53901BD01DF8C78014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F53901C001DF8C78014110A7 = {
+			fileRef = F53901BE01DF8C78014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F53901C101DF8C78014110A7 = {
+			fileRef = F53901BD01DF8C78014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F53901C201DF8C78014110A7 = {
+			fileRef = F53901BE01DF8C78014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F55D241701C0F0F501A80104 = {
 			isa = PBXFileReference;
 			path = AQTGraphic.h;
@@ -596,6 +632,8 @@
 			children = (
 				F5AB08780175BC8B01EB16F3,
 				F5AB08790175BC8B01EB16F3,
+				F53901BD01DF8C78014110A7,
+				F53901BE01DF8C78014110A7,
 			);
 			isa = PBXGroup;
 			name = View;
@@ -726,6 +764,7 @@
 				F5C4C2BB0199DE090143D54F,
 				F5C4C2BF0199DE090143D54F,
 				F5FEAC1601A6B3CE0143D50D,
+				F53901C101DF8C78014110A7,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -807,6 +846,7 @@
 				F5C4C2CB0199DE090143D54F,
 				F5C4C2D00199DE090143D54F,
 				F5C4C2D10199DE090143D54F,
+				F53901C201DF8C78014110A7,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
