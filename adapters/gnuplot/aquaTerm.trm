@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.27 2004/03/14 20:28:14 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.28 2004/03/15 12:23:46 persquare Exp $
  *
  */
 
@@ -247,49 +247,31 @@ AQUA_init()
   float fontSize, fontWHRatio;
   NSString *title;
   LOG(@"Aqua Init (open plot)");
-  if (arpool == NULL)   
-    {
-      arpool = [[NSAutoreleasePool alloc] init];
-      adapter = [[AQTAdapter alloc] init]; 
+  if (arpool == NULL) {
+    /* FIXME: This should be removed when pools are handled in gnuplot proper */
+    arpool = [[NSAutoreleasePool alloc] init];
+  }
+  if (adapter == NULL) {
+    adapter = [[AQTAdapter alloc] init]; 
+    if (!adapter) { /* server could be invalid (=nil) for several reasons */
+      printf("Error -- no adapter!\n");
+      exit(1);
     }
-  else 
-    {
-      if (!adapter)	/* server could be invalid (=nil) for several reasons */
-	{
-	  printf("Error -- no adapter!\n");
-	  exit(1);
-	}
-    }
-  /*
-  term->xmax = AQUA_XMAX; 
-  term->ymax = AQUA_YMAX; 
-  term->v_char = (unsigned int) AQUA_VCHAR;
-  term->h_char = (unsigned int) AQUA_HCHAR;
-  term->v_tic = (unsigned int) AQUA_VTIC;
-  term->h_tic = (unsigned int) AQUA_HTIC;  
-  */
+  }
 
   /* Must open plot before all other commands */
-
   [adapter openPlotWithIndex:AQUA_plotRef];
 
   /* set xmax, ymax*/
-
   term->xmax = AQUA_xSize;
   term->ymax = AQUA_ySize;
-
   /* set current font*/
-
   [adapter setFontname:[NSString stringWithCString:AQUA_fontNameCur]];
   [adapter setFontsize:AQUA_fontSizeCur];                                                                   
-
   /* set h_char, v_char*/
-
   term->h_char = (int) (AQUA_fontSizeCur * 0.7 * AQUA_RESOLUTION);
   term->v_char = (int) (AQUA_fontSizeCur * 1.5 * AQUA_RESOLUTION);
-
   /* set h_tic, v_tic*/
-
   term->h_tic = term->v_char / 2;
   term->v_tic = term->v_char / 2;
 
