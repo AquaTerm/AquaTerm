@@ -118,7 +118,7 @@ void customEventHandler(int index, NSString *event)
 }
 
 
--(IBAction)test:(id)sender
+-(IBAction)debug:(id)sender
 {
   NSAffineTransform *t;
   NSAffineTransformStruct ts;
@@ -238,5 +238,23 @@ void customEventHandler(int index, NSString *event)
 
    [adapter closePlot];
 */
+}
+-(IBAction)mailBug:(id)sender;
+{
+   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:persquare@users.sourceforge.net?subject=AquaTerm%20bugreport"]];
+}
+-(IBAction)mailFeedback:(id)sender;
+{
+   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:persquare@users.sourceforge.net?subject=AquaTerm%20feedback"]];
+
+}
+-(IBAction)testview:(id)sender;
+{
+}
+-(IBAction)stringDrawingTest:(id)sender;
+{
+}
+-(IBAction)lineDrawingTest:(id)sender;
+{
 }
 @end

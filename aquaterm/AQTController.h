@@ -20,5 +20,10 @@
 - (void)removePlot:(id)aPlot;
 
 -(IBAction)showHelp:(id)sender;
--(IBAction)test:(id)sender;
+-(IBAction)debug:(id)sender;
+-(IBAction)mailBug:(id)sender;
+-(IBAction)mailFeedback:(id)sender;
+-(IBAction)testview:(id)sender;
+-(IBAction)stringDrawingTest:(id)sender;
+-(IBAction)lineDrawingTest:(id)sender;
 @end

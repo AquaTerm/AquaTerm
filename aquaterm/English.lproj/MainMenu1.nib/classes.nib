@@ -1,7 +1,15 @@
 {
     IBClasses = (
         {
-            ACTIONS = {newDocument = id; showHelp = id; test = id; }; 
+            ACTIONS = {
+                debug = id; 
+                lineDrawingTest = id; 
+                mailBug = id; 
+                mailFeedback = id; 
+                showHelp = id; 
+                stringDrawingTest = id; 
+                testview = id; 
+            }; 
             CLASS = AQTController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
