@@ -12,7 +12,7 @@
 //
 // This code can be build as a stand-alone executable (tool)
 // from the command line:
-// gcc -o demo Demo.m -laqt -Framework Foundation
+// gcc -o demo Demo.m -laquaterm -framework Foundation
 // _or_
 // executed from inside AquaTerm using menu Debug -> Testview. 
 
