@@ -133,7 +133,7 @@
   debugRect = [self bounds];
   [NSBezierPath strokeRect:debugRect];
 #endif
-  NSLog(@"Render time: %f", -[startTime timeIntervalSinceNow]);
+  NSLog(@"Render time: %f for %d objects", -[startTime timeIntervalSinceNow], [modelObjects count]);
 }
 @end
 
