@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AQTGraphic.h"
 #import "AQTImage.h"
+#import "AQTPath.h"
 #import "AQTClientProtocol.h"
 
 // This is the default colormap size
@@ -36,6 +37,10 @@
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
   AQTAffineTransformStruct _transform;
   AQTColorMap *_colormap;
+  BOOL _hasPattern; /*" Current pattern state "*/
+  float _pattern[MAX_PATTERN_COUNT]; /*" Currently selected dash pattern "*/
+  int _patternCount;   /*" Currently selected dash count "*/
+  float _patternPhase; /*" Currently selected dash phase "*/
 }
 
 /*" Acessors "*/
@@ -64,6 +69,8 @@
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;
+- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase;
+- (void)setLinestyleSolid;
 - (void)setLineCapStyle:(int)capStyle;
 - (void)moveToPoint:(NSPoint)point;  // AQTPath
 - (void)addLineToPoint:(NSPoint)point;  // AQTPath

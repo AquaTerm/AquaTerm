@@ -76,6 +76,8 @@ extern const int AQTAlignTop;
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;
+- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase;
+- (void)setLinestyleSolid;
 - (void)setLineCapStyle:(int)capStyle;
 - (void)moveToPoint:(NSPoint)point;  
 - (void)addLineToPoint:(NSPoint)point; 

@@ -48,7 +48,8 @@
         path[i] = points[i];
      }
      pointCount = pc;
-     [self setLinewidth:.2];
+     linewidth = .2;
+     hasPattern = NO;
   }
   return self;
 }
@@ -74,7 +75,11 @@
   [coder encodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder encodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
-  [coder encodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path]; 
+  [coder encodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path];
+  [coder encodeValueOfObjCType:@encode(int) at:&patternCount];
+  [coder encodeArrayOfObjCType:@encode(float) count:patternCount at:pattern];
+  [coder encodeValueOfObjCType:@encode(float) at:&patternPhase];
+  [coder encodeValueOfObjCType:@encode(BOOL) at:&hasPattern];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
@@ -87,23 +92,52 @@
   // path might be malloc'd or on heap depending on pointCount
   pointCount = [self _aqtSetupPathStoreForPointCount:pointCount];
   [coder decodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path]; 
+  [coder decodeValueOfObjCType:@encode(int) at:&patternCount];
+  [coder decodeArrayOfObjCType:@encode(float) count:patternCount at:pattern];
+  [coder decodeValueOfObjCType:@encode(float) at:&patternPhase];
+  [coder decodeValueOfObjCType:@encode(BOOL) at:&hasPattern];
+  
   return self;
+}
+
+- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase 
+{
+  // Create a local copy of the pattern.
+   int i;
+   if (newCount <= 0) // Sanity check
+      return;
+   // constrain count to MAX_PATTERN_COUNT
+   newCount = newCount>MAX_PATTERN_COUNT?MAX_PATTERN_COUNT:newCount;
+   for (i=0; i<newCount; i++) {
+      pattern[i] = newPattern[i]; 
+   }
+   patternCount = newCount;
+   patternPhase = newPhase;
+   hasPattern = YES;
 }
 
 - (void)setLinewidth:(float)lw
 {
   linewidth = lw;
 }
+
 - (void)setLineCapStyle:(int)capStyle
 {
   lineCapStyle = capStyle;
 }
+
 - (void)setIsFilled:(BOOL)flag
 {
    isFilled = flag;
 }
+
 - (BOOL)isFilled
 {
    return isFilled;
+}
+
+- (BOOL)hasPattern
+{
+   return hasPattern;
 }
 @end

@@ -333,6 +333,18 @@ _{@"NSUnderline" 0or1}
    [_selectedBuilder setLinewidth:newLinewidth];
 }
 
+/*" Set the current line style to pattern style, used for all subsequent lines. The linestyle is specified as a pattern, an array of at most 8 float, where even positions correspond to dash-lengths and odd positions correspond to gap-lengths. To produce e.g. a dash-dotted line, use the pattern {4.0, 2.0, 1.0, 2.0}."*/
+- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase
+{
+   [_selectedBuilder setLinestylePattern:newPattern count:newCount phase:newPhase];
+}
+
+/*" Set the current line style to solid, used for all subsequent lines. This is the default."*/
+- (void)setLinestyleSolid
+{
+   [_selectedBuilder setLinestyleSolid];
+}
+
 /*" Set the current line cap style (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same cap style.
 _{capStyle Description}
 _{AQTButtLineCapStyle ButtLineCapStyle}

@@ -238,6 +238,16 @@ void aqtAddPolyline(float *x, float *y, int pc)
    }   
 }
 
+void aqtSetLinestylePattern(float *newPattern, int newCount, float newPhase)
+{
+   [_adapter setLinestylePattern:newPattern count:newCount phase:newPhase];
+}
+
+void aqtSetLinestyleSolid(void)
+{
+   [_adapter setLinestyleSolid];
+}
+
 /*" Rect and polygon handling"*/
  void aqtMoveToVertex(float x, float y)
 {

@@ -67,6 +67,8 @@ void aqtAddLabel(const char *text, float x, float y, float angle, int align);
 
 /*" Line handling "*/
 void aqtSetLinewidth(float newLinewidth);
+void aqtSetLinestylePattern(float *newPattern, int newCount, float newPhase);
+void aqtSetLinestyleSolid(void);
 void aqtSetLineCapStyle(int capStyle);
 void aqtMoveTo(float x, float y);
 void aqtAddLineTo(float x, float y);

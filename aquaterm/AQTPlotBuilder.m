@@ -26,6 +26,9 @@
    _linewidth = 1.0;
    _transform.m11 = 1.0;
    _transform.m22 = 1.0;
+   _hasPattern = NO;
+   _patternCount = 0;
+   _patternPhase = 0.0;
 }
 
 - (void)_aqtPlotBuilderSetModelIsDirty:(BOOL)isDirty
@@ -189,12 +192,36 @@
 
 - (void)setLinewidth:(float)newLinewidth
 {
+   // FIXME: The following line seems to be a bug...
    [self _flushPolygonBuffer]; // FIXME: expose flush methods in API?
    if (newLinewidth != _linewidth)
    {
       [self _flushPolylineBuffer];
       _linewidth = newLinewidth;
    }
+}
+
+- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase //CM
+{
+   [self _flushBuffers]; // FIXME: expose flush methods in API?
+   // Copy the pattern
+   int i;
+   if (newCount <= 0) // Sanity check
+      return;
+   // constrain count to MAX_PATTERN_COUNT
+   newCount = newCount>MAX_PATTERN_COUNT?MAX_PATTERN_COUNT:newCount;
+   for (i=0; i<newCount; i++) {
+      _pattern[i] = newPattern[i]; 
+   }
+   _patternCount = newCount; 
+   _patternPhase = newPhase;
+   _hasPattern = YES;
+}
+
+- (void)setLinestyleSolid
+{
+   [self _flushBuffers]; // FIXME: expose flush methods in API?
+   _hasPattern = NO;
 }
 
 - (void)setLineCapStyle:(int)capStyle
@@ -282,13 +309,21 @@
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 
+   // This is where all line-drawing  ends up eventually. 
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
 {
    AQTPath *tmpPath;
+   // Create a path
    tmpPath = [[AQTPath alloc] initWithPoints:points pointCount:pc];
+   
+   // Copy current properties to path
    [tmpPath setColor:_color];
    [tmpPath setLinewidth:_linewidth];
    [tmpPath setLineCapStyle:_capStyle];
+   // [tmpPath setHasPattern:_hasPattern];
+   if(_hasPattern == YES) {
+      [tmpPath setLinestylePattern:_pattern count:_patternCount phase:_patternPhase];
+   }
    [_model addObject:tmpPath];
    [tmpPath release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
