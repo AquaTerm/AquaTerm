@@ -4,6 +4,7 @@
 
 #import "GPTView.h"
 #import "AQTModel.h"
+#import "AQTColorMap.h"
 #import "GPTWindowController.h"
 
 @implementation GPTView
@@ -18,12 +19,12 @@
     //
     // Get the model associated with this view
     //
-    AQTGraphic *modelReference = [(GPTWindowController *)[[self window] windowController] model];
+    AQTModel *modelReference = [(GPTWindowController *)[[self window] windowController] model];
     NSRect theBounds = [self bounds];
     //
     // Erase by drawing background color and draw a stylish line around the view 
     //
-    [[[modelReference colormap] colorForIndex:-4] set]; 
+    [[(AQTColorMap *)[modelReference colormap] colorForIndex:-4] set]; 
     [[NSBezierPath bezierPathWithRect:theBounds] fill];
     [[NSColor blackColor] set];
     [[NSBezierPath bezierPathWithRect:theBounds] stroke];
