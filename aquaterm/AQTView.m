@@ -9,6 +9,7 @@
 #import "AQTView.h"
 #import "AQTGraphic.h"
 #import "AQTModel.h"
+#import "AQTGraphicDrawingMethods.h"
 
 @implementation AQTView
 -(void)awakeFromNib

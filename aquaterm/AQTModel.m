@@ -76,13 +76,6 @@
 {
   [graphic setCanvasSize:[self canvasSize]];
   [modelObjects addObject:graphic];
-  [self setBounds:NSUnionRect([self bounds], [graphic bounds])];
-}
-
--(void)addObjects:(NSArray *)objects
-{
-   [modelObjects addObjectsFromArray:objects];
-   // [self updateBounds]; // FIXME: stupid
 }
 
 -(NSArray *)modelObjects
@@ -90,57 +83,11 @@
    return modelObjects;
 }
 
-
--(void)removeObjectsInRect:(NSRect)targetRect
-{
-  // FIXME: It is possible to recursively nest models in models,
-  // but this method doesn't work in that case
-
-  NSRect testRect;
-  int i;
-  int  objectCount = [modelObjects count];
-#ifdef TIMING
-  NSDate *startTime=  [NSDate date];
-#endif
-  targetRect = NSInsetRect(targetRect, -0.5, -0.5); // Try to be smart...
-
-  if(objectCount == 0)
-    return;
-
-  if (NSContainsRect(targetRect, [self bounds]))
-  {
-    [modelObjects removeAllObjects];
-    [self setBounds:NSZeroRect];
-  }
-  else
-  {
-    for (i = objectCount - 1; i >= 0; i--)
-    {
-      testRect = [[modelObjects objectAtIndex:i] bounds];
-      if (testRect.size.height == 0.0 || testRect.size.width == 0.0)
-      {
-        testRect = NSInsetRect(testRect, -0.1, -0.1); // FIXME: Try to be smarter...
-      }
-      if (NSContainsRect(targetRect, testRect))
-      {
-        [modelObjects removeObjectAtIndex:i];
-      }
-      else
-      {
-        // FIXME: Rebuild bounds (not verified!)
-        [self setBounds:NSUnionRect([self bounds], testRect)];
-      }
-    }
-  }
-#ifdef TIMING
-  NSLog(@"Time taken: %f", -[startTime timeIntervalSinceNow]);
-#endif
-}
-
 -(void)removeAllModelObjects
 {
    [modelObjects removeAllObjects];
 }
+
 -(void)setTitle:(NSString *)newTitle
 {
   [newTitle retain];
@@ -150,7 +97,7 @@
 
 -(NSString *)title
 {
-  return [title copy];
+  return [[title copy] autorelease];
 }
 
 @end

@@ -11,6 +11,7 @@
 #import "AQTView.h"
 #import "AQTAdapter.h"
 #import "AQTPlotBuilder.h"
+//#import "AQTModelExtensions.h"
 #import "AQTGraphicDrawingMethods.h"
 
 #define TITLEBAR_HEIGHT 22.0
@@ -124,7 +125,7 @@
 
 -(void)appendPlot:(AQTModel *)newModel
 {
-   NSRect addedBounds;
+ //  NSRect addedBounds;
    NSSize canvasSize = [model canvasSize];
    if (!model)
    {
@@ -133,16 +134,17 @@
       return;
    }
 
-   addedBounds = [newModel updateBounds];
-
+//   addedBounds = [newModel updateBounds];
+   [model appendModel:newModel];
+   
 #ifdef DEBUG_BOUNDS
    NSLog(@"oldBounds = %@", NSStringFromRect([model bounds]));
-   NSLog(@"addedBounds = %@", NSStringFromRect(addedBounds));
+   NSLog(@"addedBounds = %@", NSStringFromRect([newModel bounds]));
 #endif
    
-   [model addObjects:[newModel modelObjects]];
-   [model setTitle:[newModel title]];
-   [model setColor:[newModel color]];
+//   [model addObjects:[newModel modelObjects]];
+//   [model setTitle:[newModel title]];
+//   [model setColor:[newModel color]];
    if (_isWindowLoaded)
    {
       NSRect newBounds = [newModel bounds];

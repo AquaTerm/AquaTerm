@@ -7,8 +7,8 @@
 //
 
 #import "AQTGraphicDrawingMethods.h"
+
 #import "AQTLabel.h"
-#import "AQTModel.h"
 #import "AQTPath.h"
 #import "AQTPatch.h"
 #import "AQTImage.h"
@@ -65,6 +65,8 @@
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
 #ifdef TIMING
+   static float totalTime = 0.0;
+   float thisTime;
    NSDate *startTime = [NSDate date];
 #endif
    NSRect debugRect;
@@ -88,7 +90,9 @@
    [NSBezierPath strokeRect:debugRect];
 #endif
 #ifdef TIMING
-   NSLog(@"Render time: %f for %d objects", -[startTime timeIntervalSinceNow], [modelObjects count]);
+   thisTime = -[startTime timeIntervalSinceNow];
+   totalTime += thisTime;
+   NSLog(@"Render time: %f for %d objects. Total: %f", thisTime, [modelObjects count], totalTime);
 #endif
 }
 @end
@@ -319,3 +323,64 @@
    }
 }
 @end
+
+@implementation AQTModel (AQTModelExtensions)
+-(void)appendModel:(AQTModel *)aModel
+{
+   [self setTitle:[aModel title]];
+   [self setColor:[aModel color]];
+   [self setBounds:NSUnionRect([self bounds], [aModel updateBounds])];
+   [modelObjects addObjectsFromArray:[aModel modelObjects]];
+}
+
+-(void)removeObjectsInRect:(NSRect)targetRect
+{
+   // FIXME: It is possible to recursively nest models in models,
+   // but this method doesn't work in that case
+
+   NSRect testRect;
+   NSRect newBounds = NSZeroRect;
+   int i;
+   int  objectCount = [modelObjects count];
+#if 0
+   NSDate *startTime=  [NSDate date];
+#endif
+   targetRect = NSInsetRect(targetRect, -0.5, -0.5); // Try to be smart...
+
+   if(objectCount == 0)
+      return;
+
+   if (NSContainsRect(targetRect, [self bounds]))
+   {
+      [modelObjects removeAllObjects];
+      [self setBounds:newBounds];
+   }
+   else
+   {
+      for (i = objectCount - 1; i >= 0; i--)
+      {
+         testRect = [[modelObjects objectAtIndex:i] bounds];
+         if (testRect.size.height == 0.0 || testRect.size.width == 0.0)
+         {
+            testRect = NSInsetRect(testRect, -0.1, -0.1); // FIXME: Try to be smarter...
+         }
+         if (NSContainsRect(targetRect, testRect))
+         {
+            [modelObjects removeObjectAtIndex:i];
+         }
+         else
+         {
+            // FIXME: Rebuild bounds (not verified!)
+            // [self setBounds:NSUnionRect([self bounds], testRect)];
+            newBounds = NSUnionRect(newBounds, testRect);
+         }
+      }
+   }
+   [self setBounds:newBounds];
+#if 0
+   NSLog(@"Time taken: %f", -[startTime timeIntervalSinceNow]);
+#endif
+}
+
+@end
+

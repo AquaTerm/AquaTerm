@@ -7,8 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "AQTGraphic.h"
 
+#import "AQTGraphic.h"
+#import "AQTModel.h"
 
 @interface AQTGraphic (AQTGraphicDrawingMethods)
 -(id)_cache;
@@ -16,4 +17,10 @@
 -(NSRect)updateBounds;
 -(void)renderInRect:(NSRect)boundsRect; // <--- canvas coords
 @end
+
+@interface AQTModel (AQTModelExtensions)
+-(void)appendModel:(AQTModel *)aModel;
+-(void)removeObjectsInRect:(NSRect)targetRect;
+@end
+
 
