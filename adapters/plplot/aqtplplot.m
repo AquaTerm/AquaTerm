@@ -73,7 +73,7 @@ void plD_init_aqt(PLStream *pls)
       arpool = [[NSAutoreleasePool alloc] init];
       adapter = [[AQTAdapter alloc] init];
    }
-   [adapter setBackgroundColorRed:0.0 green:0.0 blue:0.0];
+   [adapter setBackgroundColorRed:0.5 green:0.5 blue:0.5];
 
    pls->termin = 1;		// If interactive terminal, set true.
    pls->color = 1;		// aqt is color terminal
