@@ -10,19 +10,10 @@
 
 @implementation AQTColorMap
 -(id)init
-{
-  int i;
-  NSColor *dummyColor = [NSColor clearColor];
-  
+{  
   if (self = [super init])
   {
     indexedColormap = [[NSMutableArray alloc] initWithCapacity:256];	// 256 is a _hint_, not allocated!
-    // Make sure we have _1_ object in the array
-    // [indexedColormap addObject:dummyColor];
-    // for (i=0;i<256;i++)
-    // {
-    //   [indexedColormap addObject:dummyColor];
-    // }
 
     // Expand colormap to 10 colors
     [self setColor:[NSColor redColor] forIndex:0];

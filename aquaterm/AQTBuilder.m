@@ -81,7 +81,7 @@ static inline void NOOP_(id x, ...) {;}
 {
   // Hand over model to renderer and release it
   [model updateColors:colormap];
-  NSLog(@"builder/closeModel setmodel:forView:%d",index);
+  LOG(@"builder/closeModel setmodel:forView:%d",index);
 
   [renderer setModel:model forView:modelNumber];	// the renderer will retain this object
   [model release];
@@ -211,7 +211,7 @@ static inline void NOOP_(id x, ...) {;}
 - (oneway void)render
 {
   [model updateColors:colormap];	// Get all objects to set its own color before display
-    NSLog(@"builder/render calling setmodel:forView:%d",index);
+    LOG(@"builder/render calling setmodel:forView:%d",index);
 
   [renderer setModel:model forView:modelNumber];	// the renderer will retain this object
 }
