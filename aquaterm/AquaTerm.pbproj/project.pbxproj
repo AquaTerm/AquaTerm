@@ -431,6 +431,20 @@
 			settings = {
 			};
 		};
+		CB7218CC06073BFF008DCEAD = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.perl;
+			path = makeHelp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB7218CD06073BFF008DCEAD = {
+			fileRef = CB7218CC06073BFF008DCEAD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CB77583A056B83E300D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -951,6 +965,7 @@
 				CBC4B43A05E4C784001BE8D7,
 				CB7217FC06072ABA008DCEAD,
 				CB72184906072CF6008DCEAD,
+				CB7218CD06073BFF008DCEAD,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1393,6 +1408,7 @@
 		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
+				CB7218CC06073BFF008DCEAD,
 				CB7217FB06072ABA008DCEAD,
 				F57C16A202506DE3010D3DE4,
 				CB72184806072CF6008DCEAD,
