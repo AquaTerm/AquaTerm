@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.6 2001/12/13 00:19:44 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.7 2001/12/13 13:25:52 persquare Exp $
  *
  */
 
@@ -102,12 +102,15 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSPortCoder.h>
-#import <Foundation/NSNotification.h>
 #import <Foundation/NSException.h>
 #import <AppKit/NSWorkspace.h>
 #import <AppKit/NSBezierPath.h>
 #import <stdarg.h>
-
+//
+// ----------------------------------------------------------------
+// AQTProtocol - A protocol that lists the Objective-C methods 
+// that AquaTerm responds to
+// ----------------------------------------------------------------
 //
 // Since this header file is used outside of AquaTerm too,
 // the internal version number is defined explicitly here
@@ -134,6 +137,7 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 //
 // Add a string to the current model, where:
 // justification is {LEFT=0, CENTER, RIGHT}
+// angle is given in degrees
 // colorIndex is a number in the range -3 and upwards
 // The colors -3, -2, -1 have special meaning and 
 // colors 0 and upwards are taken modulo N (i.e cyclic)
@@ -161,12 +165,10 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 - (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex;
 - (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color;
 //
-// Select the model that will receive subsequent graphic elements
-// (Q: What does this imply for the corresponding window? Front? Show? Key?
-//  A: Definitely "show" and absolutely _not_ "front", "key" is meaningless)
+// Select the model that will receive subsequent calls
 // 
 - (oneway void) selectModel:(int) currentModel;
-@end
+@end /* AQTProtocol */
 
 static NSAutoreleasePool *arpool;   // our autorelease pool 
 static id gnuTermAccess;        	// local object manages the D.O. connection
@@ -198,6 +200,11 @@ static inline void NOOP_(id x, ...) {;}
 #define LOG  NOOP_
 #endif	/* LOGGING */
 
+// ----------------------------------------------------------------
+// AQTAdapter - A class to mediate between gnuplot C-function calls
+// and AquaTerm Objective-C remote messages
+// ----------------------------------------------------------------
+//
 @interface AQTAdapter : NSObject
 {
   @private
@@ -230,7 +237,7 @@ static inline void NOOP_(id x, ...) {;}
 -(void) setFillColor:(double)gray;
 -(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners;
 -(void) setFigure:(int)newFigure;
-@end
+@end 
 
 @implementation AQTAdapter
 -(id) init
@@ -344,30 +351,31 @@ static inline void NOOP_(id x, ...) {;}
 -(void) updateInfoFromServer
 {
   NS_DURING	/* try */
-		if ([server respondsToSelector:@selector(getAquaTermInfo)]) /* test protocol */ 
-		{
-			// protocol version > 0.1.0
-			[termInfo  setDictionary:[server getAquaTermInfo]];
-		}
-		else
-		{
-			// protocol version = 0.1.0
- 			NSLog(@"Warning - the graphics server is old, please update it!");
-            [termInfo setObject:@"0.1.0" forKey:@"AQTVersion"];                                      
-            [termInfo setObject:[NSNumber numberWithFloat:AQUA_XMAX] forKey:@"AQTXMax"];                                      
-            [termInfo setObject:[NSNumber numberWithFloat:AQUA_YMAX] forKey:@"AQTYMax"];                                      
-            [termInfo setObject:@"Times-Roman" forKey:@"AQTDefaultFontName"];                                      
-            [termInfo setObject:[NSNumber numberWithFloat: 16.0] forKey:@"AQTDefaultFontSize"];                                      
-            [termInfo setObject:@"Times-Roman" forKey:@"AQTFontName"];                                      
-            [termInfo setObject:[NSNumber numberWithFloat: 16.0] forKey:@"AQTFontSize"];                                      
-		}
-	NS_HANDLER 
-		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-			[self invalidateServer];
-		else
-			[localException raise];
-	NS_ENDHANDLER
-  
+    if ([server respondsToSelector:@selector(getAquaTermInfo)]) /* test protocol */ 
+    {
+      // protocol version > 0.1.0
+      [termInfo  setDictionary:[server getAquaTermInfo]];
+    }
+    else
+    {
+      // protocol version <= 0.1.0
+      NSLog(@"Warning - the graphics server is old, please update it!");
+      [termInfo setObject:@"0.1.0" forKey:@"AQTVersion"];                                      
+      [termInfo setObject:[NSNumber numberWithFloat:AQUA_XMAX] forKey:@"AQTXMax"];                                      
+      [termInfo setObject:[NSNumber numberWithFloat:AQUA_YMAX] forKey:@"AQTYMax"];                                      
+      [termInfo setObject:[NSNumber numberWithFloat: 0.6] forKey:@"AQTFontWHRatio"];  
+      [termInfo setObject:[NSNumber numberWithFloat: 1.0] forKey:@"AQTPixelWHRatio"];                                     
+      [termInfo setObject:@"Times-Roman" forKey:@"AQTDefaultFontName"];                                      
+      [termInfo setObject:[NSNumber numberWithFloat: 16.0] forKey:@"AQTDefaultFontSize"];                                      
+      [termInfo setObject:@"Times-Roman" forKey:@"AQTFontName"];                                      
+      [termInfo setObject:[NSNumber numberWithFloat: 16.0] forKey:@"AQTFontSize"];  
+   }
+  NS_HANDLER 
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
 }
 
 -(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease
@@ -388,7 +396,6 @@ static inline void NOOP_(id x, ...) {;}
       else
         [localException raise];
     NS_ENDHANDLER
-
 }
 
 -(void) moveToPoint:(NSPoint)point
@@ -424,7 +431,6 @@ static inline void NOOP_(id x, ...) {;}
     else
       [localException raise];
   NS_ENDHANDLER
-
 }
 
 -(void) setJustification:(int)mode
@@ -447,7 +453,7 @@ static inline void NOOP_(id x, ...) {;}
 -(void) setFont:(const char *)font
 {
   NSArray *tempArray = [NSArray arrayWithArray:[[NSString stringWithCString:font] componentsSeparatedByString:@","]];
-  
+  // FIXME: Check up on why setFont always is followed by a call with an empty string.
   NS_DURING
   switch ([tempArray count])
   {
@@ -540,9 +546,12 @@ static inline void NOOP_(id x, ...) {;}
       [localException raise];
   NS_ENDHANDLER
 }
-@end
-
-
+@end /* AQTAdapter */
+//
+// ----------------------------------------------------------------
+// Gnuplot driver implementation
+// ----------------------------------------------------------------
+//
 enum AQUA_id {
   AQUA_DEFAULT,
   AQUA_OTHER
@@ -582,10 +591,11 @@ AQUA_options()
   }
 }
 
-
 TERM_PUBLIC void
 AQUA_init()
 {
+  float fontSize, fontWHRatio;
+  float vTicSize, pixelWHRatio;
   LOG(@"Aqua Init");
   if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
   {
@@ -598,10 +608,14 @@ AQUA_init()
   }
   term->xmax =[[[gnuTermAccess termInfo] objectForKey:@"AQTXMax"] unsignedIntValue]; 
   term->ymax =[[[gnuTermAccess termInfo] objectForKey:@"AQTYMax"] unsignedIntValue]; 
-  term->v_char = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontSize"] unsignedIntValue];
-  term->h_char = (6*(term->v_char))/10;
-  term->v_tic =[[[gnuTermAccess termInfo] objectForKey:@"AQTVTic"] unsignedIntValue]; 
-  term->h_tic =[[[gnuTermAccess termInfo] objectForKey:@"AQTHTic"] unsignedIntValue]; 
+  fontSize = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontSize"] floatValue];
+  fontWHRatio = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontWHRatio"] floatValue];
+  pixelWHRatio = [[[gnuTermAccess termInfo] objectForKey:@"AQTPixelWHRatio"] floatValue];
+  vTicSize = AQUA_VTIC;
+  term->v_char = (unsigned int) fontSize;
+  term->h_char = (unsigned int) (fontWHRatio * fontSize);
+  term->v_tic = (unsigned int) vTicSize;
+  term->h_tic = (unsigned int) (vTicSize * pixelWHRatio);
   [gnuTermAccess setFigure:currentWindow];
 }
 
@@ -610,13 +624,11 @@ AQUA_reset()
 {
 }
 
-
 TERM_PUBLIC void
 AQUA_text()
 {
     [gnuTermAccess flushOrphanedGraphicsRender:YES release:YES];
 }
-
 
 TERM_PUBLIC void
 AQUA_graphics()
@@ -666,7 +678,16 @@ AQUA_text_angle (int angle)
 TERM_PUBLIC int 
 AQUA_set_font(const char *font) /* "font,size" */
 {
+  float fontWHRatio, fontSize;
+  // Set the font
   [gnuTermAccess setFont:font];
+  // Update driver with the new values 
+  // FIXME: Does gnuplot process these values?
+  fontSize = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontSize"] floatValue];
+  fontWHRatio = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontWHRatio"] floatValue];
+  term->v_char = (unsigned int) fontSize;
+  term->h_char = (unsigned int) (fontWHRatio * fontSize);
+
   return (TRUE);
 }
 

@@ -17,9 +17,9 @@
 					Frame = "{{0, 23}, {1024, 617}}";
 					Split0 = {
 						ActiveTab = 1;
-						Frame = "{{225, 0}, {799, 617}}";
+						Frame = "{{224, 0}, {800, 617}}";
 						Split0 = {
-							Frame = "{{0, 233}, {799, 384}}";
+							Frame = "{{0, 232}, {800, 385}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -48,16 +48,16 @@
 							LauncherConfigVersion = 4;
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {799, 208}}";
+							Frame = "{{0, 0}, {800, 208}}";
 							LauncherConfigVersion = 3;
 							Runner = {
-								Frame = "{{0, 0}, {799, 208}}";
+								Frame = "{{0, 0}, {800, 208}}";
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {801, 137}}";
-							BuildTranscriptFrame = "{{0, 146}, {801, 48}}";
-							Frame = "{{0, 0}, {799, 192}}";
+							BuildMessageFrame = "{{0, 0}, {802, 137}}";
+							BuildTranscriptFrame = "{{0, 146}, {802, 48}}";
+							Frame = "{{0, 0}, {800, 192}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {612, 295}}";
