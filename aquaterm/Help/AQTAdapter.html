@@ -1,0 +1,807 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+	<title>AQTAdapter Class Documentation</title>
+	<meta name="generator" content="BBEdit 6.5.3">
+</head>
+<body>
+<div id="rh-col">
+<h1><font color="#000066"><a name="//apple_ref/occ/cl/AQTAdapter">AQTAdapter</a></font></h1>
+<br>
+<blockquote>
+	<dl>
+		<dt>
+			<b>Inherits From:</b>
+		</dt>
+		<dd>
+			NSObject
+		</dd>
+	</dl>
+</blockquote>
+<blockquote>
+	<dl>
+		<dt>
+			<b>Declared In:</b>
+		</dt>
+		<dd>
+			AQTAdapter.h
+		</dd>
+	</dl>
+</blockquote>
+<br>
+<br>
+<h2>Class Description</h2>AQTAdapter is a class that provides an interface to the functionality of AquaTerm. As such, it bridges the gap between client's procedural calls requesting operations such as drawing a line or placing a label and the object-oriented graph being built. The actual assembling of the graph is performed by an instance of class AQTPlotBuilder.
+<p>
+	It seemlessly provides a connection to the viewer (AquaTerm.app) without any work on behalf of the client.</p>
+<p>
+	It also provides some utility functionality such an indexed colormap, and an optional error handling callback function for the client.</p>
+<p>
+	Event handling of user input is provided through an optional callback function.</p>
+<p>
+	<b>Example:</b> HelloAquaTerm.c <code>&nbsp;&nbsp;&nbsp;&nbsp;
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<b>#import</b> &lt;Foundation/Foundation.h&gt;
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<b>#import</b> &quot;aquaterm/AQTAdapter.h&quot;
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;int main(void)
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AQTAdapter *adapter = [[AQTAdapter alloc] init];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[adapter openPlotWithIndex:1];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[adapter setPlotSize:NSMakeSize(600,400)];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[adapter addLabel:@&quot;HelloAquaTerm!&quot; atPoint:NSMakePoint(300, 200) angle:0.0 align:AQTAlignCenter];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[adapter renderPlot];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[adapter release];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[pool release];
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;}
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
+<p>
+	<code>gcc -ObjC main.c -o aqtex -lobjc -laquaterm -framework Foundation</code>
+<br>
+<code>gcc main.m -o aqtex -laquaterm -framework Foundation</code></p>
+	<hr width="50%" align="LEFT">
+<h2>Global Variables</h2>
+<blockquote>
+	<h4>Synopsis:</h4><code>const int <b><a name="//apple_ref/c/data/AQTButtLineCapStyle">AQTButtLineCapStyle</a></b>;</code>
+	<br>
+	<code>const int <b><a name="//apple_ref/c/data/AQTRoundLineCapStyle">AQTRoundLineCapStyle</a></b>;</code>
+	<br>
+	<code>const int <b><a name="//apple_ref/c/data/AQTSquareLineCapStyle">AQTSquareLineCapStyle</a></b>;</code>
+	<br>
+	<h4>Description:</h4>Constants that specify linecap styles.
+	<hr width="25%" align="LEFT">
+	<h4>Synopsis:</h4><code>const int <b><a name="//apple_ref/c/data/AQTAlignLeft">AQTAlignLeft</a></b>;</code>
+	<br>
+	<code>const int <b><a name="//apple_ref/c/data/AQTAlignCenter">AQTAlignCenter</a></b>;</code>
+	<br>
+	<code>const int <b><a name="//apple_ref/c/data/AQTAlignRight">AQTAlignRight</a></b>;</code>
+	<br>
+	<h4>Description:</h4>Constants that specify horizontal alignment for labels.
+	<hr width="25%" align="LEFT">
+	<h4>Synopsis:</h4><code>const int <b><a name="//apple_ref/c/data/AQTAlignMiddle">AQTAlignMiddle</a></b>;</code>
+	<br>
+	<code>const int <b><a name="//apple_ref/c/data/AQTAlignBaseline">AQTAlignBaseline</a></b>;</code>
+	<br>
+	<code>const int <b><a name="//apple_ref/c/data/AQTAlignBottom">AQTAlignBottom</a></b>;</code>
+	<br>
+	<code>const int <b><a name="//apple_ref/c/data/AQTAlignTop">AQTAlignTop</a></b>;</code>
+	<br>
+	<h4>Description:</h4>Constants that specify vertical alignment for labels.
+</blockquote>
+<hr width="50%" align="LEFT">
+<h2>Instance Variables</h2>
+<blockquote>
+	<code>AQTClientManager *<b>_clientManager</b>;</code>
+	<br>
+	<code>AQTPlotBuilder *<b>_selectedBuilder</b>;</code>
+	<br>
+	<code>id <b>_aqtReserved1</b>;</code>
+	<br>
+	<code>id <b>_aqtReserved2</b>;</code>
+	<br>
+	<table>
+		<tr>
+			<td>
+				_clientManager
+			</td>
+			<td>
+				No description.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				_selectedBuilder
+			</td>
+			<td>
+				No description.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				_aqtReserved1
+			</td>
+			<td>
+				No description.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				_aqtReserved2
+			</td>
+			<td>
+				No description.
+			</td>
+		</tr>
+	</table>
+</blockquote>
+<hr width="50%" align="LEFT">
+<h2>Method Types</h2>
+<blockquote>
+	Class initialization etc.
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20init">- init</a>
+		</dd>
+		<dd>
+			<a href="#-%20initWithServer:">- initWithServer:</a>
+		</dd>
+		<dd>
+			<a href="#-%20setErrorHandler:">- setErrorHandler:</a>
+		</dd>
+		<dd>
+			<a href="#-%20setEventHandler:">- setEventHandler:</a>
+		</dd>
+	</dl>
+	Control operations
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20openPlotWithIndex:">- openPlotWithIndex:</a>
+		</dd>
+		<dd>
+			<a href="#-%20selectPlotWithIndex:">- selectPlotWithIndex:</a>
+		</dd>
+		<dd>
+			<a href="#-%20setPlotSize:">- setPlotSize:</a>
+		</dd>
+		<dd>
+			<a href="#-%20setPlotTitle:">- setPlotTitle:</a>
+		</dd>
+		<dd>
+			<a href="#-%20renderPlot">- renderPlot</a>
+		</dd>
+		<dd>
+			<a href="#-%20clearPlot">- clearPlot</a>
+		</dd>
+		<dd>
+			<a href="#-%20closePlot">- closePlot</a>
+		</dd>
+	</dl>
+	Event handling
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20setAcceptingEvents:">- setAcceptingEvents:</a>
+		</dd>
+		<dd>
+			<a href="#-%20lastEvent">- lastEvent</a>
+		</dd>
+		<dd>
+			<a href="#-%20waitNextEvent">- waitNextEvent</a>
+		</dd>
+	</dl>
+	Plotting related commands
+	<dl>
+		<dt>
+		</dt>
+	</dl>
+	Colormap (utility), one per open plot. 
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20colormapSize">- colormapSize</a>
+		</dd>
+		<dd>
+			<a href="#-%20setColormapEntry:red:green:blue:">- setColormapEntry:red:green:blue:</a>
+		</dd>
+		<dd>
+			<a href="#-%20getColormapEntry:red:green:blue:">- getColormapEntry:red:green:blue:</a>
+		</dd>
+		<dd>
+			<a href="#-%20takeColorFromColormapEntry:">- takeColorFromColormapEntry:</a>
+		</dd>
+		<dd>
+			<a href="#-%20takeBackgroundColorFromColormapEntry:">- takeBackgroundColorFromColormapEntry:</a>
+		</dd>
+	</dl>
+	Color handling
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20setColorRed:green:blue:">- setColorRed:green:blue:</a>
+		</dd>
+		<dd>
+			<a href="#-%20setBackgroundColorRed:green:blue:">- setBackgroundColorRed:green:blue:</a>
+		</dd>
+		<dd>
+			<a href="#-%20getColorRed:green:blue:">- getColorRed:green:blue:</a>
+		</dd>
+		<dd>
+			<a href="#-%20getBackgroundColorRed:green:blue:">- getBackgroundColorRed:green:blue:</a>
+		</dd>
+	</dl>
+	Text handling
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20setFontname:">- setFontname:</a>
+		</dd>
+		<dd>
+			<a href="#-%20setFontsize:">- setFontsize:</a>
+		</dd>
+		<dd>
+			<a href="#-%20addLabel:atPoint:angle:align:">- addLabel:atPoint:angle:align:</a>
+		</dd>
+	</dl>
+	Line handling
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20setLinewidth:">- setLinewidth:</a>
+		</dd>
+		<dd>
+			<a href="#-%20setLineCapStyle:">- setLineCapStyle:</a>
+		</dd>
+		<dd>
+			<a href="#-%20moveToPoint:">- moveToPoint:</a>
+		</dd>
+		<dd>
+			<a href="#-%20addLineToPoint:">- addLineToPoint:</a>
+		</dd>
+		<dd>
+			<a href="#-%20addPolylineWithPoints:pointCount:">- addPolylineWithPoints:pointCount:</a>
+		</dd>
+	</dl>
+	Rect and polygon handling
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20moveToVertexPoint:">- moveToVertexPoint:</a>
+		</dd>
+		<dd>
+			<a href="#-%20addEdgeToVertexPoint:">- addEdgeToVertexPoint:</a>
+		</dd>
+		<dd>
+			<a href="#-%20addPolygonWithVertexPoints:pointCount:">- addPolygonWithVertexPoints:pointCount:</a>
+		</dd>
+		<dd>
+			<a href="#-%20addFilledRect:">- addFilledRect:</a>
+		</dd>
+		<dd>
+			<a href="#-%20eraseRect:">- eraseRect:</a>
+		</dd>
+	</dl>
+	Image handling
+	<dl>
+		<dt>
+		</dt>
+		<dd>
+			<a href="#-%20setImageTransformM11:m12:m21:m22:tX:tY:">- setImageTransformM11:m12:m21:m22:tX:tY:</a>
+		</dd>
+		<dd>
+			<a href="#-%20resetImageTransform">- resetImageTransform</a>
+		</dd>
+		<dd>
+			<a href="#-%20addImageWithBitmap:size:bounds:">- addImageWithBitmap:size:bounds:</a>
+		</dd>
+		<dd>
+			<a href="#-%20addTransformedImageWithBitmap:size:clipRect:">- addTransformedImageWithBitmap:size:clipRect:</a>
+		</dd>
+	</dl>
+</blockquote>
+<hr width="50%" align="LEFT">
+<h2>Instance Methods</h2><a name="- addEdgeToVertexPoint:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addEdgeToVertexPoint:">addEdgeToVertexPoint:</a></h3>
+<p>
+	<code>- (void)<b>addEdgeToVertexPoint:</b>(NSPoint)<em>point</em> </code></p>
+<p>
+	Add an edge to a polygon (filled). See <b>addLineToPoint:</b>.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- addFilledRect:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addFilledRect:">addFilledRect:</a></h3>
+<p>
+	<code>- (void)<b>addFilledRect:</b>(NSRect)<em>aRect</em> </code></p>
+<p>
+	Add a filled rectangle. Will attempt to remove any objects that will be covered by <i>aRect</i>.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- addImageWithBitmap:size:bounds:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addImageWithBitmap:size:bounds:">addImageWithBitmap:size:bounds:</a></h3>
+<p>
+	<code>- (void)<b>addImageWithBitmap:</b>(const void *)<em>bitmap</em> <b>size:</b>(NSSize)<em>bitmapSize</em> <b>bounds:</b>(NSRect)<em>destBounds</em> </code></p>
+<p>
+	Add a <i>bitmap</i> image of size <i>bitmapSize</i> scaled to fit <i>destBounds</i>, does <i>not</i> apply transform. Bitmap format is 24bits per pixel in sequence RGBRGB... with 8 bits per color.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- addLabel:atPoint:angle:align:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addLabel:atPoint:angle:align:">addLabel:atPoint:angle:align:</a></h3>
+<p>
+	<code>- (void)<b>addLabel:</b>(id)<em>text</em> <b>atPoint:</b>(NSPoint)<em>pos</em> <b>angle:</b>(float)<em>angle</em> <b>align:</b>(int)<em>just</em> </code></p>
+<p>
+	Add <i>text</i> at coordinate given by <i>pos</i>, rotated by <i>angle</i> degrees and aligned vertically and horisontally (with respect to <i>pos</i> and rotation) according to align. Horizontal and vertical align may be combined by an OR operation, e.g. (AQTAlignCenter | AQTAlignMiddle).</p>
+<table border="1">
+	<tr bgcolor="#E0E0E0">
+		<td>
+			HorizontalAlign
+		</td>
+		<td>
+			Description
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTAlignLeft
+		</td>
+		<td>
+			Left aligned
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTAlignCenter
+		</td>
+		<td>
+			Centered
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTAlignRight
+		</td>
+		<td>
+			Right aligned
+		</td>
+	</tr>
+	<tr  bgcolor="#E0E0E0">
+		<td>
+			VerticalAlign
+		</td>
+		<td>
+			-
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTAlignMiddle
+		</td>
+		<td>
+			Approximate mid-height
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTAlignBaseline
+		</td>
+		<td>
+			Normal
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTAlignBottom
+		</td>
+		<td>
+			Bottom bounds of THIS string
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTAlignTop
+		</td>
+		<td>
+			Top bounds of THIS string
+		</td>
+	</tr>
+</table>
+The <i>text</i> can be either an NSString or an NSAttributedString. By using NSAttributedString a subset of the attributes defined in AppKit may be used to format the string beyond the fontface ans size. The currently supported attributes are
+<table border="1">
+	<tr bgcolor="#E0E0E0">
+		<td>
+			Attribute
+		</td>
+		<td>
+			value
+		</td>
+	</tr>
+	<tr>
+		<td>
+			@&quot;NSSuperScript&quot;
+		</td>
+		<td>
+			1 or -1 for super-/subscript
+		</td>
+	</tr>
+	<tr>
+		<td>
+			@&quot;NSUnderline&quot;
+		</td>
+		<td>
+			0 or 1 for (no) underline
+		</td>
+	</tr>
+</table>
+
+	<hr width="25%" align="LEFT">
+	<a name="- addLineToPoint:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addLineToPoint:">addLineToPoint:</a></h3>
+<p>
+	<code>- (void)<b>addLineToPoint:</b>(NSPoint)<em>point</em> </code></p>
+<p>
+	Add a line segment from the current <i>point</i> (given by a previous <b>moveToPoint:</b> or <b>addLineToPoint</b>).</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- addPolygonWithVertexPoints:pointCount:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addPolygonWithVertexPoints:pointCount:">addPolygonWithVertexPoints:pointCount:</a></h3>
+<p>
+	<code>- (void)<b>addPolygonWithVertexPoints:</b>(NSPoint *)<em>points</em> <b>pointCount:</b>(int)<em>pc</em> </code></p>
+<p>
+	Add a polygon specified by a list of corner <i>points</i>. Number of corners is passed in <i>pc</i>.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- addPolylineWithPoints:pointCount:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addPolylineWithPoints:pointCount:">addPolylineWithPoints:pointCount:</a></h3>
+<p>
+	<code>- (void)<b>addPolylineWithPoints:</b>(NSPoint *)<em>points</em> <b>pointCount:</b>(int)<em>pc</em> </code></p>
+<p>
+	Add a sequence of line segments specified by a list of start-, end-, and joinpoint(s) in <i>points</i>. Parameter <i>pc</i> is number of line segments + 1.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- addTransformedImageWithBitmap:size:clipRect:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/addTransformedImageWithBitmap:size:clipRect:">addTransformedImageWithBitmap:size:clipRect:</a></h3>
+<p>
+	<code>- (void)<b>addTransformedImageWithBitmap:</b>(const void *)<em>bitmap</em> <b>size:</b>(NSSize)<em>bitmapSize</em> <b>clipRect:</b>(NSRect)<em>destBounds</em> </code></p>
+<p>
+	Add a <i>bitmap</i> image of size <i>bitmapSize</i> <i>honoring</i> transform, transformed image is clipped to <i>destBounds</i>. Bitmap format is 24bits per pixel in sequence RGBRGB... with 8 bits per color.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- clearPlot"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/clearPlot">clearPlot</a></h3>
+<p>
+	<code>- (void)<b>clearPlot</b> </code></p>
+<p>
+	Clears the current plot and resets default values. To keep plot settings, use <b>eraseRect:</b> instead.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- closePlot"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/closePlot">closePlot</a></h3>
+<p>
+	<code>- (void)<b>closePlot</b> </code></p>
+<p>
+	Closes the current plot but leaves viewer window on screen. Disables event handling.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- colormapSize"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/colormapSize">colormapSize</a></h3>
+<p>
+	<code>- (int)<b>colormapSize</b> </code></p>
+<p>
+	Return the number of color entries availabel in the currently active colormap.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- eraseRect:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/eraseRect:">eraseRect:</a></h3>
+<p>
+	<code>- (void)<b>eraseRect:</b>(NSRect)<em>aRect</em> </code></p>
+<p>
+	Remove any objects <i>completely</i> inside <i>aRect</i>. Does <i>not</i> force a redraw of the plot.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- getColormapEntry:red:green:blue:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/getColormapEntry:red:green:blue:">getColormapEntry:red:green:blue:</a></h3>
+<p>
+	<code>- (void)<b>getColormapEntry:</b>(int)<em>entryIndex</em> <b>red:</b>(float *)<em>r</em> <b>green:</b>(float *)<em>g</em> <b>blue:</b>(float *)<em>b</em> </code></p>
+<p>
+	Get the RGB entry in the <em>current</em> colormap, at the position given by <i>entryIndex</i>.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- getColorRed:green:blue:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/getColorRed:green:blue:">getColorRed:green:blue:</a></h3>
+<p>
+	<code>- (void)<b>getColorRed:</b>(float *)<em>r</em> <b>green:</b>(float *)<em>g</em> <b>blue:</b>(float *)<em>b</em> </code></p>
+<p>
+	Get current RGB color components by reference.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- getBackgroundColorRed:green:blue:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/getBackgroundColorRed:green:blue:">getBackgroundColorRed:green:blue:</a></h3>
+<p>
+	<code>- (void)<b>getBackgroundColorRed:</b>(float *)<em>r</em> <b>green:</b>(float *)<em>g</em> <b>blue:</b>(float *)<em>b</em> </code></p>
+<p>
+	Get current background RGB color components by reference.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- init"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/init">init</a></h3>
+<p>
+	<code>- (id)<b>init</b> </code></p>
+<p>
+	Initializes an instance and sets up a connection to the handler object via DO. Launches AquaTerm if necessary.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- initWithServer:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/initWithServer:">initWithServer:</a></h3>
+<p>
+	<code>- (id)<b>initWithServer:</b>(id)<em>localServer</em> </code></p>
+<p>
+	This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases <b>init</b> should be used, which calls <b>initWithHandler:</b> with a <b>nil</b> argument.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- lastEvent"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/lastEvent">lastEvent</a></h3>
+<p>
+	<code>- (NSString *)<b>lastEvent</b> </code></p>
+<p>
+	Reads the last event logged by the viewer. Will always return NoEvent unless <b>setAcceptingEvents:</b> is called with a YES argument.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- moveToPoint:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/moveToPoint:">moveToPoint:</a></h3>
+<p>
+	<code>- (void)<b>moveToPoint:</b>(NSPoint)<em>point</em> </code></p>
+<p>
+	Moves the current <i>point</i> (in canvas coordinates) in preparation for a new sequence of line segments.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- moveToVertexPoint:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/moveToVertexPoint:">moveToVertexPoint:</a></h3>
+<p>
+	<code>- (void)<b>moveToVertexPoint:</b>(NSPoint)<em>point</em> </code></p>
+<p>
+	Begin a polygon (filled). See <b>moveToPoint:</b>.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- openPlotWithIndex:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/openPlotWithIndex:">openPlotWithIndex:</a></h3>
+<p>
+	<code>- (void)<b>openPlotWithIndex:</b>(int)<em>refNum</em> </code></p>
+<p>
+	Open up a new plot with internal reference number <i>refNum</i> and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- renderPlot"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/renderPlot">renderPlot</a></h3>
+<p>
+	<code>- (void)<b>renderPlot</b> </code></p>
+<p>
+	Render the current plot in the viewer.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- resetImageTransform"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/resetImageTransform">resetImageTransform</a></h3>
+<p>
+	<code>- (void)<b>resetImageTransform</b> </code></p>
+<p>
+	Set transformation matrix to unity, i.e. no transform.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- selectPlotWithIndex:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/selectPlotWithIndex:">selectPlotWithIndex:</a></h3>
+<p>
+	<code>- (BOOL)<b>selectPlotWithIndex:</b>(int)<em>refNum</em> </code></p>
+<p>
+	Get the plot referenced by <i>refNum</i> and make it the target for subsequent commands. If no plot exists for <i>refNum</i>, the currently targeted plot remain unchanged. Disables event handling for previously targeted plot. Returns YES on success.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setAcceptingEvents:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setAcceptingEvents:">setAcceptingEvents:</a></h3>
+<p>
+	<code>- (void)<b>setAcceptingEvents:</b>(BOOL)<em>flag</em> </code></p>
+<p>
+	Inform AquaTerm whether or not events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setBackgroundColorRed:green:blue:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setBackgroundColorRed:green:blue:">setBackgroundColorRed:green:blue:</a></h3>
+<p>
+	<code>- (void)<b>setBackgroundColorRed:</b>(float)<em>r</em> <b>green:</b>(float)<em>g</em> <b>blue:</b>(float)<em>b</em> </code></p>
+<p>
+	Set the background color, overriding any previous color, using explicit RGB components.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setColorRed:green:blue:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setColorRed:green:blue:">setColorRed:green:blue:</a></h3>
+<p>
+	<code>- (void)<b>setColorRed:</b>(float)<em>r</em> <b>green:</b>(float)<em>g</em> <b>blue:</b>(float)<em>b</em> </code></p>
+<p>
+	Set the current color, used for all subsequent items, using explicit RGB components.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setColormapEntry:red:green:blue:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setColormapEntry:red:green:blue:">setColormapEntry:red:green:blue:</a></h3>
+<p>
+	<code>- (void)<b>setColormapEntry:</b>(int)<em>entryIndex</em> <b>red:</b>(float)<em>r</em> <b>green:</b>(float)<em>g</em> <b>blue:</b>(float)<em>b</em> </code></p>
+<p>
+	Set an RGB entry in the <em>current</em> colormap, at the position given by <i>entryIndex</i>.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setErrorHandler:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setErrorHandler:">setErrorHandler:</a></h3>
+<p>
+	<code>- (void)<b>setErrorHandler:</b>(void (*)(NSString *msg))<em>fPtr</em> </code></p>
+<p>
+	Optionally set an error handling routine of the form <b>customErrorHandler</b>(NSString *errMsg) to override default behaviour.</p>
+<p></p>
+<p>
+	<em>*** This method is experimental, it may not be part of future releases ***</em> </p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setEventHandler:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setEventHandler:">setEventHandler:</a></h3>
+<p>
+	<code>- (void)<b>setEventHandler:</b>(void (*)(int index, NSString *event))<em>fPtr</em> </code></p>
+<p>
+	Optionally set an event handling routine of the form <b>customEventHandler</b>(int index, NSString *event). The reference number of the plot that generated the event is passed in index and the structure of the string event is @&quot;type:data1:data2:...&quot; See <b>waitNextEvent</b> for a description of the information returned.</p>
+<p>
+	<em>*** This method is experimental, it may not be part of future releases ***</em> </p>
+<p>
+</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setFontname:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setFontname:">setFontname:</a></h3>
+<p>
+	<code>- (void)<b>setFontname:</b>(NSString *)<em>newFontname</em> </code></p>
+<p>
+	Set the font to be used. Applies to all future operations. Default is Times-Roman.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setFontsize:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setFontsize:">setFontsize:</a></h3>
+<p>
+	<code>- (void)<b>setFontsize:</b>(float)<em>newFontsize</em> </code></p>
+<p>
+	Set the font size in points. Applies to all future operations. Default is 14pt.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setImageTransformM11:m12:m21:m22:tX:tY:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setImageTransformM11:m12:m21:m22:tX:tY:">setImageTransformM11:m12:m21:m22:tX:tY:</a></h3>
+<p>
+	<code>- (void)<b>setImageTransformM11:</b>(float)<em>m11</em> <b>m12:</b>(float)<em>m12</em> <b>m21:</b>(float)<em>m21</em> <b>m22:</b>(float)<em>m22</em> <b>tX:</b>(float)<em>tX</em> <b>tY:</b>(float)<em>tY</em> </code></p>
+<p>
+	Set a transformation matrix for images added by <b>addTransformedImageWithBitmap:size:clipRect:</b>, see NSImage documentation for details.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setLineCapStyle:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setLineCapStyle:">setLineCapStyle:</a></h3>
+<p>
+	<code>- (void)<b>setLineCapStyle:</b>(int)<em>capStyle</em> </code></p>
+<p>
+	Set the current line cap style (in points), used for all subsequent lines. Any line currently being built by <b>moveToPoint:</b>/<b>addLineToPoint</b> will be considered finished since any coalesced sequence of line segments must share the same cap style.</p>
+<table border="1">
+	<tr  bgcolor="#E0E0E0">
+		<td>
+			<i>capStyle</i>
+		</td>
+		<td>
+			Description
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTButtLineCapStyle
+		</td>
+		<td>
+			Butt line caps
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTRoundLineCapStyle
+		</td>
+		<td>
+			Rounded line caps
+		</td>
+	</tr>
+	<tr>
+		<td>
+			AQTSquareLineCapStyle
+		</td>
+		<td>
+			Square line caps
+		</td>
+	</tr>
+</table>
+Default is AQTRoundLineCapStyle.
+
+	<hr width="25%" align="LEFT">
+	<a name="- setLinewidth:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setLinewidth:">setLinewidth:</a></h3>
+<p>
+	<code>- (void)<b>setLinewidth:</b>(float)<em>newLinewidth</em> </code></p>
+<p>
+	Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by <b>moveToPoint:</b>/<b>addLineToPoint</b> will be considered finished since any coalesced sequence of line segments must share the same linewidth. Default linewidth is 1pt.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setPlotSize:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setPlotSize:">setPlotSize:</a></h3>
+<p>
+	<code>- (void)<b>setPlotSize:</b>(NSSize)<em>canvasSize</em> </code></p>
+<p>
+	Set the limits of the plot area. Must be set <i>before</i> any drawing command following an <b>openPlotWithIndex:</b> or <b>clearPlot</b> command or behaviour is undefined.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- setPlotTitle:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setPlotTitle:">setPlotTitle:</a></h3>
+<p>
+	<code>- (void)<b>setPlotTitle:</b>(NSString *)<em>title</em> </code></p>
+<p>
+	Set <i>title</i> to appear in window titlebar, also default name when saving.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- takeBackgroundColorFromColormapEntry:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/takeBackgroundColorFromColormapEntry:">takeBackgroundColorFromColormapEntry:</a></h3>
+<p>
+	<code>- (void)<b>takeBackgroundColorFromColormapEntry:</b>(int)<em>index</em> </code></p>
+<p>
+	Set the background color, overriding any previous color, using the color stored at the position given by <i>index</i> in the <em>current</em> colormap.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- takeColorFromColormapEntry:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/takeColorFromColormapEntry:">takeColorFromColormapEntry:</a></h3>
+<p>
+	<code>- (void)<b>takeColorFromColormapEntry:</b>(int)<em>index</em> </code></p>
+<p>
+	Set the current color, used for all subsequent items, using the color stored at the position given by <i>index</i> in the <em>current</em> colormap.</p>
+
+	<hr width="25%" align="LEFT">
+	<a name="- waitNextEvent"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/waitNextEvent">waitNextEvent</a></h3>
+<p>
+	<code>- (NSString *)<b>waitNextEvent</b> </code></p>
+<p>
+	Block until event recieved in the currently selected plot. <!-- See <b>setEventHandler:</b> for a description of the information returned.--> Will return a NoEvent after a certain time.<br>
+The structure of the returned string describing the event is @&quot;type:data1:data2:...&quot;<br> Currently supported events are:</p>
+<table border="1">
+	<tr  bgcolor="#E0E0E0">
+		<td>
+			event
+		</td>
+		<td>
+			description
+		</td>
+	</tr>
+	<tr>
+		<td>
+			0
+		</td>
+		<td>
+			No event
+		</td>
+	</tr>
+	<tr>
+		<td>
+			1:{<i>x, y</i>}:<i>button</i>
+		</td>
+		<td>
+			Mouse down at (<i>x, y</i>) left (<i>button</i>=1) or right (<i>button</i>=2) button pressed, e.g. @&quot;1:{12,39}:2&quot;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			2:{<i>x,y</i>}:<i>key</i>
+		</td>
+		<td>
+			Key <i>key</i> pressed while cursor over (<i>x, y</i>), e.g. @&quot;2:{34,319}:a&quot;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			42:{<i>x, y</i>}:<i>key</i>
+		</td>
+		<td>
+			Server error <i>x,y</i> and <i>key</i> are random
+		</td>
+	</tr>
+	<tr>
+		<td>
+			43:{<i>x,y</i>}:<i>key</i>
+		</td>
+		<td>
+			Error <i>x,y</i> and <i>key</i> are random
+		</td>
+	</tr>
+</table>
+<hr>
+	Version 1.1 Copyright &copy;2003 by AquaTerm. All Rights Reserved. Mon Dec 29 23:43:45 2003
+</div>
+
+</body>
+</html>
