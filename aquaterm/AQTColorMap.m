@@ -45,7 +45,7 @@
 
 -(void)setColor:(AQTColor)newColor forIndex:(int)index
 {
-   if (index >= 0 || index < size)
+   if (index >= 0 && index < size)
    {
       colormap[index] = newColor;
    }
