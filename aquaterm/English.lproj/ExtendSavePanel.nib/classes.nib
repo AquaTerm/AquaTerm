@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {copy = id; help = id; print = id; saveFigureAs = id; }; 
+            CLASS = GPTController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {extendSavePanelView = id; saveFormatPopup = id; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
