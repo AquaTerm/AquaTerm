@@ -52,25 +52,7 @@
   }
   return self;
 }
-/*
-// NOTE: this is a _second_ designated(?) initializer....
-- (id)initWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
-{
-   int i;
-   if (self = [super init])
-   {
-      pc = [self _aqtSetupPathStoreForPointCount:pc];
-      // FIXME: memcpy
-      for (i = 0; i < pc; i++)
-      {
-         path[i] = NSMakePoint(x[i], y[i]);
-      }
-      pointCount = pc;
-      [self setLinewidth:.2];
-   }
-   return self;
-}
-*/
+
 -(id)init
 {
   return [self initWithPoints:nil pointCount:0];

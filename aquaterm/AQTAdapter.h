@@ -90,13 +90,11 @@ enum {
 - (void)moveToPoint:(NSPoint)point;  
 - (void)addLineToPoint:(NSPoint)point; 
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
-//- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 
   /*" Rect and polygon handling"*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc;
 - (void)moveToVertexPoint:(NSPoint)point;
 - (void)addEdgeToPoint:(NSPoint)point; 
-//- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 - (void)addFilledRect:(NSRect)aRect;
 - (void)eraseRect:(NSRect)aRect;
 

@@ -351,23 +351,9 @@
    [tmpPath release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
-/*
-- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
-{
-   AQTPath *tmpPath;
-   tmpPath = [[AQTPath alloc] initWithXCoords:x yCoords:y pointCount:pc];
-   [tmpPath setColor:_color];
-   [tmpPath setLinewidth:_linewidth];
-   [tmpPath setLineCapStyle:_capStyle];
-   [_model addObject:tmpPath];
-   [tmpPath release];
-   [self _aqtPlotBuilderSetModelIsDirty:YES];
-}
-*/
 //
 // AQTPatch
 //
-
 - (void)moveToVertexPoint:(NSPoint)point
 {
    if (_polygonPointCount > 1)
@@ -414,17 +400,6 @@
    [tmpPatch release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
-/*
-- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
-{
-   AQTPatch *tmpPatch;
-   tmpPatch = [[AQTPatch alloc] initWithXCoords:x yCoords:y pointCount:pc];
-   [tmpPatch setColor:_color];
-   [_model addObject:tmpPatch];
-   [tmpPatch release];
-   [self _aqtPlotBuilderSetModelIsDirty:YES];
-}
-*/
 
 - (void)addFilledRect:(NSRect)aRect
 {
