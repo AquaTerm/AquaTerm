@@ -12,12 +12,21 @@
 
 @implementation AQTView
 
+// Should provide a -initWithFrame:model: 
+
+-(void)dealloc
+{
+  [model release];
+  [super dealloc];
+}
+
 -(void)setModel:(AQTModel *)newModel
 {
   [newModel retain];
-  [model release];		// let go of old model
-  model = newModel;		// Make it point to new model (FIXME: multiplot requires care! OK)
+  [model release];		
+  model = newModel;		
 }
+
 - (AQTModel *)model
 {
   return model;
@@ -37,26 +46,6 @@
 {
   isPrinting = flag;
 }
-/*
--(void)setPrintBounds:(NSRect)newBounds
-{
-  printBounds = newBounds;
-}
-
--(NSRect)bounds
-{
-  NSRect theBounds;
-  if(isPrinting)
-  {
-    theBounds = printBounds;
-  }
-  else
-  {
-    theBounds = [super bounds];
-  }
-  return theBounds;
-}
-*/
 
 -(void)drawRect:(NSRect)aRect
 {
@@ -77,39 +66,4 @@
   [model renderInRect:theBounds];
 }
 
-/*
- -(void)drawRect:(NSRect)aRect
- {
-   if (isPrinting)
-   {
-     [self drawPrintRect:aRect];
-   }
-   else
-   {
-     [self drawScreenRect:aRect];
-   }
- }
-
- -(void)drawScreenRect:(NSRect)aRect
- {
-   NSRect theBounds = [self bounds];
-   //
-   // Erase by drawing background color and draw a stylish line around the view
-   //
-   [[[model colormap] colorForIndex:-4] set];
-   [[NSBezierPath bezierPathWithRect:theBounds] fill];
-   [[NSColor blackColor] set];
-   [[NSBezierPath bezierPathWithRect:theBounds] stroke];
-   //
-   // Tell the model to draw itself
-   //
-   [model renderInRect:theBounds];
- }
-
- -(void)drawPrintRect:(NSRect)aRect
- {
-   NSRect theBounds = [self bounds];
-   [model renderInRect:theBounds];
- }
- */
 @end

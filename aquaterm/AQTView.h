@@ -19,13 +19,9 @@
 {
   AQTModel *model;
   BOOL isPrinting;
-  // NSRect printBounds;
 }
 - (void)setModel:(AQTModel *)newModel;
 - (AQTModel *)model;
 - (void)setIsPrinting:(BOOL)flag;
 - (BOOL)isPrinting;
-//- (void)setPrintBounds:(NSRect)newBounds;
-//- (void)drawScreenRect:(NSRect)aRect;
-//- (void)drawPrintRect:(NSRect)aRect;
 @end
