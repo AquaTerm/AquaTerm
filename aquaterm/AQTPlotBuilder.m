@@ -31,8 +31,16 @@
 
 - (void)_aqtPlotBuilderSetModelIsDirty:(BOOL)isDirty
 {
-   _modelIsDirty = isDirty;
    // Any coalescing of render call may be performed here (use timer)
+
+   // It ain't dirty until the fat lady has a size
+   _modelIsDirty = isDirty && _hasSize;
+#ifdef DEBUG
+   if (_modelIsDirty && NSEqualSizes(NSZeroSize, [_model size]))
+   {
+      [NSException raise:@"AQTDebugException" format:NSStringFromSelector(_cmd)];
+   }
+#endif
 }
 
 - (BOOL)_flushPolylineBuffer
@@ -100,6 +108,7 @@
 
 - (void)setSize:(NSSize)canvasSize
 {
+   _hasSize = !NSEqualSizes(NSZeroSize, canvasSize); 
    [_model setSize:canvasSize];
 }
 
@@ -190,6 +199,7 @@
 - (void)eraseRect:(NSRect)aRect
 {
    NSLog(@"refactor --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // FIXME: Possibly keep a list of rects to be erased and pass them before any append command??
 /*
  NS_DURING
       [_handler removeGraphicsInRect:aRect];
@@ -204,15 +214,19 @@
 
 - (void)clearAll 
 {
+   // Disregard any preemptive use of this method
+   if (_hasSize)
+   {
    // Honor size, title and background color
-   AQTModel *newModel = [[AQTModel alloc] initWithSize:[_model size]];
-   [self _flushBuffers];
-   [newModel setTitle:[_model title]];
-   [newModel setColor:[_model color]];
-   [_model release];
-   _model = newModel;
-   [self _aqtPlotBuilderSetDefaultValues]; // FIXME: colormap etc. too
-   [self _aqtPlotBuilderSetModelIsDirty:YES];
+      AQTModel *newModel = [[AQTModel alloc] initWithSize:[_model size]];
+      [self _flushBuffers];
+      [newModel setTitle:[_model title]];
+      [newModel setColor:[_model color]];
+      [_model release];
+      _model = newModel;
+      [self _aqtPlotBuilderSetDefaultValues]; // FIXME: colormap etc. too
+      [self _aqtPlotBuilderSetModelIsDirty:YES];
+   }
 }
 //
 // AQTLabel
