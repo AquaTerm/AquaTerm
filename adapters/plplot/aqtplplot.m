@@ -277,21 +277,25 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
    }
 }
 
-// sets the color for the current drawing operation based on
-// plplot colormaps. HB 11-20-04.
+//---------------------------------------------------------------------
+// set_color()
+//
+// sets the color for the drawing operations based on
+// the current plplot color.
+//---------------------------------------------------------------------
 
 void set_color (PLStream *pls)
 {
-	if(pls->curcmap){	// use color map 1
-		[adapter setColorRed:(float)(plsc->cmap1[pls->icol1].r/255.0)
-		               green:(float)(plsc->cmap1[pls->icol1].g/255.0)
-		                blue:(float)(plsc->cmap1[pls->icol1].b/255.0)];
-	} else {			// use color map 0
-		[adapter setColorRed:(float)(plsc->cmap0[pls->icol0].r/255.0)
-		               green:(float)(plsc->cmap0[pls->icol0].g/255.0)
-		                blue:(float)(plsc->cmap0[pls->icol0].b/255.0)];
-	}
+	[adapter setColorRed:(float)(pls->curcolor.r/255.)
+   				   green:(float)(pls->curcolor.g/255.)
+				    blue:(float)(pls->curcolor.b/255.)];
 }
+
+//---------------------------------------------------------------------
+// proc_str()
+//
+// process strings for display
+//---------------------------------------------------------------------
 
 void proc_str (PLStream *pls, EscText *args)
 {
@@ -527,8 +531,8 @@ void proc_str (PLStream *pls, EscText *args)
       [s release];
 
 }
-static void
-esc_purge(char *dstr, const char *sstr)
+
+static void esc_purge(char *dstr, const char *sstr)
 {
    char esc;
 
