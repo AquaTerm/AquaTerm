@@ -279,13 +279,13 @@ void set_color (PLStream *pls)
 void proc_str (PLStream *pls, EscText *args)
 {
    PLFLT   *t = args->xform;
-   PLFLT   a1, alpha, ft_ht, angle, ref;
+   PLFLT   a1, alpha, ft_ht, angle;
    PLINT   clxmin, clxmax, clymin, clymax;
    char    str[128], fontn[128], updown[128], esc, *strp;
    const char *cur_str;
    char    *font, *ofont;
    float   ft_scale;
-   int             i, jst, symbol, length, ltmp;
+   int             i, jst, ref, symbol, length, ltmp;
    NSMutableAttributedString  *s;
    char    char_ind;
    unichar Greek[53] = {
@@ -325,13 +325,13 @@ void proc_str (PLStream *pls, EscText *args)
    //   *  only approximate, based on plplot computation of it's string lenght
 
    if (args->just < 0.33){
-      jst = 0;                                         /* left */
+      jst = AQTAlignLeft;                             /* left */
    }
    else if (args->just > 0.66){
-      jst = 2;                                        /* right */
+      jst = AQTAlignRight;                            /* right */
    }
    else {
-      jst = 1;                                        /* center */
+      jst = AQTAlignCenter;                           /* center */
    }
    /*
     * Reference point (center baseline of string).
@@ -341,12 +341,13 @@ void proc_str (PLStream *pls, EscText *args)
     *  Currently plplot only uses base=0
     */
 
-   if (args->base == 2) /* not supported by plplot */
-      ref = - DPI/72. * ft_ht / 2.;
+   if (args->base == 2)
+      ref = AQTAlignTop;
    else if (args->base == 1)
-      ref = 0.;
+      ref = AQTAlignBaseline;
    else
-      ref = DPI/72. * ft_ht / 2.;
+      ref = AQTAlignMiddle;
+
    //
    //  Set the default font
    //
@@ -503,8 +504,7 @@ void proc_str (PLStream *pls, EscText *args)
                       range:NSMakeRange(i, 1)];
          }
       }
-      // FIXME: is baseline correct assumption?
-      [adapter addLabel:s atPoint:NSMakePoint((float)args->x, (float)args->y) angle:alpha align:(jst | AQTAlignBaseline)]; 
+      [adapter addLabel:s atPoint:NSMakePoint((float)args->x, (float)args->y) angle:alpha align:(jst | ref)]; 
 
       [s release];
 
