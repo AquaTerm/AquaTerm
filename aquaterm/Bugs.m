@@ -59,10 +59,16 @@ void aqtDebug(id sender)
   [adapter setPlotSize:NSMakeSize(600,400)];
   [adapter setPlotTitle:@"Testing"];
   [adapter setFontsize:24];
+  [adapter setFontname:@"Symbol"];
   // Some styling is possible
   {
-     NSMutableAttributedString *attrStr = [[[NSMutableAttributedString alloc] initWithString:@"0123456789XXXX"] autorelease];
-     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(1,3)];
+     NSData *unicode = [NSData dataWithBytes:"\x03\xb1\x03\xb1\x03\xb1" length:6];
+     NSString *uStr = [[NSString alloc] initWithData:unicode encoding:NSUnicodeStringEncoding];
+     NSString *greek = [[NSString alloc] initWithFormat:@"%S", "\x03\xb1\x03\xb1\x03\xb1"];
+//     NSMutableAttributedString *attrStr = [[[NSMutableAttributedString alloc] initWithString:@"YaddaYaddaYaddaYaddaYadda"] autorelease];
+     [adapter addLabel:uStr atPoint:NSMakePoint(200, 200) angle:0.0 align:AQTAlignCenter];
+/*
+ [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(1,3)];
      [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(4,2)];
      [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(7,1)];
      [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(8,2)];
@@ -72,7 +78,40 @@ void aqtDebug(id sender)
      [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(4,1)];
      [adapter addLabel:attrStr atPoint:NSMakePoint(200, 300) angle:0.0 align:AQTAlignLeft];
      [adapter addLabel:attrStr atPoint:NSMakePoint(100, 200) angle:90.0 align:AQTAlignCenter];
+*/
   }
+  
+  [adapter setColorRed:1.0 green:0.0 blue:0.0];
+  [adapter addFilledRect:NSMakeRect(200, 100, 20, 20)];
+  [adapter setColorRed:0.0 green:1.0 blue:0.0];
+  [adapter addFilledRect:NSMakeRect(200, 120, 20, 20)];
+  [adapter setColorRed:0.0 green:0.0 blue:1.0];
+  [adapter addFilledRect:NSMakeRect(220, 100, 20, 20)];
+  [adapter setColorRed:1.0 green:1.0 blue:0.0];
+  [adapter addFilledRect:NSMakeRect(220, 120, 20, 20)];
+
+  [adapter setColorRed:1.0 green:0.0 blue:0.0];
+  [adapter addFilledRect:NSMakeRect(250.0, 100.0, 20.0, 20.0)];
+  [adapter setColorRed:0.0 green:1.0 blue:0.0];
+  [adapter addFilledRect:NSMakeRect(250.0, 120.0, 20.0, 20.0)];
+  [adapter setColorRed:0.0 green:0.0 blue:1.0];
+  [adapter addFilledRect:NSMakeRect(270.0, 100.0, 20.0, 20.0)];
+  [adapter setColorRed:1.0 green:1.0 blue:0.0];
+  [adapter addFilledRect:NSMakeRect(270.0, 120.0, 20.0, 20.0)];
+  
+  [adapter setColorRed:0.0 green:0.0 blue:0.0];
+  [adapter moveToPoint:NSMakePoint(0,0)];
+  [adapter addLineToPoint:NSMakePoint(599,0)];
+  [adapter addLineToPoint:NSMakePoint(599,399)];
+  [adapter addLineToPoint:NSMakePoint(0,399)];
+  [adapter addLineToPoint:NSMakePoint(0,0)];
+
+  // Fontname bug (#1015888)
+  [adapter setFontname:@"Times"];
+  [adapter addLabel:@"Times" atPoint:NSMakePoint(200, 100) angle:0.0 align:AQTAlignLeft];
+  [adapter setFontname:@"Crash"];
+  [adapter addLabel:@"Crash" atPoint:NSMakePoint(300, 100) angle:0.0 align:AQTAlignLeft];
+
   
   [adapter renderPlot];
   //[adapter closePlot];
