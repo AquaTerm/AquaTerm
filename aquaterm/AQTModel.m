@@ -68,6 +68,17 @@
     canvasSize = cs;
  }
 
+-(BOOL)isDirty
+{
+   return isDirty;
+}
+
+-(NSRect)dirtyRect
+{
+   return dirtyRect;
+}
+
+
 -(int)count
 {
   return [modelObjects count];

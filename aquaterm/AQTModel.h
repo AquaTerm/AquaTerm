@@ -14,10 +14,14 @@
    NSMutableArray *modelObjects; /*" An array of AQTGraphic objects (leaf or collection) "*/
    NSString       *title; /*" Associate a title with the model. Default is 'Figure n'. "*/
    NSSize         canvasSize;
+   NSRect         dirtyRect;
+   BOOL           isDirty;
 }
 -(id)initWithCanvasSize:(NSSize)canvasSize;
 -(void)setCanvasSize:(NSSize)canvasSize;
 -(NSSize)canvasSize;
+-(NSRect)dirtyRect;
+-(BOOL)isDirty;
 -(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)addObjectsFromArray:(NSArray *)graphics;

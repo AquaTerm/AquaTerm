@@ -94,7 +94,7 @@
    return tmpRect;
 }
 
--(void)renderInRect:(NSRect)dirtyRect
+-(void)renderInRect:(NSRect)aRect
 {
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
@@ -103,11 +103,11 @@
    [self setAQTColor];
    // FIXME: needed to synchronize colors
    [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-   NSRectFill(dirtyRect);
+   NSRectFill(aRect);
 
    while ((graphic = [enumerator nextObject]))
    {
-      [graphic renderInRect:dirtyRect];
+      [graphic renderInRect:aRect];
    }
 }
 @end

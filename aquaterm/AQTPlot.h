@@ -24,8 +24,6 @@
   // interface additions
   IBOutlet NSBox *extendSavePanelView;
   IBOutlet NSPopUpButton *saveFormatPopUp;
-  // FIXME: the following should belong to the model
-  NSRect dirtyRect;
 }
 - (id)canvas;
 - (void)setClient:(id)client;

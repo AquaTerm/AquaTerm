@@ -11,6 +11,7 @@
 #import "AQTModel.h"
 #import "AQTView.h"
 #import "AQTGraphicDrawingMethods.h"
+#import "AQTModelAdditions.h"
 #import "AQTFunctions.h"
 #import "AQTPrefController.h"
 
@@ -84,7 +85,6 @@ static inline void NOOP_(id x, ...) {;}
 
 -(void)awakeFromNib
 {
-   // [[NSApp delegate] setWindowPos:[canvas window]];
    [self cascadeWindowOrderFront:NO];
    if (model)
    {
@@ -151,14 +151,6 @@ static inline void NOOP_(id x, ...) {;}
    return model;
 }
 
-/*
- -(void)setPlotKey:(id)key
- {
-    [key retain];
-    [_plotKey release];
-    _plotKey = key;
- }
- */
 - (BOOL)clientValidAndResponding
 {
    BOOL validAndResponding = NO;
@@ -188,12 +180,7 @@ static inline void NOOP_(id x, ...) {;}
    if (model)
    {
       // Respect the windowsize set by user
-      NSSize oldSize = [model canvasSize];
-      NSSize newSize = [newModel canvasSize];
-      if (fabs(oldSize.height/oldSize.width - newSize.height/newSize.width) < 0.001)
-      {
-         viewNeedResize = NO;
-      }
+      viewNeedResize = !AQTProportionalSizes([model canvasSize], [newModel canvasSize]);
    }
    [model release];		// let go of any temporary model not used (unlikely)
    model = newModel;		// Make it point to new model
@@ -202,93 +189,41 @@ static inline void NOOP_(id x, ...) {;}
    if (_isWindowLoaded)
    {
       [self _aqtSetupViewShouldResize:viewNeedResize];
-      dirtyRect = AQTRectFromSize([model canvasSize]); // Invalidate all of canvas
+      [model invalidate]; // Invalidate all of canvas
    }
-   LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
+   LOG(@"dirtyRect = %@", NSStringFromRect([model dirtyRect]));
 }
 
 -(void)appendModel:(AQTModel *)newModel
 {
-   BOOL backgroundDidChange; // FIXME
-   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
-   if (!model)
-   {
+   if (!model) {
       [self setModel:newModel];
-      return;
-   }
-   backgroundDidChange = !AQTEqualColors([model color], [newModel color]);
-   //[model appendModel:newModel]; // expanded here:
-   [model setTitle:[newModel title]];
-   [model setColor:[newModel color]];
-   [model setBounds:AQTUnionRect([model bounds], [newModel updateBounds])];
-   [model addObjectsFromArray:[newModel modelObjects]];
-   
-   LOG(@"oldBounds = %@", NSStringFromRect([model bounds]));
-   LOG(@"addedBounds = %@", NSStringFromRect([newModel bounds]));
-   
-   if (_isWindowLoaded)
-   {
-      [self _aqtSetupViewShouldResize:NO];
-#if 0
-      dirtyRect = AQTUnionRect(dirtyRect, backgroundDidChange?AQTRectFromSize([model canvasSize]):[newModel bounds]);
-#else      
-      dirtyRect = backgroundDidChange?AQTRectFromSize([model canvasSize]):AQTUnionRect(dirtyRect, [newModel bounds]);
-#endif
-      LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
+   } else {
+      BOOL viewNeedResize = !AQTProportionalSizes([model canvasSize], [newModel canvasSize]);
+      [model appendModel:newModel];
+      if (_isWindowLoaded)
+      {
+         [self _aqtSetupViewShouldResize:viewNeedResize];
+         // FIXME: Why was the next line needed???
+         // dirtyRect = backgroundDidChange?AQTRectFromSize([model canvasSize]):AQTUnionRect(dirtyRect, [newModel bounds]);
+      }      
    }
 }
 
 - (void)draw
 {
    LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
-   [canvas setNeedsDisplayInRect:[canvas convertRectToViewCoordinates:dirtyRect]];
+   [canvas setNeedsDisplayInRect:[canvas convertRectToViewCoordinates:[model dirtyRect]]];
    [[canvas window] makeKeyAndOrderFront:self];
-#if 1
-   dirtyRect = NSZeroRect;
-#endif
-   LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));   
+   [model clearDirtyRect];
+   LOG(@"dirtyRect = %@", NSStringFromRect([model dirtyRect]));   
 }
 
 /* This is a "housekeeping" method, to avoid buildup of hidden objects, does not imply redraw(?) */
 - (void)removeGraphicsInRect:(NSRect)targetRect
 {
-   // FIXME: Where does this belong? Here, category or in model proper (not functional in client)
-   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
-   NSRect testRect;
-   NSRect clipRect = AQTRectFromSize([model canvasSize]);
-   NSRect newBounds = NSZeroRect;
-   int i;
-   int  objectCount = [model count];
-   NSArray *modelObjects = [model modelObjects];
-   
-   // check for nothing to remove or disjoint modelBounds <--> targetRect
-   if (objectCount == 0 || AQTIntersectsRect(targetRect, [model bounds]) == NO)
-      return;
-   
-   // Apply clipRect (=canvasRect) to graphic bounds before comparing.
-   if (AQTContainsRect(targetRect, NSIntersectionRect([model bounds], clipRect)))
-   {
-      [model removeAllObjects];
-   }
-   else
-   {
-      for (i = objectCount - 1; i >= 0; i--)
-      {
-         testRect = [[modelObjects objectAtIndex:i] bounds];
-         if (AQTContainsRect(targetRect, NSIntersectionRect(testRect, clipRect)))
-         {
-            [model removeObjectAtIndex:i];
-         }
-         else
-         {
-            newBounds = AQTUnionRect(newBounds, testRect);
-         }
-      }
-   }
-   [model setBounds:newBounds];
-   // NSLog(@"Removed %d objs, new bounds: %@", objectCount - [modelObjects count], [self description]);
-   dirtyRect = AQTUnionRect(dirtyRect, targetRect);
-   LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
+   [model removeGraphicsInRect:targetRect];
+   LOG(@"dirtyRect = %@", NSStringFromRect([model dirtyRect]));
 }
 
 -(void)setAcceptingEvents:(BOOL)flag
@@ -308,16 +243,11 @@ static inline void NOOP_(id x, ...) {;}
 -(BOOL)invalidateClient //:(id)aClient
 {
    // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
-   //   if (_client == aClient)
-   //   {
-   // NSLog(@"invalidating %d", _client);
    [self setAcceptingEvents:NO];
    [self setClient:nil];
    [self setClientInfoName:@"No connection" pid:-1];
    [[canvas window] setTitle:[model title]];
    return YES;
-   //   }
-   //   return NO;
 }
 
 -(void)setClient:(id)client
@@ -501,6 +431,6 @@ static inline void NOOP_(id x, ...) {;}
 - (IBAction)refreshView:(id)sender
 {
    [canvas setNeedsDisplay:YES];
-   dirtyRect = NSZeroRect;
+   [model clearDirtyRect];
 }
 @end
