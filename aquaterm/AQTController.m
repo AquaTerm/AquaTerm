@@ -293,7 +293,9 @@ extern void aqtLineDrawingTest(id sender);
          row += 200;
       }
    }
-   [adapter renderPlot];   
+   [adapter renderPlot];
+   [adapter closePlot];   
+
 }
 
 #define NSAppKitVersionNumber10_0 577
