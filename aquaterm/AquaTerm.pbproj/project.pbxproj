@@ -168,7 +168,6 @@
 				F54B0FE401FF3656014110A7,
 				089C165CFE840E0CC02AAC07,
 				29B97318FDCFA39411CA2CEA,
-				F5AB087C0175BC8B01EB16F3,
 				F51551CC01FE762E01000102,
 				F54B0FE601FF5CDC014110A7,
 				F5E70370026D8645012F88DF,
@@ -437,16 +436,6 @@
 			settings = {
 			};
 		};
-		F53901BD01DF8C78014110A7 = {
-			isa = PBXFileReference;
-			path = AQTPrintView.h;
-			refType = 4;
-		};
-		F53901BE01DF8C78014110A7 = {
-			isa = PBXFileReference;
-			path = AQTPrintView.m;
-			refType = 4;
-		};
 		F546B4BF026B199901E9AA65 = {
 			fileRef = F5AB087A0175BC8B01EB16F3;
 			isa = PBXBuildFile;
@@ -658,16 +647,6 @@
 			path = GPTController.m;
 			refType = 4;
 		};
-		F5AB08780175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			path = GPTView.h;
-			refType = 4;
-		};
-		F5AB08790175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			path = GPTView.m;
-			refType = 4;
-		};
 		F5AB087A0175BC8B01EB16F3 = {
 			isa = PBXFileReference;
 			path = GPTWindowController.h;
@@ -678,27 +657,8 @@
 			path = GPTWindowController.m;
 			refType = 4;
 		};
-		F5AB087C0175BC8B01EB16F3 = {
-			children = (
-				F5AB087D0175BC8B01EB16F3,
-			);
-			isa = PBXVariantGroup;
-			name = GPTWindow.nib;
-			path = "";
-			refType = 4;
-		};
-		F5AB087D0175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			name = English;
-			path = English.lproj/GPTWindow.nib;
-			refType = 4;
-		};
 		F5AB08990175CCF101EB16F3 = {
 			children = (
-				F5AB08780175BC8B01EB16F3,
-				F5AB08790175BC8B01EB16F3,
-				F53901BD01DF8C78014110A7,
-				F53901BE01DF8C78014110A7,
 				F5E3AFA9026D80D2012F88DF,
 				F5E3AFAA026D80D2012F88DF,
 			);
