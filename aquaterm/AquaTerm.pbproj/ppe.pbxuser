@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA = {
-		activeBuildStyle = 4A9504CDFFE6A4B311CA0CBA;
+		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA;
 		activeTarget = 29B97326FDCFA39411CA2CEA;
 		addToTargets = (
 			29B97326FDCFA39411CA2CEA,
@@ -18,13 +18,13 @@
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{1024, 641}";
 				LeftSlideOut = {
-					ActiveTab = 0;
+					ActiveTab = 3;
 					Frame = "{{0, 23}, {1024, 618}}";
 					Split0 = {
 						ActiveTab = 1;
-						Frame = "{{225, 0}, {799, 618}}";
+						Frame = "{{224, 0}, {800, 618}}";
 						Split0 = {
-							Frame = "{{0, 233}, {799, 385}}";
+							Frame = "{{0, 232}, {800, 386}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
@@ -32,12 +32,12 @@
 								ActiveTab = 1;
 								Frame = "{{0, 0}, {799, 208}}";
 								Split0 = {
-									Frame = "{{0, 75}, {799, 133}}";
+									Frame = "{{0, 74}, {799, 134}}";
 									Split0 = {
-										Frame = "{{0, 0}, {392, 133}}";
+										Frame = "{{0, 0}, {392, 134}}";
 									};
 									Split1 = {
-										Frame = "{{401, 0}, {398, 133}}";
+										Frame = "{{401, 0}, {398, 134}}";
 									};
 									SplitCount = 2;
 								};
@@ -54,16 +54,16 @@
 							LauncherConfigVersion = 4;
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {799, 208}}";
+							Frame = "{{0, 0}, {800, 208}}";
 							LauncherConfigVersion = 3;
 							Runner = {
-								Frame = "{{0, 0}, {799, 208}}";
+								Frame = "{{0, 0}, {800, 208}}";
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {801, 26}}";
-							BuildTranscriptFrame = "{{0, 35}, {801, 159}}";
-							Frame = "{{0, 0}, {799, 192}}";
+							BuildMessageFrame = "{{0, 0}, {802, 26}}";
+							BuildTranscriptFrame = "{{0, 35}, {802, 159}}";
+							Frame = "{{0, 0}, {800, 192}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {799, 295}}";
@@ -152,7 +152,7 @@
 	F5AB08970175C42501EB16F3 = {
 		fileReference = F5AB08770175BC8B01EB16F3;
 		isa = PBXFileBreakpoint;
-		lineNumber = 99;
+		lineNumber = 100;
 		state = 2;
 	};
 	F5AB08980175C63D01EB16F3 = {
