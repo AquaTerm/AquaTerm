@@ -40,6 +40,8 @@
 		};
 		1058C7A2FEA54F0111CA2CBB = {
 			children = (
+				CBD51E0004EB84FA00EBD329,
+				CBD51DED04EB839F00EBD329,
 				29B97325FDCFA39411CA2CEA,
 				29B97324FDCFA39411CA2CEA,
 			);
@@ -82,6 +84,7 @@
 			children = (
 				17587328FF379C6511CA2CBB,
 				CBF30BC204D54A2E00EBD329,
+				CBD51E8E04EBA83A00EBD329,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -101,6 +104,7 @@
 			buildStyles = (
 				4A9504CCFFE6A4B311CA0CBA,
 				4A9504CDFFE6A4B311CA0CBA,
+				CBD51E7104EBA80A00EBD329,
 			);
 			hasScannedForEncodings = 1;
 			isa = PBXProject;
@@ -110,6 +114,7 @@
 				29B97326FDCFA39411CA2CEA,
 				F5DB1B640219BFD2014110D6,
 				CBF30BC104D54A2E00EBD329,
+				CBD51E8D04EBA83A00EBD329,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -461,6 +466,138 @@ http://aquaterm.sourceforge.net</string>
 			path = /Volumes/Earth/Users/per/source/AQT/adapters/gnuplot/aquaTerm.trm;
 			refType = 0;
 		};
+		CBD51DED04EB839F00EBD329 = {
+			isa = PBXFrameworkReference;
+			name = CoreFoundation.framework;
+			path = /System/Library/Frameworks/CoreFoundation.framework;
+			refType = 0;
+		};
+		CBD51E0004EB84FA00EBD329 = {
+			isa = PBXFrameworkReference;
+			name = ApplicationServices.framework;
+			path = /System/Library/Frameworks/ApplicationServices.framework;
+			refType = 0;
+		};
+		CBD51E0104EB84FA00EBD329 = {
+			fileRef = CBD51E0004EB84FA00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBD51E7104EBA80A00EBD329 = {
+			buildRules = (
+			);
+			buildSettings = {
+			};
+			isa = PBXBuildStyle;
+			name = BuildStyle;
+		};
+		CBD51E8804EBA83A00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBD51E8904EBA83A00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBD51E8A04EBA83A00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBD51E8B04EBA83A00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBD51E8C04EBA83A00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBD51E8D04EBA83A00EBD329 = {
+			buildPhases = (
+				CBD51E8804EBA83A00EBD329,
+				CBD51E8904EBA83A00EBD329,
+				CBD51E8A04EBA83A00EBD329,
+				CBD51E8B04EBA83A00EBD329,
+				CBD51E8C04EBA83A00EBD329,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				OPTIMIZATION_CFLAGS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = fwk;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = fwk;
+			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+			productName = fwk;
+			productReference = CBD51E8E04EBA83A00EBD329;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string></string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+</dict>
+</plist>
+";
+		};
+		CBD51E8E04EBA83A00EBD329 = {
+			isa = PBXFrameworkReference;
+			path = fwk.framework;
+			refType = 3;
+		};
+		CBD51E8F04EBAAEE00EBD329 = {
+			fileRef = 29B97325FDCFA39411CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CBD8F3EF04D90CDC00EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -580,6 +717,8 @@ http://aquaterm.sourceforge.net</string>
 		CBF30BBF04D54A2E00EBD329 = {
 			buildActionMask = 2147483647;
 			files = (
+				CBD51E0104EB84FA00EBD329,
+				CBD51E8F04EBAAEE00EBD329,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -602,12 +741,13 @@ http://aquaterm.sourceforge.net</string>
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				LIBRARY_STYLE = STATIC;
+				FRAMEWORK_SEARCH_PATHS = "";
+				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_LDFLAGS = "-dynamic";
+				OTHER_LIBTOOL_FLAGS = "-dynamic";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = libaqt;
+				PRODUCT_NAME = libaqt.dylib;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -621,7 +761,7 @@ http://aquaterm.sourceforge.net</string>
 		};
 		CBF30BC204D54A2E00EBD329 = {
 			isa = PBXLibraryReference;
-			path = libaqt;
+			path = libaqt.dylib;
 			refType = 3;
 		};
 		CBF30BC304D54A3800EBD329 = {
@@ -719,7 +859,7 @@ http://aquaterm.sourceforge.net</string>
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp $SRCROOT/AQTAdapter.h $HOME/include/.; cp $SRCROOT/AQTGraphic.h $HOME/include/.; cp $SRCROOT/build/libaqt $HOME/lib/libaqt.dylib; ranlib  $HOME/lib/libaqt.dylib";
+			shellScript = "cp $SRCROOT/AQTAdapter.h $HOME/include/.; cp $SRCROOT/AQTGraphic.h $HOME/include/.; cp $SRCROOT/build/libaqt.dylib $HOME/lib/.; ##ranlib  $HOME/lib/libaqt.dylib";
 		};
 		CBF30BD804D5527700EBD329 = {
 			children = (
