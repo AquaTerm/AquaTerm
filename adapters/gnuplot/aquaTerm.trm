@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.19 2003/08/19 21:03:53 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.20 2003/08/20 15:07:56 persquare Exp $
  *
  */
 
@@ -87,8 +87,8 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #define AQUA_HCHAR (AQUA_VCHAR*6/10)
 
 #define SPECIAL_COLORS 4
-#define CYCLIC_COLORS 8
-#define PM3D_COLORS (AQUA_COLORMAP_SIZE - CYCLIC_COLORS - SPECIAL_COLORS - 1)
+#define CYCLIC_COLORS 9
+#define PM3D_COLORS (AQT_COLORMAP_SIZE - CYCLIC_COLORS - SPECIAL_COLORS - 1)
 
 #define GOT_AQUA_PROTO
 #endif /* TERM_PROTO */
@@ -200,19 +200,20 @@ AQUA_init()
   // Set up the basic indexed colormap for gnuplot
   //
   //  Special colors
-  [adapter setColormapEntry:0 red:0.0 green:0.0 blue:0.0];
-  [adapter setColormapEntry:1 red:0.0 green:0.0 blue:0.0];
-  [adapter setColormapEntry:2 red:0.0 green:0.0 blue:0.0];
-  [adapter setColormapEntry:3 red:0.0 green:0.0 blue:0.0];
+  [adapter setColormapEntry:0 red:0.1 green:0.1 blue:0.1]; // linetype -4
+  [adapter setColormapEntry:1 red:0.9 green:0.9 blue:0.9]; // linetype -3 (xor;interactive) light gray
+  [adapter setColormapEntry:2 red:0.0 green:0.0 blue:0.0]; // linetype -2 (border) black
+  [adapter setColormapEntry:3 red:0.8 green:0.8 blue:0.8]; // linetype -1 (gridlines) light grey
   //  Cyclic colors
-  [adapter setColormapEntry:4 red:1.0 green:0.0 blue:0.0];
-  [adapter setColormapEntry:5 red:0.0 green:1.0 blue:0.0];
-  [adapter setColormapEntry:6 red:0.0 green:0.0 blue:1.0];
-  [adapter setColormapEntry:7 red:1.0 green:1.0 blue:0.0];
-  [adapter setColormapEntry:8 red:1.0 green:0.0 blue:1.0];
-  [adapter setColormapEntry:9 red:0.0 green:1.0 blue:1.0];
-  [adapter setColormapEntry:10 red:1.0 green:0.5 blue:0.5];
-  [adapter setColormapEntry:11 red:0.5 green:1.0 blue:0.5];
+  [adapter setColormapEntry:4 red:1.0 green:0.0 blue:0.0]; // red
+  [adapter setColormapEntry:5 red:0.0 green:1.0 blue:0.0]; // green	
+  [adapter setColormapEntry:6 red:0.0 green:0.0 blue:1.0]; // blue
+  [adapter setColormapEntry:7 red:1.0 green:0.0 blue:1.0]; // magenta
+  [adapter setColormapEntry:8 red:0.0 green:1.0 blue:1.0]; // cyan
+  [adapter setColormapEntry:9 red:0.6275 green:0.3216 blue:0.1765]; // sienna
+  [adapter setColormapEntry:10 red:1.0 green:0.6471 blue:0.0];// orange
+  [adapter setColormapEntry:11 red:0.5 green:0.4980 blue:0.3137];// coral
+  [adapter setColormapEntry:12 red:0.25 green:0.25 blue:0.25];// grey
 }
 
 TERM_PUBLIC void
@@ -254,14 +255,8 @@ TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
   LOG(@"AQUA_linetype(%d)", linetype);
-  if (linetype<0)
-  {
-   NSLog(@"Linetype %d", linetype);
-  }
-  else
-  {
-    [adapter takeColorFromColormapEntry:(linetype%CYCLIC_COLORS)+SPECIAL_COLORS];
-  }
+  // Note: this operation maps linestyle -4 to -1 onto colormap entries 0 to 3
+  [adapter takeColorFromColormapEntry:(linetype%CYCLIC_COLORS)+SPECIAL_COLORS];
 }
 
 TERM_PUBLIC void
@@ -332,7 +327,6 @@ AQUA_point(unsigned int x, unsigned int y, int number)
 TERM_PUBLIC void 
 AQUA_suspend(void)  /* after one plot of multiplot */
 {
-  //[gnuTermAccess flushBuffers];
   [adapter render];
 }
  
@@ -369,38 +363,41 @@ AQUA_pointsize(double pointsize)
   {
     if (palette == NULL)
     {
-        return 128;
+        return PM3D_COLORS;
     }
     else
     {
-        aqua_palette = palette;
+      int i;
+      for (i = 0; i < palette->colors-1; i++)
+      {
+        [adapter setColormapEntry:(SPECIAL_COLORS+CYCLIC_COLORS+i) 
+                              red:palette->color[i].r 
+                            green:palette->color[i].g 
+                             blue:palette->color[i].b];
+      }
     }
   }
 
   TERM_PUBLIC void 
   AQUA_set_color(double gray)
   {
-
-  /*  [adapter setColorRed:aqua_palette->color[pm3dColor].r 
-        green:aqua_palette->color[pm3dColor].g 
-        blue:aqua_palette->color[pm3dColor].b];
-  */
+    int index = (int)(gray*PM3D_COLORS) + SPECIAL_COLORS + CYCLIC_COLORS;
+    [adapter takeColorFromColormapEntry:index];
   }
 
   TERM_PUBLIC void 
-  AQUA_filled_polygon(int points, gpiPoint *corners)
+  AQUA_filled_polygon(int pc, gpiPoint *corners)
   {
     int i;
-    gpiPoint *scaledPoints = (gpiPoint *)malloc(points*sizeof(gpiPoint));
+    NSPoint *scaledPoints = (NSPoint *)malloc(pc*sizeof(NSPoint));
     if (scaledPoints)
       {
-	/* Need to rescale the point coordinates */
-	for (i=0; i<points; i++)
+	/* Rescale the point coordinates */
+	for (i=0; i<pc; i++)
 	  {
-	    scaledPoints[i].x = corners[i].x / AQUA_SCALE_FACTOR;
-	    scaledPoints[i].y = corners[i].y / AQUA_SCALE_FACTOR;
+            scaledPoints[i]=NSMakePoint(corners[i].x / AQUA_SCALE_FACTOR, corners[i].y / AQUA_SCALE_FACTOR);	
 	  }
-	//[gnuTermAccess setPolygonUsing:points corners:scaledPoints];
+	[adapter addPolygonWithPoints:scaledPoints pointCount:pc];
 	free(scaledPoints);
       }
   }
@@ -427,13 +424,10 @@ TERM_TABLE_START(aqua_driver)
   , 0, 0, 0, 0, 0
 #endif /* USE_MOUSE */
 #ifdef PM3D
-  /*
   , AQUA_make_palette,
-  0 // AQUA_previous_palette ,
+  0, 
   AQUA_set_color,
   AQUA_filled_polygon
-  */
-  ,0,0,0,0
 #endif /* PM3D */
 TERM_TABLE_END(aqua_driver)
 

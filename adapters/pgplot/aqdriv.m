@@ -214,28 +214,18 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=12, Draw line -----------------------------------------------
 
     case 12:
-    {
-      // FIXME: reduce amount of objects by coalescing lines starting at last endpoint
-      // FIXME: move behaviour to adapter
-      static NSPoint lastPoint;
-      NSPoint startPoint = NSMakePoint(rbuf[0], rbuf[1]);
-      NSPoint endPoint = NSMakePoint(rbuf[2], rbuf[3]);
-
       LOG(@"IFUNC=12, Draw line");
-      if (!NSEqualPoints(lastPoint, startPoint))
-      {
-        [adapter moveToPoint:startPoint];
-      }
-      [adapter addLineToPoint:endPoint];
-      lastPoint = endPoint;
-    }
+      [adapter moveToPoint:NSMakePoint(rbuf[0], rbuf[1])];
+      [adapter addLineToPoint:NSMakePoint(rbuf[2], rbuf[3])];
       break;
 
       //--- IFUNC=13, Draw dot ------------------------------------------------
 
     case 13:
-      LOG(@"IFUNC=13, Draw dot");
+      LOG(@"IFUNC=13, Draw dot"); // FIXME
       //[adapter dotAtPoint:NSMakePoint(rbuf[0], rbuf[1])];
+      [adapter moveToPoint:NSMakePoint(rbuf[0], rbuf[1])];
+      [adapter addLineToPoint:NSMakePoint(rbuf[0]+1.0, rbuf[1])];
       break;
 
       //--- IFUNC=14, End picture ---------------------------------------------
@@ -271,7 +261,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     {
       NSPoint pos;
       char key;
-      LOG(@"IFUNC=17, Read cursor");
+      LOG(@"IFUNC=17, Read cursor"); // FIXME
       /*
        Parameters passed to handler:
        RBUF(1): initial x position of cursor.
@@ -318,7 +308,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       static NSPoint vertices[64];
       static int vCount = 0;
       static int vMax = 0;
-      LOG(@"IFUNC=20, Polygon fill");
+      LOG(@"IFUNC=20, Polygon fill"); // FIXME
 
       if (vMax == 0)
       {
@@ -405,7 +395,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
           bitmapSize = NSMakeSize((int)rbuf[1], (int)rbuf[2]);
           imageBounds = NSMakeRect(rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5]);
           NSLog(@"bitmapsize: %@\nimageBounds: %@", NSStringFromSize(bitmapSize), NSStringFromRect(imageBounds));
-          NSLog(@"Matrix: %f, %f, %f, %f, %f, %f", rbuf[7], rbuf[8], rbuf[9], rbuf[10], rbuf[11], rbuf[12]);
+          NSLog(@"Matrix: %f, %f, %f, %f, %f, %f", rbuf[7], rbuf[8], rbuf[9], rbuf[10], rbuf[11], rbuf[12]); // FIXME
           pixCount = 0;
           maxPixCount = 3*bitmapSize.width*bitmapSize.height*sizeof(unsigned char);
           pixPtr = (unsigned char *)malloc(maxPixCount);
@@ -448,7 +438,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=27, World-coordinate scaling --------------------------------
 
     case 27:
-      LOG(@"IFUNC=27, World-coordinate scaling");
+      LOG(@"IFUNC=27, World-coordinate scaling"); // FIXME
       break;
 
       //--- IFUNC=28, Draw marker ---------------------------------------------
