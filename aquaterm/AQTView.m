@@ -65,16 +65,19 @@
 
 - (void)setIsProcessingEvents:(BOOL)flag
 {
-   _isProcessingEvents = flag;
-   [[self window] invalidateCursorRectsForView:self];
+   if (_isProcessingEvents != flag)
+   {
+      // Change in state
+      _isProcessingEvents = flag;
+      [[self window] invalidateCursorRectsForView:self];
+   }
 }
 
 -(void)resetCursorRects
 {
-   if ([self isProcessingEvents])
-   {
-      [self addCursorRect:[self bounds] cursor:crosshairCursor];
-   }
+   NSCursor *aCursor = _isProcessingEvents?crosshairCursor:[NSCursor arrowCursor];
+   [self addCursorRect:[self bounds] cursor:aCursor];
+   [aCursor setOnMouseEntered:YES];
 }
 
 - (NSPoint)convertPointToCanvasCoordinates:(NSPoint) aPoint
@@ -132,8 +135,6 @@
    [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:2];
 }   
 
-
-
 -(void)keyDown:(NSEvent *)theEvent
 {
    if ([self isProcessingEvents])
@@ -171,9 +172,13 @@
    float thisTime;
    NSDate *startTime;
 #endif
-   
+
    [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone]; // FIXME: user prefs
    [[NSGraphicsContext currentContext] setShouldAntialias:YES]; // FIXME: user prefs
+#ifdef DEBUG_BOUNDS
+   [[NSColor redColor] set];
+   NSFrameRect(dirtyRect);
+#endif
    NSRectClip(dirtyRect);
 
    // Dirty rect in view coords, clipping rect is set.

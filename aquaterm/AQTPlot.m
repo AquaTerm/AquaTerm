@@ -336,6 +336,12 @@
    [[NSApp delegate] removePlot:self];
 }
 
+- (void)windowDidBecomeKey:(NSNotification *)notification
+{
+   // FIXME: who should be the delegate of whom?
+   [[notification object] invalidateCursorRectsForView:canvas];
+}
+
 #pragma mark === Menu actions ===
 
 - (IBAction)copy:(id)sender
