@@ -88,25 +88,11 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 @implementation NSAttributedString (AQTStringDrawingAdditions)
 -(NSBezierPath *)aqtBezierPathInFont:(NSFont *)defaultFont
 {
-   int i = 0;
-   float subFontAdjust = 0.6;
-   float subBaseAdjust = 0.3;
-   NSFont *subFont = [NSFont fontWithName:[defaultFont fontName] size:[defaultFont pointSize]*subFontAdjust];
-   NSFont *tmpNormalFont;
-   NSFont *tmpSubFont;
-   NSFont *aFont; 
    NSString *text = [self string]; // Yuck!
    int strLen = [text length];
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
    NSPoint pos = NSZeroPoint;
-   NSPoint drawPos;
-   float leftUnderlineEdge;
-   float leftSubEdge, rightSubEdge;
-   BOOL underlineState = NO;
-   int newSubscriptState;
-   int subscriptState = 0;
    int firstChar = 0;
-   float baselineOffset = 0.0;
    int index = 0;
    
    // 
@@ -115,160 +101,9 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    while (strLen>1 && firstChar<strLen && [text characterAtIndex:firstChar] == ' ')
       firstChar++;
    
-   [_aqtSharedScratchPad() lockFocus];
-   
+   [_aqtSharedScratchPad() lockFocus];   
    [tmpPath moveToPoint:pos];   
-#if  1
    pos = recurse(tmpPath, self, [defaultFont fontName], [defaultFont pointSize], &index, 0, pos, 1.0);
-#elif
-   for(i=firstChar; i<strLen; i++) {
-      NSGlyph theGlyph;
-      NSSize offset;
-      unichar theChar = [text characterAtIndex:i];
-      NSDictionary *attrDict = [self attributesAtIndex:i effectiveRange:nil];
-      tmpNormalFont = defaultFont;
-      tmpSubFont = subFont;
-      // Switch font if set in attribute
-      if ([attrDict objectForKey:@"AQTFontname"] != nil && ![[attrDict objectForKey:@"AQTFontname"] isEqualToString:[defaultFont fontName]]) {
-         // New font set in character atttribute
-         NSFont *aFont = [NSFont fontWithName:[attrDict objectForKey:@"AQTFontname"] size:[defaultFont pointSize]]; // FIXME: Attribute for this!
-         if (aFont != nil) {
-            tmpNormalFont = aFont;
-            tmpSubFont = [NSFont fontWithName:[aFont fontName] size:[defaultFont pointSize]*subFontAdjust]; // FIXME: Attribute for this!
-         }
-      }
-      if ([[tmpNormalFont fontName] isEqualToString:@"Symbol"]) {
-         theChar = _aqtMapAdobeSymbolEncodingToUnicode(theChar);
-      }      
-      // underlining      
-      if(underlineState == NO) {
-         if ([attrDict valueForKey:NSUnderlineStyleAttributeName]) {
-            leftUnderlineEdge = pos.x;
-            underlineState = YES;
-         }
-      } else {
-         if (![attrDict valueForKey:NSUnderlineStyleAttributeName]) {
-            [tmpPath appendBezierPathWithRect:NSMakeRect(leftUnderlineEdge, -1.0, pos.x - leftUnderlineEdge, 0.5)];
-            underlineState = NO;
-            [tmpPath moveToPoint:pos];
-         }
-      }      
-      // subscript
-      newSubscriptState = [[attrDict valueForKey:NSSuperscriptAttributeName] intValue];
-      newSubscriptState = newSubscriptState>1?1:newSubscriptState;
-      newSubscriptState = newSubscriptState<-1?-1:newSubscriptState; 
-      // FIXME: this is still way too ugly... 
-      switch (newSubscriptState) {
-         case 0:
-            aFont = tmpNormalFont;
-            break;
-         case 1: // Falltrough
-         case -1:
-            aFont = tmpSubFont;
-            break;
-         default:
-            break;
-      }
-      theGlyph = [aFont _defaultGlyphForChar:theChar];
-      offset = [aFont advancementForGlyph:theGlyph];
-      
-      switch (subscriptState) {
-         case 0:
-            switch (newSubscriptState) {
-               case 0:
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  leftSubEdge = pos.x;
-                  break;
-               case 1:
-                  baselineOffset = [tmpNormalFont ascender]-[defaultFont pointSize]*subBaseAdjust;
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  rightSubEdge = MAX(pos.x, rightSubEdge);
-                  break;
-               case -1:
-                  baselineOffset = -[defaultFont pointSize]*subBaseAdjust;
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  rightSubEdge = MAX(pos.x, rightSubEdge);
-                  break;
-            }
-            break;
-         case 1:
-            switch (newSubscriptState) {
-               case 0:
-                  baselineOffset = 0.0;
-                  pos.x = rightSubEdge;
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  leftSubEdge = pos.x;
-                  break;
-               case 1:
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  rightSubEdge = MAX(pos.x, rightSubEdge);
-                  break;
-               case -1:
-                  baselineOffset = -[defaultFont pointSize]*subBaseAdjust;
-                  pos.x = leftSubEdge;
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  rightSubEdge = MAX(pos.x, rightSubEdge);
-                  break;
-            }            
-            break;
-         case -1:
-            switch (newSubscriptState) {
-               case 0:
-                  baselineOffset = 0.0;
-                  pos.x = rightSubEdge;
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  leftSubEdge = pos.x;
-                  break;
-               case 1:
-                  baselineOffset = [tmpNormalFont ascender]-[defaultFont pointSize]*subBaseAdjust;
-                  pos.x = leftSubEdge;
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  rightSubEdge = MAX(pos.x, rightSubEdge);
-                  break;
-               case -1:
-                  drawPos = pos;
-                  drawPos.y += baselineOffset;
-                  pos.x += offset.width;
-                  pos.y += offset.height;
-                  rightSubEdge = MAX(pos.x, rightSubEdge);
-                  break;
-            }
-            break;
-         default:
-            NSLog(@"Subscript parameter error, only -1, 0, and 1 allowed");
-            break;
-      }
-      [tmpPath moveToPoint:drawPos];
-      if ([attrDict objectForKey:@"AQTNonPrintingChar"] == nil || [[attrDict objectForKey:@"AQTNonPrintingChar"] intValue] == 0)
-         [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
-      [tmpPath moveToPoint:pos];      
-      subscriptState = newSubscriptState;
-   }
-#endif
    [_aqtSharedScratchPad() unlockFocus];
    return tmpPath;
 }
