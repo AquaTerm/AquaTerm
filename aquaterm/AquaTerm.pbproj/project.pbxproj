@@ -284,6 +284,7 @@ http://aquaterm.sourceforge.net</string>
 				CB7288970502798C00D208BA,
 				CB7288990502798E00D208BA,
 				CBA3D83F053D784200D208BA,
+				CB71321305444AEC00D208BA,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +320,7 @@ http://aquaterm.sourceforge.net</string>
 				CB7288980502798D00D208BA,
 				CB72889A0502798E00D208BA,
 				CBA3D843053D84DE00D208BA,
+				CB71321405444AEC00D208BA,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -468,6 +470,30 @@ http://aquaterm.sourceforge.net</string>
 			name = aqtplplot.m;
 			path = /Users/per/source/sci/adapters/plplot/aqtplplot.m;
 			refType = 0;
+		};
+		CB71321105444AEC00D208BA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTGraphicDrawingMethods.h;
+			refType = 4;
+		};
+		CB71321205444AEC00D208BA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTGraphicDrawingMethods.m;
+			refType = 4;
+		};
+		CB71321305444AEC00D208BA = {
+			fileRef = CB71321105444AEC00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB71321405444AEC00D208BA = {
+			fileRef = CB71321205444AEC00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		CB7288970502798C00D208BA = {
 			fileRef = CBF3082D04D51B9300EBD329;
@@ -1209,6 +1235,8 @@ http://aquaterm.sourceforge.net</string>
 			children = (
 				F5E3AFA9026D80D2012F88DF,
 				F5E3AFAA026D80D2012F88DF,
+				CB71321105444AEC00D208BA,
+				CB71321205444AEC00D208BA,
 			);
 			isa = PBXGroup;
 			name = View;
