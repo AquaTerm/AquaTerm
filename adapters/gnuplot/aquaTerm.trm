@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.4 2001/12/04 21:35:49 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.5 2001/12/10 16:09:00 persquare Exp $
  *
  */
 
@@ -94,7 +94,7 @@ TERM_PUBLIC void AQUA_set_pointsize __PROTO((double size)); /* notification of s
 TERM_PUBLIC int flags; /* various flags */
 TERM_PUBLIC void AQUA_suspend __PROTO((void)); /* after one plot of multiplot */
 TERM_PUBLIC void AQUA_resume __PROTO((void));  /* before subsequent plot of multiplot */
-// TERM_PUBLIC void AQUA_boxfill __PROTO((int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height)); /* clear part of multiplot */
+TERM_PUBLIC void AQUA_boxfill __PROTO((int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height)); /* clear part of multiplot */
 TERM_PUBLIC void AQUA_linewidth __PROTO((double linewidth));
 TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #ifdef PM3D
@@ -137,6 +137,7 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 // drawing to the same model
 //
 - (oneway void) renderInViewShouldRelease:(BOOL)release;
+- (oneway void) clearRect:(NSRect)rect;
 //
 // Add a string to the current model, where:
 // justification is {LEFT=0, CENTER, RIGHT}
@@ -147,7 +148,7 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 - (oneway void) addString:(bycopy NSString *)text 
                   atPoint:(bycopy NSPoint)point 
         withJustification:(bycopy int)justification 
-		              atAngle:(bycopy float)angle
+                  atAngle:(bycopy float)angle
          withIndexedColor:(bycopy int)colorIndex;
 //
 // Set the font for the subsequent strings added to the model
@@ -212,7 +213,8 @@ static float currentAngle;
 -(void)dealloc;
 -(id)server;
 -(void)invalidateServer;
--(BOOL)connectToServer; 
+-(BOOL)connectToServer;
+-(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease;
 @end
 
 @implementation GnuTermDriver
@@ -302,6 +304,25 @@ static float currentAngle;
 -(NSDistantObject *)server
 {
   return server;
+}
+-(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease
+{
+	NS_DURING
+		if ([thePath isEmpty] == NO)
+		{
+			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
+			[thePath removeAllPoints];                   
+		}
+        if (shouldRender)
+        {	
+          [[gnuTermAccess server] renderInViewShouldRelease:shouldRelease];
+        }
+	NS_HANDLER
+		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+			[gnuTermAccess invalidateServer];
+		else
+			[localException raise];
+	NS_ENDHANDLER  
 }
 @end
 
@@ -401,19 +422,7 @@ AQUA_reset()
 TERM_PUBLIC void
 AQUA_text()
 {
-	NS_DURING
-		if ([thePath isEmpty] == NO)
-		{
-			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-			[thePath removeAllPoints];                   
-		}
-		[[gnuTermAccess server] renderInViewShouldRelease:YES]; // Draw!
-	NS_HANDLER
-		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-			[gnuTermAccess invalidateServer];
-		else
-			[localException raise];
-	NS_ENDHANDLER
+    [gnuTermAccess flushOrphanedGraphicsRender:YES release:YES];
 }
 
 
@@ -439,18 +448,7 @@ AQUA_vector(unsigned int x, unsigned int y)
 TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
-  if ([thePath isEmpty] == NO)
-  {
-		NS_DURING
-			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-			[thePath removeAllPoints];                   
-		NS_HANDLER
-			if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-				[gnuTermAccess invalidateServer];
-			else
-				[localException raise];
-		NS_ENDHANDLER
-  }
+  [gnuTermAccess flushOrphanedGraphicsRender:NO release:NO];
   currentLinetype = linetype;   
 }
 
@@ -461,10 +459,10 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
     return;
   NS_DURING
 		[[gnuTermAccess server] addString:[NSString stringWithCString:str] 
-															atPoint:NSMakePoint(x, y)
-										withJustification:currentJustificationMode
-										          atAngle:currentAngle
-										 withIndexedColor:currentLinetype];    
+                                  atPoint:NSMakePoint(x, y)
+                        withJustification:currentJustificationMode
+                                  atAngle:currentAngle
+                         withIndexedColor:currentLinetype];    
 	NS_HANDLER
 		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
 			[gnuTermAccess invalidateServer];
@@ -498,14 +496,14 @@ AQUA_text_angle (int angle)
 TERM_PUBLIC int 
 AQUA_set_font(const char *font) /* "font,size" */
 {
-	NS_DURING
+  NS_DURING
   	[[gnuTermAccess server] setFontWithName:@"Times-Roman" size:16.0];
   NS_HANDLER
-		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-			[gnuTermAccess invalidateServer];
-		else
-			[localException raise];
-	NS_ENDHANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+      [gnuTermAccess invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
   
   return (TRUE);
 }
@@ -520,25 +518,32 @@ TERM_PUBLIC void
 AQUA_suspend(void)  /* after one plot of multiplot */
 {
   LOG(@"    AQUA_suspend");
-	NS_DURING
-  	if ([thePath isEmpty] == NO)
-  	{
-			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-			[thePath removeAllPoints];                   
-		}
-		[[gnuTermAccess server] renderInViewShouldRelease:NO];
-	NS_HANDLER
-		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-			[gnuTermAccess invalidateServer];
-		else
-			[localException raise];
-	NS_ENDHANDLER
+    [gnuTermAccess flushOrphanedGraphicsRender:YES release:NO];
 }
  
 TERM_PUBLIC void 
 AQUA_resume(void) /* before subsequent plot of multiplot */
 {
   LOG(@"    AQUA_resume");
+}
+TERM_PUBLIC void 
+AQUA_boxfill(int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height) /* clear part of multiplot */
+{
+  NSLog(@"AQUA_boxfill");
+  [gnuTermAccess flushOrphanedGraphicsRender:NO release:NO];
+  //
+  // FIXME: quick & dirty fix, should add -(void)clearRect:(NSRect)bounds to AQT methods
+  //
+  NS_DURING
+    // [[gnuTermAccess server] addPolygon:[NSBezierPath bezierPathWithRect:NSMakeRect(x1,y1,width,height)] withIndexedColor:style];
+    [[gnuTermAccess server] clearRect:NSMakeRect(x1,y1,width,height)];
+    [[gnuTermAccess server] renderInViewShouldRelease:NO];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+      [gnuTermAccess invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
 }
   
 TERM_PUBLIC void 
@@ -558,8 +563,7 @@ AQUA_pointsize(double pointsize)
   TERM_PUBLIC int 
   AQUA_make_palette(t_sm_palette *palette)
   {
-    /* We handle the palette in the server */
-    return(0);
+    return(0); /* We handle the palette in the server */
   }
 
   TERM_PUBLIC void 
@@ -567,19 +571,7 @@ AQUA_pointsize(double pointsize)
   {
         
     LOG(@"[pm3d] AQUA_set_color(%f)", gray);
-    if ([thePath isEmpty] == NO)
-    {
-      // This happens if a (stroked) path hasn't been sent before drawing PM3D patches
-      NS_DURING
-      	[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-      NS_HANDLER
-			if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-				[gnuTermAccess invalidateServer];
-			else
-				[localException raise];
-			NS_ENDHANDLER
-      [thePath removeAllPoints];                   
-    }
+    [gnuTermAccess flushOrphanedGraphicsRender:NO release:NO];
     currentGray = gray;
   }
 
@@ -623,8 +615,10 @@ TERM_TABLE_START(aqua_driver)
   AQUA_justify_text, do_point, do_arrow, AQUA_set_font,
   AQUA_pointsize, TERM_CAN_MULTIPLOT,
   AQUA_suspend, AQUA_resume,
-  0 /* AQUA_boxfill */, AQUA_linewidth
+  AQUA_boxfill, AQUA_linewidth
+#ifdef USE_MOUSE
   , 0, 0, 0, 0, 0
+#endif
 #ifdef PM3D
   , AQUA_make_palette,
   0 /* AQUA_previous_palette */,
