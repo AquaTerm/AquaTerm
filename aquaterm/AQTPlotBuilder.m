@@ -200,7 +200,7 @@
 
 - (void)render
 {
-   if (_modelIsDirty)
+   if (_modelIsDirty && !NSEqualSizes([_model canvasSize], NSZeroSize))
    {
       [self _flushBuffers];
       [self _aqtPlotBuilderSetModelIsDirty:NO];

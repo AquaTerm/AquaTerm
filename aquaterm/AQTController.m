@@ -32,7 +32,9 @@ extern void aqtLineDrawingTest(id sender);
 {
   if (self =  [super init])
   {
-    handlerList = [[NSMutableArray alloc] initWithCapacity:256];
+     NSRect screenFrame = [[NSScreen mainScreen] visibleFrame];
+     handlerList = [[NSMutableArray alloc] initWithCapacity:256];
+     cascadingPoint = NSMakePoint(NSMinX(screenFrame), NSMaxY(screenFrame));
   }
   return self;
 }
@@ -68,6 +70,13 @@ extern void aqtLineDrawingTest(id sender);
     adapter = [[AQTAdapter alloc] initWithServer:self];
   }
   return adapter;
+}
+
+- (void)setWindowPos:(NSWindow *)plotWindow
+{
+   cascadingPoint = [plotWindow cascadeTopLeftFromPoint:cascadingPoint];
+   NSLog(@"cascadingPoint = %@", NSStringFromPoint(cascadingPoint));
+
 }
 
 #pragma mark === AQTConnectionProtocol ===

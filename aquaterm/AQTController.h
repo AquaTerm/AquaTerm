@@ -16,10 +16,12 @@
   NSPopUpButton		*saveFormatPopup;
   NSBox			*extendSavePanelView;
   NSConnection		*doConnection;
+  NSPoint cascadingPoint;
 }
 
 - (AQTAdapter *)sharedAdapter;
 - (void)removePlot:(id)aPlot;
+- (void)setWindowPos:(NSWindow *)plotWindow;
 
 
 

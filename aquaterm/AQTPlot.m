@@ -30,13 +30,15 @@
 -(void)_aqtSetupViewShouldResize:(BOOL)shouldResize
 {
    NSSize contentSize, windowSize, maxSize, minSize, ratio;
+   NSRect windowFrame = [[canvas window] frame];
+   NSPoint windowTopLeft = NSMakePoint(NSMinX(windowFrame), NSMaxY(windowFrame)); 
    contentSize = [model canvasSize];
    windowSize = contentSize;
    windowSize.height += TITLEBAR_HEIGHT;
    maxSize = NSMakeSize(2.0*contentSize.width, 2.0*contentSize.height + TITLEBAR_HEIGHT);
    minSize = NSMakeSize(0.5*contentSize.width, 0.5*contentSize.height + TITLEBAR_HEIGHT);
    ratio = windowSize;
-
+  
    [canvas setModel:model];
    [canvas setFrameOrigin:NSMakePoint(0.0, 0.0)];
    if (_clientPID != -1)
@@ -53,6 +55,7 @@
       NSRect contentFrame = NSZeroRect;
       contentFrame.size = contentSize;
       [[canvas window] setContentSize:contentSize];
+      [[canvas window] setFrameTopLeftPoint:windowTopLeft];      
       [canvas setFrame:contentFrame];
       //[[canvas window] setAspectRatio:ratio];
    }
@@ -63,6 +66,7 @@
 
 -(void)awakeFromNib
 {
+   [[NSApp delegate] setWindowPos:[canvas window]];
    if (model)
    {
       [self _aqtSetupViewShouldResize:YES];
