@@ -1,445 +1,416 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 #import "AQTProtocol.h"
+#include "f2aqt.h"
+// 
+// 
+static NSAutoreleasePool *arpool; // Objective-C autorelease pool  
+static id adapter;        				// Adapter object 
 //
-// Fortran interface (_not_complete, just an example!!!) 
+// ----------------------------------------------------------------
+// --- Objective-C Adapter for AquaTerm 
+// ----------------------------------------------------------------
 //
-int f2aqt_init__(void);
-int f2aqt_info__(int *x, int *y);
-int f2aqt_reset__(void);
-int f2aqt_render__(void);
-int f2aqt_color__(int *color);
-int f2aqt_move__(int *x, int *y);
-int f2aqt_vector__(int *x, int *y);
-int f2aqt_justify__(int *justification);
-int f2aqt_put_text__(int *x, int *y, const char *str);
-
-static NSAutoreleasePool *arpool;   // our autorelease pool 
-static id gnuTermAccess;        	// local object manages the D.O. connection
-static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of gnuTermAccess)
-
-/*
- * The class NSBezierPath doesn't implement replacementObjectForPortCoder so
- * we add that behaviour as a category for NSBezierPath
- */
+// First we need some Cocoa magic incantations, documented at:
+// http://developer.apple.com/techpubs/macosx/Cocoa/TasksAndConcepts/ProgrammingTopics/DistrObjects/
+// Look under "Making Substitutions During Message Encoding"
+//
+// The class NSBezierPath doesn't implement replacementObjectForPortCoder so
+// we add that behaviour as a category for NSBezierPath
+//
 @interface NSBezierPath (NSBezierPathDOCategory)
-- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder;
+-(id)replacementObjectForPortCoder:(NSPortCoder *)portCoder;
 @end
 
 @implementation NSBezierPath (NSBezierPathDOCategory)
-- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder
+-(id)replacementObjectForPortCoder:(NSPortCoder *)portCoder
 {
   if ([portCoder isBycopy])
     return self;
   return [super replacementObjectForPortCoder:portCoder];
 }
 @end
-
-/* Debugging extras */
-static inline void NOOP_(id x, ...) {;}
-
-
-#ifdef LOGGING
-#define LOG  NSLog
-#else
-#define LOG  NOOP_
-#endif	/* LOGGING */
-
+//
 // ----------------------------------------------------------------
-// AQTAdapter - A class to mediate between gnuplot C-function calls
-// and AquaTerm Objective-C remote messages
+// --- AQTAdapter - A class to mediate between C-function calls
+// --- and AquaTerm Objective-C remote messages
 // ----------------------------------------------------------------
 //
 @interface AQTAdapter : NSObject
 {
-  @private
-  id server;
+  NSBezierPath *filledPathBuffer;
+  NSBezierPath *pathBuffer;
   NSMutableDictionary *termInfo;
-  NSBezierPath *thePath;
-  int justificationMode;
-  int linetype;
-  double gray;
-  float textAngle;
-  int figure;
+  float linewidth;
+  int orient;
+  int just;
+  int colorIndex;
+  @private
+  id aqtConnection;
 }
--(id) init;
--(void) dealloc;
--(id) server;
+-(id)aqtConnection;
 -(NSMutableDictionary *)termInfo;
--(void) invalidateServer;
--(BOOL) connectToServer;
--(void) updateInfoFromServer;
--(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease;
--(void) moveToPoint:(NSPoint)point;
--(void) lineToPoint:(NSPoint)point;
--(void) setLinetype:(int)linetype;
--(void) putText:(const char *)str at:(NSPoint)point;
--(void) setJustification:(int)mode;
--(void) setTextAngle:(int)angle;
--(void) setFont:(const char *)font;
--(void) fillRect:(NSRect)rect style:(int)style;
--(void) setLinewidth:(double)linewidth;
--(void) setFillColor:(double)gray;
-// -(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners;
--(void) setFigure:(int)newFigure;
+-(BOOL)connectToAquaTerm;	
+-(void)updateInfoFromServer;
+//
+// Obj-C methods implementing the functionality defined in C_API.h
+//
+-(void)openGraph:(int)n;
+-(void)closeGraph;
+-(void)render;
+-(void)setTitle:(NSString *)title;
+-(void)setColor:(NSColor *)color forIndex:(int)index;
+-(void)useColor:(int)index;
+-(void)useLinewidth:(float)width;
+-(void)appendPath:(NSBezierPath *)path;
+-(void)appendFilledPath:(NSBezierPath *)path;
+-(void)setFontWithName:(NSString *)name size:(float)size;
+-(void)useOrientation:(int)orient;
+-(void)useJustification:(int)just;
+-(void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint;
+-(void)putText:(NSString *)str at:(NSPoint)point;
+-(void)addImageFromFile:(NSString *)filename  bounds:(NSRect)bounds;
+//
+-(void)flushBuffers;
+
 @end 
 
 @implementation AQTAdapter
--(id) init
+-(id)init
 {
   if (self = [super init])
   {
-    thePath = [[NSBezierPath alloc] init];
+    filledPathBuffer = [[NSBezierPath alloc] init];
+    pathBuffer = [[NSBezierPath alloc] init];
     termInfo = [[NSMutableDictionary alloc] initWithCapacity:0];
-    justificationMode = 0;
-    linetype = 0;
-    gray = 0.0;
-    textAngle = 0.0;
-    figure = currentWindow;	/* Current window could have changed before */
-    if ([self connectToServer])
+    //
+    // Try to get a local proxy of the object in AquaTerm that manages communication
+    // 
+    if ([self connectToAquaTerm])
     {
-      [server setProtocolForProxy:@protocol(AQTProtocol)];
-      [self updateInfoFromServer];
+      // 
+      // This speeds up communication with the remote object, see
+      // http://developer.apple.com/techpubs/macosx/Cocoa/TasksAndConcepts/ProgrammingTopics/DistrObjects/
+      // Look under "Connections and Proxies"
+      //
+      [aqtConnection setProtocolForProxy:@protocol(AQTProtocol)];
     }
   }
   return self;
 }
 
--(void) dealloc
+-(void)dealloc
 {
+  [aqtConnection release];
+  [filledPathBuffer release];
+  [pathBuffer release];
   [termInfo release];
-  [thePath release];
-  [server release];
   [super dealloc];
 }
 
--(id) server
+-(id)aqtConnection
 {
-  return server;
+  return aqtConnection;
 }
+
 -(NSMutableDictionary *)termInfo
 {
   return termInfo;
 }
--(void) invalidateServer
-{
-  [server release];
-  server = nil;
-  currentWindow = 0;
-  printf("Lost connection to server,\nuse \"set term aqua <n>\" to reconnect.\n");
-}
 
--(BOOL) connectToServer
+-(BOOL)connectToAquaTerm
 {
-  BOOL defaultApp = YES;
   BOOL didConnect = NO;
-  NSString *appString;
-  /*
-   * Establish a connection to graphics terminal (server)
-   * First check if a  server is registered already
-   * If not, check if environment variable GNUTERMAPP is set
-   * and try to launch that application
-   * Finally default to looking for a hardcoded app in
-   * standard locations.
-   */
-  server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-  if (server) /* Server is running ready to go */
+  //
+  // Establish a connection to AquaTerm.
+  // First check if AquaTerm is already running, otherwise
+  // try to launch AquaTerm from standard locations.
+  //
+  aqtConnection = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+  if (aqtConnection) /* Server is running and ready to go */
   {
-    [server retain];
+    [aqtConnection retain];
     didConnect = YES;
   }
   else /* Server isn't running, we must fire it up */
   {
-    if (getenv("GNUTERMAPP") == (char *)NULL)
+    //
+    // Try to launch AquaTerm
+    //
+    if ([[NSWorkspace sharedWorkspace] launchApplication:@"AquaTerm"] == NO)
     {
-      appString = [NSString stringWithString:@"AquaTerm"];
+      printf("Failed to launch AquaTerm.\n");
+      printf("You must either put AquaTerm.app in \n");
+      printf("the /Applications or ~/Applications folder\n");
     }
     else
     {
-      appString = [NSString stringWithCString:getenv("GNUTERMAPP")];
-      defaultApp = NO;
-    }
-    /* Try to launch application */
-    if ([[NSWorkspace sharedWorkspace] launchApplication:appString] == NO)
-    {
-      printf("Failed to launch gnuplot server.\n");
-      if (defaultApp)
-      {
-        printf("You must either put the server application in \n");
-        printf("the /Applications folder, ~/Applications folder\n");
-        printf("or set the environment variable GNUTERMAPP to the\n");
-        printf("full path of the server application, e.g.\n");
-        printf("setenv GNUTERMAPP \"/some/strange/location/MyServer.app\"\n");
-      }
-      else
-      {
-        printf("Check environment variable GNUTERMAPP for errors\n");
-      }
-    }
-    else
-    {
-      do { /* Wait for it to register Server methods with OS */
-        server =[NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-      } while (!server);  /* This could result in a hang... */
-      [server retain];
+      do { /* Wait for it to register with OS */
+        aqtConnection =[NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+      } while (!aqtConnection);  /* This could result in a hang if something goes wrong with registering! */
+      [aqtConnection retain];
       didConnect = YES;
    	}
   }
-  if (didConnect)
-  {
-    [server setProtocolForProxy:@protocol(AQTProtocol)];
-    [self updateInfoFromServer];
-  }
   return didConnect;
 }
-
 -(void) updateInfoFromServer
 {
-  NS_DURING	/* try */
-    [termInfo  setDictionary:[server getAquaTermInfo]];
-  NS_HANDLER 
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-      [self invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
+    [termInfo setDictionary:[aqtConnection getAquaTermInfo]];
 }
 
--(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease
+//
+// Adapter methods, this is where the translation takes place!
+//
+// The methods known to AquaTerm are defined in AQTProtocol.h
+//
+-(void)openGraph:(int)n
 {
-  NS_DURING
-    if ([thePath isEmpty] == NO)
-    {
-      [server addPolyline:thePath withIndexedColor:linetype];
-      [thePath removeAllPoints];
-    }
-    if (shouldRender)
-    {
-      [server renderInViewShouldRelease:shouldRelease];
-    }
-    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-        [self invalidateServer];
-      else
-        [localException raise];
-    NS_ENDHANDLER
+  // Set default values
+  linewidth = 1;
+  orient = 0;
+  just = 1;
+  colorIndex = 0;
+  [aqtConnection openModel:n];
 }
 
--(void) moveToPoint:(NSPoint)point
+-(void)closeGraph
 {
-  [thePath moveToPoint:point];
+  [self flushBuffers];
+  [aqtConnection closeModel];
 }
 
--(void) lineToPoint:(NSPoint)point
+-(void)render
 {
-  [thePath lineToPoint:point];
+  [self flushBuffers];
+  [aqtConnection render];
 }
 
--(void) setLinetype:(int)newLinetype
+-(void)setTitle:(NSString *)title
 {
-  if (newLinetype != linetype)
+  [aqtConnection setTitle:title];
+}
+
+-(void)setColor:(NSColor *)color forIndex:(int)index
+{
+  [aqtConnection setColor:color forIndex:index];
+}
+-(void)useColor:(int)index
+{
+  // flush buffers before changing color...
+  if(index != colorIndex)
   {
-    [self flushOrphanedGraphicsRender:NO release:NO];
-    linetype = newLinetype;
+    [self flushBuffers];
+    colorIndex = index;
+  }
+  
+}
+
+-(void)useLinewidth:(float)width
+{
+  // flush buffers before changing linewidth...
+  if(width != linewidth)
+  {
+    [self flushBuffers];
+    linewidth = width;
   }
 }
 
--(void) putText:(const char *)str at:(NSPoint)point
+-(void)appendPath:(NSBezierPath *)path
 {
-  NS_DURING
-    [server addString:[NSString stringWithCString:str]
-              atPoint:point
-    withJustification:justificationMode
-              atAngle:textAngle
-     withIndexedColor:linetype];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-      [self invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
+  [pathBuffer appendBezierPath:path];
 }
 
--(void) setJustification:(int)mode
+-(void)appendFilledPath:(NSBezierPath *)path
 {
-  justificationMode = mode;
+  [filledPathBuffer appendBezierPath:path];
 }
 
--(void) setTextAngle:(int)angle
+-(void)setFontWithName:(NSString *)name size:(float)size
 {
-  if (angle==0)
-  {
-    textAngle = 0.0;
-  }
-  else
-  {
-    textAngle = 90.0;
-  }
+  [aqtConnection setFontWithName:name size:size];
 }
 
--(void) setFont:(const char *)font
+-(void)useOrientation:(int)newOrient
 {
-  NSArray *tempArray = [NSArray arrayWithArray:[[NSString stringWithCString:font] componentsSeparatedByString:@","]];
-  // FIXME: Check up on why setFont always is followed by a call with an empty string.
-  NS_DURING
-  switch ([tempArray count])
-  {
-    case 2:
-      [server setFontWithName:[tempArray objectAtIndex:0] size:[[tempArray objectAtIndex:1] floatValue]];
-      break;
-    case 1:
-      if ([[tempArray objectAtIndex:0] isEqualToString:@""])
-      {
-        [server setFontWithName:[termInfo objectForKey:@"AQTDefaultFontName"] size:[[termInfo objectForKey:@"AQTDefaultFontSize"] floatValue]];
-      }
-      else
-      {
-        [server setFontWithName:[tempArray objectAtIndex:0] size:[[termInfo objectForKey:@"AQTDefaultFontSize"] floatValue]];
-      }
-      break;
-    case 0:
-        // fallthrough
-    default:
-      [server setFontWithName:[termInfo objectForKey:@"AQTDefaultFontName"] size:[[termInfo objectForKey:@"AQTDefaultFontSize"] floatValue]];
-    break;
-  }
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-      [self invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
+  orient = newOrient;
+}
+
+-(void)useJustification:(int)newJust
+{
+    just = newJust;
+}
+
+-(void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint
+{
+  [pathBuffer moveToPoint:startpoint];
+  [pathBuffer lineToPoint:endpoint];
+}
+
+-(void)putText:(NSString *)str at:(NSPoint)point
+{
+  // 
+  // Put a line of beautifully rendered Times Roman (AquaTerm default)
+  // at the point (x,y), left justified and horisontally (angle 0.0).
+  // Also, the client doesnt know the concept of color so we set the
+  // linecolor to a fix value. Hence: 
   //
-  // Read back the new font info. (Not neccessarily what we wanted ;-)
-  //
-  [self updateInfoFromServer];
+  [aqtConnection addString:str
+                   atPoint:point
+         withJustification:just
+                   atAngle:90.0*orient
+          withIndexedColor:colorIndex];
 }
 
--(void) fillRect:(NSRect)rect style:(int)style
+-(void)addImageFromFile:(NSString *)filename  bounds:(NSRect)bounds
 {
-  [self flushOrphanedGraphicsRender:NO release:NO];
-  NS_DURING
-    [server clearRect:rect];
-    [server renderInViewShouldRelease:NO];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-      [self invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
+  [aqtConnection addImageFromFile:filename  bounds:bounds];
 }
 
--(void) setLinewidth:(double)linewidth
+-(void)flushBuffers
 {
-  [thePath setLineWidth:linewidth];
+  if (![pathBuffer isEmpty])
+  {
+    [pathBuffer setLineWidth:linewidth];
+    [aqtConnection addPolyline:pathBuffer withIndexedColor:colorIndex];
+    [pathBuffer removeAllPoints];
+  }
+  if (![filledPathBuffer isEmpty])
+  {
+    [filledPathBuffer setLineWidth:linewidth];
+    [aqtConnection addPolygon:filledPathBuffer withIndexedColor:colorIndex];
+    [filledPathBuffer removeAllPoints];
+  }  
 }
 
--(void) setFillColor:(double)newGray
-{
-  /* FIXME: Should allow for a color resolution to improve speed */
-  [self flushOrphanedGraphicsRender:NO release:NO];
-  gray = newGray;
-}
-
-/*
--(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners
-{
-  int i;
-  NS_DURING
-    [thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
-    for (i=1;i< count;i++)
-    {
-      [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
-    }
-    [thePath closePath];
-    [server addPolygon:thePath withColor:gray];
-    [thePath removeAllPoints];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-      [self invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
-}
-*/
--(void) setFigure:(int)newFigure
-{
-  figure = newFigure;
-  NS_DURING
-    [server selectModel:figure];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-      [self invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
-}
 @end /* AQTAdapter */
 //
 // ----------------------------------------------------------------
-// FORTRAN driver example
+// --- FORTRAN example
 // ----------------------------------------------------------------
 //
-int f2aqt_init__(void)
+void aqt_init__(void)
 {
-  LOG(@"int f2aqt_init__(void)");
+  // The autorelease pool and the adapter object must be initialized,
+  // this is the place to do it. But only once!
+  //
   if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
   {
-    arpool = [[NSAutoreleasePool alloc] init]; 
-    gnuTermAccess = [[AQTAdapter alloc] init]; 
+    arpool = [[NSAutoreleasePool alloc] init];
+    adapter = [[AQTAdapter alloc] init];
   }
-  if (![gnuTermAccess server])	/* server could be invalid (=nil) for several reasons */
+}
+
+void aqt_open__(int *n)
+{
+  [adapter openGraph:*n];
+}
+
+void aqt_close__(void)
+{
+  [adapter closeGraph];
+}
+
+void aqt_render__(void)
+{
+  [adapter render];
+}
+
+void aqt_title__(char *title)
+{
+  [adapter setTitle:[NSString stringWithCString:title]];
+}
+
+void aqt_use_color__(int *col)
+{
+  [adapter useColor:*col];
+}
+
+void aqt_set_color__(int *col, float *r, float *g, float *b)
+{
+  [adapter setColor:[NSColor colorWithCalibratedRed:*r green:*g blue:*b alpha:1] forIndex:*col];
+}
+
+void aqt_linewidth__(float *width)
+{
+  [adapter useLinewidth:*width];
+}
+
+void aqt_line__(float *x1, float *y1, float *x2, float *y2)
+{
+  NSBezierPath *path = [NSBezierPath bezierPath];
+  [path moveToPoint:NSMakePoint(*x1, *y1)];
+  [path lineToPoint:NSMakePoint(*x2, *y2)];
+  [adapter appendPath:path];
+}
+
+void aqt_polygon__(float *x, float *y, int *n, bool *isFilled)
+{
+  int i;
+  NSBezierPath *path = [NSBezierPath bezierPath];
+  [path moveToPoint:NSMakePoint(x[0], y[0])];
+  for (i = 1; i < *n; i++)
   {
-    [gnuTermAccess connectToServer];
+    [path lineToPoint:NSMakePoint(x[i], y[i])];
   }
-
-  [gnuTermAccess setFigure:currentWindow];
+  if (*isFilled)
+  {
+    [path closePath];
+    [adapter appendFilledPath:path];
+  }
+  else
+  {
+    [adapter appendPath:path];
+  }
 }
 
-int f2aqt_info__(int *x_size, int *y_size)
+void aqt_circle__(float *x, float *y, float *radius, bool *isFilled)
 {
-  *x_size = [[[gnuTermAccess termInfo] objectForKey:@"AQTXMax"] intValue]; 
-  *y_size = [[[gnuTermAccess termInfo] objectForKey:@"AQTYMax"] intValue]; 
+  NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(*x-(*radius), *y-(*radius), (*radius)*2, (*radius)*2)];
+  if (*isFilled)
+  {
+    [path closePath];
+    [adapter appendFilledPath:path];
+  }
+  else
+  {
+    [adapter appendPath:path];
+  }  
 }
 
-int f2aqt_render__(void)
-{ 
-  [gnuTermAccess flushOrphanedGraphicsRender:YES release:YES];
-}
-
-int f2aqt_reset__(void)
+void aqt_font__(char *fontname, float *size)
 {
-  [gnuTermAccess flushOrphanedGraphicsRender:NO release:YES];
-  [gnuTermAccess flushOrphanedGraphicsRender:NO release:YES];
+  [adapter setFontWithName:[NSString stringWithCString:fontname] size:*size];
 }
 
-int f2aqt_vector__(int *x, int *y)
+void aqt_textorient__(int *orient)
 {
-  [gnuTermAccess lineToPoint:NSMakePoint(*x, *y)];
+  [adapter useOrientation:*orient];
 }
 
-int f2aqt_color__(int *color)
+void aqt_textjust__(int *just)
 {
-  [gnuTermAccess setLinetype:*color];
+    [adapter useJustification:*just];
 }
 
-int f2aqt_justify__(int *justification)
+void aqt_text__(float *x, float *y, const char *str)
 {
-  [gnuTermAccess setJustification:*justification];
+  [adapter putText:[NSString stringWithCString:str] at:NSMakePoint(*x, *y)];
 }
 
-int f2aqt_move__(int *x, int *y)
+void aqt_imagefromfile__(char *filename, float *x, float *y, float *w, float *h)
 {
-  [gnuTermAccess moveToPoint:NSMakePoint(*x, *y)];
+  [adapter addImageFromFile:[NSString stringWithCString:filename] bounds:NSMakeRect(*x, *y, *w, *h)];
 }
 
-
-int f2aqt_put_text__(int *x, int *y, const char *str)
+void aqt_get_size__(float *x_max, float *y_max)
 {
-  if (!strlen(str))
-    return;
-  [gnuTermAccess putText:str at:NSMakePoint(*x, *y)];
+  [adapter updateInfoFromServer];	// Force an update of the termInfo dictionary
+  *x_max = [[[adapter termInfo] objectForKey:@"AQTXMax"] floatValue];
+  *y_max = [[[adapter termInfo] objectForKey:@"AQTYMax"] floatValue];
 }
-
-
-
+//
+// ----------------------------------------------------------------
+// --- End of FORTRAN example
+// ----------------------------------------------------------------
+//
