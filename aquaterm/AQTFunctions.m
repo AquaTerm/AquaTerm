@@ -18,7 +18,7 @@ BOOL AQTContainsRect(NSRect containerRect, NSRect testRect)
    }
    else
    {
-      if (NSWidth(testRect) == 0.0)
+      if (EQ(NSWidth(testRect), 0.0))
       {
          contains = (NSMaxY(testRect) < NSMaxY(containerRect)) && (NSMinY(testRect) > NSMinY(containerRect));
       }
@@ -51,7 +51,7 @@ BOOL AQTIntersectsRect(NSRect aRect, NSRect bRect)
       bRect = tmp;
    }
    // bRect is empty
-   if (NSWidth(bRect) == 0.0)
+   if (EQ(NSWidth(bRect),0.0))
    {
       // bRect is a vertical line
       intersects =
@@ -85,12 +85,5 @@ NSRect AQTUnionRect(NSRect aRect, NSRect bRect)
 
       return NSMakeRect(x, y, w, h);
    }
-}
-
-NSRect AQTRectFromSize(NSSize aSize)
-{
-   NSRect aRect = NSZeroRect;
-   aRect.size = aSize;
-   return aRect; 
 }
 
