@@ -235,7 +235,7 @@
 		};
 		4A9504CDFFE6A4B311CA0CBA = {
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				ZERO_LINK = NO;
 			};
@@ -414,18 +414,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		CB7C704105EA0D5B00D4CD15 = {
-			containerPortal = 29B97313FDCFA39411CA2CEA;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = CBC4B42705E4C784001BE8D7;
-			remoteInfo = "AquaTerm (Upgraded)";
-		};
-		CB7C704205EA0D5B00D4CD15 = {
-			isa = PBXTargetDependency;
-			target = CBC4B42705E4C784001BE8D7;
-			targetProxy = CB7C704105EA0D5B00D4CD15;
-		};
 		CB7C709C05EA274E00D4CD15 = {
 			buildActionMask = 2147483647;
 			files = (
@@ -565,7 +553,6 @@
 			};
 			buildToolPath = /usr/bin/make;
 			dependencies = (
-				CB7C704205EA0D5B00D4CD15,
 			);
 			isa = PBXLegacyTarget;
 			name = Distro;
@@ -635,7 +622,7 @@
 			buildRules = (
 			);
 			buildSettings = {
-				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_LOCATION = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -894,7 +881,7 @@
 			buildRules = (
 			);
 			buildSettings = {
-				DEPLOYMENT_POSTPROCESSING = YES;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
