@@ -57,9 +57,9 @@
       [[canvas window] setContentSize:contentSize];
       [[canvas window] setFrameTopLeftPoint:windowTopLeft];      
       [canvas setFrame:contentFrame];
-      //[[canvas window] setAspectRatio:ratio];
+      [[canvas window] setAspectRatio:ratio];
    }
-   [[canvas window] setMaxSize:maxSize];
+   [[canvas window] setMaxSize:maxSize];   // FIXME: take screen size into account
    [[canvas window] setMinSize:minSize];
    [canvas setIsProcessingEvents:_acceptingEvents];
 }
@@ -208,6 +208,29 @@
    }
 }
 #pragma mark === Delegate methods ===
+- (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)proposedFrameSize
+{
+   // FIXME: take screen size into account
+   NSSize tmpSize = [model canvasSize]; 
+   if (tmpSize.width > tmpSize.height)
+   {
+      // decide by width
+      proposedFrameSize.height = proposedFrameSize.width * ([model canvasSize].height/[model canvasSize].width) + TITLEBAR_HEIGHT;
+   }
+   else
+   {
+      // decide by height
+      proposedFrameSize.width = (proposedFrameSize.height - TITLEBAR_HEIGHT) * ([model canvasSize].width/[model canvasSize].height);
+   }
+   return proposedFrameSize;
+}
+
+/*
+- (void)windowDidResize:(NSNotification *)notification
+{
+   NSLog(@"window did resize, viewSize = %@", NSStringFromSize([canvas frame].size));
+}
+*/
 - (BOOL)windowShouldClose:(id)sender
 {
    BOOL shouldClose = YES; 
