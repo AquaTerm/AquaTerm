@@ -76,7 +76,9 @@ extern const int AQTAlignTop;
   /*" Text handling "*/
 - (void)setFontname:(NSString *)newFontname;
 - (void)setFontsize:(float)newFontsize;
+- (void)addLabel:(id)text atPoint:(NSPoint)pos;
 - (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just;
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle align:(int)just;
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;

@@ -106,6 +106,8 @@ static float _aqtMinimumLinewidth;
 {
    NSFont *normalFont; 
    NSAffineTransform *aTransform = [NSAffineTransform transform];
+   NSAffineTransform *shearTransform = [NSAffineTransform transform];
+   NSAffineTransformStruct ts;
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
    NSSize tmpSize;
    NSPoint adjust = NSZeroPoint;
@@ -132,6 +134,14 @@ static float _aqtMinimumLinewidth;
          // default to align baseline (do nothing) in case of error
          break;
    }
+   // Avoid multiples of 90 degrees (pi/2) since tan(k*pi/2)=inf, set beta to 0.0 instead. 
+   float beta = (fabs(shearAngle - 90.0*roundf(shearAngle/90.0))<0.1)?0.0:-shearAngle;
+   // shearTransform is an identity transform so we can just stuff the shearing into m21...
+   ts = [shearTransform transformStruct];
+   ts.m21 = -tan(beta*atan(1.0)/45.0); // =-tan(beta*pi/180.0)
+   [shearTransform setTransformStruct:ts];
+   [tmpPath transformUsingAffineTransform:shearTransform];
+   // Now, place the sheared label correctly
    [aTransform translateXBy:position.x yBy:position.y];
    [aTransform rotateByDegrees:angle];
    [aTransform translateXBy:adjust.x yBy:adjust.y]; 

@@ -15,7 +15,7 @@
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
 
--(id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify  
+-(id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)beta justification:(int)justify  
 {
   if (self=[super init])
   {
@@ -24,12 +24,13 @@
     fontSize = 14.0;
     position=aPoint;
     angle = textAngle;
+    shearAngle = beta;
     justification = justify;
   }
   return self; 
 }
 
--(id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify
+-(id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)beta justification:(int)justify
 {
   
  /* return [self initWithAttributedString:[[[NSAttributedString alloc] initWithString:aString] autorelease]
@@ -44,6 +45,7 @@
     fontSize = 14.0;
     position=aPoint;
     angle = textAngle;
+    shearAngle = beta;
     justification = justify;
   }
   return self; 
@@ -87,6 +89,7 @@
   [coder encodeValueOfObjCType:@encode(NSPoint) at:&position];
   [coder encodeValueOfObjCType:@encode(float) at:&angle];
   [coder encodeValueOfObjCType:@encode(int) at:&justification];
+  [coder encodeValueOfObjCType:@encode(float) at:&shearAngle];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
@@ -98,6 +101,7 @@
   [coder decodeValueOfObjCType:@encode(NSPoint) at:&position];
   [coder decodeValueOfObjCType:@encode(float) at:&angle];
   [coder decodeValueOfObjCType:@encode(int) at:&justification];
+  [coder decodeValueOfObjCType:@encode(float) at:&shearAngle];
   return self;
 }
 @end

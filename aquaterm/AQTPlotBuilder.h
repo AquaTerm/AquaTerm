@@ -71,7 +71,7 @@
   /*" Text handling "*/
 - (void)setFontname:(NSString *)newFontname;
 - (void)setFontsize:(float)newFontsize;
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just;
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle justification:(int)just;
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;

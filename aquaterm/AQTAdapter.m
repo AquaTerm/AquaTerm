@@ -330,15 +330,30 @@ _{AQTAlignMiddle ApproxCenter}
 _{AQTAlignBaseline Normal}
 _{AQTAlignBottom BottomBoundsOfTHISString}
 _{AQTAlignTop TopBoundsOfTHISString}
+By specifying #shearAngle the text may be sheared in order to appear correctly in e.g. 3D plot labels. 
 The text can be either an NSString or an NSAttributedString. By using NSAttributedString a subset of the attributes defined in AppKit may be used to format the string beyond the fontface ans size. The currently supported attributes are
 _{Attribute value}
 _{@"NSSuperScript" raise-level}
 _{@"NSUnderline" 0or1}
 "*/
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle align:(int)just
+{
+   [_selectedBuilder addLabel:text position:pos angle:angle shearAngle:shearAngle justification:just];
+}
+
+/*" Same as #addLabel:atPoint:angle:shearAngle:align: except that shearAngle defaults to 0."*/
 - (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just
 {
-   [_selectedBuilder addLabel:text position:pos angle:angle justification:just];
+   [_selectedBuilder addLabel:text position:pos angle:angle shearAngle:0.0 justification:just];
 }
+
+/*" Convenience form of #addLabel:atPoint:angle:shearAngle:align: for horizontal, left and baseline aligned text."*/
+- (void)addLabel:(id)text atPoint:(NSPoint)pos
+{
+   [_selectedBuilder addLabel:text position:pos angle:0.0 shearAngle:0.0 justification:(AQTAlignLeft | AQTAlignBaseline)];
+}
+
+
 
 /*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth.  Default linewidth is 1pt."*/
 - (void)setLinewidth:(float)newLinewidth

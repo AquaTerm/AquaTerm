@@ -251,7 +251,7 @@
 //
 // AQTLabel
 //
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle justification:(int)just;
 {
    AQTLabel *lb;
    if ([text isKindOfClass:[NSString class]])
@@ -259,6 +259,7 @@
       lb = [[AQTLabel alloc] initWithString:text
                                    position:pos
                                       angle:angle
+                                 shearAngle:shearAngle
                               justification:just];
    }
    else
@@ -268,6 +269,7 @@
          lb = [[AQTLabel alloc] initWithAttributedString:text
                                                 position:pos
                                                    angle:angle
+                                              shearAngle:shearAngle
                                            justification:just];
       }
       else
