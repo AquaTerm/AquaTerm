@@ -82,7 +82,7 @@
    }
 }
 
-- (NSPoint)_convertToCanvasCoordinatesFromPoint:(NSPoint) aPoint
+- (NSPoint)_aqtConvertToCanvasCoordinates:(NSPoint) aPoint
 {
    NSAffineTransform *localTransform = [NSAffineTransform transform];
    [localTransform scaleXBy:[model canvasSize].width/NSWidth([self bounds])
@@ -90,33 +90,29 @@
 
    return [localTransform transformPoint:aPoint];
 }
--(void)mouseDown:(NSEvent *)theEvent
+
+-(void)_aqtHandleMouseDownAtLocation:(NSPoint)point button:(int)button
 {
    if ([self isProcessingEvents])
    {
-      NSString *eventString;
-      NSPoint pos = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-      char aKey = '\0';
-      // Inform the delegate...
-      switch([theEvent type])
-      {
-         // Do some stuff here...
-         case NSLeftMouseDown:
-            // aKey = 'A';
-            NSLog(@"left key");
-            break;
-         case NSRightMouseDown:
-            // aKey = 'X';
-            NSLog(@"right key");
-            break;
-         default:
-            NSLog(@"Other key");
-            break;
-      }
-      eventString = [NSString stringWithFormat:@"1:%@:misc", NSStringFromPoint([self _convertToCanvasCoordinatesFromPoint:pos])];
-      [[[self window] delegate] setLastEvent:eventString];
+   point = [self convertPoint:point fromView:nil];
+   point = [self _aqtConvertToCanvasCoordinates:point];
+   [[[self window] delegate] setLastEvent:[NSString stringWithFormat:@"1:%@:%d", NSStringFromPoint(point), button]];
    }
 }
+
+
+-(void)mouseDown:(NSEvent *)theEvent
+{
+      [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:1];
+}
+
+-(void)rightMouseDown:(NSEvent *)theEvent
+{
+      [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:2];
+}   
+
+
 
 -(void)keyDown:(NSEvent *)theEvent
 {
@@ -139,7 +135,7 @@
          else if (pos.y > NSHeight(viewBounds))
             pos.y = NSHeight(viewBounds);
       }
-      eventString = [NSString stringWithFormat:@"2:%@:%c", NSStringFromPoint([self _convertToCanvasCoordinatesFromPoint:pos]), aKey];
+      eventString = [NSString stringWithFormat:@"2:%@:%c", NSStringFromPoint([self _aqtConvertToCanvasCoordinates:pos]), aKey];
       [[[self window] delegate] setLastEvent:eventString];
    }
 }
