@@ -24,6 +24,7 @@ static id adapter;                          // Adapter object
 
 /* declarations for functions local to aqt.c */
 
+void set_color (PLStream *);
 void proc_str (PLStream *, EscText *);
 static void esc_purge(char *, const char *);
 
@@ -72,7 +73,7 @@ int colorChange;
 
 void plD_init_aqt(PLStream *pls)
 {
-
+	
    if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
    {
       arpool = [[NSAutoreleasePool alloc] init];
@@ -103,7 +104,6 @@ void plD_init_aqt(PLStream *pls)
    //  Set the bounds for plotting.  initially set it to be a 400 x 400 array
    //
    plP_setphy((PLINT) 0, (PLINT) (SCALE*AQT_Max_X), (PLINT) 0, (PLINT) (SCALE*AQT_Max_Y));
-
 }
 
 //----------------------------------------------------------------------
@@ -133,7 +133,7 @@ void plD_line_aqt(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
    if(colorChange)
    {
-      [adapter takeColorFromColormapEntry:(1-pls->curcmap)*pls->icol0 + pls->curcmap*(pls->icol1+pls->ncol0)];
+      set_color(pls);
       colorChange = FALSE;
    }
    [adapter moveToPoint:NSMakePoint((float)x1a/SCALE, (float)y1a/SCALE)];
@@ -149,6 +149,12 @@ void plD_line_aqt(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 void plD_polyline_aqt(PLStream *pls, short *xa, short *ya, PLINT npts)
 {
    int i;
+
+   if(colorChange)
+   {
+      set_color(pls);
+      colorChange = FALSE;
+   }
 
    for (i = 0; i < npts - 1; i++)
       plD_line_aqt(pls, xa[i], ya[i], xa[i + 1], ya[i + 1]);
@@ -185,6 +191,7 @@ void plD_tidy_aqt(PLStream *pls)
 void plD_state_aqt(PLStream *pls, PLINT op)
 {
    int i;
+   float r,g,b;
 
    switch (op)
    {
@@ -195,37 +202,21 @@ void plD_state_aqt(PLStream *pls, PLINT op)
       case PLSTATE_COLOR0:
       case PLSTATE_COLOR1:
       case PLSTATE_FILL:
-         i = (1-pls->curcmap)*pls->icol0 + pls->curcmap*(pls->icol1+pls->ncol0);
-         [adapter setColormapEntry:i
-                               red:(float)(plsc->curcolor.r/255.)
-                             green:(float)(plsc->curcolor.g/255.)
-                              blue:(float)(plsc->curcolor.b/255.)];
+      	 set_color(pls);
          colorChange = TRUE;
          break;
 
       case PLSTATE_CMAP0:
-         for (i = 0; i < pls->ncol0; i++)
-         {
-            [adapter setColormapEntry:i
-                                  red:(float)(plsc->cmap0[i].r/255.)
-                                green:(float)(plsc->cmap0[i].g/255.)
-                                 blue:(float)(plsc->cmap0[i].b/255.)];
-         }
          colorChange = TRUE;
          //
          //  Make sure the background color is set to the current color map
          //
-         [adapter takeBackgroundColorFromColormapEntry:0];
+		[adapter setBackgroundColorRed:(float)(plsc->cmap0[0].r/255.0)
+		 						 green:(float)(plsc->cmap0[0].g/255.0)
+		 						  blue:(float)(plsc->cmap0[0].b/255.0)];
          break;
 
       case PLSTATE_CMAP1:
-         for (i = 0; i < pls->ncol1; i++)
-         {
-            [adapter setColormapEntry:i+pls->ncol0
-                                  red:(float)(plsc->cmap1[i].r/255.)
-                                green:(float)(plsc->cmap1[i].g/255.)
-                                 blue:(float)(plsc->cmap1[i].b/255.)];
-         }
          colorChange = TRUE;
          break;
    }
@@ -263,11 +254,12 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
       case PLESC_GRAPH:               // switch to graphics screen
          break;
       case PLESC_FILL:                // fill polygon
-         if(colorChange)
-         {
-            [adapter takeColorFromColormapEntry:(1-pls->curcmap)*pls->icol0 + pls->curcmap*(pls->icol1+pls->ncol0)];
-            colorChange = FALSE;
-         };
+   		 if(colorChange)
+   		 {
+      		set_color(pls);
+      		colorChange = FALSE;
+   		 }
+   		 
          [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0]/SCALE, pls->dev_y[0]/SCALE)];
          for (i = 1; i < pls->dev_npts ; i++)
          {
@@ -289,6 +281,22 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
          break;
 
    }
+}
+
+// sets the color for the current drawing operation based on
+// plplot colormaps. HB 11-20-04.
+
+void set_color (PLStream *pls)
+{
+	if(pls->curcmap){	// use color map 1
+		[adapter setColorRed:(float)(plsc->cmap1[pls->icol1].r/255.0)
+		               green:(float)(plsc->cmap1[pls->icol1].g/255.0)
+		                blue:(float)(plsc->cmap1[pls->icol1].b/255.0)];
+	} else {			// use color map 0
+		[adapter setColorRed:(float)(plsc->cmap0[pls->icol0].r/255.0)
+		               green:(float)(plsc->cmap0[pls->icol0].g/255.0)
+		                blue:(float)(plsc->cmap0[pls->icol0].b/255.0)];
+	}
 }
 
 void proc_str (PLStream *pls, EscText *args)
@@ -489,7 +497,7 @@ void proc_str (PLStream *pls, EscText *args)
       [adapter setColorRed:(float)(pls->curcolor.r/255.)
                      green:(float)(pls->curcolor.g/255.)
                       blue:(float)(pls->curcolor.b/255.)];
-      colorChange = YES; // FIXME: is this correct?
+      colorChange = TRUE; // FIXME: is this correct?
       //
       //  Set the font
       for(i = 0; i < length; i++)
