@@ -439,28 +439,45 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
   int i;
   if (self = [super init])
   {
+    // Init instance variables
+    polygon = [[NSBezierPath bezierPath] retain];
+    polylineBuffer = [[NSBezierPath bezierPath] retain];
+    polygonBuffer = [[NSBezierPath bezierPath] retain];
+
+    for (i=0;i<256;i++)
+    {
+      colorlist[i][0]=((float)i)/255.0;
+      colorlist[i][1]=0.0;
+      colorlist[i][2]=0.0;
+    }
     //
     // Try to get a local proxy of the object in AquaTerm that manages communication
     //
     if ([self connectToAquaTerm])
     {
-      // Init instance variables
-      polygon = [[NSBezierPath bezierPath] retain];
-      polylineBuffer = [[NSBezierPath bezierPath] retain];
-      polygonBuffer = [[NSBezierPath bezierPath] retain];
-
-      for (i=0;i<256;i++)
-      {
-        colorlist[i][0]=((float)i)/255.0;
-        colorlist[i][1]=0.0;
-        colorlist[i][2]=0.0;
-      }
       //
       // This speeds up communication with the remote object, see
       // http://developer.apple.com/techpubs/macosx/Cocoa/TasksAndConcepts/ProgrammingTopics/DistrObjects/
       // Look under "Connections and Proxies"
       //
       [aqtConnection setProtocolForProxy:@protocol(AQTProtocol)];
+       // set default colormap [0-15]
+      [self setColormapEntry:0 red:1.0 green:1.0 blue:1.0];
+      [self setColormapEntry:1 red:0.0 green:0.0 blue:0.0];
+      [self setColormapEntry:2 red:1.0 green:0.0 blue:0.0];
+      [self setColormapEntry:3 red:0.0 green:1.0 blue:0.0];
+      [self setColormapEntry:4 red:0.0 green:0.0 blue:1.0];
+      [self setColormapEntry:5 red:0.0 green:1.0 blue:1.0];
+      [self setColormapEntry:6 red:1.0 green:0.0 blue:1.0];
+      [self setColormapEntry:7 red:1.0 green:1.0 blue:0.0];
+      [self setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
+      [self setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
+      [self setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
+      [self setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
+      [self setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
+      [self setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
+      [self setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
+      [self setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
     }
   }
   return self;
