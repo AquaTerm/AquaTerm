@@ -103,14 +103,11 @@ for (i=0; i<256; i++)
 {
   f = (float)i/255.0;
   [adapter setColorRed:1.0 green:f blue:f/2.0];
-  [adapter moveToPoint:NSMakePoint(320+i, 370)];
-  [adapter addLineToPoint:NSMakePoint(320+i, 350)];
+  [adapter addFilledRect:NSMakeRect(320+i, 350, 1, 20)];
   [adapter setColorRed:0.0 green:f blue:(1.0-f)];
-  [adapter moveToPoint:NSMakePoint(320+i, 348)];
-  [adapter addLineToPoint:NSMakePoint(320+i, 328)];
+  [adapter addFilledRect:NSMakeRect(320+i, 328, 1, 20)];
   [adapter setColorRed:(1.0-f) green:(1.0-f) blue:(1.0-f)];
-  [adapter moveToPoint:NSMakePoint(320+i, 326)];
-  [adapter addLineToPoint:NSMakePoint(320+i, 306)];
+  [adapter addFilledRect:NSMakeRect(320+i, 306, 1, 20)];
 }
 
 // Lines
