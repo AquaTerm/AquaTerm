@@ -44,75 +44,83 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
 }
 
 @implementation AQTPath
+
+/*" A private method to provide storage for an NSPointArray "*/
+- (int)_aqtSetupPathStoreForPointCount:(int)pc
+{
+   // Use static store as default (efficient for small paths)
+   path = staticPathStore;
+   if (pc > STATIC_POINT_STORAGE)
+   {
+      // Use dynamic store instead to avoid large memory overhead
+      // by having too large static store in all objects
+      if(dynamicPathStore = malloc(pc * sizeof(NSPoint)))
+      {
+         path = dynamicPathStore;
+      }
+      else
+      {
+         NSLog(@"Error: Could not allocate memory, path clipped to %d points", STATIC_POINT_STORAGE);
+         pc = STATIC_POINT_STORAGE;
+      }
+   }
+   return pc;
+}
+
 /**"
 *** A leaf object class representing an actual item in the plot.
 *** Since the app is a viewer we do three things with the object:
 *** create (once), draw (any number of times) and (eventually) dispose of it.
 "**/
--(id)initWithPoints:(NSPointArray)points pointCount:(int)pc;// color:(AQTColor)aColor
+-(id)initWithPoints:(NSPointArray)points pointCount:(int)pc;
 {
   int i;
-  int safeCount = MIN(pc, MAX_PATH_POINTS);
   if (self = [super init])
   {
-    for (i = 0; i < safeCount; i++)
-    {
-      path[i] = points[i];
-      _bounds = AQTExpandRectWithPoint(_bounds, points[i]);
-    }
-    pointCount = safeCount;
-    [self setLinewidth:.2];
-//    [self setColor:aColor];
+     pc = [self _aqtSetupPathStoreForPointCount:pc];
+     for (i = 0; i < pc; i++)
+     {
+        path[i] = points[i];
+        _bounds = AQTExpandRectWithPoint(_bounds, points[i]);
+     }
+     pointCount = pc;
+     [self setLinewidth:.2];
   }
   return self;
 }
 
 -(id)init
 {
-/*
- AQTColor tCol;
-  tCol.red = 1.0;
-  tCol.green = 0.0;
-  tCol.blue = 1.0;
-*/
-  return [self initWithPoints:nil pointCount:0];// color:tCol];
+  return [self initWithPoints:nil pointCount:0];
 }
 
 -(void)dealloc
 {
+  if (path == dynamicPathStore)
+  {
+     free(dynamicPathStore);
+  }
   [super dealloc];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-  //int i;
   [super encodeWithCoder:coder];
   [coder encodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder encodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
   [coder encodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path]; 
-/*  for (i=0;i<pointCount;i++)
-  {
-    [coder encodeValueOfObjCType:@encode(NSPoint) at:&path[i]];
-  }
-  */
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
-  //int i;
   self = [super initWithCoder:coder];
   [coder decodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder decodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder decodeValueOfObjCType:@encode(int) at:&pointCount];
+  // path might be malloc'd or on heap depending on pointCount
+  pointCount = [self _aqtSetupPathStoreForPointCount:pointCount];
   [coder decodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path]; 
-
-/*
- for (i=0;i<pointCount;i++)
-  {
-    [coder decodeValueOfObjCType:@encode(NSPoint) at:&path[i]];
-  }
-*/
   return self;
 }
 

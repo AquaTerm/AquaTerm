@@ -9,16 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "AQTGraphic.h"
 
-#define MAX_PATH_POINTS 64
+/*" This balances the fixed size of the objects vs. the need for dynamic allocation of storage. "*/
+#define STATIC_POINT_STORAGE 24
+// FIXME: Base actual number on tests
 
 @interface AQTPath : AQTGraphic 
 {
-   NSPoint path[MAX_PATH_POINTS];
+   NSPointArray path;
+   NSPoint staticPathStore[STATIC_POINT_STORAGE];
+   NSPointArray dynamicPathStore;
    int pointCount;
    float linewidth;
    int lineCapStyle; 
 }
-- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount; // color:(AQTColor)aColor;
+- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount; 
 - (void)setLinewidth:(float)lw;
 - (void)setLineCapStyle:(int)capStyle;
 @end

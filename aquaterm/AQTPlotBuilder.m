@@ -296,7 +296,8 @@
   _pointCount++;
   if (_pointCount == MAX_PATH_POINTS)
   {
-    // Split the line 
+     NSLog(@"---- Reaching path limit (%d) ----", MAX_PATH_POINTS);
+     // Split the line 
     [self addPolylineWithPoints:_path pointCount:_pointCount];
     _pointCount = 0;
     [self moveToPoint:point];
@@ -307,9 +308,11 @@
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
 {
   AQTPath *tmpPath;
-  if (pc > MAX_PATH_POINTS)
-    NSLog(@"Path too long (%d)", pc);	// FIXME: take action here!
-  tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount]; // color:_color];
+/*
+ if (pc > MAX_PATH_POINTS)
+    NSLog(@"Path too long (%d), using malloc.", pc);	// FIXME: take action here!
+*/
+   tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount];
     [tmpPath setColor:_color];
   [tmpPath setLinewidth:_linewidth];
   [tmpPath setLineCapStyle:_capStyle];
@@ -323,9 +326,11 @@
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
   AQTPatch *tmpPatch;
-  if (pc > MAX_PATH_POINTS)
-    NSLog(@"Path too long (%d)", pc);	// FIXME: take action here!
-  tmpPatch = [[AQTPatch alloc] initWithPoints:points pointCount:pc];// color:_color];
+/*
+ if (pc > MAX_PATH_POINTS)
+    NSLog(@"Path too long (%d), using malloc.", pc);	// FIXME: take action here!
+ */
+  tmpPatch = [[AQTPatch alloc] initWithPoints:points pointCount:pc];
   [tmpPatch setColor:_color];
   [_model addObject:tmpPatch];
   [tmpPatch release];

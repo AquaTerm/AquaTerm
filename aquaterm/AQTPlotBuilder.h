@@ -11,6 +11,10 @@
 #import "AQTImage.h"
 #import "AQTClientProtocol.h"
 
+// This is the maximum practically useable path length due to the way Quartz renders a path
+// FIXME: establish some "optimal" value
+#define MAX_PATH_POINTS 256
+
 @class AQTModel;
 @interface AQTPlotBuilder : NSObject
 {
@@ -21,7 +25,7 @@
   float _fontSize;	/*" Currently selected fontsize [pt]"*/
   float _linewidth;	/*" Currently selected linewidth [pt] "*/
   int _capStyle; /*" Currently selected linecap style "*/
-  NSPoint _path[256];	/*" A cache for coalescing connected line segments into a single path "*/
+  NSPoint _path[MAX_PATH_POINTS];	/*" A cache for coalescing connected line segments into a single path "*/
   int _pointCount;	/*" The current number of points in _path"*/
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
   AQTAffineTransformStruct _transform;
