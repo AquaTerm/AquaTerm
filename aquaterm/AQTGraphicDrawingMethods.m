@@ -163,9 +163,19 @@ static float _aqtMinimumLinewidth;
 
 -(void)renderInRect:(NSRect)boundsRect
 {
-   if (AQTIntersectsRect(boundsRect, [self bounds])) {
+   NSGraphicsContext *context;
+   NSRect clippedBounds = _isClipped?NSIntersectionRect(_bounds, _clipRect):_bounds;
+   if (AQTIntersectsRect(boundsRect, clippedBounds)) {
       [self setAQTColor];
+      if (_isClipped) {
+         context = [NSGraphicsContext currentContext];
+         [context saveGraphicsState];
+         NSRectClip(clippedBounds);
+         [_cache  fill];
+         [context restoreGraphicsState];
+      } else {
       [_cache  fill];
+      }
    }
 #ifdef DEBUG_BOUNDS
    if (_shouldShowBounds) {

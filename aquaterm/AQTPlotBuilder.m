@@ -277,6 +277,7 @@
          NSLog(@"Error, not a string.");
       }
    }
+   [lb setIsClipped:_isClipped];
    [lb setClipRect:_clipRect];
    [lb setColor:_color];
    [lb setFontName:_fontName];
