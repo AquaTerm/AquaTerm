@@ -6,10 +6,16 @@ PACKAGE=AquaTerm
 VERSION=1.0.0
 RELEASENAME=AquaTerm1.0.b1
 ## RELEASENAME=$(PACKAGE)$(VERSION)
-DISTRO_DIR=$(BUILD_DIR)/distro
-DEST=$(DISTRO_DIR)
-##/$(RELEASENAME)
-ADAPT_DEST=$(DEST)/adapters
+
+## Stage the release files
+## -----------------------
+## DISTRO_DIR=$(BUILD_DIR)/distro
+## DEST=$(DISTRO_DIR)
+PKG_ROOT=$(BUILD_DIR)/pkg_root
+DMG_ROOT=$(BUILD_DIR)/dmg_root
+ADAPT_DEST=$(DMG_ROOT)/adapters
+## Get the source directories
+## --------------------------
 APPSRCDIR=$(SRCROOT)
 ADAPTSRCDIR=$(SRCROOT)/../adapters
 
@@ -17,48 +23,54 @@ all:pre dmg post
 
 pkg: app lib headers
 	freeze -v $(APPSRCDIR)/installer/installer.packproj
-	cp -RPf $(APPSRCDIR)/installer/build/AquaTerm.pkg $(DEST)/.
+	cp -RPf $(APPSRCDIR)/installer/build/AquaTerm.pkg $(DMG_ROOT)/.
 
 dmg: adapters info doc pkg
-	hdiutil create -srcfolder $(DEST) $(BUILD_DIR)/$(RELEASENAME).dmg
+	hdiutil create -volname AquaTerm -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
 	
-pre:
-	-rm -rf $(DEST)
-	-rm -rf $(BUILD_DIR)/$(RELEASENAME).dmg
-	mkdir -p $(DEST)
+pre: clean
+	mkdir -p $(PKG_ROOT)
+	mkdir -p $(DMG_ROOT)
 
 post:
-	ls -Rp $(DEST) 
+	ls -Rp $(DMG_ROOT) 
 
-app:
-	cp -RPf $(BUILD_DIR)/AquaTerm.app $(DEST)/.
+app: 
+	xcodebuild -target libaqt clean
+	xcodebuild -target libaqt -buildstyle Deployment
+	xcodebuild -target AquaTerm clean
+	xcodebuild -target AquaTerm -buildstyle Deployment GCC_PREPROCESSOR_DEFINITIONS="AQT_APP"
+	cp -RPf $(BUILD_DIR)/AquaTerm.app $(PKG_ROOT)/.
 
 lib:
-	mkdir -p $(DEST)/lib
-	cp $(BUILD_DIR)/libaquaterm.$(VERSION).dylib $(DEST)/lib/.
+	mkdir -p $(PKG_ROOT)/lib
+	cp $(BUILD_DIR)/libaquaterm.$(VERSION).dylib $(PKG_ROOT)/lib/.
 
 headers:
-	mkdir -p $(DEST)/include
-	cp $(APPSRCDIR)/{AQTAdapter,aquaterm}.h $(DEST)/include/.
+	mkdir -p $(PKG_ROOT)/include
+	cp $(APPSRCDIR)/{AQTAdapter,aquaterm}.h $(PKG_ROOT)/include/.
 
 adapters:c fortran gnuplot pgplot plplot
 
 info:
-	cp $(APPSRCDIR)/{INSTALL,ReadMe,ReleaseNotes} $(DEST)/.
+	cp $(APPSRCDIR)/{INSTALL,ReadMe,ReleaseNotes} $(DMG_ROOT)/.
 
 doc:
 	@echo "Skipping docs..."
 
 help:
-	-rm -rf $(BUILD_DIR)/help
-	mkdir -p $(BUILD_DIR)/help
-	./makeHelp c fortran gnuplot pgplot plplot
-	cp $(APPSRCDIR)/*.css $(BUILD_DIR)/help/.
-	open $(BUILD_DIR)/help/help.html 
-	cp -R $(BUILD_DIR)/help $(DEST)/.
+	@echo "Skipping help..."
+#	-rm -rf $(BUILD_DIR)/help
+#	mkdir -p $(BUILD_DIR)/help
+#	./makeHelp c fortran gnuplot pgplot plplot
+#	cp $(APPSRCDIR)/*.css $(BUILD_DIR)/help/.
+#	open $(BUILD_DIR)/help/help.html 
+#	cp -R $(BUILD_DIR)/help $(DEST)/.
 	
 clean:
-	-rm -rf $(DISTRO_DIR)
+	-rm -rf $(PKG_ROOT)
+	-rm -rf $(DMG_ROOT)
+	-rm -rf $(BUILD_DIR)/$(RELEASENAME).dmg
 
 ## -------------------------
 ## - adapters

@@ -945,6 +945,7 @@
 			buildRules = (
 			);
 			buildSettings = {
+				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
@@ -952,6 +953,7 @@
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
 				INSTALL_PATH = "$(USER_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = /tmp/AquaTerm.dst/usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-framework Foundation -framework AppKit";
 				PRODUCT_NAME = AquaTerm;
@@ -1198,7 +1200,7 @@
 		};
 		CBC4B44A05E4C784001BE8D7 = {
 			isa = PBXFileReference;
-			lastKnownFileType = text.xml;
+			lastKnownFileType = text.plist.xml;
 			path = "AquaTerm.app-Info.plist";
 			refType = 4;
 			sourceTree = "<group>";
@@ -1262,6 +1264,45 @@
 			path = /Users/per/Documents/Source/aquaterm_help/build/helpstyle.css;
 			refType = 0;
 			sourceTree = "<absolute>";
+		};
+		CBDC2B2206F06E8C000F0A8D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			name = installer.packproj;
+			path = installer/installer.packproj;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CBDC2B2306F06E8C000F0A8D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
+			name = postflight;
+			path = installer/postflight;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CBDC2B2406F06E8C000F0A8D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
+			name = preflight;
+			path = installer/preflight;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CBDC2B2906F06E98000F0A8D = {
+			children = (
+				CBDC2B2206F06E8C000F0A8D,
+				CBDC2B2306F06E8C000F0A8D,
+				CBDC2B2406F06E8C000F0A8D,
+			);
+			isa = PBXGroup;
+			name = Installer;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBF17AA505EE6BE600AAB4C4 = {
 			isa = PBXFileReference;
@@ -1447,6 +1488,7 @@
 		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
+				CBDC2B2906F06E98000F0A8D,
 				CB96E43F06634622001B32F9,
 				CB96E44006634622001B32F9,
 				CBD6C05D066284A70096ACB5,

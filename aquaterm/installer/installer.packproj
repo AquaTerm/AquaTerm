@@ -67,7 +67,7 @@
 									<key>GID</key>
 									<integer>80</integer>
 									<key>Path</key>
-									<string>/Users/per/Documents/Source/aquaterm/build/distro/AquaTerm.app</string>
+									<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/AquaTerm.app</string>
 									<key>Path Type</key>
 									<integer>1</integer>
 									<key>Privileges</key>
@@ -336,7 +336,7 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>Path</key>
-															<string>/Users/per/Documents/Source/aquaterm/build/distro/include/AQTAdapter.h</string>
+															<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/include/AQTAdapter.h</string>
 															<key>Path Type</key>
 															<integer>1</integer>
 															<key>Privileges</key>
@@ -352,7 +352,7 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>Path</key>
-															<string>/Users/per/Documents/Source/aquaterm/build/distro/include/aquaterm.h</string>
+															<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/include/aquaterm.h</string>
 															<key>Path Type</key>
 															<integer>1</integer>
 															<key>Privileges</key>
@@ -396,29 +396,30 @@
 										</dict>
 										<dict>
 											<key>Children</key>
-											<array/>
+											<array>
+												<dict>
+													<key>Children</key>
+													<array/>
+													<key>GID</key>
+													<integer>0</integer>
+													<key>Path</key>
+													<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/lib/libaquaterm.1.0.0.dylib</string>
+													<key>Path Type</key>
+													<integer>1</integer>
+													<key>Privileges</key>
+													<integer>493</integer>
+													<key>Type</key>
+													<integer>3</integer>
+													<key>UID</key>
+													<integer>0</integer>
+												</dict>
+											</array>
 											<key>Expanded</key>
 											<true/>
 											<key>GID</key>
 											<integer>0</integer>
 											<key>Path</key>
 											<string>/Users/per/Documents/Source/aquaterm_pkg/AquaTermRoot/usr/local/lib</string>
-											<key>Path Type</key>
-											<integer>1</integer>
-											<key>Privileges</key>
-											<integer>493</integer>
-											<key>Type</key>
-											<integer>3</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-										<dict>
-											<key>Children</key>
-											<array/>
-											<key>GID</key>
-											<integer>0</integer>
-											<key>Path</key>
-											<string>/Users/per/Documents/Source/aquaterm/build/distro/lib/libaquaterm.1.0.0.dylib</string>
 											<key>Path Type</key>
 											<integer>1</integer>
 											<key>Privileges</key>
