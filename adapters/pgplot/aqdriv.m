@@ -38,6 +38,23 @@ static id adapter;        		    // Adapter object
 #define AQDRIV aqdriv
 #endif
 
+// Testing the use of a callback function to handle errors in the server
+void errorHandler(NSString *msg)
+{
+  NSLog(msg);
+  //NSLog(@"rc = %d", [adapter retainCount]);
+  [adapter autorelease]; // add adapter to the AutoReleasePool
+  adapter = nil;
+}
+
+void initAdapter(void)
+{
+  // Either first time or an error has occurred
+  [arpool release]; // clean
+  arpool = [[NSAutoreleasePool alloc] init];
+  adapter = [[AQTAdapter alloc] init];
+  // [adapter setErrorHandler:errMsg];
+}
 
 static int currentPlot = 0;
 
@@ -155,23 +172,23 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       rbuf[0] = rbuf[1] = 0.0;
       *nbuf = 2;
       //
-      if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
+      if (!adapter)
       {
-        arpool = [[NSAutoreleasePool alloc] init];
-        adapter = [[AQTAdapter alloc] init];
+        initAdapter();
       }
-        if(adapter)
-        {
-          rbuf[0] = 1.0; // The number used to select this device
-          rbuf[1] = 1.0;
-          *nbuf = 2;
-        }
-        break;
+        rbuf[0] = 1.0; // The number used to select this device
+      rbuf[1] = 1.0;
+      *nbuf = 2;
+      break;
 
       //--- IFUNC=10, Close workstation ---------------------------------------
 
     case 10:
       LOG(@"FUNC=10, Close workstation");
+      [adapter autorelease];
+      adapter = nil;
+      [arpool release];
+      arpool = nil;
       break;
 
       //--- IFUNC=11, Begin picture -------------------------------------------
@@ -180,6 +197,10 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     {
       int i;
       LOG(@"IFUNC=11, Begin picture");
+      if (!adapter)
+      {
+        initAdapter();
+      }
       //[adapter openGraph:currentPlot size:NSMakeSize(rbuf[0], rbuf[1])];
       [adapter openPlotIndex:currentPlot size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
       cm[0].r = 1.0; cm[0].g = 1.0; cm[0].b = 1.0;
@@ -190,24 +211,24 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       cm[5].r = 0.0; cm[5].g = 1.0; cm[5].b = 1.0;
       cm[6].r = 1.0; cm[6].g = 0.0; cm[6].b = 1.0;
       cm[7].r = 1.0; cm[7].g = 1.0; cm[7].b = 0.0;
-/*
-      [self setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
-      [self setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
-      [self setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
-      [self setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
-      [self setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
-      [self setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
-      [self setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
-      [self setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
- */     
-/*
-      for (i=2;i<255;i++)
-      {
-        cm[i].r=((float)i)/255.0;
-        cm[i].g=0.0;
-        cm[i].b=0.0;
-      }
-*/
+      /*
+       [self setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
+       [self setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
+       [self setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
+       [self setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
+       [self setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
+       [self setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
+       [self setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
+       [self setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
+       */
+      /*
+       for (i=2;i<255;i++)
+       {
+         cm[i].r=((float)i)/255.0;
+         cm[i].g=0.0;
+         cm[i].b=0.0;
+       }
+       */
     }
       break;
 
@@ -219,16 +240,16 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       static NSPoint lastPoint;
       NSPoint startPoint = NSMakePoint(rbuf[0], rbuf[1]);
       NSPoint endPoint = NSMakePoint(rbuf[2], rbuf[3]);
-      
-      NSLog(@"IFUNC=12, Draw line");
+
+      LOG(@"IFUNC=12, Draw line");
       if (!NSEqualPoints(lastPoint, startPoint))
       {
-       [adapter addLineAtPoint:startPoint];
-      }        
+        [adapter addLineAtPoint:startPoint];
+      }
       [adapter appendLineToPoint:endPoint];
       lastPoint = endPoint;
     }
-    break;
+      break;
 
       //--- IFUNC=13, Draw dot ------------------------------------------------
 
@@ -275,17 +296,17 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       LOG(@"IFUNC=17, Read cursor");
       /*
        Parameters passed to handler:
-        RBUF(1): initial x position of cursor.
-        RBUF(2): initial y position of cursor.
-        RBUF(3): x position of reference point.
-        RBUF(4): y position of reference point.
-        RBUF(5): mode = 0 (no feedback), 1 (rubber band), 2 (rubber rectangle), 3 (vertical range),
-        4 (horizontal range). 5 (horizontal line), 6 (vertical line), 7 (cross-hair).
+       RBUF(1): initial x position of cursor.
+       RBUF(2): initial y position of cursor.
+       RBUF(3): x position of reference point.
+       RBUF(4): y position of reference point.
+       RBUF(5): mode = 0 (no feedback), 1 (rubber band), 2 (rubber rectangle), 3 (vertical range),
+       4 (horizontal range). 5 (horizontal line), 6 (vertical line), 7 (cross-hair).
 
-        Parameters returned by handler:
-        RBUF(1): x position of cursor.
-        RBUF(2): y position of cursor.
-        CHR(1:1): character typed by user.
+       Parameters returned by handler:
+       RBUF(1): x position of cursor.
+       RBUF(2): y position of cursor.
+       CHR(1:1): character typed by user.
        */
 
       key = [adapter getMouseInput:&pos options:0];
@@ -296,9 +317,9 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         chr[0] = 'X';
       else
         chr[0] = key;
-      
+
     }
-      break;
+    break;
 
       //--- IFUNC=18, Erase alpha screen. -------------------------------------
       // (Not implemented: no alpha screen)
@@ -340,7 +361,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         }
       }
     }
-      break;
+    break;
 
       //--- IFUNC=21, Set color representation. -------------------------------
 
@@ -356,7 +377,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         cm[index].b = rbuf[3];
       }
     }
-    break;
+      break;
 
       //--- IFUNC=22, Set line width. -----------------------------------------
 
@@ -391,7 +412,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       corners[3]=NSMakePoint(rbuf[0], rbuf[3]);
       [adapter addPolygonWithPoints:corners pointCount:4];
     }
-    break;
+      break;
 
       //--- IFUNC=25, ---------------------------------------------------------
       // (Not implemented: ignored)
@@ -400,7 +421,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       break;
 
       //--- IFUNC=26, Line of pixels ------------------------------------------
-   case 26:
+    case 26:
     {
       static BOOL processingBitmap = NO;
       static unsigned char *pixPtr;
@@ -409,7 +430,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       static int maxPixCount;
       static NSSize bitmapSize;
       static NSRect imageBounds;
-      
+
       switch((int)rbuf[0])
       {
         case 0:
@@ -442,7 +463,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
             unsigned char red = (unsigned char)(255*cm[(int)rbuf[i]].r);
             unsigned char green = (unsigned char)(255*cm[(int)rbuf[i]].g);
             unsigned char blue = (unsigned char)(255*cm[(int)rbuf[i]].b);
-            
+
             *dataPtr = red;
             dataPtr++;
             *dataPtr = green;
@@ -453,10 +474,10 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
             //NSLog(@"Last rgb = (%u, %u, %u)", red, green, blue);
           }
         }
-        break;
+          break;
       }
-      
-      
+
+
       LOG(@"IFUNC=26, Line of pixels");
     }
       break;
@@ -476,15 +497,15 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 29:
     {
       int index = (int)rbuf[0];
-// NSColor *color = [adapter colormapEntry:(int)rbuf[0]];
-     // NSLog(@"IFUNC=29, Query color representation for index %d", (int)rbuf[0]);
+      // NSColor *color = [adapter colormapEntry:(int)rbuf[0]];
+      // NSLog(@"IFUNC=29, Query color representation for index %d", (int)rbuf[0]);
       rbuf[1] = cm[index].r; //[color redComponent];
       rbuf[2] = cm[index].g;//[color greenComponent];
       rbuf[3] = cm[index].b;//[color blueComponent];
       *nbuf = 4;
 
     }
-      break;
+    break;
 
       //--- IFUNC=30, Scroll rectangle ----------------------------------------
     case 30:
