@@ -186,7 +186,7 @@ static float _aqtMinimumLinewidth;
    if (![self _cache]) {
       [self _aqtPathUpdateCache];
    }   
-   tmpBounds = [[self _cache] bounds];
+   tmpBounds = NSInsetRect([[self _cache] bounds], -linewidth/2, -linewidth/2);
    [self  setBounds:tmpBounds];
    return tmpBounds;
 }
