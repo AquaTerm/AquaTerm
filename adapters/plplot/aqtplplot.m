@@ -56,7 +56,6 @@ void plD_dispatch_init_aqt( PLDispatchTable *pdt )
 }
 static int currentPlot = 0;
 static int maxWindows = 30;
-int colorChange;
 
 #define AQT_Max_X       720.0
 #define AQT_Max_Y       720.0
@@ -117,7 +116,7 @@ void plD_bop_aqt(PLStream *pls)
    [adapter setLinewidth:1.];
 
    pls->page++;
-   colorChange = TRUE;
+   set_color(pls);
 }
 
 //---------------------------------------------------------------------
@@ -128,11 +127,6 @@ void plD_bop_aqt(PLStream *pls)
 
 void plD_line_aqt(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
-   if(colorChange)
-   {
-      set_color(pls);
-      colorChange = FALSE;
-   }
    [adapter moveToPoint:NSMakePoint((float)x1a, (float)y1a)];
    [adapter addLineToPoint:NSMakePoint((float)x2a, (float)y2a)];
 }
@@ -146,12 +140,6 @@ void plD_line_aqt(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 void plD_polyline_aqt(PLStream *pls, short *xa, short *ya, PLINT npts)
 {
    int i;
-
-   if(colorChange)
-   {
-      set_color(pls);
-      colorChange = FALSE;
-   }
 
    for (i = 0; i < npts - 1; i++)
       plD_line_aqt(pls, xa[i], ya[i], xa[i + 1], ya[i + 1]);
@@ -167,8 +155,8 @@ void plD_eop_aqt(PLStream *pls)
 {
    //  Make sure the background color is up to date
    [adapter setBackgroundColorRed:(float)(plsc->cmap0[0].r/255.0) 
-	                    green:(float)(plsc->cmap0[0].g/255.0)
-	                     blue:(float)(plsc->cmap0[0].b/255.0)];  
+	                        green:(float)(plsc->cmap0[0].g/255.0)
+	                         blue:(float)(plsc->cmap0[0].b/255.0)];  
    [adapter renderPlot];
 }
 
@@ -203,15 +191,12 @@ void plD_state_aqt(PLStream *pls, PLINT op)
       case PLSTATE_COLOR1:
       case PLSTATE_FILL:
       	 set_color(pls);
-         colorChange = TRUE;
          break;
 
       case PLSTATE_CMAP0:
-         colorChange = TRUE;
          break;
 
       case PLSTATE_CMAP1:
-         colorChange = TRUE;
          break;
    }
 }
@@ -247,13 +232,7 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
          break;
       case PLESC_GRAPH:               // switch to graphics screen
          break;
-      case PLESC_FILL:                // fill polygon
-   		 if(colorChange)
-   		 {
-      		set_color(pls);
-      		colorChange = FALSE;
-   		 }
-   		 
+      case PLESC_FILL:                // fill polygon	 
          [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0], pls->dev_y[0])];
          for (i = 1; i < pls->dev_npts ; i++)
          {
@@ -495,7 +474,6 @@ void proc_str (PLStream *pls, EscText *args)
       [adapter setColorRed:(float)(pls->curcolor.r/255.)
                      green:(float)(pls->curcolor.g/255.)
                       blue:(float)(pls->curcolor.b/255.)];
-      colorChange = TRUE; // FIXME: is this correct?
       //
       //  Set the font
       for(i = 0; i < length; i++)
