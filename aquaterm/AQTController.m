@@ -32,7 +32,7 @@ extern void aqtLineDrawingTest(id sender);
 
 + (void)initialize{
    NSUserDefaults *defaults = preferences;
-   NSDictionary *appDefaults = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSHomeDirectory(), @"PDF", [NSNumber numberWithInt:1], [NSNumber numberWithInt:1], [NSNumber numberWithInt:1], [NSNumber numberWithInt:1], nil] 
+   NSDictionary *appDefaults = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSHomeDirectory(), @"PDF", [NSNumber numberWithInt:0], [NSNumber numberWithInt:0], [NSNumber numberWithInt:1], [NSNumber numberWithInt:1], nil] 
                                                            forKeys:[NSArray arrayWithObjects:@"CurrentSaveFolder", @"CurrentSaveFormat", @"ShowProcessName", @"ShowProcessId", @"ShouldAntialiasDrawing", @"ImageInterpolationLevel", nil]];
    [defaults registerDefaults:appDefaults];
 }
