@@ -27,7 +27,6 @@ Documentation for AQTAdapter on http://aquaterm.sourceforge.net
 
 The following environment variables may be of interest:
 ---
-AQUATERM_REPORT_TIMING  set this in ~/.MacOSX/environment.plist to anything to log drawing time
 AQUATERM_LOGLEVEL       set in the range 0-4 to have increasing levels of logging, zero means no logging. 
 AQUATERM_PATH           point to any non-standard location of AquaTerm.app e.g. /Users/you/Apps/AquaTerm.app
 GNUTERM                 set to "aqua" to make AquaTerm default output in Gnuplot

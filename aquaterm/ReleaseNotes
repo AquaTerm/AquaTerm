@@ -5,8 +5,10 @@ AquaTerm 1.0.b3
   Adding (some) configuration info to bugreport.
   Adding preference to control window closing behaviour.
   Adding preference to convert Adobe Symbol font encoding to Unicode.
+  Adding preference to define minimum linewidth constraint. 
   Adding method to create user defined dashed lines.
   Adding method to set a clipping rect.
+  Adding a shear angle option to labels.
   Adding a Perl module Graphics::AquaTerm.	
   Fixing incompatibility with Mac OS X prior to 10.3.
   Fixing colormap range bug; report default size if not initialized.

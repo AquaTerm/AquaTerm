@@ -1,7 +1,250 @@
+2005-02-17 13:49  persquare
+
+	* Demo.m: Demo unicode handling.
+
+2005-02-17 11:43  persquare
+
+	* Demo.m: Display new features.
+
+2005-02-17 11:22  persquare
+
+	* AQTGraphicDrawingMethods.m, AQTPlotBuilder.m: Labels should be
+	  clipped too.
+
+2005-02-17 11:21  persquare
+
+	* aquaterm.h, aquaterm.m: Bringing C API up-to-date. Discrepancy in
+	  image functions compared to ObjC.
+
+2005-02-14 22:50  persquare
+
+	* AQTAdapter.h, AQTAdapter.m, AQTGraphicDrawingMethods.m,
+	  AQTLabel.h, AQTLabel.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
+	  Adding a shear angle option to labels. Useful for 3D projections.
+
+2005-02-12 22:18  persquare
+
+	* AQTController.m, AQTGraphicDrawingMethods.m, AQTPrefController.h,
+	  AQTPrefController.m, English.lproj/Preferences.nib/classes.nib,
+	  English.lproj/Preferences.nib/info.nib,
+	  English.lproj/Preferences.nib/objects.nib: Adding a preference to
+	  constrain minimum linewidth to 0.0 - 1.0 pt in steps of 0.05 pt.
+	  Specifying 0.0 turn constraint off.
+
+2005-02-11 23:52  persquare
+
+	* AQTController.m, AQTGraphic.h, AQTGraphic.m,
+	  AQTGraphicDrawingMethods.m, AQTPlot.m: Adding debug support for
+	  clip rects. Only included if DEBUG_BOUNDS is given at build time.
+	  Menu Debug->Show bounds toggles behavior.
+
+2005-02-11 23:50  persquare
+
+	* ReleaseNotes: Updating.
+
+2005-02-11 21:46  persquare
+
+	* AQTAdapter.h, AQTAdapter.m, AQTGraphic.h, AQTGraphic.m,
+	  AQTGraphicDrawingMethods.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
+	  Adding clip rect support. (RFE #1094504)
+
+2005-02-03 12:10  persquare
+
+	* AQTClientManager.m: Adding missing exception wrapper.
+
+2005-02-03 11:58  persquare
+
+	* AQTController.m, AQTPrefController.h, AQTPrefController.m,
+	  AQTStringDrawingAdditions.m,
+	  English.lproj/Preferences.nib/classes.nib,
+	  English.lproj/Preferences.nib/objects.nib: Automatic conversion
+	  of Adobe Symbol font encoding to Unicode is now a preference.
+
+2005-02-03 11:27  persquare
+
+	* AQTAdapter.m: Avoid introducing a new bug when fixing #1108709.
+
+2005-02-03 11:24  persquare
+
+	* AQTAdapter.m: Fix for bug #1108709. Method -lastEvent now works
+	  as advertised.
+
+2005-01-23 21:55  persquare
+
+	* AQTAdapter.h, AQTAdapter.m, AQTGraphicDrawingMethods.m,
+	  AQTPath.h, AQTPath.m, AQTPlotBuilder.h, AQTPlotBuilder.m,
+	  aquaterm.h, aquaterm.m: Adding setLinestylePattern method to
+	  create dashed lines and setLinestyleSolid to revert to solid
+	  lines. Thanks to Chris Murphy who took the time to implement it.
+
+2005-01-23 00:46  persquare
+
+	* AQTPrefController.m: Minor change.
+
+2005-01-23 00:40  persquare
+
+	* English.lproj/Preferences.nib/classes.nib,
+	  English.lproj/Preferences.nib/info.nib,
+	  English.lproj/Preferences.nib/objects.nib, AQTClientManager.m,
+	  AQTController.m, AQTPlot.m, AQTPrefController.h,
+	  AQTPrefController.m: Adding preference to control window closing
+	  behaviour.
+
+2005-01-22 22:36  persquare
+
+	* aquaterm.m: Adding a missing function. D'oh!
+
+2004-12-13 04:50  hbabcock
+
+	* AQTGraphicDrawingMethods.m: fix for bug #1081093, adjusts bounds
+	  for finite line width
+
+2004-12-12 21:01  persquare
+
+	* AQTAdapter.m, AQTClientManager.h, AQTClientManager.m,
+	  AQTClientProtocol.h, AQTPlot.h, AQTPlot.m, AQTView.m: Adding
+	  (private) method -timingTestWithTag: to AQTAdapter in order to
+	  make it possible to run drawing speed tests from clients.
+
+2004-12-12 19:56  persquare
+
+	* AQTFunctions.h, AQTGraphicDrawingMethods.m: Adding CAST_STRUCT_TO
+	  macro.
+
+2004-11-19 15:29  persquare
+
+	* AQTAdapter.m, AQTPlotBuilder.h, AQTPlotBuilder.m: Report default
+	  size of colormap rather than 0 if builder not initialized.
+
+2004-11-19 13:27  persquare
+
+	* AQTColorMap.m: Fixing range checking bug exposed by plplot
+	  driver.
+
+2004-10-29 13:15  persquare
+
+	* English.lproj/MainMenu1.nib/objects.nib: Removing unused menu
+	  entry (Get Info).
+
+2004-10-29 13:14  persquare
+
+	* AQTController.m: Forgot to close font plot.
+
+2004-10-29 12:42  persquare
+
+	* AQTController.h, AQTController.m,
+	  English.lproj/MainMenu1.nib/classes.nib,
+	  English.lproj/MainMenu1.nib/info.nib,
+	  English.lproj/MainMenu1.nib/objects.nib: Adding menu option to
+	  display available fonts and their names.
+
+2004-10-27 22:26  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Setting compatibility version to
+	  Mac OS X 10.1.
+
+2004-10-27 22:26  persquare
+
+	* AQTController.m: Adding configuration info to bugreport. Bumping
+	  to version 1.0.b3.
+
+2004-10-27 22:25  persquare
+
+	* AquaTerm.app-Info.plist, distroMakefile: Bumping to version
+	  1.0.b3.
+
+2004-10-27 22:24  persquare
+
+	* installer/installer.packproj: Making paths relative. Bumping to
+	  version 1.0.b3.
+
+2004-10-19 10:53  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Updating project file.
+
+2004-10-19 10:52  persquare
+
+	* AQTStringDrawingAdditions.m, Demo.m: Nudging sub/superscript
+	  size. Adding example to demo.m
+
+2004-10-18 20:38  persquare
+
+	* AQTStringDrawingAdditions.m: Querying current font for underline
+	  position and thickness.
+
+2004-10-18 20:32  persquare
+
+	* AQTStringDrawingAdditions.m: Removing the old string drawing
+	  code.
+
+2004-10-18 20:06  persquare
+
+	* AQTStringDrawingAdditions.m: Reverting overprint changes.
+
+2004-10-18 18:13  persquare
+
+	* AQTStringDrawingAdditions.m: recurse(): Adding overprinting.
+
+2004-10-18 17:23  persquare
+
+	* AQTStringDrawingAdditions.m: recurse(): Adding underling. Adding
+	  function documentation.
+
+2004-10-18 15:52  persquare
+
+	* AQTStringDrawingAdditions.m: Adding improved string rendering
+	  code.
+
+2004-10-15 11:45  persquare
+
+	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m,
+	  AQTStringDrawingAdditions.h, AQTStringDrawingAdditions.m: Moving
+	  string drawing methods into a category of their own.
+
+2004-10-14 22:56  persquare
+
+	* AQTGraphicDrawingMethods.m: Handle drawing a string differently
+	  than an attributed string.  General cleanup as a consequence
+
+2004-10-14 22:54  persquare
+
+	* AQTLabel.h, AQTLabel.m: Don't convert a string to an attributed
+	  string since the latter can be more efficiently handled when
+	  drawing.
+
+2004-10-14 13:56  persquare
+
+	* AQTGraphicDrawingMethods.m: _aqtLabelUpdateCache: Better parsing
+	  of attributes (non-printing chars and font).	Implicit conversion
+	  from Adobe Symbol encoding to unicode.  Cleaning up attribute
+	  parsing code.  Preparing for refactoring.
+
+2004-10-12 14:35  persquare
+
+	* ReleaseNotes: Clear destination rect before adding a bitmap.
+
+2004-10-12 14:25  persquare
+
+	* AQTAdapter.m: Clear destination rect before adding a bitmap. The
+	  whole process of eraseRect: need to be cleaned up in the future.
+
+2004-09-29 15:57  persquare
+
+	* AquaTerm.pbproj/per.pbxuser: Remove.
+
+2004-09-29 15:56  persquare
+
+	* Bugs.m: Bring up to date.
+
+2004-09-29 15:55  persquare
+
+	* AquaTerm.pbproj/per.pbxuser: Prepare to remove.
+
 2004-09-29 12:03  persquare
 
 	* AQTController.m, AquaTerm.app-Info.plist, ReadMe.rtf,
-	  ReleaseNotes, Help/AQTAdapter.html: Bump to version 1.0.b2.
+	  ReleaseNotes, Help/AQTAdapter.html, ChangeLog: Bump to version
+	  1.0.b2.
 
 2004-09-29 12:01  persquare
 
