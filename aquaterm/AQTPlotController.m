@@ -11,6 +11,25 @@
 #import "AQTClientManager.h"
 
 @implementation AQTPlotController
+- (void)dealloc
+{
+   [[AQTClientManager sharedManager]
+        logMessage:[NSString stringWithFormat:@"in --> %@ %s line %d",
+           NSStringFromSelector(_cmd), __FILE__, __LINE__]
+          logLevel:3];   
+   [self setHandler:nil];
+   [super dealloc];
+}
+
+- (void)release
+{
+   [[AQTClientManager sharedManager]
+        logMessage:[NSString stringWithFormat:@"in --> %@ %s line %d, rc=%d",
+           NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]]
+          logLevel:3];
+   [super release];
+}
+
 - (void)setHandler:(id)newHandler
 {
    [newHandler retain];
@@ -23,7 +42,7 @@
    [[AQTClientManager sharedManager]
         logMessage:[NSString stringWithFormat:@"handlerIsProxy: %@", [_handler isProxy]?@"YES":@"NO -- be careful!"]
           logLevel:4];
-   NSLog(@"handlerIsProxy: %@", [_handler isProxy]?@"YES":@"NO -- be careful!");
+   //NSLog(@"handlerIsProxy: %@", [_handler isProxy]?@"YES":@"NO -- be careful!");
    return [_handler isProxy];
 }
 
@@ -51,7 +70,6 @@
 
 - (void)drawPlot
 {
-   // NSLog(@"implement --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
    NS_DURING
       [_handler draw];
    NS_HANDLER
