@@ -154,38 +154,6 @@
   }
 }
 
-/*
-- (void)mouseDownAt:(NSPoint)pos key:(char)aKey
-{
-  NSLog(@"Got coord: %@ and key: %c", NSStringFromPoint(pos), aKey);
-  _selectedPoint = pos;
-  _keyPressed = aKey;
-  if (_acceptingEvents == YES)
-  {
-    NSString *theEvent = [NSString stringWithFormat:@"Got coord: %@ and key: %c",NSStringFromPoint(pos), aKey];
-     NS_DURING
-     [_client processEvent:theEvent];
-     NS_HANDLER
-        NSLog([localException name]);
-        if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
-           [self invalidateClient:_client]; // invalidate client
-        else
-           [localException raise];
-     NS_ENDHANDLER
-     [self setLastEvent:theEvent];
-  }
-}
-
-- (char)keyPressed
-{
-  return _keyPressed;
-}
-
-- (NSPoint) selectedPoint
-{
-  return _selectedPoint;
-}
-*/
 #pragma mark === Delegate methods ===
 - (void)windowWillClose:(NSNotification *)notification
 {
@@ -197,23 +165,6 @@
 }
 
 
-#pragma mark === From client handler ===
- 
-/*" The following methods applies to the currently selected view "*/
-/*
- -(NSDictionary *)status
-{
-  NSDictionary *tmpDict = [NSDictionary dictionaryWithObject:@"Status line" forKey:@"theKey"];
-  return tmpDict;
-}
-*/
-/*
- -(char)mouseDownInfo:(inout NSPoint *)mouseLoc
-{
-  *mouseLoc = [self selectedPoint];
-  return [self keyPressed];
-}
-*/
 -(void)close
 {
   NSLog(@"close");

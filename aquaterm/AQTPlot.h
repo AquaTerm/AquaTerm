@@ -16,8 +16,6 @@
   IBOutlet AQTView *viewOutlet;	/*" Points to the rendering view "*/
   AQTModel	*model;		/*" Holds the model for the view "*/
   BOOL _isWindowLoaded;
-  NSPoint _selectedPoint;
-  char _keyPressed;
   BOOL _acceptingEvents;
   AQTPlotBuilder *_client;
   int _clientPID;
@@ -32,9 +30,6 @@
 -(void)setClientInfoName:(NSString *)name pid:(int)pid;
 -(BOOL)invalidateClient:(id)aClient;
 
-// - (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
-// - (char)keyPressed;
-// - (NSPoint)selectedPoint;
 - (void)setLastEvent:(NSString *)theEvent;
 
 @end
