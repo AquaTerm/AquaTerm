@@ -18,7 +18,7 @@
   }
   return self;
 }
-
+/*
 -(id)initWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc // color:(AQTColor)aColor
 {
    if (self = [super initWithXCoords:x yCoords:y pointCount:pc]) // color:aColor])
@@ -27,4 +27,5 @@
    }
    return self;
 }
+*/
 @end

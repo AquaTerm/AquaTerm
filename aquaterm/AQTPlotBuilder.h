@@ -67,11 +67,11 @@
 - (void)moveToPoint:(NSPoint)point;  // AQTPath
 - (void)addLineToPoint:(NSPoint)point;  // AQTPath
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
-- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
+//- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 
   /*" Filled areas"*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; // AQTPatch
-- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
+//- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 - (void)addFilledRect:(NSRect)aRect;
 
   /*" Image handling "*/

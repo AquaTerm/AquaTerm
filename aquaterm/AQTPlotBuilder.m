@@ -340,7 +340,7 @@
    [tmpPath release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
-
+/*
 - (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
 {
    AQTPath *tmpPath;
@@ -352,7 +352,7 @@
    [tmpPath release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
-
+*/
 //
 // AQTPatch
 //
@@ -365,7 +365,7 @@
    [tmpPatch release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
-
+/*
 - (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
 {
    AQTPatch *tmpPatch;
@@ -375,7 +375,7 @@
    [tmpPatch release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
-
+*/
 
 - (void)addFilledRect:(NSRect)aRect
 {

@@ -285,24 +285,24 @@ _{@"NSUnderline" 0or1}
    [_selectedBuilder addPolylineWithPoints:points pointCount:pc];
 }
 
-/*" Add a sequence of line segments specified by a list of start-, end-, and joincoordinate(s) in x and y. Parameter pc is number of line segments + 1."*/
+/*" Add a sequence of line segments specified by a list of start-, end-, and joincoordinate(s) in x and y. Parameter pc is number of line segments + 1.
 - (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
 {
    [_selectedBuilder addPolylineWithXCoords:x yCoords:y pointCount:pc];
 }
-
+*/
 /*" Add a polygon specified by a list of corner points. Number of corners is passed in pc."*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
    [_selectedBuilder addPolygonWithPoints:points pointCount:pc];
 }
 
-/*" Add a polygon specified by a list of corner coordinates in x and y. Number of corners is passed in pc."*/
-- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
+/*" Add a polygon specified by a list of corner coordinates in x and y. Number of corners is passed in pc."
+ - (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
 {
    [_selectedBuilder addPolygonWithXCoords:x yCoords:y pointCount:pc];   
 }
-
+*/
 /*" Add a filled rectangle. Will attempt to remove any objects that will be covered by aRect."*/
 - (void)addFilledRect:(NSRect)aRect
 {

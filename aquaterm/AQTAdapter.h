@@ -82,7 +82,7 @@ enum {
   /*" Text handling "*/
 - (void)setFontname:(NSString *)newFontname;
 - (void)setFontsize:(float)newFontsize;
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle align:(int)just;
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle align:(int)just;// FIXME: position --> atPoint
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;
@@ -90,11 +90,13 @@ enum {
 - (void)moveToPoint:(NSPoint)point;  
 - (void)addLineToPoint:(NSPoint)point; 
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
-- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
+//- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 
   /*" Rect and polygon handling"*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc;
-- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
+- (void)moveToVertexPoint:(NSPoint)point;
+- (void)addEdgeToPoint:(NSPoint)point; 
+//- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 - (void)addFilledRect:(NSRect)aRect;
 - (void)eraseRect:(NSRect)aRect;
 

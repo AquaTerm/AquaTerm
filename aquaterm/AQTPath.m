@@ -52,7 +52,7 @@
   }
   return self;
 }
-
+/*
 // NOTE: this is a _second_ designated(?) initializer....
 - (id)initWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 {
@@ -70,7 +70,7 @@
    }
    return self;
 }
-
+*/
 -(id)init
 {
   return [self initWithPoints:nil pointCount:0];
