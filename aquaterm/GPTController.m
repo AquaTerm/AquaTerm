@@ -249,6 +249,7 @@
   {
     printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
     [printView setModel:[frontView model]];
+    [printView setIsPrinting:YES];
     filename = [[theSheet filename] stringByDeletingPathExtension];
     if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
     {
@@ -280,6 +281,7 @@
 
   printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
   [printView setModel:[frontView model]];
+  [printView setIsPrinting:YES];
   [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];
 
   [pasteboard setData:[printView dataWithPDFInsideRect:[printView bounds]] forType:NSPDFPboardType];
