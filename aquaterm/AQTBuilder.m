@@ -79,13 +79,20 @@ static inline void NOOP_(id x, ...) {;}
 
 - (oneway void)closeModel
 {
-  // Hand over model to renderer and release it
-  [model updateColors:colormap];
-  LOG(@"builder/closeModel setmodel:forView:%d",index);
+  if (!model)
+  {
+    LOG(@"Calling closeModel without open model");
+  }
+  else
+  {
+    // Hand over model to renderer and release it
+    [model updateColors:colormap];
+    LOG(@"builder/closeModel setmodel:forView:%d",index);
 
-  [renderer setModel:model forView:modelNumber];	// the renderer will retain this object
-  [model release];
-  model = nil;
+    [renderer setModel:model forView:modelNumber];	// the renderer will retain this object
+    [model release];
+    model = nil;
+  }
 }
 
 //
