@@ -106,7 +106,7 @@
             [self logMessage:[NSString stringWithFormat:@"Waiting... %d", timer] logLevel:2];
             [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
             // check for server connection
-            _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+            _server = [NSConnection rootProxyForConnectionWithRegisteredName:registeredName host:nil];
          }
       }
    }
@@ -189,7 +189,7 @@
    //            2 -- user debug
    //            3 -- noisy, dev. debug
    if (level > 0 && level <= _logLimit) {
-      NSLog(msg);
+      NSLog(@"\nlibaquaterm::%@", msg);
    }
 }
 
