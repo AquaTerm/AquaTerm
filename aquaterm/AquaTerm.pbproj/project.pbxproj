@@ -156,7 +156,7 @@
 				F54B0FE601FF5CDC014110A7,
 				F5E70370026D8645012F88DF,
 				F55BA2E303589FD301D20925,
-				CB15638804DA587B00EBD329,
+				CB05377C04DEA3A300EBD329,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -291,7 +291,7 @@ http://aquaterm.sourceforge.net</string>
 				F5B46F320209827F01A80104,
 				F5E70372026D8645012F88DF,
 				F55BA2E503589FD301D20925,
-				CB15638904DA587B00EBD329,
+				CB05377D04DEA3A300EBD329,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,14 +370,14 @@ http://aquaterm.sourceforge.net</string>
 //CB2
 //CB3
 //CB4
-		CB15638804DA587B00EBD329 = {
+		CB05377C04DEA3A300EBD329 = {
 			isa = PBXFileReference;
 			name = Cross.tiff;
-			path = "/Volumes/per-1/source/from pbook/Cross.tiff";
+			path = /Applications/OmniGraffle.app/Contents/Resources/Cross.tiff;
 			refType = 0;
 		};
-		CB15638904DA587B00EBD329 = {
-			fileRef = CB15638804DA587B00EBD329;
+		CB05377D04DEA3A300EBD329 = {
+			fileRef = CB05377C04DEA3A300EBD329;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -454,6 +454,13 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
+		CBAFDE0F04DE8F5F00EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = aquaTerm.trm;
+			path = /Volumes/Earth/Users/per/source/AQT/adapters/gnuplot/aquaTerm.trm;
+			refType = 0;
+		};
 		CBD8F3EF04D90CDC00EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -464,6 +471,7 @@ http://aquaterm.sourceforge.net</string>
 		CBD8F3F004D90CE100EBD329 = {
 			children = (
 				CBD8F3EF04D90CDC00EBD329,
+				CBAFDE0F04DE8F5F00EBD329,
 			);
 			isa = PBXGroup;
 			name = Adapters;
@@ -594,7 +602,6 @@ http://aquaterm.sourceforge.net</string>
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				INSTALL_PATH = /Volumes/Earth/Users/per/lib;
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -609,7 +616,6 @@ http://aquaterm.sourceforge.net</string>
 			);
 			isa = PBXLibraryTarget;
 			name = libaqt;
-			productInstallPath = /Volumes/Earth/Users/per/lib;
 			productName = libaqt;
 			productReference = CBF30BC204D54A2E00EBD329;
 		};
@@ -713,7 +719,7 @@ http://aquaterm.sourceforge.net</string>
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp $SRCROOT/AQTAdapter.h $HOME/include/.; cp $SRCROOT/build/libaqt $HOME/lib/libaqt.dylib; ranlib  $HOME/lib/libaqt.dylib";
+			shellScript = "cp $SRCROOT/AQTAdapter.h $HOME/include/.; cp $SRCROOT/AQTGraphic.h $HOME/include/.; cp $SRCROOT/build/libaqt $HOME/lib/libaqt.dylib; ranlib  $HOME/lib/libaqt.dylib";
 		};
 		CBF30BD804D5527700EBD329 = {
 			children = (
