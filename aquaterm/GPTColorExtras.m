@@ -31,5 +31,4 @@
                                       blue:b+zb*param 
                                      alpha:1.0];
 }
-
 @end

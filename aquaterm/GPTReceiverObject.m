@@ -7,8 +7,9 @@
 #import "AQTPath.h"
 #import "AQTLabel.h"
 #import "AQTModel.h"
+#import "AQTColorMap.h"
 #import "GPTView.h"
-#import "GPTColorExtras.h"
+// #import "GPTColorExtras.h"
 
 
 @implementation GPTReceiverObject
@@ -82,6 +83,11 @@
     If the model is part of a multiplot the flag is set to NO. "*/
 - (oneway void) renderInViewShouldRelease:(BOOL)release
 {  
+  // Get the default colormap FIXME: should read it from app prefs
+  AQTColorMap *defaultColorMap = [[[AQTColorMap alloc] init] autorelease];
+  // Get all objects to set its own color before display
+  [aqtModel updateColors:defaultColorMap];
+  // Hand it over to the renderer
     [listener setModel:aqtModel forView:currentFigure];	// the listener (GPTController) will retain this object
     if (release)
     {

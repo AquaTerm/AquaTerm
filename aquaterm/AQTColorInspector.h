@@ -12,7 +12,7 @@
 {
     IBOutlet NSColorWell *axisColor;
     IBOutlet NSColorWell *backgroundColor;
-    IBOutlet NSColorWell *borderColor;
+    IBOutlet NSColorWell *gridlineColor;
     IBOutlet NSColorWell *lineColor1;
     IBOutlet NSColorWell *lineColor2;
     IBOutlet NSColorWell *lineColor3;
@@ -21,6 +21,7 @@
     IBOutlet NSColorWell *lineColor6;
     IBOutlet NSColorWell *lineColor7;
     IBOutlet NSColorWell *lineColor8;
+    IBOutlet NSColorWell *lineColor9;
     IBOutlet NSColorWell *maxColor;
     IBOutlet NSColorWell *minColor;
     IBOutlet NSImageView *surfaceRampImage;

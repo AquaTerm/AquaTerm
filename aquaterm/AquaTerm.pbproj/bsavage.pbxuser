@@ -45,10 +45,10 @@
 							LauncherConfigVersion = 4;
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {707, 548}}";
+							Frame = "{{0, 0}, {708, 548}}";
 							LauncherConfigVersion = 3;
 							Runner = {
-								Frame = "{{0, 0}, {707, 548}}";
+								Frame = "{{0, 0}, {708, 548}}";
 							};
 						};
 						Tab2 = {
@@ -89,7 +89,6 @@
 					};
 					TabCount = 5;
 				};
-				WindowLocation = "{0, 14}";
 			};
 		};
 		wantsIndex = 1;

@@ -21,6 +21,47 @@
     return self;
 }
 
+-(id)init
+{
+  // create a color dictionary
+    NSDictionary *aColorDict =
+    [NSDictionary dictionaryWithObjects:
+      [NSArray arrayWithObjects:
+        [NSColor whiteColor], // -4
+        [NSColor yellowColor], // -3
+        [NSColor blackColor], // -2
+        [NSColor lightGrayColor], // -1
+        [NSColor redColor], // 0
+        [NSColor greenColor], // 1
+        [NSColor blueColor], // 2
+        [NSColor cyanColor], // 3
+        [NSColor magentaColor], // 4
+        [NSColor orangeColor], // 5
+        [NSColor purpleColor], // 6
+        [NSColor brownColor], // 7
+        [NSColor grayColor], // 8
+        nil]
+    forKeys:
+      [NSArray arrayWithObjects:
+        @"-4", // ? backgroundColor
+        @"-3", // ?
+        @"-2", // ?
+        @"-1", // ?
+        @"0", // lineColor1
+        @"1", // lineColor2
+        @"2", // lineColor3
+        @"3", // lineColor4
+        @"4", // lineColor5
+        @"5", // lineColor6
+        @"6", // lineColor7
+        @"7", // lineColor8
+        @"8",
+        nil]
+      ];
+
+  return [self initWithColorDict:aColorDict rampFrom:[NSColor blueColor] to:[NSColor yellowColor]];
+}
+
 -(void)dealloc {
     [indexedColormap release];
     [minColor release];
@@ -28,10 +69,22 @@
     [super dealloc];
 }
 
--(NSColor *)colorForFloat:(float)grey
+-(NSColor *)colorForFloat:(float)param
 {
-    // need to call [self interpolateColorFrom:to:by: ]
+    // need to call [self interpolateColorFrom:to:by: ] (Just replace it! PP)
     // but I am not quite sure how -- is c0 max or min?
+  float   r  = [maxColor redComponent],
+  g  = [maxColor greenComponent],
+  b  = [maxColor blueComponent];
+  float   zr = -(r - [minColor redComponent]),
+    zg = -(g - [minColor greenComponent]),
+    zb = -(b - [minColor blueComponent]);
+
+  return [NSColor colorWithCalibratedRed:r+zr*param
+                                   green:g+zg*param
+                                    blue:b+zb*param
+                                   alpha:1.0];
+  
 }
 
 -(NSColor *)colorForIndex:(int)index
@@ -41,7 +94,7 @@
     // do with gnuplot internals -- bobs
     return [indexedColormap objectForKey:[NSString stringWithFormat:@"%d", index % 9]];
 }
-
+/*
 -(NSColor *)interpolateColorFrom:(NSColor *)c0 to: (NSColor *)c1 by:(double)param
 {
     float   r  = [c0 redComponent],
@@ -56,5 +109,5 @@
                                       blue:b+zb*param 
                                      alpha:1.0];
 }
-
+*/
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "AQTGraphic.h"
+#import "AQTColorMap.h"
 
 @implementation AQTGraphic
     /**"
@@ -18,7 +19,8 @@
 {
     if (self = [super init])
     {
-      color = [[NSColor clearColor] retain]; // See-through color
+      // color = [[NSColor clearColor] retain]; // See-through color
+      color = [[NSColor blackColor] retain];	// testing, remove!
     }
     return self; 
 }
@@ -62,6 +64,7 @@
     *** colors. The index is taken modulo max_number_of_colors.
     *** Negative numbers have special meanings (-2 = axes, -1 = grid).
     "**/
+/* Not compliant with new color handling 
 -(void)setColorFromIndex:(int)theIndex
 {
     switch (theIndex % 9)
@@ -106,14 +109,25 @@
             [self setColor:[NSColor yellowColor]];
        } 
 }
+*/
 
--(void)updateColors:(AQTColormap *)colorMap {
+-(void)updateColors:(AQTColorMap *)colorMap
+{
+  // [self setColor:[NSString stringWithFormat:@"%d",colorIndex]];
+  [self setColor:[colorMap colorForIndex:colorIndex]];
+/*
+ // AQTGraphic supports only indexed colors so we save a few tests by letting
+ // subclasses that has continous color implement that
     if (hasIndexedColor)
+    {	// Always brace in if-contructs! 
         [self setColor:[NSString stringWithFormat:@"%d",colorIndex]];
-    else {
+    }
+    else
+    {
         // do whatever is necessary for continuous color mode here
         // FIXME
     }
+*/
 }
 
 @end

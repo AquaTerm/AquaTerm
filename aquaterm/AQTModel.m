@@ -7,6 +7,7 @@
 //
 
 #import "AQTModel.h"
+#import "AQTColorMap.h"
 
 @implementation AQTModel
     /**"
@@ -86,14 +87,20 @@
     }
 }
 
+-(void)setColormap:(AQTColorMap *)newColorMap
+{
+  [newColorMap retain];
+  [modelColorMap release];
+  modelColorMap = newColorMap;
+}
 // -- updateColors: --
 // 	override parent class' implementation
--(void) updateColors:(AQTColormap *)colorMap;
+-(void) updateColors:(AQTColorMap *)colorMap;
 {
     AQTGraphic *graphic;
     NSEnumerator *enumerator = [modelObjects objectEnumerator];
 
-    // [self setColormap: colorMap]; // FIXME -- what was this supposed to do?
+    [self setColormap: colorMap]; // FIXME -- what was this supposed to do? Remember map for inspector! PP
     while ((graphic = [enumerator nextObject]))
     {
         [graphic updateColors:colorMap];

@@ -30,8 +30,12 @@
     justification = justify;
     colorIndex=cIndex; 
   }
+  /*
+   // this metod is obsolete 
   [self setColorFromIndex:cIndex];
-
+   // The color is set to clearColor in superclass and by issuing an extra updateColor:
+   // before first time display all objects will set their own color.
+  */
   return self; 
 }
 

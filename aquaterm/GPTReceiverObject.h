@@ -1,7 +1,7 @@
 #import <Cocoa/Cocoa.h>
 #import <AQTProtocol.h>
 
-@class GPTController, AQTModel;
+@class GPTController, AQTModel, AQTColorMap;
 @interface GPTReceiverObject : NSObject <AQTProtocol>
 {
     NSConnection 	*gptConnection;		/*" The DO connection object "*/

@@ -7,7 +7,8 @@
 //
 
 #import "AQTPath.h"
-#import "GPTColorExtras.h"
+#import "AQTColorMap.h"
+// #import "GPTColorExtras.h"
 
 @implementation AQTPath
     /**"
@@ -30,6 +31,7 @@
     colorIndex = cIndex;
     hasIndexedColor = icFlag;
     
+/* Obsolete, send updateColor before 1st display instead
     if (hasIndexedColor)
     {
       [self setColorFromIndex:colorIndex];	
@@ -38,6 +40,7 @@
     {
       [self setColor:[NSColor interpolateColorFrom:[NSColor yellowColor] to:[NSColor redColor] by:mappedColor]];	
     }
+*/
   }
   return self; 
 }
@@ -95,6 +98,20 @@
       [[localTransform transformBezierPath:path] fill];
     }
     [[localTransform transformBezierPath:path] stroke];	// FAQ: Needed unless we holes in the surface? 
+}
+// override superclass' def of updateColors:
+-(void)updateColors:(AQTColorMap *)colorMap
+{
+   if (hasIndexedColor)
+   {	// Always brace in if-contructs!
+     // [self setColor:[NSString stringWithFormat:@"%d",colorIndex]];
+      [self setColor:[colorMap colorForIndex:colorIndex]];
+   }
+   else
+   {
+     // do whatever is necessary for continuous color mode here
+      [self setColor:[colorMap colorForFloat:mappedColor]];
+   }
 }
 
 @end

@@ -38,9 +38,9 @@
     // create a temporary colormap from the panel
     colorDICT = [NSDictionary dictionaryWithObjects: [NSArray arrayWithObjects:
                             [backgroundColor color], // -4
-                            [axisColor color], // -3
-                            [borderColor color], // -2
-                            [backgroundColor color], // -1
+                            [NSColor yellowColor], // -3 /* Reserved for now */
+                            [axisColor color], // -2
+                            [gridlineColor color], // -1
                             [lineColor1 color], // 0
                             [lineColor2 color], // 1
                             [lineColor3 color], // 2
@@ -49,12 +49,13 @@
                             [lineColor6 color], // 5
                             [lineColor7 color], // 6
                             [lineColor8 color], // 7
+                            [lineColor9 color], // 8
                              nil]
                 forKeys: [NSArray arrayWithObjects:
-                            @"-4" // ? backgroundColor
-                            @"-3" // ?
-                            @"-2" // ?
-                            @"-1" // ?
+                            @"-4", // backgroundColor
+                            @"-3", // xor-color for markers /* Reserved use for now */
+                            @"-2", // axisColor
+                            @"-1", // gridlineColor
                             @"0", // lineColor1
                             @"1", // lineColor2
                             @"2", // lineColor3
@@ -63,6 +64,7 @@
                             @"5", // lineColor6
                             @"6", // lineColor7
                             @"7", // lineColor8
+                            @"8", // lineColor9
                             nil] ];
                             
     tempColormap = [[AQTColorMap alloc] initWithColorDict:colorDICT

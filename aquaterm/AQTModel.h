@@ -14,12 +14,12 @@
 @interface AQTModel : AQTGraphic 
 {
     NSMutableArray	*modelObjects;	/*" An array of GPTGraphic objects (leaf or collection) "*/
-    AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors -- not currently used? "*/
-
+    AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors so that the (single) property inspector knows the colormap of each window (model) "*/
 }
 -(id)init;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;
 -(void)renderInRect:(NSRect)boundsRect;
+-(void)setColormap:(AQTColorMap *)newColorMap;
 @end

@@ -11,16 +11,10 @@
 @interface AQTColorMap : NSObject	
 {
     NSDictionary *indexedColormap;
-    
-    /*
-    // could we rename these maxColor and minColor?
-    // seems more descriptive -- bobs
-    NSColor *color1; // for continous colormaps
-    NSColor *color2; // for continous colormaps
-    */
     NSColor *minColor; // for continous colormaps
     NSColor *maxColor; // for continous colormaps
 }
+// Designated initializer
 -(id)initWithColorDict:(NSDictionary *)indexColors
               rampFrom:(NSColor *)contColorMin
                     to:(NSColor *)contColorMax;
@@ -28,6 +22,6 @@
 -(NSColor *)colorForIndex:(int)index;
 
 // utility method
--(NSColor *)interpolateColorFrom:(NSColor *)c0 to: (NSColor *)c1 by:(double)param;
+// -(NSColor *)interpolateColorFrom:(NSColor *)c0 to: (NSColor *)c1 by:(double)param;
 
 @end
