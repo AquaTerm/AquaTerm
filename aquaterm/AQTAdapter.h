@@ -25,7 +25,7 @@
 - (id)init;
 - (id)initWithHandler:(id)localHandler;
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr;
-
+- (void)setBuilder:(AQTPlotBuilder *)newBuilder;
   /*" Control operations "*/
 - (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title; // if title param is nil, title defaults to Figure <n>
 - (void)closePlot;

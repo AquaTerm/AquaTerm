@@ -49,6 +49,11 @@
   return self;
 }
 
+-(void)setSize:(NSSize)size
+{
+  canvasSize = size;
+}
+
 
 -(int)count
 {
@@ -84,7 +89,6 @@
   // FIXME: It is possible to recursively nest models in models,
   // but this method doesn't work in that case
 
-  AQTGraphic *graphic;
   NSRect testRect;
   int i;
   int  objectCount = [modelObjects count];

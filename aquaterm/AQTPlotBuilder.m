@@ -56,6 +56,16 @@
 {
   return _modelIsDirty; 
 }
+- (void)setSize:(NSSize)canvasSize
+{
+  [_model setSize:canvasSize];
+}
+
+- (void)setTitle:(NSString *)title
+{
+  [_model setTitle:title];  
+}
+
 /*
  - (AQTColor)color {
    return _color;

@@ -15,6 +15,7 @@
     NSString 		*title;			/*" Associate a title with the model. Default is 'Figure n'. "*/
 }
 -(id)initWithSize:(NSSize)canvasSize;
+-(void)setSize:(NSSize)canvasSize;
 -(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;

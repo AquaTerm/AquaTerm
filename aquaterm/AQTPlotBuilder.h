@@ -26,6 +26,8 @@
 - (void)setModel:(AQTModel *)newModel;
 - (AQTModel *)model;
 - (BOOL)modelIsDirty;
+- (void)setSize:(NSSize)canvasSize;
+- (void)setTitle:(NSString *)title;
 /*" Color handling "*/
   //- (AQTColor)color;
 - (void)setColorRed:(float)r green:(float)g blue:(float)b;

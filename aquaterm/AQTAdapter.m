@@ -45,7 +45,7 @@ error handling callback function for the client.
 {
   if(self = [super init])
   {
-    _builder = [[AQTPlotBuilder alloc] init];
+    [self setBuilder:[[AQTPlotBuilder alloc] init]];
     _uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
     _procName = [[NSString stringWithString:[[NSProcessInfo processInfo] processName]] retain];
     _procId = [[NSProcessInfo processInfo] processIdentifier];
@@ -106,6 +106,17 @@ error handling callback function for the client.
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr
 {
   _errorHandler = fPtr;
+}
+
+- (void)setBuilder:(AQTPlotBuilder *)newBuilder
+{
+  [newBuilder retain];
+  [_builder release];
+  _builder=newBuilder;
+}
+- (AQTPlotBuilder *)builder
+{
+  return _builder;
 }
 
 /*
@@ -188,22 +199,9 @@ error handling callback function for the client.
 //
 - (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title // if title param is nil, title defaults to Figure <n>
 {
-/* FIXME
- AQTModel *newModel = [[AQTModel alloc] initWithSize:canvasSize];
-  [self setModel:newModel];
-  [newModel release];
-  _modelRefNumber = refNum;
-  _modelIsDirty = NO;
-  if (title)
-  {
-    [[self model] setTitle:title];
-  }
-  else
-  {
-    [[self model] setTitle:[NSString stringWithFormat:@"Figure %d", refNum]];
-    NSLog(@"Using default title");
-  }
-  */
+  [self setBuilder:[[AQTPlotBuilder alloc] init]];
+  [_builder setSize:canvasSize];
+  [_builder setTitle:title?title:[NSString stringWithFormat:@"Figure %d", refNum]];
   NS_DURING
     [_handler selectView:refNum];
   NS_HANDLER
