@@ -38,6 +38,11 @@
   [super dealloc];
 }
 
+-(NSString *)description
+{
+  return [NSString stringWithFormat:@"%@\nwith string:\n%@", [super description], [string description]];
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
   [super encodeWithCoder:coder];

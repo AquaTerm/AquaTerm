@@ -103,6 +103,7 @@
 {
 
    AQTAdapter *adapter = [[AQTAdapter alloc] initWithServer:self];
+  NSMutableAttributedString *tmpStr = [[NSMutableAttributedString alloc] initWithString:@"Fancy string!"];
    NSPoint polygon[5];
    char bytes[12]={
       255, 0, 0,
@@ -123,6 +124,9 @@
    [adapter addLabel:@"Left" position:NSMakePoint(200,160) angle:0.0 justification:0];
    [adapter addLabel:@"Center" position:NSMakePoint(200,150) angle:0.0 justification:1];
    [adapter addLabel:@"Right" position:NSMakePoint(200,170) angle:0.0 justification:2];
+   [tmpStr addAttribute:@"AQTFancyAttribute" value:@"superscript" range:NSMakeRange(3,5)];
+   [adapter addLabel:tmpStr position:NSMakePoint(100,100) angle:0.0 justification:2];
+   
 /*
  for(i=0; i<1000; i++)
    {

@@ -237,22 +237,26 @@
 {
   NSMutableAttributedString *tmpString = [[NSMutableAttributedString alloc] initWithAttributedString:string];
   NSSize boundingBox;
-  int i, l = [tmpString length];
+    int i, l = [tmpString length];
   float xScale = boundsRect.size.width/canvasSize.width; // get scale changes wrt max size
   float yScale = boundsRect.size.height/canvasSize.height;
   float fontScale = sqrt(0.5*(xScale*xScale + yScale*yScale));
+  float fontsize = [[[string attributesAtIndex:0 effectiveRange:nil] objectForKey:@"AQTFontsizeKey"] floatValue];
+  NSFont *tmpFont = [NSFont fontWithName:[[string attributesAtIndex:0 effectiveRange:nil] objectForKey:@"AQTFontnameKey"]
+                                    size:fontsize];
   //
   // Scale the string FIXME: Speed up by using effective range!
   //
-  for (i=0;i<l;i++)
+/*
+ for (i=0;i<l;i++)
   {
-    NSFont *tmpFont = [[tmpString attributesAtIndex:i effectiveRange:nil] objectForKey:NSFontAttributeName];
     [tmpString addAttribute:NSFontAttributeName
                       value:[NSFont fontWithName:[tmpFont fontName] size:MAX([tmpFont pointSize]*fontScale, AQT_MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
   }
+  */
+  [tmpString addAttribute:NSFontAttributeName value:tmpFont range:NSMakeRange(0, [tmpString length])];
   boundingBox = [tmpString size];
-if (fabsf(angle)>1)
-{
+  {
   NSAffineTransform *transf = [NSAffineTransform transform];
   NSGraphicsContext *context = [NSGraphicsContext currentContext];
   //
@@ -265,11 +269,7 @@ if (fabsf(angle)>1)
   [transf concat];
   [tmpString drawAtPoint:NSMakePoint(0,0)];
   [context restoreGraphicsState];
-}
-else
-{
-   [tmpString drawAtPoint:position];
-}
+  }
   [tmpString release];
 }
 @end

@@ -71,7 +71,7 @@ enum {
 - (void)setFontname:(NSString *)newFontname;
 - (float)fontsize;
 - (void)setFontsize:(float)newFontsize;
-- (void)addLabel:(NSString *)text position:(NSPoint)pos angle:(float)angle justification:(int)just;
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just;
 
   /*" Line handling "*/
 - (float)linewidth;

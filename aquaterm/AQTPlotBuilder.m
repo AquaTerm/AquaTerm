@@ -25,11 +25,12 @@
     [self setModel:nilModel];
     [nilModel release];
     _modelIsDirty = NO;
+    _labelAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Times-Roman", @"AQTFontnameKey", [NSNumber numberWithFloat:18.0], @"AQTFontsizeKey", nil];
     _color.red = 0.0;
     _color.green = 0.0;
     _color.blue = 0.0;
-    _fontname = @"Times-Roman";
-    _fontsize = 18.0;
+//    _fontname = @"Times-Roman";
+//    _fontsize = 18.0;
     _linewidth = .2;    
   }
   return self;
@@ -102,27 +103,32 @@
 
 - (NSString *)fontname
 {
-  return _fontname;
+  return [_labelAttributes objectForKey:@"AQTFontnameKey"];
 }
 
 - (void)setFontname:(NSString *)newFontname
 {
-  if (_fontname != newFontname)
+  [_labelAttributes setObject:newFontname forKey:@"AQTFontnameKey"];
+/*
+ if (_fontname != newFontname)
   {
     NSString *oldValue = _fontname;
     _fontname = [newFontname retain];
     [oldValue release];
   }
+*/
 }
 
 - (float)fontsize
 {
-  return _fontsize;
+  return [[_labelAttributes objectForKey:@"AQTFontsizeKey"] floatValue];
 }
 
 - (void)setFontsize:(float)newFontsize
 {
-  _fontsize = newFontsize;
+//  _fontsize = newFontsize;
+  [_labelAttributes setObject:[NSNumber numberWithFloat:newFontsize] forKey:@"AQTFontsizeKey"];
+
 }
 
 - (float)linewidth
@@ -153,13 +159,35 @@
 //
 // AQTLabel
 //
-- (void)addLabel:(NSString *)text position:(NSPoint)pos angle:(float)angle justification:(int)just
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just
 {
-  AQTLabel *lb = [[AQTLabel alloc] initWithAttributedString:[[[NSAttributedString  alloc] initWithString:text] autorelease]
-                                                   position:pos
-                                                      angle:angle
-                                              justification:just];
+  AQTLabel *lb;
+  if ([text isKindOfClass:[NSString class]])
+  {
+    NSAttributedString *tmpStr = [[NSAttributedString  alloc] initWithString:text
+                                                                  attributes:_labelAttributes];
+    lb = [[AQTLabel alloc] initWithAttributedString:tmpStr
+                                           position:pos
+                                              angle:angle
+                                      justification:just];
+  }
+  else
+  {
+    if ([text isKindOfClass:[NSAttributedString class]])
+    {
+      [text addAttributes:_labelAttributes range:NSMakeRange(0, [text length])];
+      lb = [[AQTLabel alloc] initWithAttributedString:text
+                                             position:pos
+                                                angle:angle
+                                        justification:just];
+    }
+    else
+    {
+      NSLog(@"Error, not a string.");
+    }
+  }
   [_model addObject:lb];
+  NSLog([lb description]);
   [lb release];
   _modelIsDirty = YES;
 }

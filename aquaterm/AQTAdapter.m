@@ -226,7 +226,7 @@ error handling callback function for the client.
 }
 
 
-- (void)addLabel:(NSString *)text position:(NSPoint)pos angle:(float)angle justification:(int)just
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just
 {
   [_selectedBuilder addLabel:text position:pos angle:angle justification:just];
 }
