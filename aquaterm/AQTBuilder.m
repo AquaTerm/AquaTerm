@@ -12,7 +12,7 @@
 #import "AQTModel.h"
 #import "AQTImage.h"
 #import "AQTColorMap.h"
-#import "GPTController.h"
+#import "AQTController.h"
 
 #import "AQTView.h"
 
