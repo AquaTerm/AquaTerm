@@ -263,7 +263,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
             break;
       }
       [tmpPath moveToPoint:drawPos];
-      if ([attrDict objectForKey:@"AQTPrintingChar"] == nil || [[attrDict objectForKey:@"AQTPrintingChar"] intValue] ==1)
+      if ([attrDict objectForKey:@"AQTNonPrintingChar"] == nil || [[attrDict objectForKey:@"AQTNonPrintingChar"] intValue] == 0)
          [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
       [tmpPath moveToPoint:pos];      
       subscriptState = newSubscriptState;
@@ -274,22 +274,31 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 }
 @end
 
-
+/* This function appends the attributed string to a bezierPath. The following string attributes are honored:
+ * AQTFontname - overrides defaultFontName (NSString)
+ * AQTFontsize - overrides defaultFontSize (float)
+ * NSSuperscript - superscript level (int) [..., -1, 0, 1, ...], negative for subscript FIXME: AQTSuperscript
+ * NSUnderline - underline text (int) {0, 1} FIXME: AQTUnderline
+ * AQTBaselineAdjust - move baseline relative to glyph height (float) <0 below and 0> above baseline
+ * AQTNonPrintingChar - if defined and 1 char will not be drawn, only occupy space (int) {0, 1}
+ *
+ * If Symbol font is specified (defaultFont or as attribute), automatic conversion to Unicode is performed. FIXME: selectable 
+*/
 NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int *i, int sublevel, NSPoint pos, float fontScale)
 {
    static float maxRight = 0.0;
+   static NSPoint underlineLeftPoint;
    NSString *text = [attrString string];
    NSPoint subPos = pos;
    BOOL extendsRight = NO;
+   BOOL underlining = NO;
    int strLen = [text length];
    float glyphHeight = defaultFontSize * fontScale;
    int attributedSublevel = 0;
    float baselineOffset = 0.0;
     
    while (*i < strLen) {
-      //
       // Read attributes
-      // 
       NSDictionary *attributes = [attrString attributesAtIndex:*i effectiveRange:nil];
       NSString *attributedFontname = ([attributes objectForKey:@"AQTFontname"] != nil)?
          [attributes objectForKey:@"AQTFontname"]:
@@ -303,8 +312,10 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
       float baselineAdjust = ([attributes objectForKey:@"AQTBaselineAdjust"] != nil)?
          [[attributes objectForKey:@"AQTBaselineAdjust"] floatValue]:
          0.0;
-      BOOL isVisible = ([attributes objectForKey:@"AQTPrintingChar"] == nil 
-         || [[attributes objectForKey:@"AQTPrintingChar"] intValue] == 1);
+      BOOL isVisible = ([attributes objectForKey:@"AQTNonPrintingChar"] == nil 
+         || [[attributes objectForKey:@"AQTNonPrintingChar"] intValue] == 0);
+      BOOL newUnderlining = ([attributes objectForKey:@"NSUnderline"] != nil 
+                        && [[attributes objectForKey:@"NSUnderline"] intValue] == 1);
       if (attributedSublevel == sublevel) {
          NSFont *aFont;
          unichar theChar;
@@ -319,13 +330,25 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
          }
          // Get the glyph
          theGlyph = [aFont _defaultGlyphForChar:theChar];
+         // Adjust glyph position
+         glyphHeight = [aFont boundingRectForGlyph:theGlyph].size.height;
          if (extendsRight)
             pos.x = maxRight;         
-         glyphHeight = [aFont boundingRectForGlyph:theGlyph].size.height;
          baselineOffset = glyphHeight*baselineAdjust;
+         // check underlining
+         if (underlining) {
+            if (!newUnderlining) 
+               [path appendBezierPathWithRect:NSMakeRect(underlineLeftPoint.x, underlineLeftPoint.y-1.0, pos.x-underlineLeftPoint.x, 0.5)];
+         } else {
+            if (newUnderlining)
+               underlineLeftPoint = pos;
+         }
+         underlining = newUnderlining;
          [path moveToPoint:NSMakePoint(pos.x, pos.y+baselineOffset)];
+         // render glyph
          if (isVisible)
             [path appendBezierPathWithGlyph:theGlyph inFont:aFont];
+         // advance position
          pos.x += [aFont advancementForGlyph:theGlyph].width;
          [path moveToPoint:pos];
          maxRight = MAX(pos.x, maxRight);
