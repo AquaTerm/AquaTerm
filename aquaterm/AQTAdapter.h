@@ -30,8 +30,10 @@
   NSPoint _path[256];
   int _pointCount;
   BOOL _modelIsDirty;
+  void (*_errorHandler)(NSString *msg);
 }
 - (id)initWithHandler:(id)localHandler;
+- (void)setErrorHandler:(void (*)(NSString *msg))fPtr;
 - (AQTColor)color;
 - (void)setColorRed:(float)r green:(float)g blue:(float)b;
 - (void)setColor:(AQTColor)newColor;

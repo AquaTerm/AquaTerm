@@ -7,6 +7,7 @@
 //
 
 // FIXME: Use only C types, and improve method names.
+#import <ApplicationServices/ApplicationServices.h>
 
 #import "AQTAdapter.h"
 #import "AQTGraphic.h"
@@ -20,6 +21,8 @@
 
 @interface AQTAdapter (AQTAdapterPrivateMethods)
 - (BOOL)_connectToServer;
+- (BOOL)_launchServer;
+- (void)_serverError;
 @end
 
 @implementation AQTAdapter
@@ -36,7 +39,7 @@
     procId = [[NSProcessInfo processInfo] globallyUniqueString];
     NSLog(@"procUniqueId: %@\nprocName: %@\nprocId: %d", uniqueId, procName, procId);
     // Default values:
-    
+
     _color.red = 0.0;
     _color.green = 0.0;
     _color.blue = 0.0;
@@ -49,12 +52,19 @@
     }
     else
     {
-     // BOOL test = [self _connectToServer];
+      // BOOL test = [self _connectToServer];
       if([self _connectToServer])
       {
-        _handler = [_server addAQTClientWithId:uniqueId name:procName pid:procId];
-        [_handler retain];
-        [_handler setProtocolForProxy:@protocol(AQTClientProtocol)];        
+        NS_DURING
+          _handler = [_server addAQTClientWithId:uniqueId name:procName pid:procId];
+          [_handler retain];
+          [_handler setProtocolForProxy:@protocol(AQTClientProtocol)];
+        NS_HANDLER
+          if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+            [self _serverError];
+          else
+            [localException raise];
+        NS_ENDHANDLER
       }
       else
       {
@@ -75,7 +85,14 @@
 - (void)dealloc
 {
   NSLog(@"byebye from adapter %@", uniqueId);
-  [_server removeAQTClientWithId:uniqueId]; // Where to place this???
+  NS_DURING
+    [_server removeAQTClientWithId:uniqueId]; // Where to place this???
+  NS_HANDLER
+//    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] ||Ê[[localException name] isEqualToString:NSObjectInaccessibleException])
+      NSLog(@"NOOP");
+//    else
+//      [localException raise];
+  NS_ENDHANDLER
   [_handler release];
   [_server release];
   [uniqueId release];
@@ -84,6 +101,10 @@
   [super dealloc];
 }
 
+- (void)setErrorHandler:(void (*)(NSString *msg))fPtr
+{
+  _errorHandler = fPtr;
+}
 - (void)setModel:(AQTModel *)newModel
 {
   [newModel retain];
@@ -216,9 +237,9 @@
   _modelIsDirty = YES;
 
 }
-  //
-  // Control operations
-  //
+//
+// Control operations
+//
 - (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title // if title param is nil, title defaults to Figure <n>
 {
   AQTModel *newModel = [[AQTModel alloc] initWithSize:canvasSize];
@@ -235,7 +256,15 @@
     [[self model] setTitle:[NSString stringWithFormat:@"Figure %d", refNum]];
     NSLog(@"Using default title");
   }
-  [_handler selectView:refNum];
+  NS_DURING
+    [_handler selectView:refNum];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self _serverError];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+
 }
 - (void)closePlot
 {
@@ -243,35 +272,56 @@
   // don't set model unless necessary -- just release the local
   if (_modelIsDirty)
   {
-    [_handler setModel:_model];	// the renderer will retain this object
+    NS_DURING
+      [_handler setModel:_model];	// the renderer will retain this object
+    NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+        [self _serverError];
+      else
+        [localException raise];
+    NS_ENDHANDLER
     _modelIsDirty = NO;
   }
 }
 - (void)render //(push [partial] model to renderer)
 {
   // FIXME: if model hasn't changed, don't update!!!
-  if (_modelIsDirty)
-  {
-   [_handler setModel:_model];	// the renderer will retain this object
-    _modelIsDirty = NO;
-  }
-  else
-  {
-    [_handler setModel:_model];	// the renderer will retain this object
-      NSLog(@"*** Error -- trying to render non-dirty model ***");     
-  }
+  NS_DURING
+    if (_modelIsDirty)
+    {
+      [_handler setModel:_model];	// the renderer will retain this object
+      _modelIsDirty = NO;
+    }
+    else
+    {
+      [_handler setModel:_model];	// the renderer will retain this object
+      NSLog(@"*** Error -- trying to render non-dirty model ***");
+    }
+    NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+        [self _serverError];
+      else
+        [localException raise];
+    NS_ENDHANDLER
 }
 - (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options
 {
-   char keyPressed;
-   [_handler beginMouse];
-   do
-   {
+  char keyPressed;
+  NS_DURING
+    [_handler beginMouse];
+    do
+    {
       // Sleep this thread for .1 s at a time. FIXME: Will not work if non-DO client
       [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
-   } while (![_handler mouseIsDone]);
-   keyPressed = [_handler mouseDownInfo:mouseLoc];
-   return keyPressed;
+    } while (![_handler mouseIsDone]);
+    keyPressed = [_handler mouseDownInfo:mouseLoc];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self _serverError];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+  return keyPressed;
 }
 @end
 
@@ -280,16 +330,102 @@
 {
   BOOL didConnect = NO;
   _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-  if (_server)
-  {
-    [_server retain];
-    [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
-    didConnect = YES;
+    if (!_server)
+/*
+ {
+      [_server retain];
+      [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
+      didConnect = YES;
+    }
+    else
+ */
+    {
+      NSLog(@"Launching server...");
+      if (![self _launchServer])
+      {
+        NSLog(@"Launching failed.");
+      }
+      else
+      {
+        // Wait for server to start up
+        int timer = 10;
+        while (--timer && !didConnect)
+        {
+          // sleep 1s
+          NSLog(@"Waiting...");
+          [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+          // check for server connection
+          _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+        }
+      }
+    }
+  NS_DURING
+    if (_server)
+    {
+      if ([_server conformsToProtocol:@protocol(AQTConnectionProtocol)])
+      {
+        NSLog(@"Conforming!");
+        [_server retain];
+        [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
+        didConnect = YES;
+      }
+      else
+      {
+        NSLog(@"server is too old info");
+        _server = nil;
+      }
+    }    
+    NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+        [self _serverError];
+      else
+        [localException raise];
+    NS_ENDHANDLER
+    NSLog(didConnect?@"Connected!":@"Not connected");
+    return didConnect;
+}
+
+// This is still troublesome... Needs to figure out if user is running from remote machine. NSTask
+- (BOOL)_launchServer
+{
+  NSURL *appURL;
+
+  if (getenv("AQUATERM_PATH") == (char *)NULL)
+  { // No, search for it in standard locations
+    NSURL *tmpURL;
+    appURL = (LSFindApplicationForInfo(NULL, NULL, (CFStringRef)@"AquaTerm.app", NULL, (CFURLRef *)&tmpURL) == noErr)?tmpURL:nil;
   }
   else
   {
-    NSLog(@"server not running!");
+    appURL = [NSURL fileURLWithPath:[NSString stringWithCString:getenv("AQUATERM_PATH")]];
+    // Setting error msg if anything goes wrong
   }
-  return didConnect;
+  return (LSOpenCFURLRef((CFURLRef)appURL, NULL) == noErr);
+}
+
+- (void)_serverError
+{
+  // NSLog(@"Caugth an error!");
+  if (_errorHandler)
+  {
+    _errorHandler(@"Server unavailable --- passing on.");
+  }
+  else
+  {
+    NSLog(@"Server error, no handler installed\nTrying to reconnect");
+    if([self _connectToServer])
+    {
+      NS_DURING
+        _handler = [_server addAQTClientWithId:uniqueId name:procName pid:procId];
+        [_handler retain];
+        [_handler setProtocolForProxy:@protocol(AQTClientProtocol)];
+      NS_HANDLER
+        if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+          [self _serverError];
+        else
+          [localException raise];
+      NS_ENDHANDLER
+    }    
+  }
 }
 @end
