@@ -13,85 +13,78 @@
 #import "AQTPlotBuilder.h"
 
 @implementation AQTPlot
--(id)initWithModel:(AQTModel *)aModel 
-{
-  
-  if (self = [super init])
-  {
-    [self setModel:aModel];
-    [self setClientInfoName:@"No connection" pid:-1];
-    [self setAcceptingEvents:NO];
-    [self setLastEvent:@"0"];
-    [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
-  }
-  return self;
-}
-
 -(id)init
 {
-   AQTModel *aModel = [[[AQTModel alloc] init] autorelease];
-   return [self initWithModel:aModel]; 
+   if (self = [super init])
+   {
+      [self setClientInfoName:@"No connection" pid:-1];
+      [self setAcceptingEvents:NO];
+      [self setLastEvent:@"0"];
+      [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
+   }
+   return self;
 }
 
 -(void)_aqtSetupView
 {
-  NSSize tmpSize = [model canvasSize];
-  [viewOutlet setModel:model];
-  [viewOutlet setFrameOrigin:NSMakePoint(0.0, 0.0)];
-  if (_clientPID != -1)
-  {
-    [[viewOutlet window] setTitle:[NSString stringWithFormat:@"%@ (%d) %@", _clientName, _clientPID, [model title]]];
-  }
-  else
-  {
-    [[viewOutlet window] setTitle:[model title]];
-  }
-  [[viewOutlet window] setContentSize:tmpSize];
-  [[viewOutlet window] setAspectRatio:tmpSize];
-  [[viewOutlet window] setMaxSize:NSMakeSize(tmpSize.width*2, tmpSize.height*2)];
-  [[viewOutlet window] setMinSize:NSMakeSize(tmpSize.width/4, tmpSize.height/4)];
-  [viewOutlet setNeedsDisplay:YES];
+   NSSize tmpSize = [model canvasSize];
+   [canvas setModel:model];
+   [canvas setFrameOrigin:NSMakePoint(0.0, 0.0)];
+   if (_clientPID != -1)
+   {
+      [[canvas window] setTitle:[NSString stringWithFormat:@"%@ (%d) %@", _clientName, _clientPID, [model title]]];
+   }
+   else
+   {
+      [[canvas window] setTitle:[model title]];
+   }
+   [[canvas window] setContentSize:tmpSize];
+   [[canvas window] setAspectRatio:tmpSize];
+   [[canvas window] setMaxSize:NSMakeSize(tmpSize.width*2, tmpSize.height*2)];
+   [[canvas window] setMinSize:NSMakeSize(tmpSize.width/4, tmpSize.height/4)];
+   [canvas setNeedsDisplay:YES];
+   [[canvas window] setIsVisible:YES];
 }
 
 -(void)awakeFromNib
 {
-  if (model)
-  {
-    [self _aqtSetupView];
-  }
-  _isWindowLoaded = YES;
+   if (model)
+   {
+      [self _aqtSetupView];
+   }
+   _isWindowLoaded = YES;
 }
 
 -(void)dealloc
 {
    NSLog(@"Over and out from AQTPlot!");
-  [model release];
-  [_clientName release];
-    [lastEvent release];
-  [super dealloc];
+   [model release];
+   [_clientName release];
+   [lastEvent release];
+   [super dealloc];
 }
 
 /*" Accessor methods for the AQTView instance "*/
--(id)viewOutlet
+-(id)canvas
 {
-  return viewOutlet;
+   return canvas;
 }
 
 -(AQTModel *)model
 {
-  return model;
+   return model;
 }
 
 -(void)setModel:(AQTModel *)newModel
 {
-  [newModel retain];
-  [model release];		// let go of any temporary model not used (unlikely)
-  model = newModel;		// Make it point to new model
-  
-  if (_isWindowLoaded)
-  {
-    [self _aqtSetupView];
-  }
+   [newModel retain];
+   [model release];		// let go of any temporary model not used (unlikely)
+   model = newModel;		// Make it point to new model
+
+   if (_isWindowLoaded)
+   {
+      [self _aqtSetupView];
+   }
 }
 
 -(BOOL)invalidateClient:(id)aClient
@@ -102,6 +95,7 @@
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];
+      [[canvas window] setTitle:[model title]];
       return YES;
    }
    return NO;
@@ -125,151 +119,151 @@
 -(void)setAcceptingEvents:(BOOL)flag
 {
    _acceptingEvents = flag && (_client != nil);
-   [viewOutlet setIsProcessingEvents:_acceptingEvents];
-  [self setLastEvent:@"0"];
+   [canvas setIsProcessingEvents:_acceptingEvents];
+   [self setLastEvent:@"0"];
 }
 
 - (NSString *)lastEvent
 {
-  return lastEvent;
+   return lastEvent;
 }
 
 -(void)setLastEvent:(NSString *)event
 {
-  [event retain];
-  [lastEvent autorelease];	
-  lastEvent = event;
-  // Also inform client
-  if(_acceptingEvents)
-  {
-    NS_DURING
-      [_client processEvent:event];
-    NS_HANDLER
-      NSLog([localException name]);
-      if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
-        [self invalidateClient:_client]; // invalidate client
-      else
-        [localException raise];
-    NS_ENDHANDLER
-  }
+   [event retain];
+   [lastEvent autorelease];
+   lastEvent = event;
+   // Also inform client
+   if(_acceptingEvents)
+   {
+      NS_DURING
+         [_client processEvent:event];
+      NS_HANDLER
+         NSLog([localException name]);
+         if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
+            [self invalidateClient:_client]; // invalidate client
+         else
+            [localException raise];
+      NS_ENDHANDLER
+   }
 }
 
 #pragma mark === Delegate methods ===
 - (void)windowWillClose:(NSNotification *)notification
 {
-  // FIXME: What to do when a valid client still exists?
-  // Quite OK since client still retains AQTPlot instance, will however release it when finished =>
-  // => orphaned window
+   // FIXME: What to do when a valid client still exists?
+   // Quite OK since client still retains AQTPlot instance, will however release it when finished =>
+   // => orphaned window ?
 
-  [[NSApp delegate] removePlot:self];
+   [[NSApp delegate] removePlot:self];
 }
 
 
 -(void)close
 {
-  NSLog(@"close");
+   NSLog(@"close");
 }
 
 #pragma mark === Menu actions ===
 
 - (IBAction)copy:(id)sender
 {
-  NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-  AQTView *printView;
+   NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+   AQTView *printView;
 
-  printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
-  [printView setModel:model];
-  //[printView setIsPrinting:YES];
-  [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];
+   printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
+   [printView setModel:model];
+   //[printView setIsPrinting:YES];
+   [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];
 
-  [pasteboard setData:[printView dataWithPDFInsideRect:[printView bounds]] forType:NSPDFPboardType];
-  [pasteboard setData:[printView dataWithEPSInsideRect:[printView bounds]] forType:NSPostScriptPboardType];
-  [printView release];
+   [pasteboard setData:[printView dataWithPDFInsideRect:[printView bounds]] forType:NSPDFPboardType];
+   [pasteboard setData:[printView dataWithEPSInsideRect:[printView bounds]] forType:NSPostScriptPboardType];
+   [printView release];
 }
 
 - (void)printOperationDidRun:(NSPrintOperation *)printOperation success:(BOOL)success  contextInfo:(AQTView *)printView
 {
-  //[printView setIsPrinting:NO];
+   //[printView setIsPrinting:NO];
 }
 
 -(IBAction)printDocument:(id)sender
 {
-  AQTView *printView;
-  NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; // [self printInfo];
-  NSSize paperSize = [printInfo paperSize];
-  NSPrintOperation *printOp;
+   AQTView *printView;
+   NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; // [self printInfo];
+   NSSize paperSize = [printInfo paperSize];
+   NSPrintOperation *printOp;
 
-  paperSize.width -= ([printInfo leftMargin] + [printInfo rightMargin]);
-  paperSize.height -= ([printInfo topMargin] + [printInfo bottomMargin]);
-  if ([printInfo orientation] == NSPortraitOrientation)
-  {
-    paperSize.height = ([model canvasSize].height * paperSize.width) / [model canvasSize].width;
-  }
-  else
-  {
-    paperSize.width = ([model canvasSize].width * paperSize.height) / [model canvasSize].height;
-  }
+   paperSize.width -= ([printInfo leftMargin] + [printInfo rightMargin]);
+   paperSize.height -= ([printInfo topMargin] + [printInfo bottomMargin]);
+   if ([printInfo orientation] == NSPortraitOrientation)
+   {
+      paperSize.height = ([model canvasSize].height * paperSize.width) / [model canvasSize].width;
+   }
+   else
+   {
+      paperSize.width = ([model canvasSize].width * paperSize.height) / [model canvasSize].height;
+   }
 
-  printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
-  [printView setModel:model];
-  //[printView setIsPrinting:YES];
+   printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
+   [printView setModel:model];
+   //[printView setIsPrinting:YES];
 
-  printOp = [NSPrintOperation printOperationWithView:printView];
-  (void)[printOp runOperationModalForWindow:[viewOutlet window]
-                                   delegate:self
-                             didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
-                                contextInfo:printView];
-  [printView release];
+   printOp = [NSPrintOperation printOperationWithView:printView];
+   (void)[printOp runOperationModalForWindow:[canvas window]
+                                    delegate:self
+                              didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
+                                 contextInfo:printView];
+   [printView release];
 }
 
 - (IBAction)saveDocumentAs:(id)sender
 {
-  NSSavePanel *savePanel = [NSSavePanel savePanel];
-  NSLog(@"Hello from save");
-/*
-  if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])
-  {
-    NSLog(@"Failed to load ExtendSavePanel.nib");
-    return;
-  }
-  [savePanel setAccessoryView:extendSavePanelView];
- */
-  [savePanel beginSheetForDirectory:NSHomeDirectory()
-                               file:[[viewOutlet window] title]
-                     modalForWindow:[viewOutlet window]
-                      modalDelegate:self
-                     didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
-                        contextInfo:nil //saveFormatPopup
-    ];
+   NSSavePanel *savePanel = [NSSavePanel savePanel];
+   NSLog(@"Hello from save");
+   /*
+    if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])
+    {
+       NSLog(@"Failed to load ExtendSavePanel.nib");
+       return;
+    }
+    [savePanel setAccessoryView:extendSavePanelView];
+    */
+   [savePanel beginSheetForDirectory:NSHomeDirectory()
+                                file:[[canvas window] title]
+                      modalForWindow:[canvas window]
+                       modalDelegate:self
+                      didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
+                         contextInfo:nil //saveFormatPopup
+      ];
 }
 
 - (void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(NSPopUpButton *)formatPopUp
 {
-  NSData *data;
-  NSString *filename;
-  AQTView *printView;
-  if (NSFileHandlingPanelOKButton == returnCode)
-  {
-    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
-    [printView setModel:model];
-    //[printView setIsPrinting:YES];
-    filename = [[theSheet filename] stringByDeletingPathExtension];
-/*
- if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
-    {
+   NSData *data;
+   NSString *filename;
+   AQTView *printView;
+   if (NSFileHandlingPanelOKButton == returnCode)
+   {
+      printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
+      [printView setModel:model];
+      //[printView setIsPrinting:YES];
+      filename = [[theSheet filename] stringByDeletingPathExtension];
+      /*
+       if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
+       {
+          data = [printView dataWithPDFInsideRect: [printView bounds]];
+          [data writeToFile: [filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
+       }
+       else
+       {
+          data = [printView dataWithEPSInsideRect: [printView bounds]];
+          [data writeToFile: [filename stringByAppendingPathExtension:@"eps"] atomically: NO];
+       }
+       */
       data = [printView dataWithPDFInsideRect: [printView bounds]];
       [data writeToFile: [filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
-    }
-    else
-    {
-      data = [printView dataWithEPSInsideRect: [printView bounds]];
-      [data writeToFile: [filename stringByAppendingPathExtension:@"eps"] atomically: NO];
-    }
- */
-    data = [printView dataWithPDFInsideRect: [printView bounds]];
-    [data writeToFile: [filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
-    
-    [printView release];
-  }
+
+      [printView release];
+   }
 }
 @end

@@ -13,7 +13,7 @@
 @class AQTModel, AQTView, AQTPlotBuilder;
 @interface AQTPlot : NSObject <AQTClientProtocol>
 {
-  IBOutlet AQTView *viewOutlet;	/*" Points to the rendering view "*/
+  IBOutlet AQTView *canvas;	/*" Points to the rendering view "*/
   AQTModel	*model;		/*" Holds the model for the view "*/
   BOOL _isWindowLoaded;
   BOOL _acceptingEvents;
@@ -22,9 +22,7 @@
   NSString *_clientName;
   NSString *lastEvent;
 }
--(id)initWithModel:(AQTModel *)aModel; // FIXME: Good idea to init _with_ model?
-
--(id)viewOutlet;
+-(id)canvas;
 -(void)setModel:(AQTModel *)newModel;
 -(void)setClient:(id)client;
 -(void)setClientInfoName:(NSString *)name pid:(int)pid;
