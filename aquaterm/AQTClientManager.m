@@ -98,6 +98,7 @@
 
 - (BOOL)connectToServer
 {
+   // FIXME: Check to see if _server exists.
    BOOL didConnect = NO;
    _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
    if (!_server)
