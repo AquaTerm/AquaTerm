@@ -1,4 +1,15 @@
+//
+// Since this header file is used outside of AquaTerm too,
+// the internal version number is defined explicitly here
+//
+#define AQTProtocolVersion 0.2.0
+
 @protocol AQTProtocol
+//
+// Return a version number string for AquaTerm in the form #.#.#
+// corresponding to major_version.minor_version.bugfix_version
+//
+- (bycopy NSDictionary *) getAquaTermInfo;
 //
 // Render the current model, argument is normally YES unless
 // this is part of a multiplot operation with subsequent 

@@ -25,4 +25,5 @@
 -(GPTWindowController *)controllerForView:(unsigned)index;
 -(void)setFrontWindow:(NSWindow *)mainWindow;
 -(IBAction)print:(id)sender; 
+-(IBAction)debugInfo:(id)sender;
 @end

@@ -10,7 +10,7 @@
 @implementation GPTReceiverObject
     /**" 
     *** GPTReceiverObject is the class controlling the DO connection.
-    *** It creates an NSConnection and register the service "gnuplotServer"
+    *** It creates an NSConnection and register the service "aquatermServer"
     *** with the system. 
     "**/
 
@@ -20,6 +20,7 @@
     {
         listener = listeningObject;	// set reference to the object listening (GPTController)
         gptModel = [[GPTModel alloc] init];
+        currentFont = [[NSFont fontWithName:@"Times-Roman" size:16.0] retain];
         currentFigure = 0;
         gptConnection = [[NSConnection defaultConnection] retain];
         [gptConnection setRootObject:self];
@@ -35,9 +36,13 @@
 {
     [gptConnection release];
     [gptModel release];
+    [currentFont release];
     [super dealloc];
 }
-
+- (NSConnection *)connection
+{
+  return gptConnection;
+}
 //
 // -----------------------------------------------------------------
 //                                                                   
@@ -45,6 +50,22 @@
 //              
 // -----------------------------------------------------------------
 //
+//
+
+    /*" Return a info about AquaTerm settings "*/
+- (bycopy NSDictionary *) getAquaTermInfo
+{
+    //
+    // FiXME: These are _app_ settings, not to be set here!
+    // 
+    NSMutableDictionary *tmpDict = [NSMutableDictionary dictionaryWithObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"AQTVersion"];
+    [tmpDict setObject:[NSNumber numberWithFloat:AQUA_XMAX] forKey:@"AQTXMax"];                                      
+    [tmpDict setObject:[NSNumber numberWithFloat:AQUA_YMAX] forKey:@"AQTYMax"];                                      
+    //
+    // Get hold of app settings and return them
+    //
+    return tmpDict;
+}
 
     /*" Render the current model (graph) in the current window. 
     If the model is part of a multiplot the flag is set to NO. "*/
@@ -63,7 +84,7 @@
                      withJustification:(bycopy int)justification 
                      withIndexedColor:(bycopy int)colorIndex
 {
-	NSDictionary *attrs = [NSDictionary dictionaryWithObject:[NSFont fontWithName:@"Times-Roman" size:16.0] forKey:NSFontAttributeName];
+    NSDictionary *attrs = [NSDictionary dictionaryWithObject:currentFont forKey:NSFontAttributeName];
 	//
 	// FIXME: The current attributes should be stored locally and [currentAttrs copy] used for last arg. below
 	// 
@@ -78,9 +99,24 @@
     
 }
     /*" Set the font to be used. Not implemented. "*/
-- (oneway void) setFontWithName:(bycopy NSString *)fontName size:(bycopy float)fontSize;
-{
-    NSLog(@"Not implemented: setFontWithName:%@ size:%f 4.1", fontName, fontSize);
+- (oneway void) setFontWithName:(bycopy NSString *)newFontName size:(bycopy float)newFontSize;
+{   
+    //
+    // FIXME: Sanity check here, please!
+    //
+    NSFont *newFont;
+    NSMutableArray *allFonts = [NSMutableArray arrayWithCapacity:0];
+    [allFonts setArray:[[NSFontManager sharedFontManager] availableFonts]];
+    if ([allFonts containsObject:newFontName])
+    {
+      newFont = [NSFont fontWithName:newFontName size:newFontSize];    
+    }
+    else
+    {
+      newFont = [NSFont systemFontOfSize:newFontSize];
+    }
+    [currentFont release];
+    currentFont = newFont;
 }
 
     /*" Add a path to the model currently being built "*/

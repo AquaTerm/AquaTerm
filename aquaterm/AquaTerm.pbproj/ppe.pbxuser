@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA = {
-		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA;
+		activeBuildStyle = 4A9504CDFFE6A4B311CA0CBA;
 		activeTarget = 29B97326FDCFA39411CA2CEA;
 		addToTargets = (
 			29B97326FDCFA39411CA2CEA,
@@ -18,7 +18,7 @@
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{1024, 641}";
 				LeftSlideOut = {
-					ActiveTab = 0;
+					ActiveTab = 3;
 					Frame = "{{0, 23}, {1024, 618}}";
 					Split0 = {
 						ActiveTab = 1;
@@ -83,12 +83,12 @@
 						Frame = "{{0, 0}, {200, 100}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {200, 100}}";
+						Frame = "{{0, 0}, {200, 618}}";
 						Split0 = {
-							Frame = "{{0, 0}, {200, 45}}";
+							Frame = "{{0, 0}, {200, 301}}";
 						};
 						Split1 = {
-							Frame = "{{0, 54}, {200, 46}}";
+							Frame = "{{0, 310}, {200, 308}}";
 						};
 						SplitCount = 2;
 					};
@@ -97,7 +97,6 @@
 					};
 					TabCount = 5;
 				};
-				WindowLocation = "{-1, 43}";
 			};
 		};
 		wantsIndex = 1;
@@ -160,6 +159,9 @@
 		isa = PBXFileBreakpoint;
 		lineNumber = 57;
 		state = 1;
+	};
+	F5C4C2B30199DE090143D54F = {
+		activeExec = 0;
 	};
 	F5F637770179799A01EFE54A = {
 		fileReference = F5AB087B0175BC8B01EB16F3;

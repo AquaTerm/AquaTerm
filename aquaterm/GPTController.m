@@ -121,6 +121,12 @@
     "**/
 -(IBAction)print:(id)sender 
 {
+    // FIXME: this is just a printout of the screen image...
     [[NSPrintOperation printOperationWithView:[[frontWindow windowController] viewOutlet]] runOperation];
 }
+-(IBAction)debugInfo:(id)sender
+{
+  NSLog(@"Debug log: %@", [[receiverObject connection] remoteObjects]);
+}
+
 @end
