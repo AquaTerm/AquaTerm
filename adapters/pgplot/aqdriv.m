@@ -144,14 +144,15 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=8, Select plot ----------------------------------------------
 
     case 8:
-      LOG(@"IFUNC=8, Select plot");
+      NSLog(@"IFUNC=8, Select plot: %d", (int)rbuf[0]);
       currentPlot = (int)rbuf[0];
+      [adapter selectPlot:currentPlot];
       break;
 
       //--- IFUNC=9, Open workstation -----------------------------------------
 
     case 9:
-      LOG(@"IFUNC=9, Open workstation");
+      NSLog(@"IFUNC=9, Open workstation");
       //
       // Assign the returned device unit number and success indicator.
       // Assume failure to open until the workstation is open.
@@ -163,7 +164,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       {
         initAdapter();
       }
-      rbuf[0] = 1.0; // The number used to select this device
+      rbuf[0] = 1.0; // The number used to select this device by IFUNC=8 (Select plot)
       rbuf[1] = 1.0;
       *nbuf = 2;
       break;
@@ -171,7 +172,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=10, Close workstation ---------------------------------------
 
     case 10:
-      LOG(@"FUNC=10, Close workstation");
+      NSLog(@"FUNC=10, Close workstation");
       [adapter autorelease];
       adapter = nil;
       [arpool release];
@@ -183,7 +184,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 11:
     {
       int i;
-      LOG(@"IFUNC=11, Begin picture");
+      NSLog(@"IFUNC=11, Begin picture");
       if (!adapter)
       {
         initAdapter();
@@ -231,7 +232,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=14, End picture ---------------------------------------------
 
     case 14:
-      LOG(@"IFUNC=14, End picture");
+      NSLog(@"IFUNC=14, End picture");
       if (rbuf[0] != 0.0)
       {
         // clear screen
