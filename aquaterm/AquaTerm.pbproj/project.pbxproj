@@ -8,6 +8,8 @@
 		080E96DDFE201D6D7F000001 = {
 			children = (
 				F5FEAC1401A6B3CE0143D50D,
+				F5E99A51036446DA01EBD329,
+				F5E99A52036446DA01EBD329,
 				F5B4A77E0222A7D9014110D6,
 			);
 			isa = PBXGroup;
@@ -289,6 +291,8 @@
 				F546B4BF026B199901E9AA65,
 				F546B4C0026B199901E9AA65,
 				F5E3AFAB026D80D2012F88DF,
+				F5E99A55036446EB01EBD329,
+				F5E99A56036446EC01EBD329,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -805,6 +809,28 @@
 		};
 		F5E70372026D8645012F88DF = {
 			fileRef = F5E70370026D8645012F88DF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E99A51036446DA01EBD329 = {
+			isa = PBXFileReference;
+			path = AQTBaseMethods.h;
+			refType = 4;
+		};
+		F5E99A52036446DA01EBD329 = {
+			isa = PBXFileReference;
+			path = AQTExtendedMethods.h;
+			refType = 4;
+		};
+		F5E99A55036446EB01EBD329 = {
+			fileRef = F5E99A51036446DA01EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E99A56036446EC01EBD329 = {
+			fileRef = F5E99A52036446DA01EBD329;
 			isa = PBXBuildFile;
 			settings = {
 			};
