@@ -80,7 +80,7 @@ AQTAdapter *adapter = [sender sharedAdapter];
 [adapter addLineToPoint:NSMakePoint(20,20)];
 [adapter addLabel:@"Frame 600x400 pt" atPoint:NSMakePoint(24,30) angle:0.0 align:AQTAlignLeft];
 // Colormap
-[adapter addLabel:@"Custom colormap (8 out of 256)" atPoint:NSMakePoint(30, 390) angle:0.0 align:AQTAlignLeft];
+[adapter addLabel:@"Custom colormap (8 out of 256)" atPoint:NSMakePoint(30, 385) angle:0.0 align:AQTAlignLeft];
 // Display the colormap, but first create a background for the white box...
 [adapter setColorRed:0.8 green:0.8 blue:0.8];
 [adapter addFilledRect:NSMakeRect(28, 348, 24, 24)];
@@ -97,7 +97,7 @@ for (i=0; i<8; i++)
 }
 // Contiouos colors
 [adapter takeColorFromColormapEntry:1];
-[adapter addLabel:@"\"Any color you like\"" atPoint:NSMakePoint(320, 390) angle:0.0 align:AQTAlignLeft];
+[adapter addLabel:@"\"Any color you like\"" atPoint:NSMakePoint(320, 385) angle:0.0 align:AQTAlignLeft];
 [adapter setLinewidth:1.0];
 for (i=0; i<256; i++)
 {
@@ -111,19 +111,47 @@ for (i=0; i<256; i++)
 }
 
 // Lines
+static float pat[4][4]={{4,2,4,2},{4,2,2,2},{8,4,8,4},{2,2,2,2}};
+
 [adapter takeColorFromColormapEntry:1];
+[adapter addLabel:@"Specify linewidth and pattern" atPoint:NSMakePoint(30, 325)];
 for (f=1.0; f<13.0; f+=2.0)
 {
   float lw = f/2.0;
-  [adapter setLinewidth:lw];
+  [adapter setLinewidth:roundf(lw-.5)];
+  [adapter setLinestylePattern:pat[((int)f)%3] count:4 phase:0.0];
   [adapter moveToPoint:NSMakePoint(30, 200.5+f*10)];
-  [adapter addLineToPoint:NSMakePoint(200, 200.5+f*10)];
-  [adapter addLabel:[NSString stringWithFormat:@"linewidth %3.1f", lw]
-           atPoint:NSMakePoint(210, 201.5+f*10)
-              angle:0.0
-              align:AQTAlignLeft];
+  [adapter addLineToPoint:NSMakePoint(180, 200.5+f*10)];
+}
+[adapter setLinestyleSolid];
+
+// Clip rect
+{
+   NSRect r = NSMakeRect(200, 200, 60, 120);
+   [adapter addLabel:@"Clip rects" atPoint:NSMakePoint(200, 325)];
+   [adapter setColorRed:.9 green:.9 blue:.9];
+   [adapter addFilledRect:r];
+   [adapter setColorRed:0 green:0 blue:0];
+   [adapter setClipRect:r];
+   [adapter addLabel:@"Clipped text. Clipped text. Clipped text." atPoint:NSMakePoint(180, 230) angle:30.0 align:(AQTAlignCenter | AQTAlignMiddle)];
+   [adapter setLinewidth:1.0];
+   for (i=0; i<5; i++)
+   {
+      double radians=(double)i*pi*0.8, r=30.0;
+      points[i]=NSMakePoint(240.0+r*cos(radians), 215.0+r*sin(radians));
+   }
+   [adapter takeColorFromColormapEntry:3];
+   [adapter addPolygonWithVertexPoints:points pointCount:5];
+   [adapter takeColorFromColormapEntry:1];
+   points[5] = points[0];
+   [adapter addPolylineWithPoints:points pointCount:6];
+   [adapter addImageWithBitmap:rgbImage size:NSMakeSize(2,2) bounds:NSMakeRect(190, 280, 50, 50)]; // ClipRect demo
+   [adapter setDefaultClipRect];
+   
+   // ***** Reset clip rect! *****
 }
 // linecap styles
+[adapter setFontsize:8.0];
 [adapter setLinewidth:11.0];
 [adapter takeColorFromColormapEntry:1];
 [adapter setLineCapStyle:AQTButtLineCapStyle];
@@ -156,6 +184,7 @@ for (f=1.0; f<13.0; f+=2.0)
 [adapter takeColorFromColormapEntry:6];
 [adapter moveToPoint:NSMakePoint(40.5, 130.5)];
 [adapter addLineToPoint:NSMakePoint(150.5, 130.5)];
+[adapter setFontsize:12.0];
 
 // line joins
 [adapter takeColorFromColormapEntry:1];
@@ -242,6 +271,7 @@ for (i=0; i<32; i++)
 [adapter addLabel:@"scale, rotate & translate" atPoint:NSMakePoint(500, 180) angle:0.0 align:AQTAlignCenter];
 [adapter resetImageTransform]; // clean up
 
+
 // Text
 [adapter takeColorFromColormapEntry:1];
 [adapter setFontname:@"Times-Roman"];
@@ -269,9 +299,9 @@ pos = NSMakePoint(540.5, 75.5);
 [adapter takeColorFromColormapEntry:1];
 [adapter setFontname:@"Verdana"];
 [adapter setFontsize:10.0];
-[adapter addLabel:@"left aligned" atPoint:NSMakePoint(510.5, 150) angle:0.0 align:AQTAlignLeft];
+[adapter addLabel:@"left align" atPoint:NSMakePoint(510.5, 150) angle:0.0 align:AQTAlignLeft];
 [adapter addLabel:@"centered" atPoint:NSMakePoint(510.5, 130) angle:0.0 align:AQTAlignCenter];
-[adapter addLabel:@"right aligned" atPoint:NSMakePoint(510.5, 110) angle:0.0 align:AQTAlignRight];
+[adapter addLabel:@"right align" atPoint:NSMakePoint(510.5, 110) angle:0.0 align:AQTAlignRight];
 [adapter setFontname:@"Times-Roman"];
 [adapter setFontsize:14.0];
 [adapter addLabel:@"-rotate" atPoint:pos angle:90.0 align:AQTAlignLeft];
@@ -279,6 +309,11 @@ pos = NSMakePoint(540.5, 75.5);
 [adapter addLabel:@"-rotate" atPoint:pos angle:-30.0 align:AQTAlignLeft];
 [adapter addLabel:@"-rotate" atPoint:pos angle:-60.0 align:AQTAlignLeft];
 [adapter addLabel:@"-rotate" atPoint:pos angle:-90.0 align:AQTAlignLeft];
+// Shear
+[adapter setFontname:@"Arial"];
+[adapter setFontsize:12.0];
+[adapter addLabel:@"Rotate & shear" atPoint:NSMakePoint(430, 105) angle:45.0 shearAngle:45.0 align:AQTAlignLeft];
+
 
 // Some styling is possible
 {
