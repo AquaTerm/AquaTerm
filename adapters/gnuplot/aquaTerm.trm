@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.30 2004/03/29 12:18:02 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.31 2004/06/09 09:49:46 persquare Exp $
  *
  */
 
@@ -348,7 +348,6 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
   if (!strlen(str))
     return;
-  LOG(@"put: %s", str);
   [adapter  addLabel:[NSString stringWithCString: str] 
 	     atPoint:NSMakePoint(x/AQUA_RESOLUTION, y/AQUA_RESOLUTION) 
 	       angle:AQUA_TextAngle 
@@ -358,7 +357,6 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 TERM_PUBLIC int 
 AQUA_justify_text (enum JUSTIFY mode)
 {
-  LOG(@"Justify mode is %d", mode);
   AQUA_TextJust = mode;
   return (TRUE);
 }
@@ -507,18 +505,7 @@ AQUA_set_color(double gray)
 {
   rgb_color color;
   
-  if( sm_palette.use_maxcolors != 0 ) {
-    /* finite nb of colors explicitly requested */
-    if( gray >= ( (double)(sm_palette.use_maxcolors-1) )
-	/ sm_palette.use_maxcolors ) {
-      gray = 1.0;
-    } else {
-      gray = floor( gray * sm_palette.use_maxcolors ) 
-	/ sm_palette.use_maxcolors;
-    }
-  }
-  
-  rgb1_from_gray( gray, &color );
+  rgb1maxcolors_from_gray( gray, &color );
   [adapter setColorRed:color.r green:color.g blue:color.b];
   AQUA_LineType = LT_UNDEFINED; 
 }
