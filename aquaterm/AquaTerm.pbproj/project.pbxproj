@@ -9,10 +9,6 @@
 			children = (
 				CB5B1BEE04A9C2E900EBD329,
 				CB5B1BEF04A9C2E900EBD329,
-				F5FEAC1401A6B3CE0143D50D,
-				F5E99A51036446DA01EBD329,
-				F5E99A52036446DA01EBD329,
-				F5B4A77E0222A7D9014110D6,
 			);
 			isa = PBXGroup;
 			name = Extras;
@@ -85,6 +81,7 @@
 		19C28FACFE9D520D11CA2CBB = {
 			children = (
 				17587328FF379C6511CA2CBB,
+				CBF30BC204D54A2E00EBD329,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -112,6 +109,7 @@
 			targets = (
 				29B97326FDCFA39411CA2CEA,
 				F5DB1B640219BFD2014110D6,
+				CBF30BC104D54A2E00EBD329,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -119,6 +117,7 @@
 				F5AB08990175CCF101EB16F3,
 				F5AB089A0175CCF101EB16F3,
 				F5AB089B0175CCF101EB16F3,
+				CBF30BD804D5527700EBD329,
 				080E96DDFE201D6D7F000001,
 				29B97317FDCFA39411CA2CEA,
 				29B97315FDCFA39411CA2CEA,
@@ -212,7 +211,6 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-DDEBUG_BOUNDS";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AquaTerm;
 				SECTORDER_FLAGS = "";
@@ -269,12 +267,14 @@ http://aquaterm.sourceforge.net</string>
 				F55D242601C11B5201A80104,
 				F5653B8201C4B8F201A80104,
 				F59F5FCB021011D301A18598,
-				F546B4BF026B199901E9AA65,
 				F5E3AFAB026D80D2012F88DF,
 				CB5B187304A9A49E00EBD329,
 				CB5B1BEC04A9C1EC00EBD329,
 				CB5B1BF004A9C2E900EBD329,
 				CB5B1BF104A9C2E900EBD329,
+				CBF3082F04D51B9400EBD329,
+				CBF3083704D51BCF00EBD329,
+				CBF3084104D5209800EBD329,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,10 +302,12 @@ http://aquaterm.sourceforge.net</string>
 				F55D242B01C11B5201A80104,
 				F5653B8301C4B8F201A80104,
 				F59F5FCC021011D301A18598,
-				F546B4C1026B199901E9AA65,
 				F5E3AFAC026D80D2012F88DF,
 				CB5B187404A9A49E00EBD329,
 				CB5B1BED04A9C1EC00EBD329,
+				CBF3083004D51B9400EBD329,
+				CBF3083804D51BCF00EBD329,
+				CBF3084204D5209800EBD329,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,6 +439,271 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
+		CBF3082D04D51B9300EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTAdapter.h;
+			refType = 4;
+		};
+		CBF3082E04D51B9400EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTAdapter.m;
+			refType = 4;
+		};
+		CBF3082F04D51B9400EBD329 = {
+			fileRef = CBF3082D04D51B9300EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF3083004D51B9400EBD329 = {
+			fileRef = CBF3082E04D51B9400EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF3083404D51BCF00EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTPatch.h;
+			refType = 4;
+		};
+		CBF3083504D51BCF00EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTPatch.m;
+			refType = 4;
+		};
+		CBF3083704D51BCF00EBD329 = {
+			fileRef = CBF3083404D51BCF00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF3083804D51BCF00EBD329 = {
+			fileRef = CBF3083504D51BCF00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF3083904D51CF100EBD329 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTPlot.h;
+			refType = 4;
+		};
+		CBF3083A04D51CF100EBD329 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTPlot.m;
+			refType = 4;
+		};
+		CBF3084104D5209800EBD329 = {
+			fileRef = CBF3083904D51CF100EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF3084204D5209800EBD329 = {
+			fileRef = CBF3083A04D51CF100EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BBD04D54A2E00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBF30BC404D54A3800EBD329,
+				CBF30BC504D54A3A00EBD329,
+				CBF30BC704D54A3B00EBD329,
+				CBF30BC904D54A3C00EBD329,
+				CBF30BCB04D54A3E00EBD329,
+				CBF30BCD04D54A4000EBD329,
+				CBF30BCF04D54A4200EBD329,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBF30BBE04D54A2E00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBF30BC304D54A3800EBD329,
+				CBF30BC604D54A3A00EBD329,
+				CBF30BC804D54A3C00EBD329,
+				CBF30BCA04D54A3D00EBD329,
+				CBF30BCC04D54A3F00EBD329,
+				CBF30BCE04D54A4100EBD329,
+				CBF30BD004D54A4300EBD329,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBF30BBF04D54A2E00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBF30BC004D54A2E00EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBF30BC104D54A2E00EBD329 = {
+			buildPhases = (
+				CBF30BBD04D54A2E00EBD329,
+				CBF30BBE04D54A2E00EBD329,
+				CBF30BBF04D54A2E00EBD329,
+				CBF30BC004D54A2E00EBD329,
+				CBF30BD304D54B5900EBD329,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				INSTALL_PATH = /Volumes/Earth/Users/per/lib;
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libaqt;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = libaqt;
+			productInstallPath = /Volumes/Earth/Users/per/lib;
+			productName = libaqt;
+			productReference = CBF30BC204D54A2E00EBD329;
+		};
+		CBF30BC204D54A2E00EBD329 = {
+			isa = PBXLibraryReference;
+			path = libaqt;
+			refType = 3;
+		};
+		CBF30BC304D54A3800EBD329 = {
+			fileRef = CBF3082E04D51B9400EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BC404D54A3800EBD329 = {
+			fileRef = CBF3082D04D51B9300EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BC504D54A3A00EBD329 = {
+			fileRef = F55D241701C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BC604D54A3A00EBD329 = {
+			fileRef = F55D241801C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BC704D54A3B00EBD329 = {
+			fileRef = F55D241901C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BC804D54A3C00EBD329 = {
+			fileRef = F55D241A01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BC904D54A3C00EBD329 = {
+			fileRef = F55D241B01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BCA04D54A3D00EBD329 = {
+			fileRef = F55D241C01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BCB04D54A3E00EBD329 = {
+			fileRef = F5653B8001C4B8F201A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BCC04D54A3F00EBD329 = {
+			fileRef = F5653B8101C4B8F201A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BCD04D54A4000EBD329 = {
+			fileRef = CBF3083404D51BCF00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BCE04D54A4100EBD329 = {
+			fileRef = CBF3083504D51BCF00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BCF04D54A4200EBD329 = {
+			fileRef = F59F5FC9021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BD004D54A4300EBD329 = {
+			fileRef = F59F5FCA021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBF30BD304D54B5900EBD329 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp $SRCROOT/AQTAdapter.h $HOME/include/.; cp $SRCROOT/build/libaqt $HOME/lib/libaqt.dylib; ranlib  $HOME/lib/libaqt.dylib";
+		};
+		CBF30BD804D5527700EBD329 = {
+			children = (
+				F5FEAC1401A6B3CE0143D50D,
+				F5E99A51036446DA01EBD329,
+				F5E99A52036446DA01EBD329,
+				F5B4A77E0222A7D9014110D6,
+				F50F0B540205D23401AA2E68,
+				F50F0B550205D23401AA2E68,
+				F5AB087A0175BC8B01EB16F3,
+				F5AB087B0175BC8B01EB16F3,
+				F50F0B500205D1AF01AA2E68,
+				F50F0B510205D1AF01AA2E68,
+				F57A4136022288E5014110D6,
+				F57A4137022288E5014110D6,
+			);
+			isa = PBXGroup;
+			name = oldsource;
+			refType = 4;
+		};
 //CB0
 //CB1
 //CB2
@@ -479,18 +746,6 @@ http://aquaterm.sourceforge.net</string>
 		};
 		F51551CD01FE762E01000102 = {
 			fileRef = F51551CC01FE762E01000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F546B4BF026B199901E9AA65 = {
-			fileRef = F5AB087A0175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F546B4C1026B199901E9AA65 = {
-			fileRef = F5AB087B0175BC8B01EB16F3;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -725,12 +980,10 @@ http://aquaterm.sourceforge.net</string>
 				CB5B187204A9A49E00EBD329,
 				CB5B1BE504A9C0F900EBD329,
 				CB5B1BE604A9C0F900EBD329,
-				F5AB087A0175BC8B01EB16F3,
-				F5AB087B0175BC8B01EB16F3,
-				F50F0B500205D1AF01AA2E68,
-				F50F0B510205D1AF01AA2E68,
-				F57A4136022288E5014110D6,
-				F57A4137022288E5014110D6,
+				CBF3083904D51CF100EBD329,
+				CBF3083A04D51CF100EBD329,
+				CBF3082D04D51B9300EBD329,
+				CBF3082E04D51B9400EBD329,
 			);
 			isa = PBXGroup;
 			name = Controller;
@@ -747,8 +1000,8 @@ http://aquaterm.sourceforge.net</string>
 				F55D241C01C0F0F501A80104,
 				F5653B8001C4B8F201A80104,
 				F5653B8101C4B8F201A80104,
-				F50F0B540205D23401AA2E68,
-				F50F0B550205D23401AA2E68,
+				CBF3083404D51BCF00EBD329,
+				CBF3083504D51BCF00EBD329,
 				F59F5FC9021011D301A18598,
 				F59F5FCA021011D301A18598,
 			);
