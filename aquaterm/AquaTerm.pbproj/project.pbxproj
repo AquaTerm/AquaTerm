@@ -1475,9 +1475,8 @@ http://aquaterm.sourceforge.net</string>
 		FE8252ACC5B321F400CFA73B = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
-			name = Demo.m;
-			path = /Users/ppe/Source/AQT/aquaterm/Demo.m;
-			refType = 0;
+			path = Demo.m;
+			refType = 2;
 		};
 		FE8252ADC5B321F400CFA73B = {
 			fileRef = FE8252ACC5B321F400CFA73B;
