@@ -26,6 +26,9 @@ extern const int AQTAlignTop;
 /*" Class initialization etc."*/
 int aqtInit(void);
 void aqtTerminate(void);
+/* The event handler callback functionality should be used with caution, it may 
+   not be safe to use in all circumstances. It is certainly _not_ threadsafe. 
+   If in doubt, use aqtWaitNextEvent() instead. */
 void aqtSetEventHandler(void (*func)(int ref, const char *event));
 
 /*" Control operations "*/
