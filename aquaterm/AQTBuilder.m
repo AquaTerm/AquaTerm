@@ -14,7 +14,7 @@
 #import "AQTColorMap.h"
 #import "GPTController.h"
 
-#import "GPTView.h"
+#import "AQTView.h"
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}

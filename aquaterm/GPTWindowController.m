@@ -1,5 +1,5 @@
 #import "GPTWindowController.h"
-#import "GPTView.h"
+#import "AQTView.h"
 #import "AQTModel.h"
 
 @implementation GPTWindowController
@@ -7,7 +7,9 @@
     *** GPTWindowController is a subclass of NSWindowController
     *** that controls an AquaTerm window. Every instance of a 
     *** GPTWindowController holds a reference to the rendering
-    *** GPTView and to the GPTModel received from gnuplot.
+    *** AQTView. GPTWindowController assists in setting the model
+    *** for the view by assuring that the window nib is loaded before
+    *** the model received from the AQTBuilder object is handed to the view.
     "**/
     
     /**"
@@ -15,34 +17,29 @@
     "**/
  -(id)initWithIndex:(int)index
 {
-  self = [super initWithWindowNibName:@"GPTWindow"];
+  self = [super initWithWindowNibName:@"AQTWindow"];
   if (self)
   {
     viewIndex = index;
-    model = [[AQTModel alloc] init];
+    tempModel = nil;
   }
   return self;
 }
 
--(void)awakeFromNib
+ -(void)awakeFromNib
 {
-	[[self window] setTitle:[model title]];
-    [viewOutlet setNeedsDisplay:YES];
+  [viewOutlet setModel:tempModel];
+  [[self window] setTitle:[tempModel title]];
+  [tempModel release];
+  tempModel = nil;
 }
 
 -(void)dealloc
 {   
-    [model release];
     [super dealloc];
 }
 
-    /*" Describe model. (for debugging) "*/
--(NSString *)description
-{
-    return [NSString stringWithFormat:@"Plot \"%@\"\nModel: %@", [model title], [model description]];
-}
-
-    /*" Accessor methods for the GPTView instance "*/
+    /*" Accessor methods for the AQTView instance "*/
 -(id)viewOutlet
 {
     return viewOutlet;
@@ -55,26 +52,23 @@
 
 -(void)setModel:(AQTModel *)newModel
 {
-  [newModel retain];
-  [model release];		// let go of old model
-  model = newModel;		// Make it point to new model (FIXME: multiplot requires care! OK)
-
-  // FIXME: Voodo below!  
-  // Check if window is has been loaded
-    if ([self window])
+  
+  if ([self isWindowLoaded])
+  {
+    [viewOutlet setModel:newModel];
+    [[self window] setTitle:[newModel title]];
+    [viewOutlet setNeedsDisplay:YES];    
+    if(![[self window] isVisible])
     {
-      if (![[self window] isVisible])
-      {
-        // The window was hidden (due to e.g. a close action)
-        [[self window] orderFront:self];
-      }
-      [[self window] setTitle:[model title]];
-      [viewOutlet setNeedsDisplay:YES];	// Tell view to update itself
+      [self showWindow:self];
     }
-}
-
--(AQTModel *)model
-{
-    return model;
+  }
+  else
+  {
+    [newModel retain];
+    [tempModel release];		// let go of any temporary model not used (unlikely)
+    tempModel = newModel;		// Make it point to new model (FIXME: multiplot requires care! OK)
+    [self window];				// Load it!
+  }
 }
 @end

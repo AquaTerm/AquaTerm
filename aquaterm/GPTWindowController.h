@@ -5,13 +5,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class AQTModel, GPTView;
+@class AQTModel, AQTView;
 
 @interface GPTWindowController : NSWindowController
 {
     @private
     IBOutlet id viewOutlet;	/*" Points to the rendering view "*/
-    AQTModel	*model;		/*" Holds the model for the view "*/ 
+    AQTModel	*tempModel;		/*" Holds the model for the view "*/ 
     int 		viewIndex;	/*" The number by which the client refers to the model "*/ 
 }
 
@@ -20,5 +20,4 @@
 -(id)viewOutlet;
 -(int)viewIndex;
 -(void)setModel:(AQTModel *)newModel;
--(AQTModel *)model;
 @end

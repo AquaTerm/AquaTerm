@@ -28,7 +28,7 @@
     {
       // Read colormap from front window
       [self setFrontWindowController:[frontWindow windowController]];
-      tempColormap = [[[frontWindowController model] colormap] copy]; // Copy implicitly retains object
+      tempColormap = [[[[frontWindowController viewOutlet] model] colormap] copy]; // Copy implicitly retains object
     }
     else
     {
@@ -61,17 +61,19 @@
 - (void)setFrontWindowController:(GPTWindowController *)newWindowController
 {
   AQTColorMap *tempColormap;
+  AQTModel *model;
   // First check that it is an actual update
   if (newWindowController != frontWindowController)
   {
     frontWindowController = newWindowController;
     if (frontWindowController)
     {
-      tempColormap = [[[frontWindowController model] colormap] copy]; // Copy implicitly retains object
+      model = [[frontWindowController viewOutlet] model];
+      tempColormap = [[model colormap] copy]; 
       [self setColormap:tempColormap];
       [tempColormap release];
 
-      [infoText setStringValue:[NSString stringWithFormat:@"%d objects in %f seconds", [[frontWindowController model] count], [[frontWindowController model] timeTaken]]];
+      [infoText setStringValue:[NSString stringWithFormat:@"%d objects in %f seconds", [model count], [model timeTaken]]];
       [self updatePopUp];
       [self updateVisibleState];
     }
@@ -168,7 +170,7 @@
       [self setFrontWindowController:[frontWindow windowController]];
     }
   }
-  [[frontWindowController model] updateColors:localColormap];
+  [[[frontWindowController viewOutlet] model] updateColors:localColormap];
   [[frontWindowController viewOutlet] setNeedsDisplay:YES];
 }
 

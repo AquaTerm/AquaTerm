@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class AQTBuilder, GPTWindowController, GPTView, AQTModel, AQTColorInspector;
+@class AQTBuilder, GPTWindowController, AQTView, AQTModel, AQTColorInspector;
 
 @interface GPTController : NSObject 
 {
@@ -26,8 +26,6 @@
 -(id)init;
 -(void)awakeFromNib;
 
--(NSArray *)windowControllers;
--(void)addWindowController:(GPTWindowController *)newWindowController;
 -(GPTWindowController *)controllerForView:(int)index;
 
 -(void)setModel:(AQTModel *)gptModel forView:(int)index;

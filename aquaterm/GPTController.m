@@ -8,40 +8,36 @@
 
 #import "GPTController.h"
 #import "GPTWindowController.h"
-#import "GPTView.h"
-#import "AQTPrintView.h"
+#import "AQTView.h"
 #import "AQTColorInspector.h"
 #import "AQTBuilder.h"
 #import "AQTModel.h"
 
 @implementation GPTController
-    /**"
-    *** GPTController is the main controller object which coordinates all the
-    *** action and manages the DO connection object.
-    "**/
-    
+/**"
+*** GPTController is the main controller object which coordinates all the
+*** action and manages the DO connection object.
+"**/
+
 -(id)init
 {
-    if (self =  [super init])
-    {
-      builder = [[AQTBuilder alloc] init];
-      [builder setRenderer:self];
-      gptWindowControllers = [[NSMutableArray arrayWithCapacity:0] retain];
-      // Force (pre-)loading of window NIB-file.... 
-      [self setModel:[[[AQTModel alloc] init] autorelease] forView:0];
-      [[[self controllerForView:0] window] close];
-    }
-    return self;
+  if (self =  [super init])
+  {
+    builder = [[AQTBuilder alloc] init];
+    [builder setRenderer:self];
+    gptWindowControllers = [[NSMutableArray arrayWithCapacity:0] retain];
+  }
+  return self;
 }
 
-    /**" 
-    *** When the NIB file is loaded, the controller vends an object of class AQTBuilder
-    *** via the distributed objects system and also adds itself to 
-    *** the list of observers for NSWindowDidBecomeMainNotification
-    *** to keep track of the model to render when the user print.
+/**"
+*** When the NIB file is loaded, the controller vends an object of class AQTBuilder
+*** via the distributed objects system and also adds itself to
+*** the list of observers for NSWindowDidBecomeMainNotification
+*** to keep track of the model to render when the user print.
 
-    *** The name of the DO connection registered is 'aquatermServer'.
-    "**/
+*** The name of the DO connection registered is 'aquatermServer'.
+"**/
 -(void)awakeFromNib
 {
   doConnection = [[NSConnection defaultConnection] retain];
@@ -52,35 +48,23 @@
   {
     NSLog(@"Error registering \"aquatermServer\" with defaultConnection");
   }
-  
-
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-        selector:@selector(mainWindowChanged:)
-        name:NSWindowDidBecomeMainNotification
-        object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(mainWindowChanged:)
+                                               name:NSWindowDidBecomeMainNotification
+                                             object:nil];
 }
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self ];
-    [builder release];
-    [gptWindowControllers release];
-    [super dealloc];
-}
-
--(void)addWindowController:(GPTWindowController *)newWindowController
-{
-  [gptWindowControllers addObject:newWindowController];
-}
-
--(NSArray *)windowControllers
-{
-  return [NSArray arrayWithArray:gptWindowControllers];
+  [[NSNotificationCenter defaultCenter] removeObserver:self ];
+  [builder release];
+  [gptWindowControllers release];
+  [super dealloc];
 }
 
 -(void)setFrontWindow:(NSWindow *)mainWindow
 {
-    frontWindow = mainWindow;
+  frontWindow = mainWindow;
 }
 
 -(NSWindow *)frontWindow
@@ -118,10 +102,10 @@
   {
     // FIXME: For now, the windowcontroller holds the index, that is unneccessary, see -controllerForView:
     theController = [[GPTWindowController allocWithZone:[self zone]] initWithIndex:index];
-    [self addWindowController:theController];	// The windowController is added to the array, and thus retained
+    [gptWindowControllers addObject:theController]; // The windowController is added to the array, and thus retained
     [theController release];					// By releasing here, every windowController is released when the main nib is deallocated
   }
-  [theController setModel:aqtModel];    		// Then hand the model over to the corresponding controller
+  [theController setModel:aqtModel];
 }
 
 /**"
@@ -134,8 +118,7 @@
   // FIXME! should be a dictionary of some kind => no need for wc to know its index
   //
   GPTWindowController *wc;
-  NSEnumerator *enumerator = [[self windowControllers] objectEnumerator];
-  
+  NSEnumerator *enumerator = [gptWindowControllers objectEnumerator];
   while (wc = [enumerator nextObject])
   {
     if ([wc viewIndex] == index)
@@ -147,13 +130,21 @@
 }
 
 
+// static NSRect tempFrame;
+
+- (void)printOperationDidRun:(NSPrintOperation *)printOperation success:(BOOL)success  contextInfo:(AQTView *)printView
+{
+  [printView setIsPrinting:NO];
+  // [printView setFrame:tempFrame];
+}
+
 /**"
 *** Called when user selects print…. Runs a print operation with the model
 *** corresponding to the main window.
 "**/
 -(IBAction)print:(id)sender
 {
-  AQTPrintView *printView;
+  AQTView *printView;
   NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; // [self printInfo];
   NSSize paperSize = [printInfo paperSize];
   NSPrintOperation *printOp;
@@ -169,9 +160,20 @@
     paperSize.width = (AQUA_XMAX * paperSize.height) / AQUA_YMAX;
   }
 
-  printView = [[AQTPrintView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height) model:[[frontWindow windowController] model]];
+  printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
+  [printView setModel:[[[frontWindow windowController] viewOutlet] model]];
+  // printView = [[frontWindow windowController] viewOutlet];
+  // tempFrame = [printView frame];
+  // [printView setFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
+  [printView setIsPrinting:YES];
+  //[printView setPrintBounds:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
+
   printOp = [NSPrintOperation printOperationWithView:printView];
-  (void)[printOp runOperationModalForWindow:frontWindow delegate:nil didRunSelector:NULL contextInfo:NULL];
+  (void)[printOp runOperationModalForWindow:frontWindow
+                                   delegate:self
+                             didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
+                                contextInfo:printView];
+  // [printView setIsPrinting:NO];
   [printView release];
 }
 
@@ -186,14 +188,15 @@
   if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])
   {
     NSLog(@"Failed to load ExtendSavePanel.nib");
+    return;
   }
   [savePanel setAccessoryView:extendSavePanelView];
-  [savePanel beginSheetForDirectory:NSHomeDirectory() /* FIXME: Should store and use latest dir used */
-file:[frontWindow title]
-modalForWindow:frontWindow
-modalDelegate:self
-didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
-contextInfo:saveFormatPopup
+  [savePanel beginSheetForDirectory:NSHomeDirectory()
+                               file:[frontWindow title]
+                     modalForWindow:frontWindow
+                      modalDelegate:self
+                     didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
+                        contextInfo:saveFormatPopup
     ];
 }
 
@@ -201,11 +204,12 @@ contextInfo:saveFormatPopup
 {
   NSData *data;
   NSString *filename;
-  AQTPrintView *printView;
+  AQTView *printView;
 
   if (NSFileHandlingPanelOKButton == returnCode)
   {
-    printView = [[AQTPrintView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX) model:[[frontWindow windowController] model]];
+    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
+    [printView setModel:[[frontWindow windowController] model]];
     filename = [[theSheet filename] stringByDeletingPathExtension];
     if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
     {
@@ -226,9 +230,11 @@ contextInfo:saveFormatPopup
   //
   // Copy figure to pasteboard as EPS (FIXME: format should be set in prefs)
   //
-  AQTPrintView *printView = [[AQTPrintView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX) model:[[frontWindow windowController] model]];
-  NSData *data = [printView dataWithEPSInsideRect:[printView bounds]];
+  NSData *data;
   NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+  AQTView *printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
+  [printView setModel:[[frontWindow windowController] model]];
+  data = [printView dataWithEPSInsideRect:[printView bounds]];
   [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, NSStringPboardType, nil] owner:nil];
   if (YES !=[pasteboard setData:data forType:NSStringPboardType])
     NSLog(@"write to pasteboard failed");
