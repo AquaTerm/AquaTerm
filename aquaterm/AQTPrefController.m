@@ -27,10 +27,21 @@
    [imageInterpolateLevel selectItemAtIndex:[preferences integerForKey:@"ImageInterpolationLevel"]];
    [shouldAntialiasSwitch setIntValue:[preferences integerForKey:@"ShouldAntialiasDrawing"]];
    [limitMinimumLinewidthSwitch setIntValue:[preferences integerForKey:@"limitMinimumLinewidth"]];
+   [closeWindowSwitch setIntValue:[preferences integerForKey:@"CloseWindowWhenClosingPlot"]];
+   [confirmCloseWindowSwitch setIntValue:[preferences integerForKey:@"ConfirmCloseWindowWhenClosingPlot"]];
    [showProcessNameSwitch setIntValue:[preferences integerForKey:@"ShowProcessName"]];
    [showProcessIdSwitch setIntValue:[preferences integerForKey:@"ShowProcessId"]];
+   
+   if([closeWindowSwitch intValue] == 0) {
+      [confirmCloseWindowSwitch setEnabled:NO];
+   }
    [self updateTitleExample:self];
    [prefWindow makeKeyAndOrderFront:self];
+}
+
+- (IBAction)windowClosingChanged:(id)sender
+{
+   [confirmCloseWindowSwitch setEnabled:([closeWindowSwitch intValue] == 0)?NO:YES];
 }
 
 - (IBAction)updateTitleExample:(id)sender
@@ -48,6 +59,8 @@
    [preferences setInteger:[imageInterpolateLevel indexOfSelectedItem] forKey:@"ImageInterpolationLevel"];
    [preferences setInteger:[shouldAntialiasSwitch intValue] forKey:@"ShouldAntialiasDrawing"];
    [preferences setInteger:[limitMinimumLinewidthSwitch intValue] forKey:@"limitMinimumLinewidth"];
+   [preferences setInteger:[closeWindowSwitch intValue] forKey:@"CloseWindowWhenClosingPlot"];
+   [preferences setInteger:[confirmCloseWindowSwitch intValue] forKey:@"ConfirmCloseWindowWhenClosingPlot"];
    [preferences setInteger:[showProcessNameSwitch intValue] forKey:@"ShowProcessName"];
    [preferences setInteger:[showProcessIdSwitch intValue] forKey:@"ShowProcessId"];
    [prefWindow orderOut:self];

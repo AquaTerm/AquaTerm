@@ -236,9 +236,29 @@ static inline void NOOP_(id x, ...) {;}
    }
 }
 
+-(void)aqtClosePanelDidEnd:(id)sheet returnCode:(int)retCode contextInfo:(id)contextInfo
+{
+   LOG(@"", NSStringFromSelector(_cmd));
+   if (retCode == NSAlertAlternateReturn) {
+      [[canvas window] close];
+   }
+}
+
 -(void)close
 {
-   LOG(@"close");
+   // Check defaults and maybe throw up a modal sheet asking for confirmation
+   if ([[NSUserDefaults standardUserDefaults] boolForKey:@"CloseWindowWhenClosingPlot"] == YES) {
+      if ([[NSUserDefaults standardUserDefaults] boolForKey:@"ConfirmCloseWindowWhenClosingPlot"] == YES) {
+      NSBeginAlertSheet(@"Close window?", 
+                        @"Keep", @"Close", 
+                        nil, [canvas window], self, 
+                        @selector(aqtClosePanelDidEnd:returnCode:contextInfo:), 
+                        NULL, nil, 
+                        @"The client is finished with the plot (or exiting) and tries to close the window. Do you want to close the window or keep it on screen?");
+      } else {
+         [[canvas window] close];
+      }
+   }
 }
 
 -(void)setClient:(id)client

@@ -1,10 +1,17 @@
 {
     IBClasses = (
         {
-            ACTIONS = {OKButtonPressed = id; cancelButtonPressed = id; updateTitleExample = id; }; 
+            ACTIONS = {
+                OKButtonPressed = id; 
+                cancelButtonPressed = id; 
+                updateTitleExample = id; 
+                windowClosingChanged = id; 
+            }; 
             CLASS = AQTPrefController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                closeWindowSwitch = NSButton; 
+                confirmCloseWindowSwitch = NSButton; 
                 imageInterpolateLevel = NSPopUpButton; 
                 limitMinimumLinewidthSwitch = NSButton; 
                 prefWindow = NSWindow; 

@@ -358,6 +358,7 @@
 
    NS_DURING
       [[_plots objectForKey:_activePlotKey] setClient:nil];
+      [[_plots objectForKey:_activePlotKey] close];
    NS_HANDLER
       [self logMessage:@"Closing plot, discarding exception..." logLevel:2];
    NS_ENDHANDLER
