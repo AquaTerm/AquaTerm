@@ -61,7 +61,13 @@ extern void aqtLineDrawingTest(id sender);
 
   if([doConnection registerName:@"aquatermServer"] == NO)
   {
-    NSLog(@"Error registering \"aquatermServer\" with defaultConnection");
+    int retCode = NSRunCriticalAlertPanel(@"Could not establish service",
+                                       @"Another application has already registered the service \"aquatermServer\".\nYou may leave AquaTerm running by pressing Cancel, but no clients will be able to use it.\nPress Quit to close this copy of AquaTerm.",
+                                       @"Quit", @"Cancel", nil);
+    if (retCode == NSAlertDefaultReturn)
+       [NSApp terminate:self];
+    else
+       NSLog(@"Error registering \"aquatermServer\" with defaultConnection");       
   }
 }
 
@@ -182,7 +188,7 @@ extern void aqtLineDrawingTest(id sender);
 
 -(NSString *)_aqtBugMsg
 {
-    return @"Bug report for AquaTerm 1.0.a2\n\n\
+    return @"Bug report for AquaTerm 1.0.b1\n\n\
 Description:\n-----------------------\n\n\
 *\tPlease replace this item with a detailed description of the \n\
 \tproblem.  Suggestions or general comments are also welcome.\n\n\
@@ -210,7 +216,7 @@ Configuration (please do not edit this section):\n\
 
 -(NSString *)_aqtMailMsg
 {
-    return @"Feedback report for AquaTerm 1.0.a2\n\n\
+    return @"Feedback report for AquaTerm 1.0.b1\n\n\
 Feedback:\n-----------------------\n\n\
 *\tPlease replace this item with suggestions or general comments.\n\n";
 }
