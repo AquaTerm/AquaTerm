@@ -1,5 +1,17 @@
 AquaTerm 1.0.b3
   Removing objects in destRect before adding an untransformed bitmap. (#1042636)
+  Major improvements to font handling and drawing. Gnuplot 4.1 will support enhanced text.
+  Added Show Available Fonts to Help menu.
+  Adding (some) configuration info to bugreport.
+  Adding preference to control window closing behaviour.
+  Adding preference to convert Adobe Symbol font encoding to Unicode.
+  Adding method to create user defined dashed lines.
+  Adding method to set a clipping rect.
+  Adding a Perl module Graphics::AquaTerm.	
+  Fixing incompatibility with Mac OS X prior to 10.3.
+  Fixing colormap range bug; report default size if not initialized.
+  Fixing aqtGetBackgroundColor; defined in aquaterm.h but never implemented.
+  Fixing -lastEvent to work as advertised. (#1108709)
 
 AquaTerm 1.0.b2
   Fixing a problem with LaunchServices
