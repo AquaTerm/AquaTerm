@@ -395,7 +395,6 @@ void aqt_textjust__(int *just)
 
 void aqt_text__(float *x, float *y, char *str, unsigned len)
 {
-    NSLog(@"%@\t%d\t%d", [NSString stringWithCString:str length:len], strlen(str), len);
   [adapter putText:[NSString stringWithCString:str  length:len] at:NSMakePoint(*x, *y)];
 }
 
