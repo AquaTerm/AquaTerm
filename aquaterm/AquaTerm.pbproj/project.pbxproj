@@ -16,27 +16,6 @@
 			name = Extras;
 			refType = 4;
 		};
-		089C165CFE840E0CC02AAC07 = {
-			children = (
-				089C165DFE840E0CC02AAC07,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			refType = 4;
-		};
-		089C165DFE840E0CC02AAC07 = {
-			fileEncoding = 10;
-			isa = PBXFileReference;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-		};
-		089C165EFE840E0CC02AAC07 = {
-			fileRef = 089C165CFE840E0CC02AAC07;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 //080
 //081
 //082
@@ -124,6 +103,7 @@
 				4A9504CCFFE6A4B311CA0CBA,
 				4A9504CDFFE6A4B311CA0CBA,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
@@ -160,6 +140,7 @@
 			refType = 4;
 		};
 		29B97316FDCFA39411CA2CEA = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = main.m;
 			refType = 4;
@@ -168,7 +149,6 @@
 			children = (
 				F5FEAC2701A7219B0143D50D,
 				F54B0FE401FF3656014110A7,
-				089C165CFE840E0CC02AAC07,
 				29B97318FDCFA39411CA2CEA,
 				F51551CC01FE762E01000102,
 				F54B0FE601FF5CDC014110A7,
@@ -225,10 +205,12 @@
 				29B9732DFDCFA39411CA2CEA,
 			);
 			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "";
+				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AquaTerm;
@@ -239,8 +221,8 @@
 			dependencies = (
 			);
 			isa = PBXApplicationTarget;
-			name = AquaTerm1;
-			productInstallPath = "";
+			name = AquaTerm;
+			productInstallPath = /Applications;
 			productName = AquaTerm;
 			productReference = 17587328FF379C6511CA2CBB;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -252,7 +234,7 @@
 	<key>CFBundleExecutable</key>
 	<string>AquaTerm</string>
 	<key>CFBundleGetInfoString</key>
-	<string>AquaTerm v0.3.1</string>
+	<string>AquaTerm v0.3.2</string>
 	<key>CFBundleIconFile</key>
 	<string>AquaTerm.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -262,11 +244,14 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>AquaTerm v0.3.1</string>
+	<string>AquaTerm v0.3.2</string>
 	<key>CFBundleSignature</key>
 	<string>AqTS</string>
 	<key>CFBundleVersion</key>
-	<string>0.3.1</string>
+	<string>0.3.2</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>©2001-2003, The AquaTerm Project  
+http://aquaterm.sourceforge.net</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu1</string>
 	<key>NSPrincipalClass</key>
@@ -274,7 +259,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 1;
 		};
 		29B97327FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -300,7 +284,6 @@
 		29B97328FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				089C165EFE840E0CC02AAC07,
 				F5C4C2DC0199DF380143D54F,
 				F5FEAC2901A7219B0143D50D,
 				F51551CD01FE762E01000102,
@@ -387,11 +370,13 @@
 //F53
 //F54
 		F50F0B500205D1AF01AA2E68 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTColorInspector.m;
 			refType = 4;
 		};
 		F50F0B510205D1AF01AA2E68 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTColorInspector.h;
 			refType = 4;
@@ -409,11 +394,13 @@
 			};
 		};
 		F50F0B540205D23401AA2E68 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTColorMap.h;
 			refType = 4;
 		};
 		F50F0B550205D23401AA2E68 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTColorMap.m;
 			refType = 4;
@@ -467,6 +454,7 @@
 			};
 		};
 		F54B0FE401FF3656014110A7 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = help.html;
 			path = English.lproj/help.html;
@@ -506,21 +494,25 @@
 			};
 		};
 		F55D241701C0F0F501A80104 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTGraphic.h;
 			refType = 4;
 		};
 		F55D241801C0F0F501A80104 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTGraphic.m;
 			refType = 4;
 		};
 		F55D241901C0F0F501A80104 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTLabel.h;
 			refType = 4;
 		};
 		F55D241A01C0F0F501A80104 = {
+			fileEncoding = 30;
 			indentWidth = 2;
 			isa = PBXFileReference;
 			path = AQTLabel.m;
@@ -529,11 +521,13 @@
 			usesTabs = 0;
 		};
 		F55D241B01C0F0F501A80104 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTModel.h;
 			refType = 4;
 		};
 		F55D241C01C0F0F501A80104 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTModel.m;
 			refType = 4;
@@ -575,16 +569,19 @@
 			};
 		};
 		F55D7FF10219BEF4014110D6 = {
+			fileEncoding = 30;
 			isa = PBXExecutableFileReference;
 			path = makedocs;
 			refType = 2;
 		};
 		F5653B8001C4B8F201A80104 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTPath.h;
 			refType = 4;
 		};
 		F5653B8101C4B8F201A80104 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTPath.m;
 			refType = 4;
@@ -602,11 +599,13 @@
 			};
 		};
 		F57A4136022288E5014110D6 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTBuilder.h;
 			refType = 4;
 		};
 		F57A4137022288E5014110D6 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTBuilder.m;
 			refType = 4;
@@ -633,21 +632,25 @@
 			refType = 4;
 		};
 		F57C16A202506DE3010D3DE4 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ReadMe.txt;
 			refType = 4;
 		};
 		F57C16A302506DE3010D3DE4 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ToDo;
 			refType = 4;
 		};
 		F59F5FC9021011D301A18598 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTImage.h;
 			refType = 4;
 		};
 		F59F5FCA021011D301A18598 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTImage.m;
 			refType = 4;
@@ -665,21 +668,25 @@
 			};
 		};
 		F5AB086D0175BC8B01EB16F3 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GPTController.h;
 			refType = 4;
 		};
 		F5AB086E0175BC8B01EB16F3 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GPTController.m;
 			refType = 4;
 		};
 		F5AB087A0175BC8B01EB16F3 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GPTWindowController.h;
 			refType = 4;
 		};
 		F5AB087B0175BC8B01EB16F3 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GPTWindowController.m;
 			refType = 4;
@@ -737,6 +744,7 @@
 			};
 		};
 		F5B4A77E0222A7D9014110D6 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTProtocol.mdoc;
 			refType = 4;
@@ -748,34 +756,36 @@
 			};
 		};
 		F5DB1B640219BFD2014110D6 = {
-			buildArgumentsString = $ACTION;
+			buildArgumentsString = "$(SRCROOT)/makedocs ";
 			buildPhases = (
 			);
 			buildSettings = {
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Untitled;
+				PRODUCT_NAME = Docs;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
-			buildToolPath = "~/Source/scitech/aquaterm/makedocs";
+			buildToolPath = /bin/sh;
 			dependencies = (
 			);
 			isa = PBXLegacyTarget;
 			name = Docs;
+			passBuildSettingsInEnvironment = 1;
 			productName = Untitled;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		F5E3AFA9026D80D2012F88DF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTView.h;
 			refType = 4;
 		};
 		F5E3AFAA026D80D2012F88DF = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTView.m;
 			refType = 4;
@@ -814,11 +824,13 @@
 			};
 		};
 		F5E99A51036446DA01EBD329 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTBaseMethods.h;
 			refType = 4;
 		};
 		F5E99A52036446DA01EBD329 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTExtendedMethods.h;
 			refType = 4;
@@ -836,6 +848,7 @@
 			};
 		};
 		F5FEAC1401A6B3CE0143D50D = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTProtocol.h;
 			refType = 4;
