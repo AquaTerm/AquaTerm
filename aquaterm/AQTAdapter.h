@@ -36,7 +36,7 @@ enum {
   AQTPlotBuilder *_selectedBuilder; 	
   BOOL _serverIsLocal;
   void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
-  void (*_eventHandler)(NSString *event); /* A callback function optionally installed by the client */
+  void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
   id _aqtReserved1;
   id _aqtReserved2;
 }
@@ -45,7 +45,7 @@ enum {
 - (id)init;
 - (id)initWithServer:(id)localServer;
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr;
-- (void)setEventHandler:(void (*)(NSString *event))fPtr;
+- (void)setEventHandler:(void (*)(int index, NSString *event))fPtr;
 
 
   /*" Control operations "*/

@@ -60,9 +60,10 @@
    }
    [[canvas window] setMaxSize:maxSize];
    [[canvas window] setMinSize:minSize];
-   [canvas setNeedsDisplay:YES];
+   [canvas setIsProcessingEvents:_acceptingEvents];
    [[canvas window] setIsVisible:YES];
    [[canvas window] orderFront:self];
+   [canvas setNeedsDisplay:YES];
 }
 
 -(void)awakeFromNib
@@ -133,8 +134,8 @@
 -(void)setClient:(id)client
 {
    [client retain];
-   [_client release];		// let go of any temporary model not used (unlikely)
-   _client = client;		// Make it point to new model
+   [_client release];		
+   _client = client;		
 }
 
 -(void)setClientInfoName:(NSString *)name pid:(int)pid
@@ -147,8 +148,11 @@
 
 -(void)setAcceptingEvents:(BOOL)flag
 {
-   _acceptingEvents = flag && (_client != nil);
-   [canvas setIsProcessingEvents:_acceptingEvents];
+   _acceptingEvents = flag; // && (_client != nil);
+   if (_isWindowLoaded)
+   {
+      [canvas setIsProcessingEvents:_acceptingEvents];
+   }
    [self setLastEvent:@"0"];
 }
 

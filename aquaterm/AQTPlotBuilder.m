@@ -218,7 +218,7 @@
 
 - (void)setAcceptingEvents:(BOOL)flag
 {
-   _acceptingEvents = flag;
+//   _acceptingEvents = flag;
    NS_DURING
       [_handler setAcceptingEvents:flag];
    NS_HANDLER
@@ -233,13 +233,14 @@
 
 - (void)processEvent:(NSString *)event
 {
-   [owner processEvent:event]; // FIXME: Needs autoreleasing here???
+   // FIXME: insert info on self
+   [owner processEvent:event sender:self]; // FIXME: Needs autoreleasing here???
 }
 
 - (NSString *)lastEvent
 {
    NS_DURING
-      return [[_handler lastEvent] autorelease];
+      return [_handler lastEvent]; // FIXME: ???
    NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
          // [self _serverError]; // FIXME: Grab from AQTAdapterPrivateMethods

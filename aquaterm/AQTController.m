@@ -101,9 +101,9 @@
 }
 
 // Testing the use of a callback function to handle errors in the server
-void customEventHandler(NSString *event)
+void customEventHandler(int index, NSString *event)
 {
-   NSLog(@"Custom event handler --- %@", event);
+   NSLog(@"Custom event handler --- %@ from %d", event, index);
 }
 
 
@@ -127,7 +127,7 @@ void customEventHandler(NSString *event)
    {
       NSLog(@"Failed to init adapter");
    }
-/*
+
  [adapter setEventHandler:customEventHandler];
    [adapter openPlotWithIndex:2];// size:NSMakeSize(400,300) title:@"Testing"];
    [adapter setPlotSize:NSMakeSize(400,300)];
@@ -158,6 +158,7 @@ void customEventHandler(NSString *event)
    [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
    [adapter addTransformedImageWithBitmap:bytes size:NSMakeSize(2,2) clipRect:NSMakeRect(50,50,100,100)];
    [adapter renderPlot];
+   [adapter closePlot];
 
    t = [NSAffineTransform transform];
    [t translateXBy:10 yBy:10];
@@ -165,7 +166,7 @@ void customEventHandler(NSString *event)
    [t rotateByDegrees:30.0];
    ts = [t transformStruct];
    // NSLog(@"ts (m11 m12 m21 m22 tx ty)= (%f %f %f %f %f %f)", ts.m11, ts.m12, ts.m21, ts.m22, ts.tX, ts.tY);
-*/
+
  [adapter openPlotWithIndex:4];
    [adapter setPlotSize:NSMakeSize(200,200)];
    [adapter setPlotTitle:@"Image (tsr)"];
@@ -173,7 +174,7 @@ void customEventHandler(NSString *event)
    [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)]; // discards transform
    [adapter setAcceptingEvents:YES];
    [adapter renderPlot];
-/*
+
    [adapter openPlotWithIndex:5];
    [adapter setPlotSize:NSMakeSize(400,300)];
    [adapter setPlotTitle:@"Lines"];
@@ -196,7 +197,7 @@ void customEventHandler(NSString *event)
    [adapter moveToPoint:NSMakePoint(0, 0)]; // Force end of line
  
    [adapter renderPlot];
-*/
+
    /* 
 
    [adapter openPlotIndex:3 size:NSMakeSize(200,200) title:@"Image"];

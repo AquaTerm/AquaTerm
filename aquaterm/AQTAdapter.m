@@ -116,7 +116,8 @@ Event handling of user input is provided through an optional callback function.
 /*" Inform AquaTerm whether or events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events. "*/
 - (void)setAcceptingEvents:(BOOL)flag
 {
-   NSEnumerator *enumObjects = [_builders objectEnumerator];
+/*
+ NSEnumerator *enumObjects = [_builders objectEnumerator];
    AQTPlotBuilder *aBuilder;
    if (flag == YES)
    {
@@ -126,17 +127,19 @@ Event handling of user input is provided through an optional callback function.
          [aBuilder setAcceptingEvents:NO];
       }
    }
+ */
    [_selectedBuilder setAcceptingEvents:flag];
 }
 
-/*" Optionally set an event handling routine of the form #customEventHandler(NSString *event).
-The structure of the string event is @"type:data1:data2:..."
+/*" Optionally set an event handling routine of the form #customEventHandler(int index, NSString *event).
+The reference number of the plot that generated the event is passed in index and
+the structure of the string event is @"type:data1:data2:..."
 Currently supported events are:
 _{event description}
 _{0 NoEvent }
 _{1:%{x,y}:%button MouseDownEvent }
 _{2:%{x,y}:%key KeyDownEvent } "*/
-- (void)setEventHandler:(void (*)(NSString *event))fPtr
+- (void)setEventHandler:(void (*)(int index, NSString *event))fPtr
 {
    _eventHandler = fPtr;
 }
@@ -356,11 +359,15 @@ _{@"NSUnderline" 0or1}
 
 
 #pragma mark === Control operations ===
-- (void)processEvent:(NSString *)event
+- (void)processEvent:(NSString *)event sender:(id)sender
 {
    if (_eventHandler != nil)
    {
-      _eventHandler(event);
+      NSArray *keys = [_builders allKeysForObject:sender];
+      if ([keys count] > 0)
+      {
+         _eventHandler([[keys objectAtIndex:0] intValue], event);
+      }
    }
 /*
  else
@@ -385,7 +392,7 @@ _{@"NSUnderline" 0or1}
 /*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
 - (void)openPlotWithIndex:(int)refNum
 {
-   [_selectedBuilder setAcceptingEvents:NO]; // FIXME: This may or may not be desirable
+   // [_selectedBuilder setAcceptingEvents:NO]; // FIXME: This may or may not be desirable
    if ([self selectPlotWithIndex:refNum])
    {
       // already exists, just select and reset
@@ -423,7 +430,7 @@ _{@"NSUnderline" 0or1}
    AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSString stringWithFormat:@"%d", refNum]];
    if(tmpBuilder)
    {
-      [_selectedBuilder setAcceptingEvents:NO]; // FIXME: This may or may not be desirable
+      // [_selectedBuilder setAcceptingEvents:NO]; // FIXME: This may or may not be desirable
       _selectedBuilder = tmpBuilder;
       return YES;
    }

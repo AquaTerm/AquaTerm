@@ -70,6 +70,7 @@
 
 - (void)setIsProcessingEvents:(BOOL)flag
 {
+   // NSLog(@"%@ acceptEvents=%@", [model title], flag?@"YES":@"NO");
    _isProcessingEvents = flag;
    [[self window] invalidateCursorRectsForView:self];
 }

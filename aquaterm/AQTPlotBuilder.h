@@ -29,7 +29,7 @@
   int _pointCount;	/*" The current number of points in _path"*/
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
   AQTAffineTransformStruct _transform;
-  BOOL _acceptingEvents;
+//  BOOL _acceptingEvents;
   NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
   id owner;
   AQTColorMap *_colormap;
@@ -80,7 +80,7 @@
   /*" Control operations "*/
 - (void)eraseRect:(NSRect)aRect;
 - (void)render;
-- (void)clearAll; // <-- implement
+- (void)clearAll; 
 
    /*" Interactions with user "*/
 - (void)setAcceptingEvents:(BOOL)flag;
