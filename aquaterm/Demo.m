@@ -28,6 +28,7 @@ int main(void)
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   AQTAdapter *adapter = [[AQTAdapter alloc] init];
   aqtTestview(adapter);
+  [adapter release];
   return 0;
 }
 void aqtTestview(AQTAdapter *adapter)
@@ -299,5 +300,7 @@ pos = NSMakePoint(540.5, 75.5);
 [adapter addLabel:@"Baseline" atPoint:NSMakePoint(460, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignBaseline)];
 
 [adapter renderPlot];
+// [NSException raise:@"AQTFatalException" format:@"Testing"];
+
 [adapter closePlot];
 }
