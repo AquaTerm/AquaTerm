@@ -246,7 +246,7 @@ for (i=0; i<32; i++)
 [adapter takeColorFromColormapEntry:4];
 [adapter setFontname:@"Zapfino"];
 [adapter setFontsize:12.0];
-[adapter addLabel:@"Zapfino 12pt" position:NSMakePoint(320, 120) angle:0.0 align:AQTAlignLeft];
+[adapter addLabel:@"Zapfino 12pt" position:NSMakePoint(320, 104) angle:0.0 align:AQTAlignLeft];
 
 [adapter takeColorFromColormapEntry:2];
 [adapter setLinewidth:0.5];
@@ -289,10 +289,10 @@ pos = NSMakePoint(540.5, 75.5);
 [adapter takeColorFromColormapEntry:1];
 [adapter setFontname:@"Times-Italic"];
 [adapter setFontsize:14.0];
-[adapter addLabel:@"Top" position:NSMakePoint(330, 45.5) angle:0.0 align:AQTAlignLeft];
-[adapter addLabel:@"Bottom" position:NSMakePoint(360, 45.5) angle:0.0 align:AQTAlignLeft];
-[adapter addLabel:@"Middle" position:NSMakePoint(410, 45.5) angle:0.0 align:AQTAlignLeft];
-[adapter addLabel:@"Baseline" position:NSMakePoint(460, 45.5) angle:0.0 align:AQTAlignLeft];
+[adapter addLabel:@"Top" position:NSMakePoint(330, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignTop)];
+[adapter addLabel:@"Bottom" position:NSMakePoint(360, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignBottom)];
+[adapter addLabel:@"Middle" position:NSMakePoint(410, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignMiddle)];
+[adapter addLabel:@"Baseline" position:NSMakePoint(460, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignBaseline)];
 
 [adapter renderPlot];
 

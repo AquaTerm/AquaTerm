@@ -12,6 +12,8 @@
 #import "AQTPath.h"
 #import "AQTPatch.h"
 #import "AQTImage.h"
+// Needed for constants...
+#import "AQTAdapter.h" 
 
 //
 // Using an undocumented method in NSFont.
@@ -125,6 +127,7 @@
    NSAffineTransform *aTransform = [NSAffineTransform transform];
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
    NSSize tmpSize;
+   NSPoint adjust = NSZeroPoint;
    NSPoint pos = NSZeroPoint;
    //
    // appendBezierPathWithGlyph needs a valid context...
@@ -148,10 +151,30 @@
    tmpSize = [tmpPath bounds].size;
    //
    // Place the path according to position, angle and align
-   //
+   //   
+   // hAlign:
+   adjust.x = -(float)(justification & 0x03)*0.5*tmpSize.width;
+   // vAlign:
+   switch (justification & 0x1C)
+   {
+      case AQTAlignMiddle: // align middle wrt *font size*
+         adjust.y = -([aFont descender] + [aFont capHeight])*0.5; 
+         break;
+      case AQTAlignBaseline: // align baseline (do nothing)
+         break;
+      case AQTAlignBottom: // align bottom wrt *bounding box*
+         adjust.y = -[tmpPath bounds].origin.y;
+         break;
+      case AQTAlignTop: // align top wrt *bounding box*
+         adjust.y = -([tmpPath bounds].origin.y + tmpSize.height) ;
+         break;
+      default:
+         // default to align baseline (do nothing) in case of error
+         break;
+   }
    [aTransform translateXBy:position.x yBy:position.y];
    [aTransform rotateByDegrees:angle];
-   [aTransform translateXBy:-justification*tmpSize.width*0.5 yBy:-tmpSize.height*0.5]; // FIXME: compensate for baseline/center diff
+   [aTransform translateXBy:adjust.x yBy:adjust.y]; 
    [tmpPath transformUsingAffineTransform:aTransform];
 
    [self _setCache:tmpPath];

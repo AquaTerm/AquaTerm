@@ -20,9 +20,13 @@ enum {
 };
 
 enum {
-   AQTAlignLeft = 0,
-   AQTAlignCenter = 1,
-   AQTAlignRight = 2
+   AQTAlignLeft = 0x00,
+   AQTAlignCenter = 0x01,
+   AQTAlignRight = 0x02,
+   AQTAlignMiddle = 0x00,
+   AQTAlignBaseline = 0x04,
+   AQTAlignBottom = 0x08,
+   AQTAlignTop = 0x10
 };
 
 
