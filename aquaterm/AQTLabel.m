@@ -7,11 +7,11 @@
 //
 
 #import "AQTLabel.h"
-#import "AQTModel.h"
-#import "math.h"
 
-#define max(a, b) a>b?a:b 
-#define MIN_FONTSIZE 9.0
+/*" Justification Constants "*/
+#define justifyLeft 0
+#define justifyCenter 1
+#define justifyRight 2
 
 @implementation AQTLabel
     /**"
@@ -36,6 +36,25 @@
 {
   [string release];
   [super dealloc];
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+  [super encodeWithCoder:coder];
+  [coder encodeObject:string];
+  [coder encodeValueOfObjCType:@encode(NSPoint) at:&position];
+  [coder encodeValueOfObjCType:@encode(float) at:&angle];
+  [coder encodeValueOfObjCType:@encode(int) at:&justification];
+}
+
+-(id)initWithCoder:(NSCoder *)coder
+{
+  self = [super initWithCoder:coder];
+  string = [[coder decodeObject] retain];
+  [coder decodeValueOfObjCType:@encode(NSPoint) at:&position];
+  [coder decodeValueOfObjCType:@encode(float) at:&angle];
+  [coder decodeValueOfObjCType:@encode(int) at:&justification];
+  return self;
 }
 
 -(NSRect)bounds

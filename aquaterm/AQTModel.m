@@ -35,6 +35,22 @@
   [super dealloc];
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+  [super encodeWithCoder:coder];
+  [coder encodeObject:modelObjects];
+  [coder encodeObject:title];
+}
+
+-(id)initWithCoder:(NSCoder *)coder
+{
+  self = [super initWithCoder:coder];
+  modelObjects = [[coder decodeObject] retain];
+  title = [[coder decodeObject] retain];
+  return self;
+}
+
+
 -(int)count
 {
   return [modelObjects count];

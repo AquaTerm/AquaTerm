@@ -12,7 +12,7 @@
 
 @class AQTColorMap, AQTModel;
 
-@interface AQTGraphic : NSObject
+@interface AQTGraphic : NSObject <NSCoding>
 {
     NSColor *color;
   /* hasIndexedColor should be part of the subclasses that have an option! */

@@ -14,7 +14,12 @@
     *** An abstract class to derive model objects from
     *** (Overkill at present but could come in handy if the app grows…)
     "**/
-
+- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder
+{
+  if ([portCoder isBycopy])
+    return self;
+  return [super replacementObjectForPortCoder:portCoder];
+}  
 -(id)init
 {
     if (self = [super init])
@@ -29,6 +34,23 @@
   [color release];
   [super dealloc];
 }
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+  [coder encodeObject:color];
+  [coder encodeValueOfObjCType:@encode(int) at:&colorIndex];
+  [coder encodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
+}
+
+-(id)initWithCoder:(NSCoder *)coder
+{
+  self = [super init];
+  [self setColor:[coder decodeObject]];
+  [coder decodeValueOfObjCType:@encode(int) at:&colorIndex];
+  [coder decodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
+  return self;
+}
+
 
 -(NSSize)canvasSize
 {
