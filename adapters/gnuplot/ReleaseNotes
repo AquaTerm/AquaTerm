@@ -1,6 +1,6 @@
 AquaTerm 1.0a2
       Process a lot more options. Currently supported options are:
-      <n> title "theTitle" size <x> <y> fname "fontface" fsize <fontsize>
+      «n» title "theTitle" size «x» «y» fname "fontface" fsize «fontsize»
       Points and boxfill Implemented.
       Autoreleasepools should be handled in command() in gnuplot/src/command.c, 
       leave a last line of defense in the driver.     
