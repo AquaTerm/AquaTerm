@@ -19,8 +19,6 @@ static id adapter;                          // Adapter object
 // ----------------------------------------------------------------
 #include "plplotP.h"
 #include "drivers.h"
-#include "plDevs.h"
-#include "ps.h"
 
 /* declarations for functions local to aqt.c */
 
@@ -60,10 +58,9 @@ static int currentPlot = 0;
 static int maxWindows = 30;
 int colorChange;
 
-#define AQT_Max_X       (10.0*72.0)
-#define AQT_Max_Y       (10.0*72.0)
+#define AQT_Max_X       720.0
+#define AQT_Max_Y       720.0
 #define DPI             72.0
-#define SCALE           10.0
 
 //---------------------------------------------------------------------
 //   aqt_init()
@@ -99,11 +96,11 @@ void plD_init_aqt(PLStream *pls)
    //
    // Set up device parameters
    //
-   plP_setpxl(72./25.4, 72./25.4);           /* Pixels/mm. */
+   plP_setpxl(DPI/25.4, DPI/25.4);           /* Pixels/mm. */
    //
    //  Set the bounds for plotting.  initially set it to be a 400 x 400 array
    //
-   plP_setphy((PLINT) 0, (PLINT) (SCALE*AQT_Max_X), (PLINT) 0, (PLINT) (SCALE*AQT_Max_Y));
+   plP_setphy((PLINT) 0, (PLINT) (AQT_Max_X), (PLINT) 0, (PLINT) (AQT_Max_Y));
 }
 
 //----------------------------------------------------------------------
@@ -136,8 +133,8 @@ void plD_line_aqt(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
       set_color(pls);
       colorChange = FALSE;
    }
-   [adapter moveToPoint:NSMakePoint((float)x1a/SCALE, (float)y1a/SCALE)];
-   [adapter addLineToPoint:NSMakePoint((float)x2a/SCALE, (float)y2a/SCALE)];
+   [adapter moveToPoint:NSMakePoint((float)x1a, (float)y1a)];
+   [adapter addLineToPoint:NSMakePoint((float)x2a, (float)y2a)];
 }
 
 //---------------------------------------------------------------------
@@ -257,10 +254,10 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
       		colorChange = FALSE;
    		 }
    		 
-         [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0]/SCALE, pls->dev_y[0]/SCALE)];
+         [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0], pls->dev_y[0])];
          for (i = 1; i < pls->dev_npts ; i++)
          {
-            [adapter addEdgeToVertexPoint:NSMakePoint(pls->dev_x[i]/SCALE, pls->dev_y[i]/SCALE)];
+            [adapter addEdgeToVertexPoint:NSMakePoint(pls->dev_x[i], pls->dev_y[i])];
          };
          break;
       case PLESC_DI:                  // handle DI command
@@ -490,7 +487,7 @@ void proc_str (PLStream *pls, EscText *args)
       //  Set the default font and color for the string before we do anything else
       //
       [adapter setFontname:[NSString stringWithCString:ofont]];
-      [adapter setFontsize:ft_ht/SCALE];
+      [adapter setFontsize:ft_ht];
       [adapter setColorRed:(float)(pls->curcolor.r/255.)
                      green:(float)(pls->curcolor.g/255.)
                       blue:(float)(pls->curcolor.b/255.)];
@@ -525,7 +522,7 @@ void proc_str (PLStream *pls, EscText *args)
          }
       }
       // FIXME: is baseline correct assumption?
-      [adapter addLabel:s atPoint:NSMakePoint((float)args->x/SCALE, (float)args->y/SCALE) angle:alpha align:(jst | AQTAlignBaseline)]; 
+      [adapter addLabel:s atPoint:NSMakePoint((float)args->x, (float)args->y) angle:alpha align:(jst | AQTAlignBaseline)]; 
 
       [s release];
 
