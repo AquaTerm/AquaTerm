@@ -86,9 +86,14 @@
 
 - (BOOL)connectToServer
 {
+   return [self connectToServerWithName:@"aquatermServer"];
+}
+
+- (BOOL)connectToServerWithName:(NSString *)registeredName
+{
    // FIXME: Check to see if _server exists.
    BOOL didConnect = NO;
-   _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+   _server = [NSConnection rootProxyForConnectionWithRegisteredName:registeredName host:nil];
    if (!_server) {
       [self logMessage:@"Launching server..." logLevel:2];
       if (![self launchServer]) {

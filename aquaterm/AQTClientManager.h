@@ -24,6 +24,7 @@
 }
 + (AQTClientManager *)sharedManager;
 - (void)setServer:(id)server;
+- (BOOL)connectToServerWithName:(NSString *)registeredName;
 - (BOOL)connectToServer;
 - (BOOL)launchServer;
 - (void)terminateConnection;
