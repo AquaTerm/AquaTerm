@@ -268,7 +268,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 16:
       LOG(@"IFUNC=16, Flush buffer");
       // FIXME: this could be devastating for complex plots, sanity check needed!
-      // [adapter render];
+      [adapter render];
       break;
 
       //--- IFUNC=17, Read cursor. --------------------------------------------
