@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.28 2004/03/15 12:23:46 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.29 2004/03/15 16:02:43 persquare Exp $
  *
  */
 
@@ -272,8 +272,8 @@ AQUA_init()
   term->h_char = (int) (AQUA_fontSizeCur * 0.7 * AQUA_RESOLUTION);
   term->v_char = (int) (AQUA_fontSizeCur * 1.5 * AQUA_RESOLUTION);
   /* set h_tic, v_tic*/
-  term->h_tic = term->v_char / 2;
-  term->v_tic = term->v_char / 2;
+  term->h_tic = term->v_char / 3;
+  term->v_tic = term->v_char / 3;
 
   [adapter setPlotSize:NSMakeSize(AQUA_xSize/AQUA_RESOLUTION, AQUA_ySize/AQUA_RESOLUTION)];
   [adapter setPlotTitle:[NSString stringWithCString:AQUA_title]];
@@ -409,13 +409,13 @@ TERM_PUBLIC void
 AQUA_point(unsigned int x, unsigned int y, int number)
 {
   // The default dot-routine doesn't work with AQT
-  if (number<0)
-    {
-      [adapter setLinewidth:1.0];
-      [adapter moveToPoint:NSMakePoint(x/AQUA_RESOLUTION, y/AQUA_RESOLUTION)];
-      [adapter addLineToPoint:NSMakePoint(x/AQUA_RESOLUTION+1.0, y/AQUA_RESOLUTION)];
-      return;
-    }
+
+  [adapter setLinewidth:1.0];
+  [adapter moveToPoint:NSMakePoint(x/AQUA_RESOLUTION-.5, y/AQUA_RESOLUTION)];
+  [adapter addLineToPoint:NSMakePoint(x/AQUA_RESOLUTION+.5, y/AQUA_RESOLUTION)];
+  if (number<0) {
+    return;
+  }
   do_point(x, y, number);
 }
 
