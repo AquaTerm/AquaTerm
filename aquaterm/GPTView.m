@@ -1,5 +1,5 @@
 #import "GPTView.h"
-#import "GPTModel.h"
+#import "AQTModel.h"
 
 @implementation GPTView
 - (id)initWithFrame:(NSRect)frameRect 
@@ -29,7 +29,7 @@
     //
     // Get the model associated with this view
     //
-    GPTModel *modelReference = [[[self window] windowController] model];	// FAQ: Typecast to GPTWindowController to avoid warning?
+    AQTGraphic *modelReference = [[[self window] windowController] model];	// FAQ: Typecast to GPTWindowController to avoid warning?
     NSRect theBounds = [self bounds];
     //
     // Erase background and draw a stylish line around the view 
