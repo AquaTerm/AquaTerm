@@ -20,7 +20,7 @@
   self = [super init];
   if (self)
   {
-    modelObjects = [[NSMutableArray alloc] initWithCapacity:0];
+    modelObjects = [[NSMutableArray alloc] initWithCapacity:1024];
     [self setTitle:@"Untitled"];
     canvasSize = size;
   }
