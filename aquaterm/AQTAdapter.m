@@ -11,6 +11,7 @@
 
 #import "AQTAdapter.h"
 #import "AQTGraphic.h"
+#import "AQTImage.h"
 #import "AQTPlotBuilder.h"
 #import "AQTConnectionProtocol.h"
 #import "AQTClientProtocol.h"
@@ -267,6 +268,30 @@ error handling callback function for the client.
   [_selectedBuilder eraseRect:aRect];
 }
 
+- (void)setImageTransformM11:(float)m11 m12:(float)m12 m21:(float)m21 m22:(float)m22 tX:(float)tX tY:(float)tY
+{
+  AQTAffineTransformStruct trans;
+  trans.m11 = m11;
+  trans.m12 = m12;
+  trans.m21 = m21;
+  trans.m22 = m22;
+  trans.tX = tX;
+  trans.tY = tY;
+  [_selectedBuilder setImageTransform:trans];
+}
+
+- (void)resetImageTransform
+{
+  AQTAffineTransformStruct trans;
+  trans.m11 = 1.0;
+//  trans.m12 = m12;
+//  trans.m21 = m21;
+  trans.m22 = 1.0;
+//  trans.tX = tX;
+//  trans.tY = tY;
+  [_selectedBuilder setImageTransform:trans];
+}
+
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
   [_selectedBuilder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
@@ -396,7 +421,7 @@ error handling callback function for the client.
   }
   else
   {
-    // [_selectedHandler setModel:[_selectedBuilder model]];
+    [_selectedHandler setModel:[_selectedBuilder model]];
     NSLog(@"*** Warning -- Rendering non-dirty model ***");
   }
 }

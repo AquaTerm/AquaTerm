@@ -10,11 +10,18 @@
 
 #import "AQTGraphic.h"
 
+typedef struct _AQTAffineTransformStruct {
+  float m11, m12, m21, m22;
+  float tX, tY;
+} AQTAffineTransformStruct;
+
 @interface AQTImage : AQTGraphic
 {
   NSData *bitmap;
   NSSize bitmapSize;
+  AQTAffineTransformStruct transform;
 }
 - (id)initWithBitmap:(const char *)bytes size:(NSSize)size bounds:(NSRect)bounds;
 - (NSData *)bitmap;
+- (void)setTransform:(AQTAffineTransformStruct)newTransform;
 @end

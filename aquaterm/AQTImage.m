@@ -26,6 +26,9 @@
     _bounds = bounds;
     bitmapSize = size;
     bitmap = [[NSData alloc] initWithBytes:bytes length:3*size.width*size.height];  // 3 bytes/sample
+    // Identity matrix
+    transform.m11 = 1.0;
+    transform.m22 = 1.0;
   }
   return self;
   
@@ -43,6 +46,7 @@
   [coder encodeObject:bitmap];
   [coder encodeValueOfObjCType:@encode(NSSize) at:&bitmapSize];
   [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
+  [coder encodeValueOfObjCType:@encode(AQTAffineTransformStruct) at:&transform];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
@@ -51,6 +55,7 @@
   bitmap = [[coder decodeObject] retain];
   [coder decodeValueOfObjCType:@encode(NSSize) at:&bitmapSize];
   [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
+  [coder decodeValueOfObjCType:@encode(AQTAffineTransformStruct) at:&transform];
   return self;
 }
 
@@ -59,4 +64,10 @@
 {
   return bitmap;
 }
+
+- (void)setTransform:(AQTAffineTransformStruct)newTransform
+{
+  transform = newTransform;
+}
+
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AQTGraphic.h"
+#import "AQTImage.h"
 
 @class AQTModel;
 @interface AQTPlotBuilder : NSObject
@@ -23,7 +24,8 @@
   int _capStyle; /*" Currently selected linecap style "*/
   NSPoint _path[256];	/*" A cache for coalescing connected line segments into a single path "*/
   int _pointCount;	/*" The current number of points in _path"*/
-  BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/  
+  BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
+  AQTAffineTransformStruct _transform;
 }
 
 /*" Acessors "*/
@@ -60,6 +62,7 @@
 - (void)addFilledRect:(NSRect)aRect;
 
   /*" Image handling "*/
+- (void)setImageTransform:(AQTAffineTransformStruct)trans;
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage
 
   /*" Control operations "*/

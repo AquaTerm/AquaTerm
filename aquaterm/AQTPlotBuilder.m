@@ -31,7 +31,9 @@
     _color.blue = 0.0;
 //    _fontname = @"Times-Roman";
 //    _fontsize = 18.0;
-    _linewidth = .2;    
+    _linewidth = .2;
+    _transform.m11 = 1.0;
+    _transform.m22 = 1.0;
   }
   return self;
 }
@@ -285,12 +287,17 @@
 //
 // AQTImage
 //
+- (void)setImageTransform:(AQTAffineTransformStruct)trans
+{
+  _transform = trans;
+}
+
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
   AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
+  [tmpImage setTransform:_transform];
   [_model addObject:tmpImage];
   [tmpImage release];
   _modelIsDirty = YES;
-
 }
 @end
