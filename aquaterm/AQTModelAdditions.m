@@ -23,7 +23,7 @@
 -(void)appendModel:(AQTModel *)newModel
 {
    BOOL backgroundDidChange; // FIXME
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    backgroundDidChange = !AQTEqualColors([self color], [newModel color]);
    [self setTitle:[newModel title]];
    [self setCanvasSize:[newModel canvasSize]];

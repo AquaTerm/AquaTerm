@@ -238,7 +238,7 @@ static inline void NOOP_(id x, ...) {;}
 
 -(void)close
 {
-   NSLog(@"close");
+   LOG(@"close");
 }
 
 -(void)setClient:(id)client

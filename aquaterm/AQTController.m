@@ -214,7 +214,7 @@ extern void aqtLineDrawingTest(id sender);
    for(i=0;i<[handlerList count];i++) {
       row = i/nCol;
       col = i%nRow;
-      NSLog(@"(row, col)=(%d, %d)", row, col);
+      // NSLog(@"(row, col)=(%d, %d)", row, col);
       NSRect tmpFrame = NSMakeRect(tileOrigin.x+col*tileSize.width, tileOrigin.y-row*tileSize.height, tileSize.width, tileSize.height);
       [[handlerList objectAtIndex:i] constrainWindowToFrame:tmpFrame];
    }
