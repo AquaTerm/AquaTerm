@@ -11,6 +11,11 @@ C
 C     Initialize AquaTerm adapter
       CALL aqt_init()
 C
+C     Open a new graph for drawing into
+      CALL aqt_open(1)
+C     Set the title (Default is 'Figure n')
+      CALL aqt_title('Test of f2aqt')
+C
 C     Set color entries in colortable
 C     Black
       CALL aqt_set_color(0, 0.0, 0.0, 0.0)
@@ -20,11 +25,7 @@ C     Green
       CALL aqt_set_color(2, 0.0, 1.0, 0.0)
 C     Blue
       CALL aqt_set_color(3, 0.0, 0.0, 1.0)
-C
-C     Open a new graph for drawing into
-      CALL aqt_open(1)
-C     Set the title (Default is 'Figure n')
-      CALL aqt_title('Test of f2aqt')
+
 C     Set text justification: 0 = left, 1 = center, 2 = right
       CALL aqt_textjust(0)
       DO 10 i = 0, 3
@@ -40,11 +41,24 @@ C     Select font and size (default is Times-Roman 16pt)
 C     Add the text with the current attributes
          CALL aqt_text(400.0, i*50.0+100.0, 'Hello World!')
  10   END DO
-C     Close current graph => render it in window
+C     Draw it 
+      CALL aqt_render()
+C     Close current graph
       CALL aqt_close()
 C     
 C     Open a new graph for drawing into
       CALL aqt_open(2)
+C
+C     Set color entries in colortable
+C     Black
+      CALL aqt_set_color(0, 0.0, 0.0, 0.0)
+C     Red
+      CALL aqt_set_color(1, 1.0, 0.0, 0.0)
+C     Green
+      CALL aqt_set_color(2, 0.0, 1.0, 0.0)
+C     Blue
+      CALL aqt_set_color(3, 0.0, 0.0, 1.0)
+C      
 C     Get the size of the canvas
       CALL aqt_get_size(x_max, y_max)
 C     Set the title (Default is 'Figure n')
@@ -85,7 +99,9 @@ C     Nil-terminate strings since they are padded with ' ' characters:
       CALL aqt_image(string, xpos, ypos, w, h)
 C     Constant strings don't _need_ nil-termination, but seem to have a max length of 32
       CALL aqt_image('~/Pictures/m31.jpg', 10.0, 10.0, 101.0, 102.0)
-C     Close current graph => render it in window
+C     Draw it 
+      CALL aqt_render()
+C     Close current graph
       CALL aqt_close()
       END
 
