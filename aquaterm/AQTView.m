@@ -30,14 +30,11 @@
 
 -(void)dealloc
 {
-  [model release];
   [super dealloc];
 }
 
 -(void)setModel:(AQTModel *)newModel
 {
-  [newModel retain];
-  [model release];
   model = newModel;
 }
 

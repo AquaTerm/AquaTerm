@@ -13,6 +13,7 @@
 @interface AQTClientHandler : NSObject <AQTClientProtocol>
 {
   AQTController *owner;
+  NSMutableDictionary *plotList;
   int currentView;
 }
 -(void)setOwner:(AQTController *)ref;
