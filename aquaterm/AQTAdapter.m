@@ -116,18 +116,6 @@ Event handling of user input is provided through an optional callback function.
 /*" Inform AquaTerm whether or events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events. "*/
 - (void)setAcceptingEvents:(BOOL)flag
 {
-/*
- NSEnumerator *enumObjects = [_builders objectEnumerator];
-   AQTPlotBuilder *aBuilder;
-   if (flag == YES)
-   {
-      // Make sure only one view per client process events
-      while (aBuilder = [enumObjects nextObject])
-      {
-         [aBuilder setAcceptingEvents:NO];
-      }
-   }
- */
    [_selectedBuilder setAcceptingEvents:flag];
 }
 
@@ -392,7 +380,6 @@ _{@"NSUnderline" 0or1}
 /*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
 - (void)openPlotWithIndex:(int)refNum
 {
-   // [_selectedBuilder setAcceptingEvents:NO]; // FIXME: This may or may not be desirable
    if ([self selectPlotWithIndex:refNum])
    {
       // already exists, just select and reset
@@ -415,7 +402,7 @@ _{@"NSUnderline" 0or1}
       NS_ENDHANDLER
       if (newHandler)
       {
-         [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
+         [_builders setObject:newBuilder forKey:[NSNumber numberWithInt:refNum]];
          [newBuilder setHandler:newHandler];
          [newBuilder setOwner:self];
          _selectedBuilder = newBuilder;
@@ -427,10 +414,9 @@ _{@"NSUnderline" 0or1}
 /*" Get the plot referenced by refNum and make it the target for subsequent commands. If no plot exists for refNum, the currently targeted plot remain unchanged. Disables event handling for previously targeted plot. Returns YES on success. "*/
 - (BOOL)selectPlotWithIndex:(int)refNum
 {
-   AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSString stringWithFormat:@"%d", refNum]];
+   AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSNumber numberWithInt:refNum]];
    if(tmpBuilder)
    {
-      // [_selectedBuilder setAcceptingEvents:NO]; // FIXME: This may or may not be desirable
       _selectedBuilder = tmpBuilder;
       return YES;
    }
