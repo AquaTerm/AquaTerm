@@ -1,9 +1,10 @@
+---
 AquaTerm 1.0a2
-      Process a lot more options. Currently supported options are:
-      «n» title "theTitle" size «x» «y» fname "fontface" fsize «fontsize»
-      Points and boxfill Implemented.
-      Autoreleasepools should be handled in command() in gnuplot/src/command.c, 
-      leave a last line of defense in the driver.     
+    Process a lot more options. Currently supported options are:
+    <n> title "theTitle" size <x> <y> fname "fontface" fsize <fontsize>
+    Points and boxfill Implemented.
+    Autoreleasepools should be handled in command() in gnuplot/src/command.c, 
+    leave a last line of defense in the driver.     
    
 AquaTerm 1.0a1
     Moved all common code into libaquaterm.dylib, all adapters link with this.
@@ -17,3 +18,4 @@ AquaTerm 0.3.1
 
 AquaTerm 0.3.0
     New syntax: set term aqua [<n> [title "windowtitle"]]
+===
