@@ -38,7 +38,6 @@ enum {
   NSDistantObject <AQTConnectionProtocol> *_server; /* The viewer app's (AquaTerm) default connection */
   NSMutableDictionary *_builders; /* The objects responsible for assembling a model object from client's calls. */
   AQTPlotBuilder *_selectedBuilder;
-  BOOL _serverIsLocal; // FIXME: use isProxy to determine.
   void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
   void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
   id _eventBuffer;
@@ -51,7 +50,6 @@ enum {
 - (id)initWithServer:(id)localServer;
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr;
 - (void)setEventHandler:(void (*)(int index, NSString *event))fPtr;
-
 
   /*" Control operations "*/
 - (void)openPlotWithIndex:(int)refNum; 

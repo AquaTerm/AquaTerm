@@ -80,7 +80,6 @@ Event handling of user input is provided through an optional callback function.
       if(localServer)
       {
          _server = localServer;
-         _serverIsLocal=YES;
       }
       else
       {
@@ -119,7 +118,7 @@ Event handling of user input is provided through an optional callback function.
       NS_ENDHANDLER
       [_builders release];
       [_eventBuffer release];
-      if(_serverIsLocal == NO)
+      if([_server isProxy])
       {
          [_server release];
       }
