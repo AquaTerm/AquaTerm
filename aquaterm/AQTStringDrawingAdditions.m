@@ -8,6 +8,8 @@
 
 #import "AQTStringDrawingAdditions.h"
 
+NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int *i, int sublevel, NSPoint pos, float fontScale);
+
 
 
 NSImage *_aqtSharedScratchPad(void)
@@ -33,12 +35,12 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
       0x03C0, 0x03B8, 0x03C1, 0x03C3, 0x03C4, 0x03C5, 0x03D6, 0x03C9, 0x03BE, 0x03C8, 0x03B6, 0x007B, 0x007C, 0x007D, 0x223C, 0x007F,
       0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087, 0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
       0x0090, 0x0091, 0x0092, 0x0093, 0x0094, 0x0095, 0x0096, 0x0097, 0x0098, 0x0099, 0x009A, 0x009B, 0x009C, 0x009D, 0x009E, 0x009F,
-      /* --> */      0x20AC, 0x00A1, 0x00A2, 0x00A3, 0x00A4, 0x00A5, 0x00A6, 0x00A7, 0x00A8, 0x00A9, 0x00AA, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x00AF,
-      0x00B0, 0x00B1, 0x00B2, 0x00B3, 0x00B4, 0x00B5, 0x00B6, 0x00B7, 0x00B8, 0x00B9, 0x00BA, 0x00BB, 0x00BC, 0x00BD, 0x00BE, 0x00BF,
-      0x00C0, 0x00C1, 0x00C2, 0x00C3, 0x00C4, 0x00C5, 0x00C6, 0x00C7, 0x00C8, 0x00C9, 0x00CA, 0x00CB, 0x00CC, 0x00CD, 0x00CE, 0x00CF,
-      0x00D0, 0x00D1, 0x00D2, 0x00D3, 0x00D4, 0x00D5, 0x00D6, 0x00D7, 0x00D8, 0x00D9, 0x00DA, 0x00DB, 0x00DC, 0x00DD, 0x00DE, 0x00DF,
-      0x00E0, 0x00E1, 0x00E2, 0x00E3, 0x00E4, 0x00E5, 0x00E6, 0x00E7, 0x00E8, 0x00E9, 0x00EA, 0x00EB, 0x00EC, 0x00ED, 0x00EE, 0x00EF,
-      0x00F0, 0x00F1, 0x222B, 0x2320, 0x222B, 0x2321, 0x00F6, 0x00F7, 0x00F8, 0x00F9, 0x00FA, 0x00FB, 0x00FC, 0x00FD, 0x00FE, 0x00FF};
+      0x20AC, 0x03D2, 0x2032, 0x2264, 0x2044, 0x221E, 0x0192, 0x2663, 0x2666, 0x2665, 0x2660, 0x2194, 0x2190, 0x2191, 0x2192, 0x2193,
+      0x00B0, 0x00B1, 0x2033, 0x2265, 0x00D7, 0x221D, 0x2202, 0x2022, 0x00F7, 0x2260, 0x2261, 0x2248, 0x2026, 0xF8E6, 0xF8E7, 0x21B5,
+      0x2135, 0x2111, 0x211C, 0x2118, 0x2297, 0x2295, 0x2205, 0x2229, 0x222A, 0x2283, 0x2287, 0x2284, 0x2282, 0x2286, 0x2208, 0x2209,
+      0x2220, 0x2207, 0x00AE, 0x00A9, 0x2122, 0x220F, 0x221A, 0x22C5, 0x00AC, 0x2227, 0x2228, 0x21D4, 0x21D0, 0x21D1, 0x21D2, 0x21D3,
+      0x22C4, 0x3008, 0x00AE, 0x00A9, 0x2122, 0x2211, 0x00E6, 0x00E7, 0x00E8, 0x00E9, 0x00EA, 0x00EB, 0x00EC, 0x00ED, 0x00EE, 0xF8F4,
+      0xF8FF, 0x3009, 0x222B, 0x2320, 0x00F4, 0x2321, 0x00F6, 0x00F7, 0x00F8, 0x00F9, 0x00FA, 0x00FB, 0x00FC, 0x00FD, 0x00FE, 0x00FF};
    
    return theChar<256?map[theChar]:0x0000;
 }
@@ -52,8 +54,8 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    int strLen = [self length];
    NSPoint pos = NSZeroPoint;
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
+   BOOL convertFont = [[aFont fontName] isEqualToString:@"Symbol"];
    
-   NSLog(self);
    // Remove leading spaces FIXME: trailing as well?, need better solution
    // Don't skip a single space...
    while (strLen>1 && firstChar<strLen && [self characterAtIndex:firstChar] == ' ') {
@@ -61,20 +63,23 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    }
    
    [_aqtSharedScratchPad() lockFocus];
-   
    [tmpPath moveToPoint:pos];
    
    for(i=firstChar; i<strLen; i++)
    {
+      NSGlyph theGlyph;
+      NSSize offset;
       unichar theChar = [self characterAtIndex:i];
-      NSGlyph theGlyph = [aFont _defaultGlyphForChar:theChar];
-      NSSize offset = [aFont advancementForGlyph:theGlyph];
-      
+      if (convertFont)
+         theChar = _aqtMapAdobeSymbolEncodingToUnicode(theChar);
+      theGlyph = [aFont _defaultGlyphForChar:theChar];
+      offset = [aFont advancementForGlyph:theGlyph];
       [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
       pos.x += offset.width;
       pos.y += offset.height;
       [tmpPath moveToPoint:pos];      
    }
+
    [_aqtSharedScratchPad() unlockFocus];
    return tmpPath;
 }
@@ -102,6 +107,8 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    int subscriptState = 0;
    int firstChar = 0;
    float baselineOffset = 0.0;
+   int index = 0;
+   
    // 
    // Remove leading spaces FIXME: trailing as well?, need better solution
    // Don't skip a single space...
@@ -111,10 +118,13 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    [_aqtSharedScratchPad() lockFocus];
    
    [tmpPath moveToPoint:pos];   
+#if  1
+   pos = recurse(tmpPath, self, [defaultFont fontName], [defaultFont pointSize], &index, 0, pos, 1.0);
+#elif
    for(i=firstChar; i<strLen; i++) {
-      unichar theChar = [text characterAtIndex:i];
       NSGlyph theGlyph;
       NSSize offset;
+      unichar theChar = [text characterAtIndex:i];
       NSDictionary *attrDict = [self attributesAtIndex:i effectiveRange:nil];
       tmpNormalFont = defaultFont;
       tmpSubFont = subFont;
@@ -258,7 +268,89 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
       [tmpPath moveToPoint:pos];      
       subscriptState = newSubscriptState;
    }
+#endif
    [_aqtSharedScratchPad() unlockFocus];
    return tmpPath;
 }
 @end
+
+
+NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int *i, int sublevel, NSPoint pos, float fontScale)
+{
+   static float maxRight = 0.0;
+   NSString *text = [attrString string];
+   NSPoint subPos = pos;
+   BOOL extendsRight = NO;
+   int strLen = [text length];
+   float glyphHeight = defaultFontSize * fontScale;
+   int attributedSublevel = 0;
+   float baselineOffset = 0.0;
+    
+   while (*i < strLen) {
+      //
+      // Read attributes
+      // 
+      NSDictionary *attributes = [attrString attributesAtIndex:*i effectiveRange:nil];
+      NSString *attributedFontname = ([attributes objectForKey:@"AQTFontname"] != nil)?
+         [attributes objectForKey:@"AQTFontname"]:
+         defaultFontName; 
+      float attributedFontsize = ([attributes objectForKey:@"AQTFontsize"] != nil)?
+         [[attributes objectForKey:@"AQTFontsize"] intValue]:
+         defaultFontSize;
+      attributedSublevel = ([attributes objectForKey:NSSuperscriptAttributeName] != nil)?
+         [[attributes objectForKey:NSSuperscriptAttributeName] intValue]:
+         0;
+      float baselineAdjust = ([attributes objectForKey:@"AQTBaselineAdjust"] != nil)?
+         [[attributes objectForKey:@"AQTBaselineAdjust"] floatValue]:
+         0.0;
+      BOOL isVisible = ([attributes objectForKey:@"AQTPrintingChar"] == nil 
+         || [[attributes objectForKey:@"AQTPrintingChar"] intValue] == 1);
+      if (attributedSublevel == sublevel) {
+         NSFont *aFont;
+         unichar theChar;
+         NSGlyph theGlyph;
+         // Get selected font
+         if ((aFont = [NSFont fontWithName:attributedFontname size:attributedFontsize * fontScale]) == nil)
+            aFont = [NSFont systemFontOfSize:attributedFontsize * fontScale]; 
+         theChar = [text characterAtIndex:*i];
+         // Perform neccessary conversion to Unicode
+         if ([[aFont fontName] isEqualToString:@"Symbol"]) {
+            theChar = _aqtMapAdobeSymbolEncodingToUnicode(theChar);
+         }
+         // Get the glyph
+         theGlyph = [aFont _defaultGlyphForChar:theChar];
+         if (extendsRight)
+            pos.x = maxRight;         
+         glyphHeight = [aFont boundingRectForGlyph:theGlyph].size.height;
+         baselineOffset = glyphHeight*baselineAdjust;
+         [path moveToPoint:NSMakePoint(pos.x, pos.y+baselineOffset)];
+         if (isVisible)
+            [path appendBezierPathWithGlyph:theGlyph inFont:aFont];
+         pos.x += [aFont advancementForGlyph:theGlyph].width;
+         [path moveToPoint:pos];
+         maxRight = MAX(pos.x, maxRight);
+         extendsRight = NO; 
+         (*i)++;
+      } else if(abs(attributedSublevel) <= abs(sublevel)) {
+         return pos;
+      } else {
+         float baseline;
+         if(attributedSublevel < 0)
+            baseline = pos.y - attributedFontsize * 0.3 * fontScale + baselineOffset;
+         else
+            baseline = pos.y + glyphHeight * 0.7 + baselineOffset; 
+         extendsRight = YES;
+         subPos = recurse(path, attrString, defaultFontName, defaultFontSize, i, attributedSublevel, NSMakePoint(pos.x, baseline), fontScale * 0.65);
+         maxRight = MAX(subPos.x, maxRight);
+      }
+   }
+   maxRight = 0.0; 
+   return pos;
+}
+
+
+
+
+
+
+
