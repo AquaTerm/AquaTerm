@@ -1,3 +1,6 @@
+AquaTerm 1.0.b2
+  Fixing a problem with LaunchServices
+
 AquaTerm 1.0.b1
   Adding user preferences.
   Adding preference to constrain minimum line width used in plot to 0.25 pts.

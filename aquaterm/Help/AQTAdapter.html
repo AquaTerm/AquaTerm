@@ -7,7 +7,6 @@
 	<meta name="generator" content="BBEdit 6.5.3">
 </head>
 <body>
-<div id="rh-col">
 <h1><font color="#000066"><a name="//apple_ref/occ/cl/AQTAdapter">AQTAdapter</a></font></h1>
 <br>
 <blockquote>
@@ -41,6 +40,7 @@
 	Event handling of user input is provided through an optional callback function.</p>
 <p>
 	<b>Example:</b> HelloAquaTerm.c <code>&nbsp;&nbsp;&nbsp;&nbsp;
+		<br>
 		<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;<b>#import</b> &lt;Foundation/Foundation.h&gt;
 		<br>
@@ -107,6 +107,7 @@
 	<h4>Description:</h4>Constants that specify vertical alignment for labels.
 </blockquote>
 <hr width="50%" align="LEFT">
+<!-- These are not accessible anyhow...
 <h2>Instance Variables</h2>
 <blockquote>
 	<code>AQTClientManager *<b>_clientManager</b>;</code>
@@ -153,6 +154,7 @@
 	</table>
 </blockquote>
 <hr width="50%" align="LEFT">
+-->
 <h2>Method Types</h2>
 <blockquote>
 	Class initialization etc.
@@ -165,9 +167,11 @@
 		<dd>
 			<a href="#-%20initWithServer:">- initWithServer:</a>
 		</dd>
+<!-- This is not a method to rely on, leave out of docs
 		<dd>
 			<a href="#-%20setErrorHandler:">- setErrorHandler:</a>
 		</dd>
+-->        
 		<dd>
 			<a href="#-%20setEventHandler:">- setEventHandler:</a>
 		</dd>
@@ -624,6 +628,7 @@ The <i>text</i> can be either an NSString or an NSAttributedString. By using NSA
 	Set an RGB entry in the <em>current</em> colormap, at the position given by <i>entryIndex</i>.</p>
 
 	<hr width="25%" align="LEFT">
+<!--
 	<a name="- setErrorHandler:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setErrorHandler:">setErrorHandler:</a></h3>
 <p>
 	<code>- (void)<b>setErrorHandler:</b>(void (*)(NSString *msg))<em>fPtr</em> </code></p>
@@ -634,11 +639,15 @@ The <i>text</i> can be either an NSString or an NSAttributedString. By using NSA
 	<em>*** This method is experimental, it may not be part of future releases ***</em> </p>
 
 	<hr width="25%" align="LEFT">
+-->
 	<a name="- setEventHandler:"></a><h3><a name="//apple_ref/occ/instm/AQTAdapter/setEventHandler:">setEventHandler:</a></h3>
 <p>
 	<code>- (void)<b>setEventHandler:</b>(void (*)(int index, NSString *event))<em>fPtr</em> </code></p>
 <p>
 	Optionally set an event handling routine of the form <b>customEventHandler</b>(int index, NSString *event). The reference number of the plot that generated the event is passed in index and the structure of the string event is @&quot;type:data1:data2:...&quot; See <b>waitNextEvent</b> for a description of the information returned.</p>
+<p>
+   The callback function <em>fPtr</em> should not access the adapter methods further, but rather pass relevant event information to the client's event queue and return control to aquaterm.
+</p>
 <p>
 	<em>*** This method is experimental, it may not be part of future releases ***</em> </p>
 <p>
@@ -801,7 +810,5 @@ The structure of the returned string describing the event is @&quot;type:data1:d
 </table>
 <hr>
 	Version 1.1 Copyright &copy;2003 by AquaTerm. All Rights Reserved. Mon Dec 29 23:43:45 2003
-</div>
-
 </body>
 </html>

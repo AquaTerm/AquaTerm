@@ -1,3 +1,110 @@
+2004-09-29 12:03  persquare
+
+	* AQTController.m, AquaTerm.app-Info.plist, ReadMe.rtf,
+	  ReleaseNotes, Help/AQTAdapter.html: Bump to version 1.0.b2.
+
+2004-09-29 12:01  persquare
+
+	* distroMakefile, installer/installer.packproj: Building .pkg
+	  directly in destination because of data loss when copying.
+
+2004-09-29 12:00  persquare
+
+	* installer/preflight: Remove library too.
+
+2004-09-29 11:59  persquare
+
+	* Fwk-Info.plist: Adding an experimental Framework target.
+
+2004-09-29 11:59  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Adding an experimental Framework
+	  target. Minor changes.
+
+2004-09-29 11:57  persquare
+
+	* AQTClientManager.m: Changing the way launching from client works.
+
+2004-09-21 23:12  persquare
+
+	* AQTController.m, AQTPlot.m, AQTModelAdditions.m: Removing stray
+	  logging.
+
+2004-09-16 13:12  persquare
+
+	* ReadMe.rtf: Using RTF for main ReadMe file (again).
+
+2004-09-16 13:11  persquare
+
+	* Help/: AQTAdapter.html, help.html: Adding help files to project.
+
+2004-09-16 13:03  persquare
+
+	* AquaTerm.pbproj/project.pbxproj, AQTAdapter.h,
+	  AQTClientManager.m, AQTClientProtocol.h,
+	  AQTGraphicDrawingMethods.m, ReleaseNotes, distroMakefile: Final
+	  changes for first beta release.
+
+2004-09-16 13:00  persquare
+
+	* English.lproj/help.html: This file is now copied to Resources at
+	  build time.
+
+2004-09-12 23:23  persquare
+
+	* ChangeLog, ReleaseNotes: Update.
+
+2004-09-12 23:22  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Don't strip deployment binaries
+	  (yet).
+
+2004-09-12 23:20  persquare
+
+	* distroMakefile: Minor changes.
+
+2004-09-10 16:33  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Removing absolute file
+	  references.
+
+2004-09-10 15:57  persquare
+
+	* distroMakefile, AquaTerm.pbproj/project.pbxproj,
+	  installer/installer.packproj: Rearranging stuff and updating
+
+2004-09-09 13:33  persquare
+
+	* distroMakefile: First steps towards a fully automated release
+	  system.
+
+2004-09-09 12:53  persquare
+
+	* installer/: installer.packproj, postflight, preflight: Now using
+	  Iceberg to create an installer pkg.
+
+2004-09-04 17:46  persquare
+
+	* AQTClientHandler.h, AQTClientHandler.m: Removing unused files.
+
+2004-09-04 17:42  persquare
+
+	* AQTAdapterPrivateMethods.h, AQTAdapterPrivateMethods.m: Removing
+	  unused files.
+
+2004-09-04 17:36  persquare
+
+	* AquaTerm.pbproj/project.pbxproj, AquaTerm.app-Info.plist:
+	  Bringing project up to date.
+
+2004-09-04 17:33  persquare
+
+	* AQTController.m, AQTGraphicDrawingMethods.m, AQTPrefController.h,
+	  AQTPrefController.m, English.lproj/Preferences.nib/classes.nib,
+	  English.lproj/Preferences.nib/info.nib,
+	  English.lproj/Preferences.nib/objects.nib: Adding preference to
+	  constrain minimum line width used in plot to 0.25 pts.
+
 2004-09-03 23:24  persquare
 
 	* AQTClientManager.m: Catch server errors as gracefully as

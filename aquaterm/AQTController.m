@@ -136,7 +136,7 @@ extern void aqtLineDrawingTest(id sender);
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
    // FIXME: inform clients?
-   NSLog(@"Implement %@, %s:%d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"Implement %@, %s:%d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 }
 
 #pragma mark === AQTConnectionProtocol ===
@@ -242,7 +242,7 @@ extern void aqtLineDrawingTest(id sender);
 
 -(NSString *)_aqtBugMsg
 {
-    return @"Bug report for AquaTerm 1.0.b1\n\n\
+    return @"Bug report for AquaTerm 1.0.b2\n\n\
 Description:\n-----------------------\n\n\
 *\tPlease replace this item with a detailed description of the \n\
 \tproblem.  Suggestions or general comments are also welcome.\n\n\
@@ -270,7 +270,7 @@ Configuration (please do not edit this section):\n\
 
 -(NSString *)_aqtMailMsg
 {
-    return @"Feedback report for AquaTerm 1.0.b1\n\n\
+    return @"Feedback report for AquaTerm 1.0.b2\n\n\
 Feedback:\n-----------------------\n\n\
 *\tPlease replace this item with suggestions or general comments.\n\n";
 }
