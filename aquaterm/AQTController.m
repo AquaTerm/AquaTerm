@@ -240,6 +240,62 @@ extern void aqtLineDrawingTest(id sender);
   }
 }
 
+-(IBAction)showAvailableFonts:(id)sender
+{
+   int row = 10;
+   int col = 10;
+   NSFontManager *fontManager = [NSFontManager sharedFontManager];
+   NSString *systemFont = [[NSFont systemFontOfSize:10.0] fontName];
+   NSMutableArray *allFontnames = [NSMutableArray arrayWithCapacity:1024];
+
+   // Set up Aquaterm
+   AQTAdapter *adapter = [self sharedAdapter];
+   [adapter openPlotWithIndex:1];
+   [adapter setPlotTitle:@"Available fonts"];
+   [adapter setPlotSize:NSMakeSize(1000, 700)];
+   [adapter setFontsize:8.0];
+
+   // Collect all fontnames
+   NSArray *allFontFamilies = [fontManager availableFontFamilies];
+   NSEnumerator *fontFamilyEnumerator = [allFontFamilies objectEnumerator];
+   NSString *familyName;
+   
+   while (familyName = [fontFamilyEnumerator nextObject]) {
+      NSArray *allFonts = [fontManager availableMembersOfFontFamily:familyName];
+      NSEnumerator *fontEnumerator = [allFonts objectEnumerator];
+      NSArray *variation;
+      while (variation = [fontEnumerator nextObject]) {
+         [allFontnames addObject:[variation objectAtIndex:0]];
+      }
+   }
+   
+   // Display them in alphabetical order
+   [allFontnames sortUsingSelector:@selector(caseInsensitiveCompare:)];
+   NSEnumerator *fontEnumerator = [allFontnames objectEnumerator];
+   NSString *fontname;
+   
+   while (fontname = [fontEnumerator nextObject]) {
+      [adapter setFontname:systemFont];
+      [adapter setColorRed:0.0 green:0.0 blue:0.0];
+      [adapter addLabel:fontname
+                atPoint:NSMakePoint(row, 700-col)
+                  angle:0.0
+                  align:0];
+      [adapter setFontname:fontname];
+      [adapter setColorRed:0.0 green:0.0 blue:1.0];
+      [adapter addLabel:@"ABC abc"
+                atPoint:NSMakePoint(row+140, 700-col)
+                  angle:0.0
+                  align:0];
+      col += 12;
+      if (col > 688) {
+         col = 10;
+         row += 200;
+      }
+   }
+   [adapter renderPlot];   
+}
+
 #define NSAppKitVersionNumber10_0 577
 #define NSAppKitVersionNumber10_1 620
 #define NSAppKitVersionNumber10_2 663

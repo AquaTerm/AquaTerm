@@ -26,6 +26,7 @@
 -(IBAction)tileWindows:(id)sender;
 -(IBAction)cascadeWindows:(id)sender;
 -(IBAction)showHelp:(id)sender;
+-(IBAction)showAvailableFonts:(id)sender;
 -(IBAction)showPrefs:(id)sender;
 -(IBAction)debug:(id)sender;
 -(IBAction)mailBug:(id)sender;
