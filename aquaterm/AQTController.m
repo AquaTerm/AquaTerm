@@ -12,6 +12,7 @@
 #import "AQTColorInspector.h"
 #import "AQTClientHandler.h"
 #import "AQTModel.h"
+#import "AQTAdapter.h"
 
 @implementation AQTController
 /**"
@@ -39,6 +40,23 @@
 "**/
 -(void)awakeFromNib
 {
+   //
+   // First of all, create a local client for testing purposes:
+   //
+   AQTAdapter *localClient;
+   id h = [[AQTClientHandler alloc] init];
+   clientList = [[[NSMutableArray alloc] initWithCapacity:16] retain];
+   handlerList = [[[NSMutableArray alloc] initWithCapacity:16] retain];
+   localClient = [[AQTAdapter alloc] initWithHandler:h]; 
+
+   [clientList addObject:localClient];
+   [h setOwner:self];
+   [handlerList addObject:h];
+   [h release];
+   [localClient release];
+   //
+   // Next, set up a DO connection:
+   //   
   doConnection = [[NSConnection defaultConnection] retain];
   [doConnection setIndependentConversationQueueing:YES];	// FAQ: Needed to sync calls!!!!
   [doConnection setRootObject:self];
@@ -364,4 +382,19 @@
   }
 }
 
+-(IBAction)test:(id)sender
+{
+   AQTAdapter *testObject = [clientList objectAtIndex:0];
+   [testObject openPlotIndex:1 size:NSMakeSize(400,300) title:@"Testing"];
+   [testObject addLabel:@"Right" position:NSMakePoint(200,160) angle:0.0 justification:0];
+   [testObject addLabel:@"Left" position:NSMakePoint(200,150) angle:0.0 justification:1];
+   [testObject addLabel:@"Center" position:NSMakePoint(200,170) angle:0.0 justification:2];
+   [testObject addLineAtPoint:NSMakePoint(random() % 400, random() % 300)];
+   [testObject appendLineToPoint:NSMakePoint(random() % 400, random() % 300)];
+   [testObject appendLineToPoint:NSMakePoint(random() % 400, random() % 300)];
+   [testObject appendLineToPoint:NSMakePoint(random() % 400, random() % 300)];
+   [testObject appendLineToPoint:NSMakePoint(random() % 400, random() % 300)];
+   [testObject addLineAtPoint:NSMakePoint(0, 0)]; // Force end of line
+   [testObject closePlot];
+}
 @end

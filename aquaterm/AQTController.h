@@ -34,5 +34,5 @@
 -(void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(NSPopUpButton *)formatPopUp;
 -(IBAction)copy:(id)sender;
 -(IBAction)help:(id)sender;
-
+-(IBAction)test:(id)sender;
 @end
