@@ -284,6 +284,7 @@
 				F53901BF01DF8C78014110A7,
 				F50F0B520205D1AF01AA2E68,
 				F50F0B560205D23401AA2E68,
+				F59F5FCB021011D301A18598,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -317,6 +318,7 @@
 				F53901C001DF8C78014110A7,
 				F50F0B530205D1AF01AA2E68,
 				F50F0B570205D23401AA2E68,
+				F59F5FCC021011D301A18598,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -563,6 +565,28 @@
 			settings = {
 			};
 		};
+		F59F5FC9021011D301A18598 = {
+			isa = PBXFileReference;
+			path = AQTImage.h;
+			refType = 4;
+		};
+		F59F5FCA021011D301A18598 = {
+			isa = PBXFileReference;
+			path = AQTImage.m;
+			refType = 4;
+		};
+		F59F5FCB021011D301A18598 = {
+			fileRef = F59F5FC9021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F59F5FCC021011D301A18598 = {
+			fileRef = F59F5FCA021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F5AB086D0175BC8B01EB16F3 = {
 			isa = PBXFileReference;
 			path = GPTController.h;
@@ -712,6 +736,8 @@
 				F5653B8101C4B8F201A80104,
 				F50F0B540205D23401AA2E68,
 				F50F0B550205D23401AA2E68,
+				F59F5FC9021011D301A18598,
+				F59F5FCA021011D301A18598,
 			);
 			isa = PBXGroup;
 			name = Model;

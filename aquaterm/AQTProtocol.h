@@ -66,4 +66,9 @@
 // Select the model that will receive subsequent graphic elements
 // 
 - (oneway void) selectModel:(int) currentModel;
+//
+// ------ higly experimental stuff below! -----
+//
+- (oneway void) addImage:(bycopy NSData *)imageData  bounds:(NSRect)theBounds;
+- (oneway void) addImageFromFile:(bycopy NSString *)filename;
 @end
