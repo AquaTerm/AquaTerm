@@ -11,7 +11,7 @@
 
 @interface AQTLabel : AQTGraphic /*" NSObject "*/
 {
-   NSAttributedString *string;		/*" The text (label, legend etc.) "*/
+   id string;		/*" The text (label, legend etc.) "*/
    NSString *fontName;
    float fontSize;
    NSPoint position;		/*" The position of the text "*/

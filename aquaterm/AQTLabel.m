@@ -19,7 +19,7 @@
 {
   if (self=[super init])
   {
-    string = [[NSAttributedString alloc] initWithAttributedString:aString];
+    string = [aString copy]; // [[NSAttributedString alloc] initWithAttributedString:aString];
     fontName = @"Times-Roman";
     fontSize = 14.0;
     position=aPoint;
@@ -32,10 +32,22 @@
 -(id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify
 {
   
-  return [self initWithAttributedString:[[[NSAttributedString alloc] initWithString:aString] autorelease]
+ /* return [self initWithAttributedString:[[[NSAttributedString alloc] initWithString:aString] autorelease]
                                position:aPoint
                                   angle:textAngle
                           justification:justify];
+*/
+  if (self=[super init])
+  {
+    string = [aString copy]; // [[NSAttributedString alloc] initWithAttributedString:aString];
+    fontName = @"Times-Roman";
+    fontSize = 14.0;
+    position=aPoint;
+    angle = textAngle;
+    justification = justify;
+  }
+  return self; 
+
 }
 
 
