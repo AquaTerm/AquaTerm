@@ -12,16 +12,15 @@
 #import "AQTPath.h"
 #import "AQTImage.h"
 #import "AQTFunctions.h"
+// #import "AQTStringDrawingAdditions.h"
 
-//
-// Using an undocumented method in NSFont.
-//
+/* Using an undocumented method in NSFont. */
 @interface NSFont (NSFontHiddenMethods)
 - (NSGlyph)_defaultGlyphForChar:(unichar)theChar;
 @end
 
 /* _aqtMinimumLinewidth is used by view to pass user prefs to line drawing routine,
-   this is ugly, but I can't see a simple way to do it without affecting performance. */
+this is ugly, but I can't see a simple way to do it without affecting performance. */
 static float _aqtMinimumLinewidth; 
 
 /* Utility function to map Adobe Symbol encoding to unicode */ 
@@ -38,13 +37,13 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
       0x03C0, 0x03B8, 0x03C1, 0x03C3, 0x03C4, 0x03C5, 0x03D6, 0x03C9, 0x03BE, 0x03C8, 0x03B6, 0x007B, 0x007C, 0x007D, 0x223C, 0x007F,
       0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087, 0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F,
       0x0090, 0x0091, 0x0092, 0x0093, 0x0094, 0x0095, 0x0096, 0x0097, 0x0098, 0x0099, 0x009A, 0x009B, 0x009C, 0x009D, 0x009E, 0x009F,
-/* --> */      0x20AC, 0x00A1, 0x00A2, 0x00A3, 0x00A4, 0x00A5, 0x00A6, 0x00A7, 0x00A8, 0x00A9, 0x00AA, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x00AF,
+      /* --> */      0x20AC, 0x00A1, 0x00A2, 0x00A3, 0x00A4, 0x00A5, 0x00A6, 0x00A7, 0x00A8, 0x00A9, 0x00AA, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x00AF,
       0x00B0, 0x00B1, 0x00B2, 0x00B3, 0x00B4, 0x00B5, 0x00B6, 0x00B7, 0x00B8, 0x00B9, 0x00BA, 0x00BB, 0x00BC, 0x00BD, 0x00BE, 0x00BF,
       0x00C0, 0x00C1, 0x00C2, 0x00C3, 0x00C4, 0x00C5, 0x00C6, 0x00C7, 0x00C8, 0x00C9, 0x00CA, 0x00CB, 0x00CC, 0x00CD, 0x00CE, 0x00CF,
       0x00D0, 0x00D1, 0x00D2, 0x00D3, 0x00D4, 0x00D5, 0x00D6, 0x00D7, 0x00D8, 0x00D9, 0x00DA, 0x00DB, 0x00DC, 0x00DD, 0x00DE, 0x00DF,
       0x00E0, 0x00E1, 0x00E2, 0x00E3, 0x00E4, 0x00E5, 0x00E6, 0x00E7, 0x00E8, 0x00E9, 0x00EA, 0x00EB, 0x00EC, 0x00ED, 0x00EE, 0x00EF,
       0x00F0, 0x00F1, 0x222B, 0x2320, 0x222B, 0x2321, 0x00F6, 0x00F7, 0x00F8, 0x00F9, 0x00FA, 0x00FB, 0x00FC, 0x00FD, 0x00FE, 0x00FF};
-      
+   
    return theChar<256?map[theChar]:0x0000;
 }
 
@@ -52,8 +51,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 + (NSImage *)sharedScratchPad
 {
    static NSImage *scratchPadImage;
-   if (!scratchPadImage)
-   {
+   if (!scratchPadImage) {
       scratchPadImage = [[NSImage alloc] initWithSize:NSMakeSize(10,10)];
    }
    return scratchPadImage;
@@ -61,15 +59,14 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 
 - (void)setAQTColor
 {
-  static AQTColor currentColor;
-  if (!AQTEqualColors(currentColor, _color))
-  {
-    [[NSColor colorWithCalibratedRed:_color.red
-                               green:_color.green
-                                blue:_color.blue
-                               alpha:1.0] set];
-    currentColor = _color;
-  }
+   static AQTColor currentColor;
+   if (!AQTEqualColors(currentColor, _color)) {
+      [[NSColor colorWithCalibratedRed:_color.red
+                                 green:_color.green
+                                  blue:_color.blue
+                                 alpha:1.0] set];
+      currentColor = _color;
+   }
 }
 
 -(void)renderInRect:(NSRect)boundsRect
@@ -105,20 +102,20 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    NSRect tmpRect = NSZeroRect;
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
-
+   
    _aqtMinimumLinewidth = [[NSUserDefaults standardUserDefaults] boolForKey:@"limitMinimumLinewidth"]?0.25:0.0; // FIXME: make limit (0.25) a pref
-
+   
    while ((graphic = [enumerator nextObject]))
    {
-/*       NSRect graphRect = [graphic updateBounds];
-
- if (NSIsEmptyRect(graphRect))
-       {
-          NSLog(@"**** rect = %@ : %@", NSStringFromRect(graphRect), [graphic description]);
-       }
-
+      /*       NSRect graphRect = [graphic updateBounds];
+      
+      if (NSIsEmptyRect(graphRect))
+   {
+         NSLog(@"**** rect = %@ : %@", NSStringFromRect(graphRect), [graphic description]);
+   }
+      
       tmpRect = AQTUnionRect(tmpRect, graphRect);
-*/
+      */
       tmpRect = AQTUnionRect(tmpRect, [graphic updateBounds]);
    }
    [self setBounds:tmpRect];
@@ -129,48 +126,33 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 {
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
-
+   
    // Model object is responsible for background...
    [self setAQTColor];
    // FIXME: needed to synchronize colors
    [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
    NSRectFill(aRect);
-
-   while ((graphic = [enumerator nextObject]))
-   {
+   
+   while ((graphic = [enumerator nextObject])) {
       [graphic renderInRect:aRect];
    }
 }
 @end
 
 @implementation AQTLabel (AQTLabelDrawing)
-
--(NSBezierPath *)_aqtPathFromAttributedString:(NSAttributedString *)label
-{
-   return nil;
-}
-
--(NSBezierPath *)_aqtPathFromString:(NSString *)label
-{
-   return nil;
-}
-
--(void)_aqtLabelUpdateCache
+// FIXME: The following to methods should be categories on NSAttributedString and NSString, repectively
+-(NSBezierPath *)_aqtPathFromAttributedString:(NSAttributedString *)attrString inFont:(NSFont *)defaultFont;
 {
    int i = 0;
    float subFontAdjust = 0.6;
    float subBaseAdjust = 0.3;
-   NSFont *normalFont; 
-   NSFont *subFont; 
+   NSFont *subFont = [NSFont fontWithName:[defaultFont fontName] size:fontSize*subFontAdjust];
    NSFont *tmpNormalFont;
    NSFont *tmpSubFont;
    NSFont *aFont; 
-   NSString *text = [string string]; // Yuck!
+   NSString *text = [attrString string]; // Yuck!
    int strLen = [text length];
-   NSAffineTransform *aTransform = [NSAffineTransform transform];
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
-   NSSize tmpSize;
-   NSPoint adjust = NSZeroPoint;
    NSPoint pos = NSZeroPoint;
    NSPoint drawPos;
    float leftUnderlineEdge;
@@ -181,89 +163,56 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    int firstChar = 0;
    float baselineOffset = 0.0;
    // 
-   // Make sure we get a valid font....
-   //
-   normalFont = [NSFont fontWithName:fontName size:fontSize];
-   if (normalFont==nil) {
-      // Fall back to a system font
-      normalFont = [NSFont systemFontOfSize:fontSize];
-   }
-   subFont = [NSFont fontWithName:[normalFont fontName] size:fontSize*subFontAdjust];
-   // aFont = normalFont;
-   // 
    // Remove leading spaces FIXME: trailing as well?, need better solution
    // Don't skip a single space...
-   // 
-   while (strLen>1 && firstChar<strLen && [text characterAtIndex:firstChar] == ' ') {
+   while (strLen>1 && firstChar<strLen && [text characterAtIndex:firstChar] == ' ')
       firstChar++;
-   }
-   //
-   // appendBezierPathWithGlyph needs a valid context...
-   //
+   
    [[AQTGraphic sharedScratchPad] lockFocus];
    
-   //
-   // Create glyphs and convert to path
-   //
-   [tmpPath moveToPoint:pos];
-
-   for(i=firstChar; i<strLen; i++)
-   {
+   [tmpPath moveToPoint:pos];   
+   for(i=firstChar; i<strLen; i++) {
       unichar theChar = [text characterAtIndex:i];
       NSGlyph theGlyph;
       NSSize offset;
       NSDictionary *attrDict = [string attributesAtIndex:i effectiveRange:nil];
-      tmpNormalFont = normalFont;
+      tmpNormalFont = defaultFont;
       tmpSubFont = subFont;
-      //
       // Switch font if set in attribute
-      //
-      if ([attrDict objectForKey:@"AQTFontname"] != nil && ![[attrDict objectForKey:@"AQTFontname"] isEqualToString:fontName])
-      {
+      if ([attrDict objectForKey:@"AQTFontname"] != nil && ![[attrDict objectForKey:@"AQTFontname"] isEqualToString:fontName]) {
          // New font set in character atttribute
          NSFont *aFont = [NSFont fontWithName:[attrDict objectForKey:@"AQTFontname"] size:fontSize];
-         if (aFont != nil)
-         {
+         if (aFont != nil) {
             tmpNormalFont = aFont;
             tmpSubFont = [NSFont fontWithName:[aFont fontName] size:fontSize*subFontAdjust];
          }
       }
-      if ([[tmpNormalFont fontName] isEqualToString:@"Symbol"])
-      {
+      if ([[tmpNormalFont fontName] isEqualToString:@"Symbol"]) {
          theChar = _aqtMapAdobeSymbolEncodingToUnicode(theChar);
-      }
-      
-      // underlining
-
-      if(underlineState == NO)
-      {
-         if ([attrDict valueForKey:NSUnderlineStyleAttributeName])
-         {
+      }      
+      // underlining      
+      if(underlineState == NO) {
+         if ([attrDict valueForKey:NSUnderlineStyleAttributeName]) {
             leftUnderlineEdge = pos.x;
             underlineState = YES;
          }
-      }
-      else
-      {
-         if (![attrDict valueForKey:NSUnderlineStyleAttributeName])
-         {
+      } else {
+         if (![attrDict valueForKey:NSUnderlineStyleAttributeName]) {
             [tmpPath appendBezierPathWithRect:NSMakeRect(leftUnderlineEdge, -1.0, pos.x - leftUnderlineEdge, 0.5)];
             underlineState = NO;
             [tmpPath moveToPoint:pos];
          }
-      }
-
+      }      
       // subscript
       newSubscriptState = [[attrDict valueForKey:NSSuperscriptAttributeName] intValue];
       newSubscriptState = newSubscriptState>1?1:newSubscriptState;
       newSubscriptState = newSubscriptState<-1?-1:newSubscriptState; 
-      // FIXME: this is way too ugly... 
-      switch (newSubscriptState)
-      {
+      // FIXME: this is still way too ugly... 
+      switch (newSubscriptState) {
          case 0:
             aFont = tmpNormalFont;
             break;
-         case 1:
+         case 1: // Falltrough
          case -1:
             aFont = tmpSubFont;
             break;
@@ -273,11 +222,9 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
       theGlyph = [aFont _defaultGlyphForChar:theChar];
       offset = [aFont advancementForGlyph:theGlyph];
       
-      switch (subscriptState)
-      {
+      switch (subscriptState) {
          case 0:
-            switch (newSubscriptState)
-            {
+            switch (newSubscriptState) {
                case 0:
                   drawPos = pos;
                   drawPos.y += baselineOffset;
@@ -304,8 +251,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
             }
             break;
          case 1:
-            switch (newSubscriptState)
-            {
+            switch (newSubscriptState) {
                case 0:
                   baselineOffset = 0.0;
                   pos.x = rightSubEdge;
@@ -334,8 +280,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
             }            
             break;
          case -1:
-            switch (newSubscriptState)
-            {
+            switch (newSubscriptState) {
                case 0:
                   baselineOffset = 0.0;
                   pos.x = rightSubEdge;
@@ -374,19 +319,63 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
       subscriptState = newSubscriptState;
    }
    [[AQTGraphic sharedScratchPad] unlockFocus];
+   return tmpPath;
+}
+
+-(NSBezierPath *)_aqtPathFromString:(NSString *)text inFont:(NSFont *)aFont
+{
+   int i;
+   int firstChar = 0;
+   int strLen = [text length];
+   NSPoint pos = NSZeroPoint;
+   NSBezierPath *tmpPath = [NSBezierPath bezierPath];
+   // Remove leading spaces FIXME: trailing as well?, need better solution
+   // Don't skip a single space...
+   while (strLen>1 && firstChar<strLen && [text characterAtIndex:firstChar] == ' ')
+      firstChar++;
+   
+   [[AQTGraphic sharedScratchPad] lockFocus];
+   
+   [tmpPath moveToPoint:pos];
+   
+   for(i=firstChar; i<strLen; i++) {
+      unichar theChar = [text characterAtIndex:i];
+      NSGlyph theGlyph = [aFont _defaultGlyphForChar:theChar];
+      NSSize offset = [aFont advancementForGlyph:theGlyph];
+      
+      [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+      pos.x += offset.width;
+      pos.y += offset.height;
+      [tmpPath moveToPoint:pos];      
+   }
+   [[AQTGraphic sharedScratchPad] unlockFocus];
+   return tmpPath;
+}
+
+-(void)_aqtLabelUpdateCache
+{
+   NSFont *normalFont; 
+   NSAffineTransform *aTransform = [NSAffineTransform transform];
+   NSBezierPath *tmpPath = [NSBezierPath bezierPath];
+   NSSize tmpSize;
+   NSPoint adjust = NSZeroPoint;
+   // Make sure we get a valid font....
+   if ((normalFont = [NSFont fontWithName:fontName size:fontSize]) == nil)
+      normalFont = [NSFont systemFontOfSize:fontSize]; // Fall back to a system font 
+                                                       // Convert (attributed) string into a path
+   if ([string isKindOfClass:[NSAttributedString class]]) {
+      tmpPath = [self _aqtPathFromAttributedString:string inFont:normalFont];
+   } else if ([string isKindOfClass:[NSString class]]) {
+      tmpPath = [self _aqtPathFromString:string inFont:normalFont]; 
+   } else {
+      [NSException raise:@"AQTWrongArgument" format:@"Yo"];
+   } // tmpPath = [string aqtBezierPathInFont:normalFont];
    tmpSize = [tmpPath bounds].size;
-   //
-   // Place the path according to position, angle and align
-   //   
-   // hAlign:
-   adjust.x = -(float)(justification & 0x03)*0.5*tmpSize.width;
-   // vAlign:
-   switch (justification & 0x1C)
-   {
+   // Place the path according to position, angle and align  
+   adjust.x = -(float)(justification & 0x03)*0.5*tmpSize.width; // hAlign:
+   switch (justification & 0x1C) { // vAlign:
       case 0x00:// AQTAlignMiddle: // align middle wrt *font size*
-         adjust.y = -([aFont descender] + [aFont capHeight])*0.5; 
-         break;
-      case 0x04:// AQTAlignBaseline: // align baseline (do nothing)
+         adjust.y = -([normalFont descender] + [normalFont capHeight])*0.5; 
          break;
       case 0x08:// AQTAlignBottom: // align bottom wrt *bounding box*
          adjust.y = -[tmpPath bounds].origin.y;
@@ -394,6 +383,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
       case 0x10:// AQTAlignTop: // align top wrt *bounding box*
          adjust.y = -([tmpPath bounds].origin.y + tmpSize.height) ;
          break;
+      case 0x04:// AQTAlignBaseline: // align baseline (do nothing)
       default:
          // default to align baseline (do nothing) in case of error
          break;
@@ -402,15 +392,14 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    [aTransform rotateByDegrees:angle];
    [aTransform translateXBy:adjust.x yBy:adjust.y]; 
    [tmpPath transformUsingAffineTransform:aTransform];
-
+   
    [self _setCache:tmpPath];
 }
 
 -(NSRect)updateBounds
 {
    NSRect tempBounds;
-   if (![self _cache])
-   {
+   if (![self _cache]) {
       [self _aqtLabelUpdateCache];
    }
    tempBounds = [_cache bounds];
@@ -420,10 +409,9 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 
 -(void)renderInRect:(NSRect)boundsRect
 {
-   if (AQTIntersectsRect(boundsRect, [self bounds]))
-   {
-     [self setAQTColor];
-     [_cache  fill];
+   if (AQTIntersectsRect(boundsRect, [self bounds])) {
+      [self setAQTColor];
+      [_cache  fill];
    }
 #ifdef DEBUG_BOUNDS
    [[NSColor yellowColor] set];
@@ -442,8 +430,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    [scratch setLineJoinStyle:NSRoundLineJoinStyle];
    [scratch setLineCapStyle:lineCapStyle];
    [scratch setLineWidth:(lw<_aqtMinimumLinewidth)?_aqtMinimumLinewidth:lw];
-   if([self isFilled])
-   {
+   if([self isFilled]) {
       [scratch closePath];
    }
    [self _setCache:scratch];
@@ -452,23 +439,20 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 -(NSRect)updateBounds
 {
    NSRect tmpBounds;
-   if (![self _cache])
-   {
+   if (![self _cache]) {
       [self _aqtPathUpdateCache];
    }   
    tmpBounds = [[self _cache] bounds];
    [self  setBounds:tmpBounds];
    return tmpBounds;
 }
-   
+
 -(void)renderInRect:(NSRect)boundsRect
 {
-   if (AQTIntersectsRect(boundsRect, [self bounds]))
-   {
-     [self setAQTColor];
+   if (AQTIntersectsRect(boundsRect, [self bounds])) {
+      [self setAQTColor];
       [_cache stroke];
-      if ([self isFilled])
-      {
+      if ([self isFilled]) {
          [_cache fill];
       }
    }
@@ -478,10 +462,8 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 @implementation AQTImage (AQTImageDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-   if (AQTIntersectsRect(boundsRect, [self bounds]))
-   {
-      if (![self _cache])
-      {
+   if (AQTIntersectsRect(boundsRect, [self bounds])) {
+      if (![self _cache]) {
          // Install an NSImage in _cache
          const unsigned char *theBytes = [bitmap bytes];
          NSImage *tmpImage = [[NSImage alloc] initWithSize:bitmapSize];
@@ -501,15 +483,12 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
          [tmpImage release];
          [tmpBitmap release];
       }
-      if (fitBounds == YES)
-      {
+      if (fitBounds == YES) {
          [_cache drawInRect:_bounds
                    fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
                   operation:NSCompositeSourceOver
                    fraction:1.0];
-      }
-      else
-      {
+      } else {
          NSAffineTransform *transf = [NSAffineTransform transform];
          NSGraphicsContext *context = [NSGraphicsContext currentContext];
          NSAffineTransformStruct tmpStruct;
@@ -519,7 +498,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
          tmpStruct.m22 = transform.m22;
          tmpStruct.tX = transform.tX;
          tmpStruct.tY = transform.tY;
-
+         
          [context saveGraphicsState];
          [NSBezierPath clipRect:_bounds];
          [transf setTransformStruct:tmpStruct];
