@@ -168,6 +168,7 @@
 				29B97318FDCFA39411CA2CEA,
 				F5AB087C0175BC8B01EB16F3,
 				F51551CC01FE762E01000102,
+				F54B0FE601FF5CDC014110A7,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -295,6 +296,7 @@
 				F5FEAC2901A7219B0143D50D,
 				F51551CD01FE762E01000102,
 				F54B0FE501FF3656014110A7,
+				F54B0FE701FF5CDC014110A7,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -413,6 +415,17 @@
 		};
 		F54B0FE501FF3656014110A7 = {
 			fileRef = F54B0FE401FF3656014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F54B0FE601FF5CDC014110A7 = {
+			isa = PBXFileReference;
+			path = ExtendSavePanel.nib;
+			refType = 4;
+		};
+		F54B0FE701FF5CDC014110A7 = {
+			fileRef = F54B0FE601FF5CDC014110A7;
 			isa = PBXBuildFile;
 			settings = {
 			};

@@ -12,9 +12,11 @@
 
 @interface GPTController : NSObject 
 {
-        GPTReceiverObject *receiverObject;	/*" DO connection handler  "*/
-        NSMutableArray 	*gptWindowControllers;	/*" Array of windowcontrollers "*/
-        NSWindow	*frontWindow;		/*" The main (frontmost) window of the app "*/
+	GPTReceiverObject 	*receiverObject;		/*" DO connection handler  "*/
+	NSMutableArray 		*gptWindowControllers;	/*" Array of windowcontrollers "*/
+	NSWindow			*frontWindow;			/*" The main (frontmost) window of the app "*/
+	NSPopUpButton 		*saveFormatPopup;
+    NSBox				*extendSavePanelView;
 }
 
 /* FAQ: since the window controller is made a delegate of the window (in the NIB) does that mean that it has "first access" to all window calls??? */
@@ -26,7 +28,7 @@
 -(void)setFrontWindow:(NSWindow *)mainWindow;
 -(IBAction)print:(id)sender; 
 -(IBAction)saveFigureAs:(id)sender;
--(void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+-(void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(NSPopUpButton *)formatPopUp;
 - (IBAction)copy:(id)sender;
 -(IBAction)help:(id)sender;
 @end

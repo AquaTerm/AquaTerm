@@ -147,21 +147,22 @@
 - (IBAction)saveFigureAs:(id)sender
 {
   NSSavePanel *savePanel = [NSSavePanel savePanel];
-  [savePanel setRequiredFileType: @"pdf"];
-  [savePanel beginSheetForDirectory:nil 
-                               file:nil 
+  if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])  
+  {
+	NSLog(@"Failed to load ExtendSavePanel.nib");
+  }
+  [savePanel setAccessoryView:extendSavePanelView];
+  [savePanel beginSheetForDirectory:NSHomeDirectory() /* FIXME: Should store and use latest dir used */
+                               file:[frontWindow title] 
                      modalForWindow:frontWindow 
                       modalDelegate:self 
                      didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:) 
-                        contextInfo:NULL
+                        contextInfo:saveFormatPopup
   ];
 }
 
-- (void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+- (void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(NSPopUpButton *)formatPopUp
 {
-  //
-  // Save figure to pasteboard as PDF (FIXME: format should be set in dialog)
-  //
   NSData *data;
   NSString *filename;
   AQTPrintView *printView;
@@ -169,12 +170,17 @@
   if (NSFileHandlingPanelOKButton == returnCode)
   {
     printView = [[AQTPrintView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX) model:[[frontWindow windowController] model]];
-    //
-    // save the image as a pdf file with the name returned by the sheet
-    //
-    filename = [theSheet filename];
-    data = [printView dataWithPDFInsideRect: [printView bounds]];
-    [data writeToFile: filename atomically: NO];
+    filename = [[theSheet filename] stringByDeletingPathExtension];
+    if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
+    {
+      data = [printView dataWithPDFInsideRect: [printView bounds]];
+      [data writeToFile: [filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
+    }
+    else
+    {
+      data = [printView dataWithEPSInsideRect: [printView bounds]];     
+      [data writeToFile: [filename stringByAppendingPathExtension:@"eps"] atomically: NO];
+    }
     [printView release];
   }
 }

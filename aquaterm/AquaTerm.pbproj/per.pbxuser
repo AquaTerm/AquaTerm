@@ -28,6 +28,9 @@
 			F53901C401DFBB9B014110A7,
 			F594691E01ECF288014110A7,
 			F54B0FE301FF300A014110A7,
+			F54B0FE801FF6085014110A7,
+			F54B0FE901FF60CB014110A7,
+			F54B0FEA01FF70E6014110A7,
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
@@ -157,7 +160,25 @@
 	F54B0FE301FF300A014110A7 = {
 		fileReference = F5AB086E0175BC8B01EB16F3;
 		isa = PBXFileBreakpoint;
-		lineNumber = 204;
+		lineNumber = 212;
+		state = 1;
+	};
+	F54B0FE801FF6085014110A7 = {
+		fileReference = F5AB086E0175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 168;
+		state = 1;
+	};
+	F54B0FE901FF60CB014110A7 = {
+		fileReference = F5AB086E0175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 149;
+		state = 1;
+	};
+	F54B0FEA01FF70E6014110A7 = {
+		fileReference = F5AB086E0175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 154;
 		state = 1;
 	};
 	F55D242101C0F0F501A80104 = {
@@ -205,8 +226,13 @@
 	F594691E01ECF288014110A7 = {
 		fileReference = F5AB086E0175BC8B01EB16F3;
 		isa = PBXFileBreakpoint;
-		lineNumber = 159;
+		lineNumber = 165;
 		state = 2;
+	};
+	F5AB086E0175BC8B01EB16F3 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{177, 390}, {750, 502}}";
+		};
 	};
 	F5AB08770175BC8B01EB16F3 = {
 		uiCtxt = {
