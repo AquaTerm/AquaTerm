@@ -15,6 +15,7 @@ This is a prerelease for testing purposes. Please provide feedback and feature r
 \fs36 How to use AquaTerm:
 \fs28 \
 AquaTerm is a graphics terminal that can be used to easily add aqua graphics to (primarily scientific) legacy applications written in C (or any other language that can send remote messages). One such example is Gnuplot.\
+There is also a FORTRAN example showing how to connect to AquaTerm.\
 \
 AquaTerm register with the system and responds to a (small) set of remote messages, listed and explained in AQTProtocol.h. An example called "AdapterExample" is provided. (Start both apps and press the buttons in AdapterExample ;-)\
 \
@@ -22,10 +23,14 @@ AquaTerm register with the system and responds to a (small) set of remote messag
 
 \fs36 \cf2 How To install GNUPlot under MacOS X with AquaTerm graphics:
 \fs28 \
-1.  Get the latest gnuplot from cvs at\
+1.  Get the latest gnuplot 3.8 (\cf0 http://sourceforge.net/projects/gnuplot/\cf2 ) sources from cvs.\
+\pard\tx1440\tx2880\tx4320\tx5760\tx7200\ql\qnatural
+\cf0 From the terminal use (press return when prompted for password):\
 \pard\tx0\tx1120\tx2240\tx3360\tx4480\tx5600\tx6720\tx7840\tx8960\tx10080\tx11200\tx12320\tx13440\tx14560\tx15680\tx16800\tx17920\tx19040\tx20160\tx21280\tx22400\tx23520\tx24640\tx25760\tx26880\tx28000\tx29120\tx30240\tx31360\tx32480\tx33600\tx34720\ql\qnatural
-\cf0 http://sourceforge.net/projects/gnuplot/\cf2 \
-(it has checks for Mac OS X)\
+
+\f1\fs24 \cf2 cvs -d:pserver:anonymous@cvs.gnuplot.sourceforge.net:/cvsroot/gnuplot login\
+cvs -z3 -d:pserver:anonymous@cvs.gnuplot.sourceforge.net:/cvsroot/gnuplot co gnuplot
+\f0\fs28 \
 2.  Edit the entry for MacOS X Server in 
 \f1 src/term.h
 \f0  to read:\
@@ -35,22 +40,27 @@ AquaTerm register with the system and responds to a (small) set of remote messag
 #if defined(__APPLE__) && defined(__MACH__)\
 # include "aquaTerm.trm"\
 #endif\
+\pard\tx0\tx1120\tx2240\tx3360\tx4480\tx5600\tx6720\tx7840\tx8960\tx10080\tx11200\tx12320\tx13440\tx14560\tx15680\tx16800\tx17920\tx19040\tx20160\tx21280\tx22400\tx23520\tx24640\tx25760\tx26880\tx28000\tx29120\tx30240\tx31360\tx32480\tx33600\tx34720\ql\qnatural
 
-\f0 3.  Put the adapter aquaTerm.trm in 
+\f0 \cf2 3.  Put the adapter aquaTerm.trm in 
 \f1 gnuplot/term/
 \f0 \
 4.  configure and make gnuplot\
 5.  Put AquaTerm.app in /Applications or ~/Applications 
 \f2\b or
 \f0\b0  add the following line to your .cshrc file\
+\pard\tx0\tx1120\tx2240\tx3360\tx4480\tx5600\tx6720\tx7840\tx8960\tx10080\tx11200\tx12320\tx13440\tx14560\tx15680\tx16800\tx17920\tx19040\tx20160\tx21280\tx22400\tx23520\tx24640\tx25760\tx26880\tx28000\tx29120\tx30240\tx31360\tx32480\tx33600\tx34720\ql\qnatural
 
-\f1 setenv GNUTERMAPP /path/to/my/AquaTerm.app \
+\f1 \cf2 setenv GNUTERMAPP /path/to/my/AquaTerm.app \
+\pard\tx0\tx1120\tx2240\tx3360\tx4480\tx5600\tx6720\tx7840\tx8960\tx10080\tx11200\tx12320\tx13440\tx14560\tx15680\tx16800\tx17920\tx19040\tx20160\tx21280\tx22400\tx23520\tx24640\tx25760\tx26880\tx28000\tx29120\tx30240\tx31360\tx32480\tx33600\tx34720\ql\qnatural
 
-\f0 6.  If you want it to be the default terminal, also add\
+\f0 \cf2 6.  If you want it to be the default terminal, also add\
+\pard\tx0\tx1120\tx2240\tx3360\tx4480\tx5600\tx6720\tx7840\tx8960\tx10080\tx11200\tx12320\tx13440\tx14560\tx15680\tx16800\tx17920\tx19040\tx20160\tx21280\tx22400\tx23520\tx24640\tx25760\tx26880\tx28000\tx29120\tx30240\tx31360\tx32480\tx33600\tx34720\ql\qnatural
 
-\f1 setenv GNUTERM aqua \
+\f1 \cf2 setenv GNUTERM aqua \
+\pard\tx0\tx1120\tx2240\tx3360\tx4480\tx5600\tx6720\tx7840\tx8960\tx10080\tx11200\tx12320\tx13440\tx14560\tx15680\tx16800\tx17920\tx19040\tx20160\tx21280\tx22400\tx23520\tx24640\tx25760\tx26880\tx28000\tx29120\tx30240\tx31360\tx32480\tx33600\tx34720\ql\qnatural
 
-\f0 to the .cshrc file.\
+\f0 \cf2 to the .cshrc file.\
 7.  start gnuplot\
 8.  the syntax for controlling aquaterm in gnuplot is:\
 "set term aqua [n]" where n is an optional plot number\
