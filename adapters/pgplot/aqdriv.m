@@ -51,7 +51,7 @@ static id adapter;        		    // Adapter object
                            //
                            // Obj-C methods implementing the functionality defined in PGPLOT driver
                            //
-- (void)openGraph:(int)n;
+- (void)openGraph:(int)n size:(NSSize)size;
 - (void)closeGraph;
 - (void)render;
 - (void)flushPolylineBuffer;
@@ -228,7 +228,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 11:
       LOG(@"IFUNC=11, Begin picture");
-      [adapter openGraph:currentPlot];
+      [adapter openGraph:currentPlot size:NSMakeSize(rbuf[0], rbuf[1])];
       break;
 
       //--- IFUNC=12, Draw line -----------------------------------------------
@@ -561,12 +561,12 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
   lineWidth=newLineWidth<.5?.5:newLineWidth;
 }
 
-- (void)openGraph:(int)n
+- (void)openGraph:(int)n size:(NSSize)size
 {
   //
   // Select a "model"
   //
-  [aqtConnection openModel:n];
+  [aqtConnection openModel:n size:size];
 }
 
 - (void)closeGraph
