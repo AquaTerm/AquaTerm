@@ -305,10 +305,10 @@
 
 -(IBAction)help:(id)sender
 {
-  NSString *helpURL = [[NSBundle mainBundle] pathForResource:@"help" ofType:@"html"];
+  NSURL *helpURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"help" ofType:@"html"]];
   if (helpURL)
   {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:helpURL]];
+    [[NSWorkspace sharedWorkspace] openURL:helpURL];
   }
 }
 @end
