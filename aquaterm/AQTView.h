@@ -22,4 +22,8 @@
 - (BOOL)isProcessingEvents;
 - (void)setIsProcessingEvents:(BOOL)flag;
 
+/*" Utility methods "*/
+- (NSPoint)convertPointToCanvasCoordinates:(NSPoint)viewPoint;
+- (NSRect)convertRectToCanvasCoordinates:(NSRect)viewRect;
+- (NSRect)convertRectToViewCoordinates:(NSRect)canvasRect;
 @end

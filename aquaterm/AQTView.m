@@ -71,7 +71,7 @@
    }
 }
 
-- (NSPoint)_aqtConvertToCanvasCoordinates:(NSPoint) aPoint
+- (NSPoint)convertPointToCanvasCoordinates:(NSPoint) aPoint
 {
    NSAffineTransform *localTransform = [NSAffineTransform transform];
    [localTransform scaleXBy:[model canvasSize].width/NSWidth([self bounds])
@@ -80,12 +80,41 @@
    return [localTransform transformPoint:aPoint];
 }
 
+- (NSRect)convertRectToCanvasCoordinates:(NSRect)viewRect
+{
+   NSRect tmpRect;
+   NSAffineTransform *localTransform = [NSAffineTransform transform];
+   [localTransform scaleXBy:[model canvasSize].width/NSWidth([self bounds])
+                        yBy:[model canvasSize].height/NSHeight([self bounds])];
+
+   tmpRect.origin = [localTransform transformPoint:viewRect.origin];
+   tmpRect.size = [localTransform transformSize:viewRect.size];
+   return tmpRect;
+}
+
+- (NSRect)convertRectToViewCoordinates:(NSRect)canvasRect
+{
+   NSRect tmpRect;
+   NSAffineTransform *localTransform = [NSAffineTransform transform];
+   [localTransform scaleXBy:NSWidth([self bounds])/[model canvasSize].width
+                        yBy:NSHeight([self bounds])/[model canvasSize].height];
+
+   tmpRect.origin = [localTransform transformPoint:canvasRect.origin];
+   tmpRect.size = [localTransform transformSize:canvasRect.size];
+   return tmpRect;
+}
+
+
 -(void)_aqtHandleMouseDownAtLocation:(NSPoint)point button:(int)button
 {
    if ([self isProcessingEvents])
    {
    point = [self convertPoint:point fromView:nil];
-   point = [self _aqtConvertToCanvasCoordinates:point];
+#ifdef DEBUG_BOUNDS
+      NSLog(@"viewPoint: %@ ---> canvasPoint: %@", NSStringFromPoint(point),
+            NSStringFromPoint([self convertPointToCanvasCoordinates:point]));
+#endif
+      point = [self convertPointToCanvasCoordinates:point];
    [[[self window] delegate] processEvent:[NSString stringWithFormat:@"1:%@:%d", NSStringFromPoint(point), button]];
    }
 }
@@ -99,7 +128,10 @@
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
 #ifdef DEBUG_BOUNDS
-   NSLog(@"viewFrame: %@", NSStringFromRect([self bounds]));
+   NSLog(@"viewFrame: %@ ---> canvasFrame: %@", NSStringFromRect([self bounds]),
+         NSStringFromRect([self convertRectToCanvasCoordinates:[self bounds]]));
+   NSLog(@"canvasFrame: %@ ---> viewFrame: %@", NSStringFromRect(NSMakeRect(0,0,[model canvasSize].width, [model canvasSize].height)),
+         NSStringFromRect([self convertRectToViewCoordinates:NSMakeRect(0,0,[model canvasSize].width, [model canvasSize].height)]));
 #endif
    [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:2];
 }   
@@ -127,7 +159,7 @@
          else if (pos.y > NSHeight(viewBounds))
             pos.y = NSHeight(viewBounds);
       }
-      eventString = [NSString stringWithFormat:@"2:%@:%c", NSStringFromPoint([self _aqtConvertToCanvasCoordinates:pos]), aKey];
+      eventString = [NSString stringWithFormat:@"2:%@:%c", NSStringFromPoint([self convertPointToCanvasCoordinates:pos]), aKey];
       [[[self window] delegate] processEvent:eventString];
    }
 }

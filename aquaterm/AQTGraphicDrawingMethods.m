@@ -324,6 +324,8 @@
    NSRect newBounds = NSZeroRect;
    int i;
    int  objectCount = [modelObjects count];
+
+   NSLog(@"removeObjectsInRect");
 #if 0
    NSDate *startTime=  [NSDate date];
 #endif

@@ -11,7 +11,6 @@
 #import "AQTView.h"
 #import "AQTAdapter.h"
 #import "AQTPlotBuilder.h"
-//#import "AQTModelExtensions.h"
 #import "AQTGraphicDrawingMethods.h"
 
 #define TITLEBAR_HEIGHT 22.0
@@ -37,13 +36,7 @@
    maxSize = NSMakeSize(2.0*contentSize.width, 2.0*contentSize.height + TITLEBAR_HEIGHT);
    minSize = NSMakeSize(0.5*contentSize.width, 0.5*contentSize.height + TITLEBAR_HEIGHT);
    ratio = windowSize;
-/* Fixing content size when resizing requires use of windowDidResize?
-   NSLog(@"contentSize:%@", NSStringFromSize(contentSize));
-   NSLog(@"windowSize:%@", NSStringFromSize(windowSize));
-   NSLog(@"maxSize:%@", NSStringFromSize(maxSize));
-   NSLog(@"minSize:%@", NSStringFromSize(minSize));
-   NSLog(@"ratio:%@", NSStringFromSize(ratio));
-*/
+
    [canvas setModel:model];
    [canvas setFrameOrigin:NSMakePoint(0.0, 0.0)];
    if (_clientPID != -1)
@@ -54,6 +47,7 @@
    {
       [[canvas window] setTitle:[model title]];
    }
+
    if (shouldResize)
    {
       NSRect contentFrame = NSZeroRect;
@@ -65,9 +59,6 @@
    [[canvas window] setMaxSize:maxSize];
    [[canvas window] setMinSize:minSize];
    [canvas setIsProcessingEvents:_acceptingEvents];
-   [[canvas window] setIsVisible:YES];
-   [[canvas window] orderFront:self];
-   // [canvas setNeedsDisplay:YES];
 }
 
 -(void)awakeFromNib
@@ -75,6 +66,7 @@
    if (model)
    {
       [self _aqtSetupViewShouldResize:YES];
+      [[canvas window] makeKeyAndOrderFront:self];
    }
    _isWindowLoaded = YES;
 }
@@ -120,21 +112,18 @@
    {
       [self _aqtSetupViewShouldResize:viewNeedResize];
       [canvas setNeedsDisplay:YES];
+      [[canvas window] makeKeyAndOrderFront:self];
    }
 }
 
 -(void)appendPlot:(AQTModel *)newModel
 {
- //  NSRect addedBounds;
-   NSSize canvasSize = [model canvasSize];
    if (!model)
    {
       NSLog(@"*** Error: No model ***");
       [self setPlot:newModel];
       return;
    }
-
-//   addedBounds = [newModel updateBounds];
    [model appendModel:newModel];
    
 #ifdef DEBUG_BOUNDS
@@ -142,18 +131,14 @@
    NSLog(@"addedBounds = %@", NSStringFromRect([newModel bounds]));
 #endif
    
-//   [model addObjects:[newModel modelObjects]];
-//   [model setTitle:[newModel title]];
-//   [model setColor:[newModel color]];
    if (_isWindowLoaded)
    {
       NSRect newBounds = [newModel bounds];
-      NSRect viewBounds = [canvas bounds];
-      float xScale = canvasSize.width/NSWidth(viewBounds);
-      float yScale = canvasSize.height/NSHeight(viewBounds);
-      NSRect dirtyRect = NSMakeRect(newBounds.origin.x*xScale, newBounds.origin.y*yScale, newBounds.size.width*xScale, newBounds.size.height*yScale); 
+      NSRect dirtyRect = [canvas convertRectToViewCoordinates:newBounds];
       [self _aqtSetupViewShouldResize:NO];
       [canvas setNeedsDisplayInRect:dirtyRect];
+      [[canvas window] makeKeyAndOrderFront:self];
+
 #ifdef DEBUG_BOUNDS
       NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
 #endif
