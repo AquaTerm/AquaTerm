@@ -6,9 +6,21 @@
 
 @protocol AQTProtocol
 //
-// Return a version number string for AquaTerm in the form #.#.#
+// Return a dictionary containing useful information such as
+// version number string for AquaTerm in the form #.#.#
 // corresponding to major_version.minor_version.bugfix_version
-// as well as user settings such as default font etc.
+// as well as user settings such as canvas size, default font etc.
+//
+// The following dictionary keys are valid:
+// 		AQTVersion 			- version number string for AquaTerm in the form #.#.#
+// 		AQTXMax				- x-size of canvas in points (1/72 inch) 
+//		AQTYMax				- y-size of canvas in points (1/72 inch)
+// 		AQTFontWHRatio		- ratio of fontWidth to fontHeight
+//		AQTPixelWHRatio		- ratio of pixel with to height on device (always 1.0 for now)
+//		AQTDefaultFontName	- default font (Times Roman)
+//		AQTDefaultFontSize	- default font size (16p)
+//		AQTFontName			- current font
+//		AQTFontSize			- current font size
 //
 - (bycopy NSDictionary *) getAquaTermInfo;
 //
@@ -25,7 +37,7 @@
 // Add a string to the current model, where:
 // justification is {LEFT=0, CENTER, RIGHT}
 // colorIndex is a number in the range -3 and upwards
-// The colors -3, -2, -1 have special meaning and 
+// The colors -4, ..., -1 have special meaning and 
 // colors 0 and upwards are taken modulo N (i.e cyclic)
 //
 - (oneway void) addString:(bycopy NSString *)text 
@@ -52,8 +64,6 @@
 - (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color;
 //
 // Select the model that will receive subsequent graphic elements
-// (Q: What does this imply for the corresponding window? Front? Show? Key?
-//  A: Definitely "show" and absolutely _not_ "front", "key" is meaningless)
 // 
 - (oneway void) selectModel:(int) currentModel;
 @end
