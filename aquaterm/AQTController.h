@@ -9,30 +9,13 @@
 #import <Cocoa/Cocoa.h>
 #import "AQTConnectionProtocol.h"
 
-@class AQTClientHandler, GPTWindowController, AQTView, AQTModel, AQTColorInspector;
 @interface AQTController : NSObject <AQTConnectionProtocol>
 {
-  NSMutableArray	*handlerList;		/*" Array of client handlers "*/
-  NSMutableArray	*clientList;		/*" Array of client proxies "*/
-  NSMutableArray	*gptWindowControllers;	/*" Array of windowcontrollers "*/
-  NSWindow		*frontWindow;		/*" The main (frontmost) window of the app "*/
-  AQTView		*frontView;
+  NSMutableDictionary	*handlerList;		/*" Array of client handlers "*/
   NSPopUpButton		*saveFormatPopup;
   NSBox			*extendSavePanelView;
-  //AQTColorInspector 	*inspector;
   NSConnection		*doConnection;
 }
--(GPTWindowController *)controllerForView:(int)index;
-
--(void)setModel:(AQTModel *)gptModel forView:(int)index;
-
--(NSWindow *)frontWindow;
--(void)setFrontWindow:(NSWindow *)mainWindow;
-
--(IBAction)print:(id)sender;
--(IBAction)saveFigureAs:(id)sender;
--(void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(NSPopUpButton *)formatPopUp;
--(IBAction)copy:(id)sender;
--(IBAction)help:(id)sender;
+-(IBAction)showHelp:(id)sender;
 -(IBAction)test:(id)sender;
 @end

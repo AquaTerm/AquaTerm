@@ -1,5 +1,11 @@
 {
     IBClasses = (
+        {
+            CLASS = AQTPlot; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {viewOutlet = AQTView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
         {CLASS = AQTView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
