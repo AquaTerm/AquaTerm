@@ -1,4 +1,5 @@
 @protocol AQTClientProtocol
+// FIXME: Add "oneway" later
 - (void)setModel:(bycopy id)aModel; // (id)?
 - (void)appendModel:(bycopy id)aModel;
 - (void)draw;

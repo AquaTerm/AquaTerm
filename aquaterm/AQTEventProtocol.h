@@ -1,4 +1,5 @@
 @protocol AQTEventProtocol
-- (void)processEvent:(NSString *)event;
-- (oneway void)ping;
+// FIXME: Add "oneway" later
+- (void)processEvent:(bycopy NSString *)event;
+- (void)ping;
 @end
