@@ -7,6 +7,7 @@
 //
 
 #import "AQTPlot.h"
+#import "AQTGraphic.h"
 #import "AQTModel.h"
 #import "AQTView.h"
 #import "AQTAdapter.h"
@@ -120,14 +121,21 @@
    }
 }
 
+BOOL _aqtEqualColors(AQTColor col1, AQTColor col2)
+{
+   return (col1.red == col2.red && col1.green == col2.green && col1.blue == col2.blue);
+}
+
 -(void)appendPlot:(AQTModel *)newModel
 {
+   BOOL backgroundDidChange;
    if (!model)
    {
       NSLog(@"*** Error: No model ***");
       [self setPlot:newModel];
       return;
    }
+   backgroundDidChange = !_aqtEqualColors([model color], [newModel color]);
    [model appendModel:newModel];
    
 #ifdef DEBUG_BOUNDS
@@ -140,7 +148,14 @@
       NSRect newBounds = [newModel bounds];
       NSRect dirtyRect = [canvas convertRectToViewCoordinates:newBounds];
       [self _aqtSetupViewShouldResize:NO];
-      [canvas setNeedsDisplayInRect:dirtyRect];
+      if (backgroundDidChange)
+      {
+         [canvas setNeedsDisplay:YES];
+      }
+      else
+      {
+         [canvas setNeedsDisplayInRect:dirtyRect];
+      }
       [[canvas window] makeKeyAndOrderFront:self];
 
 #ifdef DEBUG_BOUNDS
