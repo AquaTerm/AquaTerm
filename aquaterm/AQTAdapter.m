@@ -26,7 +26,18 @@
 @end
 
 @implementation AQTAdapter
--(id)initWithHandler:(id )localHandler // Designated init
+/*" AQTAdapter is a class that provides an interface to the functionality of AquaTerm.
+As such, it bridges the gap between client's procedural calls requesting operations
+such as drawing a line or placing a label and the object-oriented graph being built.
+
+It seemlessly provides a connection to the viewer (AquaTerm.app) without any work on behalf of the client. 
+
+It also provides some utility functionality such an indexed colormap, and an optional
+error handling callback function for the client.
+"*/
+
+/*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #{initWithHandler:} with a nil argument."*/
+-(id)initWithHandler:(id)localHandler 
 {
   if(self = [super init])
   {
@@ -34,10 +45,10 @@
     [self setModel:nilModel];
     [nilModel release];
     _modelIsDirty = NO;
-    uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
-    procName = [[NSString stringWithString:[[NSProcessInfo processInfo] processName]] retain];
-    procId = [[NSProcessInfo processInfo] globallyUniqueString];
-    NSLog(@"procUniqueId: %@\nprocName: %@\nprocId: %d", uniqueId, procName, procId);
+    _uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
+    _procName = [[NSString stringWithString:[[NSProcessInfo processInfo] processName]] retain];
+    _procId = [[NSProcessInfo processInfo] processIdentifier];
+    NSLog(@"procUniqueId: %@\nprocName: %@\nprocId: %d", _uniqueId, _procName, _procId);
     // Default values:
 
     _color.red = 0.0;
@@ -52,11 +63,10 @@
     }
     else
     {
-      // BOOL test = [self _connectToServer];
       if([self _connectToServer])
       {
         NS_DURING
-          _handler = [_server addAQTClientWithId:uniqueId name:procName pid:procId];
+          _handler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
           [_handler retain];
           [_handler setProtocolForProxy:@protocol(AQTClientProtocol)];
         NS_HANDLER
@@ -77,6 +87,7 @@
   return self;
 }
 
+/*" Initializes an instance and sets up a connection to the handler object via DO. Launches AquaTerm if necessary. "*/
 - (id)init
 {
   return [self initWithHandler:nil];
@@ -84,9 +95,9 @@
 
 - (void)dealloc
 {
-  NSLog(@"byebye from adapter %@", uniqueId);
+  NSLog(@"byebye from adapter %@", _uniqueId);
   NS_DURING
-    [_server removeAQTClientWithId:uniqueId]; // Where to place this???
+    [_server removeAQTClientWithId:_uniqueId]; // Where to place this???
   NS_HANDLER
 //    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] ||Ê[[localException name] isEqualToString:NSObjectInaccessibleException])
       NSLog(@"NOOP");
@@ -95,12 +106,13 @@
   NS_ENDHANDLER
   [_handler release];
   [_server release];
-  [uniqueId release];
-  [procName release];
+  [_uniqueId release];
+  [_procName release];
   [_model release];
   [super dealloc];
 }
 
+/*" Optionally set an error handling routine to override default behaviour "*/
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr
 {
   _errorHandler = fPtr;
@@ -117,22 +129,23 @@
   return _model;
 }
 
-- (AQTColor)color {
+/*
+ - (AQTColor)color {
   return _color;
 }
-
+*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b
 {
   _color.red = r;
   _color.green = g;
   _color.blue = b;
 }
-
+/*
 - (void)setColor:(AQTColor)newColor
 {
   _color = newColor;
 }
-
+*/
 - (NSString *)fontname
 {
   return _fontname;
@@ -328,6 +341,7 @@
 @implementation AQTAdapter (AQTAdapterPrivateMethods)
 - (BOOL)_connectToServer
 {
+  
   BOOL didConnect = NO;
   _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
     if (!_server)
@@ -416,7 +430,7 @@
     if([self _connectToServer])
     {
       NS_DURING
-        _handler = [_server addAQTClientWithId:uniqueId name:procName pid:procId];
+        _handler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
         [_handler retain];
         [_handler setProtocolForProxy:@protocol(AQTClientProtocol)];
       NS_HANDLER
