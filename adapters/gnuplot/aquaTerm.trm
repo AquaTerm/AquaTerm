@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.25 2004/02/25 14:15:02 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.26 2004/02/25 14:41:21 persquare Exp $
  *
  */
 
@@ -73,6 +73,7 @@ TERM_PUBLIC void AQUA_linewidth __PROTO((double linewidth));
 TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #ifdef PM3D
   TERM_PUBLIC int AQUA_make_palette __PROTO((t_sm_palette *palette));
+  TERM_PUBLIC void AQUA_previous_palette __PROTO((void));
   TERM_PUBLIC void AQUA_set_color __PROTO((double gray));
   TERM_PUBLIC void AQUA_filled_polygon __PROTO((int points, gpiPoint *corners));
 #endif /* PM3D */
@@ -88,7 +89,6 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 
 #define SPECIAL_COLORS 4
 #define CYCLIC_COLORS 9
-//#define PM3D_COLORS (AQT_COLORMAP_SIZE - CYCLIC_COLORS - SPECIAL_COLORS - 1)
 
 #define GOT_AQUA_PROTO
 #endif /* TERM_PROTO */
@@ -101,6 +101,11 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSArray.h>
 #import <stdarg.h>
+
+#ifdef PM3D
+#include "getcolor.h"
+#endif
+
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
@@ -506,41 +511,51 @@ AQUA_pointsize(double pointsize)
 TERM_PUBLIC int 
 AQUA_make_palette(t_sm_palette *palette)
 {
-  if (palette == NULL)
-    {
-      return ([adapter colormapSize] - CYCLIC_COLORS - SPECIAL_COLORS - 1);
-    }
-  else
-    {
-      int i;
-      for (i = 0; i < palette->colors-1; i++)
-	{
-	  [adapter setColormapEntry:(SPECIAL_COLORS+CYCLIC_COLORS+i) 
-		   red:palette->color[i].r 
-		   green:palette->color[i].g 
-		   blue:palette->color[i].b];
-	}
-    }
+  if (palette == NULL) {
+    /* AquaTerm can do continuous colors */
+    return 0;
+  }
+  return 0;
 }
 
 TERM_PUBLIC void 
 AQUA_set_color(double gray)
 {
-  int numPM3DCol = [adapter colormapSize] - CYCLIC_COLORS - SPECIAL_COLORS - 1;
-  int index = (int)(gray*numPM3DCol) + SPECIAL_COLORS + CYCLIC_COLORS;
-  [adapter takeColorFromColormapEntry:index];
+    rgb_color color;
+    
+    if( sm_palette.use_maxcolors != 0 ) {
+      /* finite nb of colors explicitly requested */
+      if( gray >= ( (double)(sm_palette.use_maxcolors-1) )
+	  / sm_palette.use_maxcolors )
+	gray = 1.0;
+      else
+	gray = floor( gray * sm_palette.use_maxcolors ) 
+	  / sm_palette.use_maxcolors;
+    }
+    
+    rgb1_from_gray( gray, &color );
+    [adapter setColorRed:color.r green:color.g blue:color.b];
+    AQUA_LineType = LT_UNDEFINED; 
 }
 
 TERM_PUBLIC void 
 AQUA_filled_polygon(int pc, gpiPoint *corners)
 {
   int i;
-  [adapter moveToVertexPoint:NSMakePoint(corners[0].x / AQUA_RESOLUTION, corners[0].y / AQUA_RESOLUTION)];
-  for (i=1; i<pc; i++)
+  [adapter moveToVertexPoint:NSMakePoint(corners[0].x/AQUA_RESOLUTION,
+					 corners[0].y/AQUA_RESOLUTION)];
+  for (i=1; i<pc; i++) 
     {
-      [adapter addEdgeToVertexPoint:NSMakePoint(corners[i].x / AQUA_RESOLUTION, corners[i].y / AQUA_RESOLUTION)];	
+      [adapter addEdgeToVertexPoint:NSMakePoint(corners[i].x/AQUA_RESOLUTION,
+						corners[i].y/AQUA_RESOLUTION)];	
     }
 }
+
+TERM_PUBLIC void
+AQUA_previous_palette(void)
+{
+}
+
 #endif /* PM3D */
 
 #endif /* TERM_BODY */
@@ -550,7 +565,8 @@ AQUA_filled_polygon(int pc, gpiPoint *corners)
 TERM_TABLE_START(aqua_driver)
   "aqua",
   "Interface to graphics terminal server for Mac OS X",
-  0, 0, 0, 0, 0, 0, 
+  0 /* xmax */ , 0 /* ymax */ , 0 /* vchar */ , 0 /* hchar */ ,
+  0 /* vtic */ , 0 /* htic */ ,
   AQUA_options, AQUA_init, AQUA_reset,
   AQUA_text, null_scale, AQUA_graphics, AQUA_move, AQUA_vector,
   AQUA_linetype, AQUA_put_text, 
@@ -565,7 +581,7 @@ TERM_TABLE_START(aqua_driver)
 #endif /* USE_MOUSE */
 #ifdef PM3D
   , AQUA_make_palette,
-  0, 
+  AQUA_previous_palette, 
   AQUA_set_color,
   AQUA_filled_polygon
 #endif /* PM3D */
