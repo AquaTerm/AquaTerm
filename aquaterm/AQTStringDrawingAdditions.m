@@ -288,7 +288,6 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
 {
    static float maxRight = 0.0;
    static NSPoint underlineLeftPoint;
-   static NSPoint overprintLeftPoint;
    NSString *text = [attrString string];
    NSPoint subPos = pos;
    BOOL extendsRight = NO;
@@ -317,12 +316,6 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
          || [[attributes objectForKey:@"AQTNonPrintingChar"] intValue] == 0);
       BOOL newUnderlining = ([attributes objectForKey:@"NSUnderline"] != nil 
                         && [[attributes objectForKey:@"NSUnderline"] intValue] == 1);
-      int markOverprinting = ([attributes objectForKey:@"AQTOverprint"] != nil)?
-         [[attributes objectForKey:@"AQTOverprint"] intValue]:
-         0;
-      float overprintAdjust = ([attributes objectForKey:@"AQTOverprintAdjust"] != nil)?
-         [[attributes objectForKey:@"AQTOverprintAdjust"] floatValue]:
-         1.0;
       if (attributedSublevel == sublevel) {
          NSFont *aFont;
          unichar theChar;
@@ -345,32 +338,18 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
          // check underlining
          if (underlining) {
             if (!newUnderlining) 
-               [path appendBezierPathWithRect:NSMakeRect(underlineLeftPoint.x, underlineLeftPoint.y+[aFont underlinePosition], pos.x-underlineLeftPoint.x, [aFont underlineThickness])];
+               [path appendBezierPathWithRect:NSMakeRect(underlineLeftPoint.x, underlineLeftPoint.y-1.0, pos.x-underlineLeftPoint.x, 0.5)];
          } else {
             if (newUnderlining)
                underlineLeftPoint = pos;
          }
          underlining = newUnderlining;
-         // Overprint
-         if (markOverprinting == 1)
-            overprintLeftPoint = pos;
-         if (markOverprinting == 2)
-         {
-            [path moveToPoint:NSMakePoint(pos.x + (pos.x-overprintLeftPoint.x-[aFont advancementForGlyph:theGlyph].width)/2.0,
-                                          pos.y+[aFont xHeight]*overprintAdjust)];
-            // render glyph
-            if (isVisible)
-               [path appendBezierPathWithGlyph:theGlyph inFont:aFont];
-            // advance position
-            // pos.x += [aFont advancementForGlyph:theGlyph].width;
-         } else {
-            [path moveToPoint:NSMakePoint(pos.x, pos.y+baselineOffset)];
-            // render glyph
-            if (isVisible)
-               [path appendBezierPathWithGlyph:theGlyph inFont:aFont];
-            // advance position
-            pos.x += [aFont advancementForGlyph:theGlyph].width;
-         }
+         [path moveToPoint:NSMakePoint(pos.x, pos.y+baselineOffset)];
+         // render glyph
+         if (isVisible)
+            [path appendBezierPathWithGlyph:theGlyph inFont:aFont];
+         // advance position
+         pos.x += [aFont advancementForGlyph:theGlyph].width;
          [path moveToPoint:pos];
          maxRight = MAX(pos.x, maxRight);
          extendsRight = NO; 
