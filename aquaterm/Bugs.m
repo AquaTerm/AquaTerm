@@ -12,12 +12,12 @@
 //
 // This code can be build as a stand-alone executable (tool)
 // from the command line:
-// gcc -o bugs Bugs.m -laqt -Framework Foundation
+// gcc -DAQT_STANDALONE -o bugs Bugs.m -framework AquaTerm -framework Foundation
 // _or_
 // executed from AquaTerm using menu Debug -> Exercise bugs.
 
 #import <Foundation/Foundation.h>
-#ifdef AQT_APP
+#ifndef AQT_STANDALONE
 #import <AppKit/AppKit.h>
 #import "AQTController.h"
 #endif
@@ -30,7 +30,7 @@ static void customEventHandler(int index, NSString *event)
 }
 
 
-#ifndef AQT_APP
+#ifdef AQT_STANDALONE
 void aqtDebug(AQTAdapter *adapter);
 
 int main(void)
@@ -48,71 +48,73 @@ void aqtDebug(AQTAdapter *adapter)
 void aqtDebug(id sender)
 #endif
 {
-#ifdef AQT_APP
+#ifndef AQT_STANDALONE
   AQTAdapter *adapter = [sender sharedAdapter];
 #endif
   if (!adapter)
   {
     NSLog(@"Failed to init adapter");
   }
-  [adapter openPlotWithIndex:2];
-  [adapter setPlotSize:NSMakeSize(600,400)];
-  [adapter setPlotTitle:@"Testing"];
-  [adapter setFontsize:24];
-  [adapter setFontname:@"Symbol"];
-  // Some styling is possible
+  [adapter setFontname:@"Times-Roman"];
+  NSString *s = [NSString stringWithFormat:@"Unicode: %C %C %C %C%C%C%C%C", 0x2124, 0x2133, 0x5925, 0x2654, 0x2655, 0x2656, 0x2657, 0x2658]; 
+  NSMutableAttributedString *as = [[NSMutableAttributedString alloc] initWithString:s];
+  [as setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:@"AppleSymbols", @"AQTFontname", nil] range:NSMakeRange(9,11)];
+  [as setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:@"Song Regular", @"AQTFontname", nil] range:NSMakeRange(13,1)];
+  [adapter openPlotWithIndex:1];
+  [adapter setPlotSize:NSMakeSize(620,420)];
+  [adapter setPlotTitle:@"Unicode"];
+  [adapter setFontsize:20];
+  [adapter addLabel:as atPoint:NSMakePoint(100,100)];
+  //[adapter setFontname:@"Song Regular"];
+  //[adapter addLabel:[NSString stringWithFormat:@"%C", 0x5925] atPoint:NSMakePoint(100,120)];
+  [adapter renderPlot];
+  
+  float a;
+  float a1=40.;
+  float a2=20.;
+  float x=400., y=200.;
+  
+  for (a=0.0; a<360.0; a+=30.0)
   {
-     NSData *unicode = [NSData dataWithBytes:"\x03\xb1\x03\xb1\x03\xb1" length:6];
-     NSString *uStr = [[NSString alloc] initWithData:unicode encoding:NSUnicodeStringEncoding];
-     NSString *greek = [[NSString alloc] initWithFormat:@"%S", "\x03\xb1\x03\xb1\x03\xb1"];
-//     NSMutableAttributedString *attrStr = [[[NSMutableAttributedString alloc] initWithString:@"YaddaYaddaYaddaYaddaYadda"] autorelease];
-     [adapter addLabel:uStr atPoint:NSMakePoint(200, 200) angle:0.0 align:AQTAlignCenter];
-/*
- [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(1,3)];
-     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(4,2)];
-     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(7,1)];
-     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(8,2)];
-     [adapter addLabel:attrStr atPoint:NSMakePoint(200, 200) angle:0.0 align:AQTAlignLeft];
-     [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:0] range:NSMakeRange(0, 11)];
-     [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(0,3)];
-     [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(4,1)];
-     [adapter addLabel:attrStr atPoint:NSMakePoint(200, 300) angle:0.0 align:AQTAlignLeft];
-     [adapter addLabel:attrStr atPoint:NSMakePoint(100, 200) angle:90.0 align:AQTAlignCenter];
-*/
+     [adapter addLabel:@"--- Sheared" atPoint:NSMakePoint(200,200) angle:a shearAngle:a align:AQTAlignLeft | AQTAlignMiddle];
   }
+   
+  [adapter moveToPoint:NSMakePoint(x-100*cos(3.1415*a1/180.0), y+100+100*sin(3.1415*a1/180.0))];
+  [adapter addLineToPoint:NSMakePoint(x-100*cos(3.1415*a1/180.0), y+100*sin(3.1415*a1/180.0))];
+  [adapter addLineToPoint:NSMakePoint(x, y)];
+  [adapter addLineToPoint:NSMakePoint(x+100*cos(3.1415*a2/180.0), y+100*sin(3.1415*a2/180.0))];
   
-  [adapter setColorRed:1.0 green:0.0 blue:0.0];
-  [adapter addFilledRect:NSMakeRect(200, 100, 20, 20)];
-  [adapter setColorRed:0.0 green:1.0 blue:0.0];
-  [adapter addFilledRect:NSMakeRect(200, 120, 20, 20)];
-  [adapter setColorRed:0.0 green:0.0 blue:1.0];
-  [adapter addFilledRect:NSMakeRect(220, 100, 20, 20)];
-  [adapter setColorRed:1.0 green:1.0 blue:0.0];
-  [adapter addFilledRect:NSMakeRect(220, 120, 20, 20)];
-
-  [adapter setColorRed:1.0 green:0.0 blue:0.0];
-  [adapter addFilledRect:NSMakeRect(250.0, 100.0, 20.0, 20.0)];
-  [adapter setColorRed:0.0 green:1.0 blue:0.0];
-  [adapter addFilledRect:NSMakeRect(250.0, 120.0, 20.0, 20.0)];
-  [adapter setColorRed:0.0 green:0.0 blue:1.0];
-  [adapter addFilledRect:NSMakeRect(270.0, 100.0, 20.0, 20.0)];
-  [adapter setColorRed:1.0 green:1.0 blue:0.0];
-  [adapter addFilledRect:NSMakeRect(270.0, 120.0, 20.0, 20.0)];
+  [adapter addLabel:@"---z-axis---" atPoint:NSMakePoint(x-20-100*cos(3.1415*a1/180.0), y+50+100*sin(3.1415*a1/180.0)) 
+              angle:90.0 
+         shearAngle:a1 
+              align:AQTAlignCenter | AQTAlignMiddle];
   
-  [adapter setColorRed:0.0 green:0.0 blue:0.0];
-  [adapter moveToPoint:NSMakePoint(0,0)];
-  [adapter addLineToPoint:NSMakePoint(599,0)];
-  [adapter addLineToPoint:NSMakePoint(599,399)];
-  [adapter addLineToPoint:NSMakePoint(0,399)];
-  [adapter addLineToPoint:NSMakePoint(0,0)];
+  [adapter addLabel:@"---y-axis---" atPoint:NSMakePoint(x-50*cos(3.1415*a1/180.0), y-20+50*sin(3.1415*a1/180.0)) 
+              angle:-a1 
+         shearAngle:-a1 
+              align:AQTAlignCenter | AQTAlignMiddle];
 
-  // Fontname bug (#1015888)
-  [adapter setFontname:@"Times"];
-  [adapter addLabel:@"Times" atPoint:NSMakePoint(200, 100) angle:0.0 align:AQTAlignLeft];
-  [adapter setFontname:@"Crash"];
-  [adapter addLabel:@"Crash" atPoint:NSMakePoint(300, 100) angle:0.0 align:AQTAlignLeft];
-
+  [adapter addLabel:@"---x-axis---" atPoint:NSMakePoint(x+50*cos(3.1415*a2/180.0), y-20+50*sin(3.1415*a2/180.0)) 
+              angle:a2 
+         shearAngle:a2 
+              align:AQTAlignCenter | AQTAlignMiddle];
+  
   
   [adapter renderPlot];
-  //[adapter closePlot];
+  
+  // Resizing bug
+  [adapter openPlotWithIndex:2];
+  [adapter setPlotSize:NSMakeSize(200,400)];
+  [adapter setPlotTitle:@"Page 1 200x400"];
+  [adapter addLabel:@"Hello" atPoint:NSMakePoint(100,100)];
+  [adapter renderPlot];
+#ifdef AQT_STANDALONE
+  [adapter waitNextEvent];
+#endif
+  [adapter openPlotWithIndex:2];
+  [adapter setPlotSize:NSMakeSize(400,200)];
+  [adapter setPlotTitle:@"Page 2 400x200"];
+  [adapter addLabel:@"World" atPoint:NSMakePoint(100,100)];
+  [adapter renderPlot];
+  
 }

@@ -12,18 +12,18 @@
 //
 // This code can be build as a stand-alone executable (tool)
 // from the command line:
-// gcc -o demo Demo.m -laquaterm -framework Foundation
+// gcc -DAQT_STANDALONE -o demo Demo.m -framework AquaTerm -framework Foundation
 // _or_
 // executed from inside AquaTerm using menu Debug -> Testview. 
 
 #import <Foundation/Foundation.h>
-#ifdef AQT_APP
+#ifndef AQT_STANDALONE
 #import <AppKit/AppKit.h>
 #import "AQTController.h"
 #endif
 #import <aquaterm/AQTAdapter.h>
 
-#ifndef AQT_APP
+#ifdef AQT_STANDALONE
 void aqtTestview(AQTAdapter *adapter);
 
 int main(void)
@@ -51,7 +51,7 @@ unsigned char rgbImage[12]={
   0, 0, 0
 };
 
-#ifdef AQT_APP
+#ifndef AQT_STANDALONE
 AQTAdapter *adapter = [sender sharedAdapter];
 #endif
 
