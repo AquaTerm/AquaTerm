@@ -10,6 +10,7 @@
    IBOutlet NSPopUpButton *imageInterpolateLevel;
    IBOutlet NSButton *shouldAntialiasSwitch;
    IBOutlet NSButton *limitMinimumLinewidthSwitch;
+   IBOutlet NSButton *convertSymbolFontSwitch;
    IBOutlet NSButton *closeWindowSwitch;
    IBOutlet NSButton *confirmCloseWindowSwitch;
    IBOutlet NSButton *showProcessNameSwitch;

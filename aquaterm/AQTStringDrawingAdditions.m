@@ -54,7 +54,8 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
    int strLen = [self length];
    NSPoint pos = NSZeroPoint;
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
-   BOOL convertFont = [[aFont fontName] isEqualToString:@"Symbol"];
+   BOOL convertSymbolFontToUnicode = [[aFont fontName] isEqualToString:@"Symbol"] 
+      && [[NSUserDefaults standardUserDefaults] boolForKey:@"ShouldConvertSymbolFont"];
    
    // Remove leading spaces FIXME: trailing as well?, need better solution
    // Don't skip a single space...
@@ -70,7 +71,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
       NSGlyph theGlyph;
       NSSize offset;
       unichar theChar = [self characterAtIndex:i];
-      if (convertFont)
+      if (convertSymbolFontToUnicode)
          theChar = _aqtMapAdobeSymbolEncodingToUnicode(theChar);
       theGlyph = [aFont _defaultGlyphForChar:theChar];
       offset = [aFont advancementForGlyph:theGlyph];
@@ -117,7 +118,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
  * AQTBaselineAdjust - move baseline relative to glyph height (float) <0 below and 0> above baseline
  * AQTNonPrintingChar - if defined and 1 char will not be drawn, only occupy space (int) {0, 1}
  *
- * If Symbol font is specified (defaultFont or as attribute), automatic conversion to Unicode is performed. FIXME: selectable 
+ * If Symbol font is specified (defaultFont or as attribute), automatic conversion to Unicode is performed. 
 */
 NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int *i, int sublevel, NSPoint pos, float fontScale)
 {
@@ -131,6 +132,7 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
    float glyphHeight = defaultFontSize * fontScale;
    int attributedSublevel = 0;
    float baselineOffset = 0.0;
+   BOOL convertSymbolFontToUnicode = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShouldConvertSymbolFont"];
     
    while (*i < strLen) {
       // Read attributes
@@ -160,7 +162,7 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
             aFont = [NSFont systemFontOfSize:attributedFontsize * fontScale]; 
          theChar = [text characterAtIndex:*i];
          // Perform neccessary conversion to Unicode
-         if ([[aFont fontName] isEqualToString:@"Symbol"]) {
+         if ([[aFont fontName] isEqualToString:@"Symbol"] && convertSymbolFontToUnicode) {
             theChar = _aqtMapAdobeSymbolEncodingToUnicode(theChar);
          }
          // Get the glyph

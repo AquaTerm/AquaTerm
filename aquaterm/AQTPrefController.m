@@ -27,6 +27,7 @@
    [imageInterpolateLevel selectItemAtIndex:[preferences integerForKey:@"ImageInterpolationLevel"]];
    [shouldAntialiasSwitch setIntValue:[preferences integerForKey:@"ShouldAntialiasDrawing"]];
    [limitMinimumLinewidthSwitch setIntValue:[preferences integerForKey:@"limitMinimumLinewidth"]];
+   [convertSymbolFontSwitch setIntValue:[preferences integerForKey:@"ShouldConvertSymbolFont"]];
    [closeWindowSwitch setIntValue:[preferences integerForKey:@"CloseWindowWhenClosingPlot"]];
    [confirmCloseWindowSwitch setIntValue:[preferences integerForKey:@"ConfirmCloseWindowWhenClosingPlot"]];
    [showProcessNameSwitch setIntValue:[preferences integerForKey:@"ShowProcessName"]];
@@ -57,6 +58,7 @@
    [preferences setInteger:[imageInterpolateLevel indexOfSelectedItem] forKey:@"ImageInterpolationLevel"];
    [preferences setInteger:[shouldAntialiasSwitch intValue] forKey:@"ShouldAntialiasDrawing"];
    [preferences setInteger:[limitMinimumLinewidthSwitch intValue] forKey:@"limitMinimumLinewidth"];
+   [preferences setInteger:[convertSymbolFontSwitch intValue] forKey:@"ShouldConvertSymbolFont"];
    [preferences setInteger:[closeWindowSwitch intValue] forKey:@"CloseWindowWhenClosingPlot"];
    [preferences setInteger:[confirmCloseWindowSwitch intValue] forKey:@"ConfirmCloseWindowWhenClosingPlot"];
    [preferences setInteger:[showProcessNameSwitch intValue] forKey:@"ShowProcessName"];

@@ -12,6 +12,7 @@
             OUTLETS = {
                 closeWindowSwitch = NSButton; 
                 confirmCloseWindowSwitch = NSButton; 
+                convertSymbolFontSwitch = NSButton; 
                 imageInterpolateLevel = NSPopUpButton; 
                 limitMinimumLinewidthSwitch = NSButton; 
                 prefWindow = NSWindow; 
