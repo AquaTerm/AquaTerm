@@ -37,6 +37,9 @@ NSRect AQTUnionRect(NSRect aRect, NSRect bRect);
 static inline NSRect AQTRectFromSize(NSSize aSize) {
    return NSMakeRect(0.0, 0.0, aSize.width, aSize.height);
 }
+static inline BOOL AQTProportionalSizes(NSSize aSize, NSSize bSize) {
+   return EQ(aSize.height/aSize.width, bSize.height/bSize.width);
+}
 
 
 
