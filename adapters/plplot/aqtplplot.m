@@ -55,11 +55,13 @@ void plD_dispatch_init_aqt( PLDispatchTable *pdt )
 }
 static int currentPlot = 0;
 static int maxWindows = 30;
+static int windowXSize = 0;
+static int windowYSize = 0;
 
-#define AQT_Max_X       10.0 * 720.0
-#define AQT_Max_Y       10.0 * 720.0
-#define DPI             720.0
-#define SCALE			0.1			// DPI divided by actual screen resolution
+#define SCALE			0.1
+#define AQT_Max_X       720
+#define AQT_Max_Y       720
+#define DPI             72.0
 
 //---------------------------------------------------------------------
 //   aqt_init()
@@ -91,15 +93,25 @@ void plD_init_aqt(PLStream *pls)
    pls->graphx = GRAPHICS_MODE;
 
    if (!pls->colorset)
-      pls->color = 1;
+      pls->color = 1; 
    //
    // Set up device parameters
    //
    plP_setpxl(DPI/25.4, DPI/25.4);           /* Pixels/mm. */
    //
-   //  Set the bounds for plotting.  initially set it to be a AQT_Max_X x AQT_Max_Y array
+   // Set the bounds for plotting.  default is AQT_Max_X x AQT_Max_Y unless otherwise specified.
    //
-   plP_setphy((PLINT) 0, (PLINT) (AQT_Max_X), (PLINT) 0, (PLINT) (AQT_Max_Y));
+   if (pls->xlength <= 0 || pls->ylength <= 0){
+      windowXSize = AQT_Max_X;
+      windowYSize = AQT_Max_Y;
+      plP_setphy((PLINT) 0, (PLINT) (AQT_Max_X/SCALE), (PLINT) 0, (PLINT) (AQT_Max_Y/SCALE));
+   } else {
+      // FIXME : Would the user typically specify a window size in pixels?
+      //   All I know is that the Perl Data Language Plplot package does...
+      windowXSize = pls->xlength;
+      windowYSize = pls->ylength;
+      plP_setphy((PLINT) 0, (PLINT) (pls->xlength/SCALE), (PLINT) 0, (PLINT) (pls->ylength/SCALE));
+   }   
 }
 
 //----------------------------------------------------------------------
@@ -112,7 +124,7 @@ void plD_bop_aqt(PLStream *pls)
 {
    currentPlot = currentPlot>=maxWindows?0:currentPlot;
    [adapter openPlotWithIndex:currentPlot++];
-   [adapter setPlotSize:NSMakeSize(AQT_Max_X*SCALE, AQT_Max_Y*SCALE)];
+   [adapter setPlotSize:NSMakeSize(windowXSize, windowYSize)];
    [adapter setLinewidth:1.0];
    [adapter setColorRed:(float)(pls->curcolor.r/255.)
    				  green:(float)(pls->curcolor.g/255.)
