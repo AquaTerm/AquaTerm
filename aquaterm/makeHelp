@@ -8,16 +8,18 @@ $docpath=".";
 &gen_aqt_content;
 foreach $item (@ARGV) {   
     print  "<div id=\"contentitem\">\n";
-    print "<h2>$item</h2>\n<pre>";     
-    print "<h3>ReadMe</h3>\n<pre>";     
+    print "<h2>Adapter::$item</h2>";     
+    print "<h3>ReadMe</h3><code><pre>";     
     open (filedata, "$adapterpath/$item/ReadMe");
     print <filedata>;
     close(filedata);
-    print "<h3>ReleaseNotes</h3>\n<pre>";     
+    print "</pre></code>";
+    print "<h3>ReleaseNotes</h3><code><pre>";     
     open (filedata, "$adapterpath/$item/ReleaseNotes");
     print <filedata>;
     close(filedata);
-    print "</pre>\n</div>\n";
+    print "</pre></code>";
+    print "</div>\n";
 }
 
 &gen_postamble;
@@ -40,8 +42,8 @@ sub gen_page_heading {
 <!-- Header -->
 <div id="hdr">
 <h1>AquaTerm.app, your friendly plotting front-end</h1>
-This is the help file for AquaTerm 1.0.a2, which is simply a collection of info files from the release.
-For questions, please use the mailing lists at <a href="http://aquaterm.sf.net">the official website</a>.
+This is the help file for AquaTerm 1.0.a2, which is simply a collection of info files from the release.<br>
+For questions, please use the mailing lists at <a href="http://aquaterm.sf.net">the AquaTerm website</a>.
 <br>
 </div>
 END
@@ -51,12 +53,11 @@ END
 sub gen_aqt_content {
 foreach $item ('ReadMe', 'INSTALL', 'ReleaseNotes') {   
     print  "<div id=\"contentitem\">\n";
-    print "<h2>$item</h2>\n<pre>"; 
-    
+    print "<h2>AquaTerm::$item</h2><code><pre>";     
     open (filedata, "$docpath/$item");
     print <filedata>;
     close(filedata);
-    print "</pre>\n</div>\n";
+    print "</pre></code>\n</div>\n";
     }
 }
 
