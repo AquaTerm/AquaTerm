@@ -122,7 +122,6 @@
 				29B97323FDCFA39411CA2CEA,
 				CBF17AA505EE6BE600AAB4C4,
 				19C28FACFE9D520D11CA2CBB,
-				F55D7FF10219BEF4014110D6,
 				CBC4B44A05E4C784001BE8D7,
 			);
 			isa = PBXGroup;
@@ -291,6 +290,34 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		CB2CC10D0677017B0042863D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AQTModelAdditions.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB2CC10E0677017B0042863D = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AQTModelAdditions.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB2CC10F0677017B0042863D = {
+			fileRef = CB2CC10D0677017B0042863D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB2CC1100677017B0042863D = {
+			fileRef = CB2CC10E0677017B0042863D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CB2DDBAB056D10FB00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -363,29 +390,16 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		CB7217DB06072905008DCEAD = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/ReadMe",
-				"$(SRCROOT)/ReleaseNotes\n$(SRCROOT)/ReleaseNotes",
-				"$(SRCROOT)/makeHelp",
-			);
-			isa = PBXShellScriptBuildPhase;
-			outputPaths = (
-				"$(SRCROOT)/help.html",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "perl makeHelp c fortran gnuplot pgplot plplot > help.html";
-		};
 		CB7217EF060729FF008DCEAD = {
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				CB72180806072AE9008DCEAD,
+				CB96E44D0663462E001B32F9,
+				CB96E44E0663462E001B32F9,
+				CB96E44506634629001B32F9,
+				CB96E44606634629001B32F9,
+				CB96E44706634629001B32F9,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,17 +408,12 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = text.html;
-			path = help.html;
-			refType = 4;
-			sourceTree = "<group>";
+			name = help.html;
+			path = /Users/per/Documents/Source/aquaterm_help/build/help.html;
+			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		CB7217FC06072ABA008DCEAD = {
-			fileRef = CB7217FB06072ABA008DCEAD;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CB72180806072AE9008DCEAD = {
 			fileRef = CB7217FB06072ABA008DCEAD;
 			isa = PBXBuildFile;
 			settings = {
@@ -420,20 +429,6 @@
 		};
 		CB72184906072CF6008DCEAD = {
 			fileRef = CB72184806072CF6008DCEAD;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CB7218CC06073BFF008DCEAD = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.script.perl;
-			path = makeHelp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		CB7218CD06073BFF008DCEAD = {
-			fileRef = CB7218CC06073BFF008DCEAD;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -501,6 +496,54 @@
 			isa = PBXTargetDependency;
 			target = CBC4B42705E4C784001BE8D7;
 			targetProxy = CB7C70A105EA276200D4CD15;
+		};
+		CB96E43F06634622001B32F9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.html;
+			name = adapters.html;
+			path = /Users/per/Documents/Source/aquaterm_help/build/adapters.html;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		CB96E44006634622001B32F9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.html;
+			name = releasenotes.html;
+			path = /Users/per/Documents/Source/aquaterm_help/build/releasenotes.html;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		CB96E44506634629001B32F9 = {
+			fileRef = CB96E43F06634622001B32F9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB96E44606634629001B32F9 = {
+			fileRef = CB96E44006634622001B32F9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB96E44706634629001B32F9 = {
+			fileRef = CB7217FB06072ABA008DCEAD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB96E44D0663462E001B32F9 = {
+			fileRef = CBD6C05D066284A70096ACB5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB96E44E0663462E001B32F9 = {
+			fileRef = CBD6C05E066284A70096ACB5;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		CB9B70CB065A0AD100563010 = {
 			children = (
@@ -904,7 +947,6 @@
 				CBC4B43205E4C784001BE8D7,
 				CBC4B43B05E4C784001BE8D7,
 				CBC4B44505E4C784001BE8D7,
-				CB7217DB06072905008DCEAD,
 				CB7217EF060729FF008DCEAD,
 			);
 			buildRules = (
@@ -913,7 +955,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				GCC_PREPROCESSOR_DEFINITIONS = AQT_APP;
+				GCC_PREPROCESSOR_DEFINITIONS = "AQT_APP DEBUG";
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
 				INSTALL_PATH = "$(USER_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = /tmp/AquaTerm.dst/usr/local/lib;
@@ -946,6 +988,7 @@
 				CBC4B43005E4C784001BE8D7,
 				CBC4B43105E4C784001BE8D7,
 				CB9B70D3065A0B9C00563010,
+				CB2CC10F0677017B0042863D,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1011,7 +1054,6 @@
 				CBC4B43A05E4C784001BE8D7,
 				CB7217FC06072ABA008DCEAD,
 				CB72184906072CF6008DCEAD,
-				CB7218CD06073BFF008DCEAD,
 				CB9B70CD065A0AD100563010,
 			);
 			isa = PBXResourcesBuildPhase;
@@ -1078,6 +1120,7 @@
 				CBC4B44305E4C784001BE8D7,
 				CBC4B44405E4C784001BE8D7,
 				CB9B70D4065A0B9C00563010,
+				CB2CC1100677017B0042863D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1212,6 +1255,24 @@
 			};
 			isa = PBXBuildStyle;
 			name = BuildStyle;
+		};
+		CBD6C05D066284A70096ACB5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = helplayout.css;
+			path = /Users/per/Documents/Source/aquaterm_help/build/helplayout.css;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		CBD6C05E066284A70096ACB5 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = helpstyle.css;
+			path = /Users/per/Documents/Source/aquaterm_help/build/helpstyle.css;
+			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		CBF17AA505EE6BE600AAB4C4 = {
 			isa = PBXFileReference;
@@ -1379,15 +1440,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F55D7FF10219BEF4014110D6 = {
-			fallbackIsa = PBXFileReference;
-			fileEncoding = 30;
-			isa = PBXExecutableFileReference;
-			lastKnownFileType = text.script.sh;
-			path = makedocs;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
 		F5653B8001C4B8F201A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1406,7 +1458,10 @@
 		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
-				CB7218CC06073BFF008DCEAD,
+				CB96E43F06634622001B32F9,
+				CB96E44006634622001B32F9,
+				CBD6C05D066284A70096ACB5,
+				CBD6C05E066284A70096ACB5,
 				CB7217FB06072ABA008DCEAD,
 				F57C16A202506DE3010D3DE4,
 				CB72184806072CF6008DCEAD,
@@ -1470,6 +1525,8 @@
 				CB5B187204A9A49E00EBD329,
 				CBF3083904D51CF100EBD329,
 				CBF3083A04D51CF100EBD329,
+				CB2CC10D0677017B0042863D,
+				CB2CC10E0677017B0042863D,
 				FEBB59CE055CF10B00EEC8EA,
 				FEBB59D0055CF40600EEC8EA,
 				FE8252ACC5B321F400CFA73B,
