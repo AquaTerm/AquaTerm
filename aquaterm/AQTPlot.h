@@ -30,6 +30,7 @@
 
 - (void)beginMouseInput;
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
+- (char)keyPressed;
 - (NSPoint) selectedPoint;
 - (BOOL) selectedPointIsValid;
 

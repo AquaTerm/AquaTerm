@@ -80,7 +80,7 @@
 -(char)mouseDownInfo:(inout NSPoint *)mouseLoc
 {
   *mouseLoc = [[self _plotForView:currentView] selectedPoint];
-  return 'A';
+  return [[self _plotForView:currentView] keyPressed];
 }
 
 /*

@@ -87,10 +87,15 @@
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey
 {
   [[self viewOutlet] setMouseIsActive:NO];
-  NSLog(@"Got coord: %@", NSStringFromPoint(pos));
+  NSLog(@"Got coord: %@ and key: %c", NSStringFromPoint(pos), aKey);
   _selectedPoint = pos;
   _keyPressed = aKey;
   _selectedPointIsValid = YES;
+}
+
+- (char)keyPressed
+{
+  return _keyPressed;
 }
 
 - (NSPoint) selectedPoint
