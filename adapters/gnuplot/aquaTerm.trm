@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.5 2001/12/10 16:09:00 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.6 2001/12/13 00:19:44 persquare Exp $
  *
  */
 
@@ -47,6 +47,48 @@ register_term(aqua)
 #endif
 
 #ifdef TERM_PROTO
+
+/* Required entries */
+TERM_PUBLIC void AQUA_options __PROTO((void));
+TERM_PUBLIC void AQUA_init __PROTO((void));
+TERM_PUBLIC void AQUA_reset __PROTO((void));
+TERM_PUBLIC void AQUA_text __PROTO((void));
+TERM_PUBLIC void AQUA_graphics __PROTO((void));
+TERM_PUBLIC void AQUA_move __PROTO((unsigned int x, unsigned int y));
+TERM_PUBLIC void AQUA_vector __PROTO((unsigned int x, unsigned int y));
+TERM_PUBLIC void AQUA_linetype __PROTO((int linetype));
+TERM_PUBLIC void AQUA_put_text __PROTO((unsigned int x, unsigned int y,const char *str));
+/* Optional entries */
+TERM_PUBLIC int AQUA_text_angle __PROTO((int));
+TERM_PUBLIC int AQUA_justify_text __PROTO((enum JUSTIFY));
+TERM_PUBLIC int AQUA_set_font __PROTO((const char *font));  /* "font,size" */
+TERM_PUBLIC void AQUA_set_pointsize __PROTO((double size)); /* notification of set pointsize */
+TERM_PUBLIC int flags; /* various flags */
+TERM_PUBLIC void AQUA_suspend __PROTO((void)); /* after one plot of multiplot */
+TERM_PUBLIC void AQUA_resume __PROTO((void));  /* before subsequent plot of multiplot */
+TERM_PUBLIC void AQUA_boxfill __PROTO((int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height)); /* clear part of multiplot */
+TERM_PUBLIC void AQUA_linewidth __PROTO((double linewidth));
+TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
+#ifdef PM3D
+  TERM_PUBLIC int AQUA_make_palette __PROTO((t_sm_palette *palette));
+  TERM_PUBLIC void AQUA_set_color __PROTO((double gray));
+  TERM_PUBLIC void AQUA_filled_polygon __PROTO((int points, gpiPoint *corners));
+#endif /* PM3D */
+/* End of entries */
+
+#define AQUA_XMAX (11.69*72)  /* = 842, paper width times screen resolution */
+#define AQUA_YMAX (8.26*72)   /* = 595, paper height times screen resolution */
+#define AQUA_VTIC 8     
+#define AQUA_HTIC 8
+#define AQUA_VCHAR 16     /* default font is Times at 16 points */
+#define AQUA_HCHAR (AQUA_VCHAR*6/10)
+
+#define GOT_AQUA_PROTO
+#endif /* TERM_PROTO */
+
+#ifndef TERM_PROTO_ONLY
+
+#ifdef TERM_BODY
 /*
  * 2001-08-18 PP
  * src/tables.h defines S_OUTPUT which is also defined in
@@ -66,69 +108,17 @@ register_term(aqua)
 #import <AppKit/NSBezierPath.h>
 #import <stdarg.h>
 
-/* Debugging extras */
-static inline void NOOP_(id x, ...) {;}
+//
+// Since this header file is used outside of AquaTerm too,
+// the internal version number is defined explicitly here
+//
+#define AQTProtocolVersion 0.2.0
 
-#ifdef LOGGING
-#define LOG  NSLog
-#else
-#define LOG  NOOP_
-#endif
-
-/* Required entries */
-TERM_PUBLIC void AQUA_options __PROTO((void));
-TERM_PUBLIC void AQUA_init __PROTO((void));
-TERM_PUBLIC void AQUA_reset __PROTO((void));
-TERM_PUBLIC void AQUA_text __PROTO((void));
-TERM_PUBLIC void AQUA_graphics __PROTO((void));
-TERM_PUBLIC void AQUA_move __PROTO((unsigned int x, unsigned int y));
-TERM_PUBLIC void AQUA_vector __PROTO((unsigned int x, unsigned int y));
-TERM_PUBLIC void AQUA_linetype __PROTO((int linetype));
-TERM_PUBLIC void AQUA_put_text __PROTO((unsigned int x, unsigned int y,const char *str));
-
-/* Optional entries */
-TERM_PUBLIC int AQUA_text_angle __PROTO((int));
-TERM_PUBLIC int AQUA_justify_text __PROTO((enum JUSTIFY));
-TERM_PUBLIC int AQUA_set_font __PROTO((const char *font));  /* "font,size" */
-TERM_PUBLIC void AQUA_set_pointsize __PROTO((double size)); /* notification of set pointsize */
-TERM_PUBLIC int flags; /* various flags */
-TERM_PUBLIC void AQUA_suspend __PROTO((void)); /* after one plot of multiplot */
-TERM_PUBLIC void AQUA_resume __PROTO((void));  /* before subsequent plot of multiplot */
-TERM_PUBLIC void AQUA_boxfill __PROTO((int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height)); /* clear part of multiplot */
-TERM_PUBLIC void AQUA_linewidth __PROTO((double linewidth));
-TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
-#ifdef PM3D
-  TERM_PUBLIC int AQUA_make_palette __PROTO((t_sm_palette *palette));
-  TERM_PUBLIC void AQUA_set_color __PROTO((double gray));
-  TERM_PUBLIC void AQUA_filled_polygon __PROTO((int points, gpiPoint *corners));
-#endif
-/* End of entries */
-
-
-#define AQUA_XMAX (11.69*72)  /* = 842, paper width times screen resolution */
-#define AQUA_YMAX (8.26*72)   /* = 595, paper height times screen resolution */
-#define AQUA_VTIC 8     
-#define AQUA_HTIC 8
-#define AQUA_VCHAR 16     /* default font is Times at 16 points */
-#define AQUA_HCHAR (AQUA_VCHAR*6/10)
-
-/*
- * The class NSBezierPath doesn't implement replacementObjectForPortCoder so 
- * we add that behaviour as a category for NSBezierPath
- */
-@interface NSBezierPath (NSBezierPathDOCategory)
-- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder; 
-@end
-
-/*
- * This defines the methods implemented by the server
- *
- */
 @protocol AQTProtocol
 //
-// Returns key/value coded objects such as a version
-// number string for AquaTerm in the form #.#.#
-// Parameters like AQUA_XMAX should also be passed here
+// Return a version number string for AquaTerm in the form #.#.#
+// corresponding to major_version.minor_version.bugfix_version
+// as well as user settings such as default font etc.
 //
 - (bycopy NSDictionary *) getAquaTermInfo;
 //
@@ -137,7 +127,10 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 // drawing to the same model
 //
 - (oneway void) renderInViewShouldRelease:(BOOL)release;
-- (oneway void) clearRect:(NSRect)rect;
+//
+// remove all objects found _completely_ contained in rect
+//
+-(oneway void) clearRect:(NSRect)rect;
 //
 // Add a string to the current model, where:
 // justification is {LEFT=0, CENTER, RIGHT}
@@ -148,12 +141,12 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 - (oneway void) addString:(bycopy NSString *)text 
                   atPoint:(bycopy NSPoint)point 
         withJustification:(bycopy int)justification 
-                  atAngle:(bycopy float)angle
+                  atAngle:(bycopy float)angle		
          withIndexedColor:(bycopy int)colorIndex;
 //
 // Set the font for the subsequent strings added to the model
 // (mimics fontWithName: size: method in NSFont)
-//          
+//                  
 - (oneway void) setFontWithName:(bycopy NSString *)fontName size:(bycopy float)fontSize;
 //
 // Add graphic elements to the model. A "polyline" refers to any 
@@ -175,74 +168,116 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 - (oneway void) selectModel:(int) currentModel;
 @end
 
-#define GOT_AQUA_PROTO
-#endif
-
-#ifndef TERM_PROTO_ONLY
-
-#ifdef TERM_BODY
-
 static NSAutoreleasePool *arpool;   // our autorelease pool 
-static id gnuTermAccess;        		// local (and private) object manages the D.O. connection
-static int currentWindow = 0;				// the only option to set
-// FIXME: stuff below goes into gnuTermAccess object
-static NSBezierPath *thePath;
-static int currentJustificationMode;
-static int currentLinetype;
-static double currentGray; 
-static float currentAngle;
+static id gnuTermAccess;        	// local object manages the D.O. connection
+static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of gnuTermAccess)
+
+/*
+ * The class NSBezierPath doesn't implement replacementObjectForPortCoder so
+ * we add that behaviour as a category for NSBezierPath
+ */
+@interface NSBezierPath (NSBezierPathDOCategory)
+- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder;
+@end
 
 @implementation NSBezierPath (NSBezierPathDOCategory)
-- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder 
+- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder
 {
-  if ([portCoder isBycopy]) 
+  if ([portCoder isBycopy])
     return self;
   return [super replacementObjectForPortCoder:portCoder];
 }
 @end
 
-//
-// Private Obj-C class GnuTermDriver
-//
-@interface GnuTermDriver:NSObject 
+/* Debugging extras */
+static inline void NOOP_(id x, ...) {;}
+
+#ifdef LOGGING
+#define LOG  NSLog
+#else
+#define LOG  NOOP_
+#endif	/* LOGGING */
+
+@interface AQTAdapter : NSObject
 {
   @private
-  NSDistantObject *server;
+  id server;
+  NSMutableDictionary *termInfo;
+  NSBezierPath *thePath;
+  int justificationMode;
+  int linetype;
+  double gray;
+  float textAngle;
+  int figure;
 }
--(id)init;
--(void)dealloc;
--(id)server;
--(void)invalidateServer;
--(BOOL)connectToServer;
+-(id) init;
+-(void) dealloc;
+-(id) server;
+-(NSMutableDictionary *)termInfo;
+-(void) invalidateServer;
+-(BOOL) connectToServer;
+-(void) updateInfoFromServer;
 -(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease;
+-(void) moveToPoint:(NSPoint)point;
+-(void) lineToPoint:(NSPoint)point;
+-(void) setLinetype:(int)linetype;
+-(void) putText:(const char *)str at:(NSPoint)point;
+-(void) setJustification:(int)mode;
+-(void) setTextAngle:(int)angle;
+-(void) setFont:(const char *)font;
+-(void) fillRect:(NSRect)rect style:(int)style;
+-(void) setLinewidth:(double)linewidth;
+-(void) setFillColor:(double)gray;
+-(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners;
+-(void) setFigure:(int)newFigure;
 @end
 
-@implementation GnuTermDriver
-- (id)init
+@implementation AQTAdapter
+-(id) init
 {
-	self = [super init];
-	if ([self connectToServer])
-	{
-		[server setProtocolForProxy:@protocol(AQTProtocol)];
-	}
+  if (self = [super init])
+  {
+    thePath = [[NSBezierPath alloc] init];
+    termInfo = [[NSMutableDictionary alloc] initWithCapacity:0];
+    justificationMode = 0;
+    linetype = 0;
+    gray = 0.0;
+    textAngle = 0.0;
+    figure = currentWindow;	/* Current window could have changed before */
+    if ([self connectToServer])
+    {
+      [server setProtocolForProxy:@protocol(AQTProtocol)];
+      [self updateInfoFromServer];
+    }
+  }
   return self;
 }
 
--(void)dealloc
+-(void) dealloc
 {
+  [termInfo release];
+  [thePath release];
   [server release];
   [super dealloc];
 }
 
--(void)invalidateServer
+-(id) server
 {
-	[server release];
-	server = nil;
-	currentWindow = 0;
-	printf("Lost connection to server,\nuse \"set term aqua <n>\" to reconnect.");
+  return server;
+}
+-(NSMutableDictionary *)termInfo
+{
+  return termInfo;
+}
+-(void) invalidateServer
+{
+  [server release];
+  server = nil;
+  currentWindow = 0;
+  printf("Lost connection to server,\nuse \"set term aqua <n>\" to reconnect.\n");
 }
 
--(BOOL)connectToServer
+-(BOOL) connectToServer
 {
   BOOL defaultApp = YES;
   BOOL didConnect = NO;
@@ -252,12 +287,12 @@ static float currentAngle;
    * First check if a  server is registered already
    * If not, check if environment variable GNUTERMAPP is set
    * and try to launch that application
-   * Finally default to looking for a hardcoded app in 
+   * Finally default to looking for a hardcoded app in
    * standard locations.
    */
   server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
   if (server) /* Server is running ready to go */
-  {   
+  {
     [server retain];
     didConnect = YES;
   }
@@ -273,7 +308,7 @@ static float currentAngle;
       defaultApp = NO;
     }
     /* Try to launch application */
-    if ([[NSWorkspace sharedWorkspace] launchApplication:appString] == NO) 
+    if ([[NSWorkspace sharedWorkspace] launchApplication:appString] == NO)
     {
       printf("Failed to launch gnuplot server.\n");
       if (defaultApp)
@@ -289,7 +324,7 @@ static float currentAngle;
         printf("Check environment variable GNUTERMAPP for errors\n");
       }
     }
-    else 
+    else
     {
       do { /* Wait for it to register Server methods with OS */
         server =[NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
@@ -298,31 +333,212 @@ static float currentAngle;
       didConnect = YES;
    	}
   }
+  if (didConnect)
+  {
+    [server setProtocolForProxy:@protocol(AQTProtocol)];
+    [self updateInfoFromServer];
+  }
   return didConnect;
 }
 
--(NSDistantObject *)server
+-(void) updateInfoFromServer
 {
-  return server;
-}
--(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease
-{
-	NS_DURING
-		if ([thePath isEmpty] == NO)
+  NS_DURING	/* try */
+		if ([server respondsToSelector:@selector(getAquaTermInfo)]) /* test protocol */ 
 		{
-			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-			[thePath removeAllPoints];                   
+			// protocol version > 0.1.0
+			[termInfo  setDictionary:[server getAquaTermInfo]];
 		}
-        if (shouldRender)
-        {	
-          [[gnuTermAccess server] renderInViewShouldRelease:shouldRelease];
-        }
-	NS_HANDLER
+		else
+		{
+			// protocol version = 0.1.0
+ 			NSLog(@"Warning - the graphics server is old, please update it!");
+            [termInfo setObject:@"0.1.0" forKey:@"AQTVersion"];                                      
+            [termInfo setObject:[NSNumber numberWithFloat:AQUA_XMAX] forKey:@"AQTXMax"];                                      
+            [termInfo setObject:[NSNumber numberWithFloat:AQUA_YMAX] forKey:@"AQTYMax"];                                      
+            [termInfo setObject:@"Times-Roman" forKey:@"AQTDefaultFontName"];                                      
+            [termInfo setObject:[NSNumber numberWithFloat: 16.0] forKey:@"AQTDefaultFontSize"];                                      
+            [termInfo setObject:@"Times-Roman" forKey:@"AQTFontName"];                                      
+            [termInfo setObject:[NSNumber numberWithFloat: 16.0] forKey:@"AQTFontSize"];                                      
+		}
+	NS_HANDLER 
 		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-			[gnuTermAccess invalidateServer];
+			[self invalidateServer];
 		else
 			[localException raise];
-	NS_ENDHANDLER  
+	NS_ENDHANDLER
+  
+}
+
+-(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease
+{
+  NS_DURING
+    if ([thePath isEmpty] == NO)
+    {
+      [server addPolyline:thePath withIndexedColor:linetype];
+      [thePath removeAllPoints];
+    }
+    if (shouldRender)
+    {
+      [server renderInViewShouldRelease:shouldRelease];
+    }
+    NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+        [self invalidateServer];
+      else
+        [localException raise];
+    NS_ENDHANDLER
+
+}
+
+-(void) moveToPoint:(NSPoint)point
+{
+  [thePath moveToPoint:point];
+}
+
+-(void) lineToPoint:(NSPoint)point
+{
+  [thePath lineToPoint:point];
+}
+
+-(void) setLinetype:(int)newLinetype
+{
+  if (newLinetype != linetype)
+  {
+    [self flushOrphanedGraphicsRender:NO release:NO];
+    linetype = newLinetype;
+  }
+}
+
+-(void) putText:(const char *)str at:(NSPoint)point
+{
+  NS_DURING
+    [server addString:[NSString stringWithCString:str]
+              atPoint:point
+    withJustification:justificationMode
+              atAngle:textAngle
+     withIndexedColor:linetype];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+
+}
+
+-(void) setJustification:(int)mode
+{
+  justificationMode = mode;
+}
+
+-(void) setTextAngle:(int)angle
+{
+  if (angle==0)
+  {
+    textAngle = 0.0;
+  }
+  else
+  {
+    textAngle = 90.0;
+  }
+}
+
+-(void) setFont:(const char *)font
+{
+  NSArray *tempArray = [NSArray arrayWithArray:[[NSString stringWithCString:font] componentsSeparatedByString:@","]];
+  
+  NS_DURING
+  switch ([tempArray count])
+  {
+    case 2:
+      [server setFontWithName:[tempArray objectAtIndex:0] size:[[tempArray objectAtIndex:1] floatValue]];
+      break;
+    case 1:
+      if ([[tempArray objectAtIndex:0] isEqualToString:@""])
+      {
+        [server setFontWithName:[termInfo objectForKey:@"AQTDefaultFontName"] size:[[termInfo objectForKey:@"AQTDefaultFontSize"] floatValue]];
+      }
+      else
+      {
+        [server setFontWithName:[tempArray objectAtIndex:0] size:[[termInfo objectForKey:@"AQTDefaultFontSize"] floatValue]];
+      }
+      break;
+    case 0:
+        // fallthrough
+    default:
+      [server setFontWithName:[termInfo objectForKey:@"AQTDefaultFontName"] size:[[termInfo objectForKey:@"AQTDefaultFontSize"] floatValue]];
+    break;
+  }
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+  //
+  // Read back the new font info. (Not neccessarily what we wanted ;-)
+  //
+  [self updateInfoFromServer];
+}
+
+-(void) fillRect:(NSRect)rect style:(int)style
+{
+  [self flushOrphanedGraphicsRender:NO release:NO];
+  NS_DURING
+    [server clearRect:rect];
+    [server renderInViewShouldRelease:NO];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+}
+
+-(void) setLinewidth:(double)linewidth
+{
+  [thePath setLineWidth:linewidth];
+}
+
+-(void) setFillColor:(double)newGray
+{
+  /* FIXME: Should allow for a color resolution to improve speed */
+  [self flushOrphanedGraphicsRender:NO release:NO];
+  gray = newGray;
+}
+
+-(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners
+{
+  int i;
+  NS_DURING
+    [thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
+    for (i=1;i< count;i++)
+    {
+      [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
+    }
+    [thePath closePath];
+    [server addPolygon:thePath withColor:gray];
+    [thePath removeAllPoints];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+
+}
+-(void) setFigure:(int)newFigure
+{
+  figure = newFigure;
+  NS_DURING
+    [server selectModel:figure];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
 }
 @end
 
@@ -339,10 +555,10 @@ static struct gen_table AQUA_opts[] =
   { NULL, AQUA_OTHER }
 };
 
-   /**"
-   *** AQUA_options is called 0 or more times before a call to AQUA_init occurs.
-   *** It is important that the option <n> is passed correctly to GNUTERMAPP
-   "**/
+//
+// AQUA_options is called 0 or more times before a call to AQUA_init occurs.
+// It is important that the option <n> is passed correctly to GNUTERMAPP
+//
 TERM_PUBLIC void
 AQUA_options()
 {
@@ -370,47 +586,23 @@ AQUA_options()
 TERM_PUBLIC void
 AQUA_init()
 {
-	NSDictionary *termInfo;
   LOG(@"Aqua Init");
   if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
   {
     arpool = [[NSAutoreleasePool alloc] init]; 
-    gnuTermAccess = [[GnuTermDriver alloc] init]; 
-    thePath = [[NSBezierPath alloc] init];
-    currentJustificationMode = 0;
-    currentLinetype = 0;
-    currentGray = 0.0;
-    currentAngle = 0.0;
+    gnuTermAccess = [[AQTAdapter alloc] init]; 
   }
   if (![gnuTermAccess server])	/* server could be invalid (=nil) for several reasons */
   {
-  	if ([gnuTermAccess connectToServer])
-  	{
-  		[[gnuTermAccess server] setProtocolForProxy:@protocol(AQTProtocol)];
-		}
+    [gnuTermAccess connectToServer];
   }
-  NS_DURING	/* try */
-		if ([[gnuTermAccess server] respondsToSelector:@selector(getAquaTermInfo)]) /* test protocol */ 
-		{
-			// protocol version > 0.1.0
-			termInfo = [[gnuTermAccess server] getAquaTermInfo];
-			term->xmax =[[termInfo objectForKey:@"AQTXMax"] unsignedIntValue]; 
-			term->ymax =[[termInfo objectForKey:@"AQTYMax"] unsignedIntValue]; 
-		}
-		else
-		{
-			// protocol version = 0.1.0
-			term->xmax = AQUA_XMAX;
-			term->ymax = AQUA_YMAX;
-			NSLog(@"Warning - the graphics server is old, please update it!");
-		}
-		[[gnuTermAccess server]  selectModel:currentWindow];
-	NS_HANDLER 
-		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-			[gnuTermAccess invalidateServer];
-		else
-			[localException raise];
-	NS_ENDHANDLER
+  term->xmax =[[[gnuTermAccess termInfo] objectForKey:@"AQTXMax"] unsignedIntValue]; 
+  term->ymax =[[[gnuTermAccess termInfo] objectForKey:@"AQTYMax"] unsignedIntValue]; 
+  term->v_char = [[[gnuTermAccess termInfo] objectForKey:@"AQTFontSize"] unsignedIntValue];
+  term->h_char = (6*(term->v_char))/10;
+  term->v_tic =[[[gnuTermAccess termInfo] objectForKey:@"AQTVTic"] unsignedIntValue]; 
+  term->h_tic =[[[gnuTermAccess termInfo] objectForKey:@"AQTHTic"] unsignedIntValue]; 
+  [gnuTermAccess setFigure:currentWindow];
 }
 
 TERM_PUBLIC void
@@ -434,22 +626,19 @@ AQUA_graphics()
 TERM_PUBLIC void
 AQUA_move(unsigned int x, unsigned int y)
 {
-  [thePath moveToPoint:NSMakePoint(x, y)];
+  [gnuTermAccess moveToPoint:NSMakePoint(x, y)];
 }
-
 
 TERM_PUBLIC void
 AQUA_vector(unsigned int x, unsigned int y)
 {
-  [thePath lineToPoint:NSMakePoint(x, y)];
+  [gnuTermAccess lineToPoint:NSMakePoint(x, y)];
 }
-
 
 TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
-  [gnuTermAccess flushOrphanedGraphicsRender:NO release:NO];
-  currentLinetype = linetype;   
+  [gnuTermAccess setLinetype: linetype];
 }
 
 TERM_PUBLIC void
@@ -457,106 +646,61 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
   if (!strlen(str))
     return;
-  NS_DURING
-		[[gnuTermAccess server] addString:[NSString stringWithCString:str] 
-                                  atPoint:NSMakePoint(x, y)
-                        withJustification:currentJustificationMode
-                                  atAngle:currentAngle
-                         withIndexedColor:currentLinetype];    
-	NS_HANDLER
-		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-			[gnuTermAccess invalidateServer];
-		else
-			[localException raise];
-	NS_ENDHANDLER
+  [gnuTermAccess putText:str at:NSMakePoint(x,y)];
 }
 
 TERM_PUBLIC int 
 AQUA_justify_text (enum JUSTIFY mode)
 {
-  currentJustificationMode = mode;
+  [gnuTermAccess  setJustification:mode];
   return (TRUE);
 }
 
 TERM_PUBLIC int
 AQUA_text_angle (int angle)
 {
-  if (angle==0)
-  {
- 		currentAngle = 0.0;      
-  }
-  else
-  {
-    currentAngle = 90.0;   
-  }
+  [gnuTermAccess setTextAngle: angle];
   return (TRUE);
 }
-
 
 TERM_PUBLIC int 
 AQUA_set_font(const char *font) /* "font,size" */
 {
-  NS_DURING
-  	[[gnuTermAccess server] setFontWithName:@"Times-Roman" size:16.0];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-      [gnuTermAccess invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
-  
+  [gnuTermAccess setFont:font];
   return (TRUE);
 }
 
 TERM_PUBLIC void 
 AQUA_set_pointsize(double size) /* notification of set pointsize */
 {
-  LOG(@"    AQUA_set_pointsize(%f)",size);
 }
 
 TERM_PUBLIC void 
 AQUA_suspend(void)  /* after one plot of multiplot */
 {
-  LOG(@"    AQUA_suspend");
-    [gnuTermAccess flushOrphanedGraphicsRender:YES release:NO];
+  [gnuTermAccess flushOrphanedGraphicsRender:YES release:NO];
 }
  
 TERM_PUBLIC void 
 AQUA_resume(void) /* before subsequent plot of multiplot */
 {
-  LOG(@"    AQUA_resume");
 }
+
 TERM_PUBLIC void 
 AQUA_boxfill(int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height) /* clear part of multiplot */
 {
-  NSLog(@"AQUA_boxfill");
-  [gnuTermAccess flushOrphanedGraphicsRender:NO release:NO];
-  //
-  // FIXME: quick & dirty fix, should add -(void)clearRect:(NSRect)bounds to AQT methods
-  //
-  NS_DURING
-    // [[gnuTermAccess server] addPolygon:[NSBezierPath bezierPathWithRect:NSMakeRect(x1,y1,width,height)] withIndexedColor:style];
-    [[gnuTermAccess server] clearRect:NSMakeRect(x1,y1,width,height)];
-    [[gnuTermAccess server] renderInViewShouldRelease:NO];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-      [gnuTermAccess invalidateServer];
-    else
-      [localException raise];
-  NS_ENDHANDLER
+  [gnuTermAccess fillRect:NSMakeRect(x1,y1,width,height) style:style];
 }
   
 TERM_PUBLIC void 
 AQUA_linewidth(double linewidth)
 {
-  LOG(@"    AQUA_linewidth(%f)",linewidth);
-  [thePath setLineWidth:linewidth];
+  [gnuTermAccess setLinewidth:linewidth];
 }
 
 TERM_PUBLIC void 
 AQUA_pointsize(double pointsize)
 {
-  LOG(@"    AQUA_pointsize(%f)",pointsize);
 }
 
 #ifdef PM3D
@@ -569,39 +713,19 @@ AQUA_pointsize(double pointsize)
   TERM_PUBLIC void 
   AQUA_set_color(double gray)
   {
-        
-    LOG(@"[pm3d] AQUA_set_color(%f)", gray);
-    [gnuTermAccess flushOrphanedGraphicsRender:NO release:NO];
-    currentGray = gray;
+    [gnuTermAccess setFillColor:gray];
   }
 
   TERM_PUBLIC void 
   AQUA_filled_polygon(int points, gpiPoint *corners)
   {
-    int i;
-		NS_DURING    
-			[thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
-			for (i=1;i<points;i++)
-			{
-				 [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
-			}
-			[thePath closePath];
-			[[gnuTermAccess server] addPolygon:thePath withColor:currentGray];
-			[thePath removeAllPoints];                   
-		NS_HANDLER
-			if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
-				[gnuTermAccess invalidateServer];
-			else
-				[localException raise];
-		NS_ENDHANDLER
+    [gnuTermAccess setPolygonUsing:points corners:corners];
   }
-#endif
-
+#endif /* PM3D */
 
 #endif /* TERM_BODY */
 
 #ifdef TERM_TABLE
-
 
 TERM_TABLE_START(aqua_driver)
   "aqua",
@@ -618,13 +742,13 @@ TERM_TABLE_START(aqua_driver)
   AQUA_boxfill, AQUA_linewidth
 #ifdef USE_MOUSE
   , 0, 0, 0, 0, 0
-#endif
+#endif /* USE_MOUSE */
 #ifdef PM3D
   , AQUA_make_palette,
   0 /* AQUA_previous_palette */,
   AQUA_set_color,
   AQUA_filled_polygon
-#endif
+#endif /* PM3D */
 TERM_TABLE_END(aqua_driver)
 
 #undef LAST_TERM
