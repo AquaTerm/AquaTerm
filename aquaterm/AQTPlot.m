@@ -359,23 +359,11 @@
 - (BOOL)windowShouldClose:(id)sender
 {
    BOOL shouldClose = YES;
-   // FIXME: Check for presence of client, it may have been release w/o invalidating itself
-   // and this class will leak until app quits.
-   // QUE?! If client goes away, retain count is automagically decreased???
-   
-   // NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
    if (_client)
    {
-      NS_DURING
-         [_client ping];
-         // NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
-      NS_HANDLER
-         [self invalidateClient];//:_client];
-                                 // FIXME: Tell controller to check all connections?
-         NS_ENDHANDLER   
-   } 
-   if (_client)
-   {
+      // Post a notification to check (later) wheter or not the client is still alive, if it isn't the window is closed
+      [[NSNotificationQueue defaultQueue] enqueueNotification:[NSNotification notificationWithName:@"AQTWindowDidCloseNotification" object:self]
+                                                 postingStyle:NSPostWhenIdle];
       if ([self acceptingEvents] == NO)
       {
          [sender orderOut:self];

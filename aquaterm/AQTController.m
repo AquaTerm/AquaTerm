@@ -48,11 +48,17 @@ extern void aqtLineDrawingTest(id sender);
   return self;
 }
 
+-(void)dealloc
+{
+   [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 /**"
 *** The name of the DO connection registered is 'aquatermServer'.
 "**/
 -(void)awakeFromNib
 {
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidClose:) name:@"AQTWindowDidCloseNotification" object:nil];
   //
   // Set up a DO connection:
   //
@@ -67,7 +73,7 @@ extern void aqtLineDrawingTest(id sender);
     if (retCode == NSAlertDefaultReturn)
        [NSApp terminate:self];
     else
-       NSLog(@"Error registering \"aquatermServer\" with defaultConnection");       
+       NSLog(@"Error registering \"aquatermServer\" with defaultConnection"); 
   }
 }
 
@@ -168,6 +174,18 @@ extern void aqtLineDrawingTest(id sender);
 - (void)removePlot:(id)aPlot
 {
   [handlerList removeObject:aPlot];
+}
+
+- (void)windowDidClose:(NSNotification *)aNotification
+{
+   // NSLog(@"in %@, %s:%d\nnotification %@", NSStringFromSelector(_cmd), __FILE__, __LINE__, [aNotification description]);
+
+   AQTPlot *aPlot = [aNotification object]; 
+   if ([aPlot clientValidAndResponding] == NO)
+   {
+      [[[aPlot canvas] window] close];
+      [self removePlot:aPlot];
+   }
 }
 
 #pragma mark === Actions ===

@@ -20,6 +20,7 @@
 
 - (AQTAdapter *)sharedAdapter;
 - (void)removePlot:(id)aPlot;
+- (void)windowDidClose:(NSNotification *)aNotification;
 - (void)setWindowPos:(NSWindow *)plotWindow;
 
 -(IBAction)tileWindows:(id)sender;
