@@ -238,7 +238,7 @@ break;
     if (rbuf[0] != 0.0)
     {
         // An extra closeGraph clears screen
-        [adapter closeGraph];
+        // [adapter closeGraph];
     }   
     [adapter closeGraph];
 break;
