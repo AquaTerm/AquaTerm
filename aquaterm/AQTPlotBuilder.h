@@ -19,7 +19,7 @@
 @interface AQTPlotBuilder : NSObject
 {
   AQTModel *_model;	/*" The graph currently being built "*/
-  int _modelRefNumber;	/*" Index into our handler's list of views "*/
+//  int _modelRefNumber;	/*" Index into our handler's list of views "*/
   AQTColor _color;	/*" Currently selected color "*/
   NSString *_fontName;	/*" Currently selected font "*/
   float _fontSize;	/*" Currently selected fontsize [pt]"*/
@@ -35,10 +35,6 @@
 }
 
 /*" Acessors "*/
-- (void)setModel:(AQTModel *)newModel;
-- (AQTModel *)model;
-- (BOOL)modelIsDirty;
-- (void)flushBuffers;
 - (void)setSize:(NSSize)canvasSize;
 - (void)setTitle:(NSString *)title;
 - (void)setHandler:(id)newHandler;
@@ -61,7 +57,6 @@
 - (float)linewidth;
 - (void)setLinewidth:(float)newLinewidth;
 - (void)setLineCapStyle:(int)capStyle;
-- (BOOL)_flushLineSegmentBuffer;
 - (void)moveToPoint:(NSPoint)point;  // AQTPath
 - (void)addLineToPoint:(NSPoint)point;  // AQTPath
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
@@ -78,6 +73,7 @@
   /*" Control operations "*/
 - (void)eraseRect:(NSRect)aRect;
 - (void)render;
+// FIXME:  - (void)clearAll; // <-- implement
 
    /*" Interactions with user "*/
 - (void)setAcceptingEvents:(BOOL)flag;
