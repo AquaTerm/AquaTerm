@@ -126,6 +126,7 @@
 			projectDirPath = "";
 			targets = (
 				29B97326FDCFA39411CA2CEA,
+				F5DB1B640219BFD2014110D6,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -138,6 +139,7 @@
 				29B97315FDCFA39411CA2CEA,
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
+				F55D7FF10219BEF4014110D6,
 			);
 			isa = PBXGroup;
 			name = AquaTerm;
@@ -543,6 +545,11 @@
 			settings = {
 			};
 		};
+		F55D7FF10219BEF4014110D6 = {
+			isa = PBXExecutableFileReference;
+			path = makedocs;
+			refType = 2;
+		};
 		F5653B8001C4B8F201A80104 = {
 			isa = PBXFileReference;
 			path = AQTPath.h;
@@ -755,6 +762,29 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F5DB1B640219BFD2014110D6 = {
+			buildArgumentsString = $ACTION;
+			buildPhases = (
+			);
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Untitled;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			buildToolPath = "~/source/plotting/aquaterm/makedocs";
+			dependencies = (
+			);
+			isa = PBXLegacyTarget;
+			name = Docs;
+			productName = Untitled;
+			settingsToExpand = 6;
+			settingsToPassInEnvironment = 287;
+			settingsToPassOnCommandLine = 280;
+			shouldUseHeadermap = 0;
 		};
 		F5FEAC1401A6B3CE0143D50D = {
 			isa = PBXFileReference;

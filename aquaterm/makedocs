@@ -1,0 +1,37 @@
+#! /bin/sh 
+## 
+## A small script generating class docs for AquaTerm if 
+## autodoc is installed
+##
+## 2002-02-04 persquare@users.sf.net
+##
+## I like to keep stuff like autodoc in my $HOME/bin/ directory:
+PATH=$HOME/bin:$PATH
+echo "Checking for autodoc..."
+AUTODOC=$(which autodoc);
+if [ -x "$AUTODOC" ]; then
+    echo "$AUTODOC is OK"
+else
+    if [ -e "$AUTODOC" ]; then
+        echo "$AUTODOC exists, but is not executable"
+    else
+        echo "$AUTODOC doesn't exist your system"
+    fi
+    exit 1 
+fi
+## check build action {build, clean, install}
+echo "Checking for build action..."
+if [ "$ACTION" = "clean" ]; then
+    echo "Cleaning docs"
+    rm -rf "$SYMROOT/Docs"
+    exit 0
+fi
+echo "Creating docs..."
+if [ ! -d "$SYMROOT/Docs" ]; then
+    mkdir "$SYMROOT/Docs"
+fi
+$AUTODOC -force -timestamp -copyright "AquaTerm" -destination "$SYMROOT/Docs" -format html -project "$SRCROOT"
+## We could probably filter the output (the classnames) with sed and insert them as links in a html template for easy viewing
+echo "Done"
+exit 0
+
