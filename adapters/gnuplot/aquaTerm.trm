@@ -1,16 +1,16 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.1 2001/11/13 18:56:29 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.2 2001/11/17 23:28:22 persquare Exp $
  *
  */
 
-/* GNUPLOT - aqua.trm */
+/* GNUPLOT - aquaTerm.trm */
 
 
 /*
  * This file is included by ../term.c via ../term.h.
  *
  * This terminal driver supports:
- *     Aqua (MacOS X/Cocoa)
+ *     Aqua (Mac OS X/Cocoa)
  *
  * AUTHORS
  *  Per Persson from openstep.trm by Robert Lutwak
@@ -18,26 +18,25 @@
  * send your comments or suggestions to (info-gnuplot@dartmouth.edu).
  *
  * This terminal attempts to connect, via the MacOS X Distributed
- * Objects system, to the "gnuplotServer."  If there is no such
+ * Objects system, to the "aquatermServer."  If there is no such
  * service registered with the OS, the terminal attempts to fire
- * up AGPTerm.app.  If the user has not set the environment variable
- * GNUTERMAPP, the terminal uses the users ApplicationPaths Workspace
- * dwrite to search for AGPTerm.app (Note:  this is usually something
- * like /Applications, ~/Applications, ~/Network/Applications, etc.).
- * In order to use this filter, you MUST have AGPTerm.app or some other
- * application capable of handling the gnuplot DO protocol installed
+ * up AquaTerm.app.  If the user has not set the environment variable
+ * GNUTERMAPP, the terminal searches for AquaTerm.app in standard 
+ * locations like /Applications, ~/Applications, etc.
+ * In order to use this filter, you MUST have AquaTerm.app or some other
+ * application capable of handling the AQTProtocol installed
  * on your system.
  *
  * Once connected to the server, all gnuplot primitives are sent, 
- * via the D.O. system, to AGPTerm.app, which produces the graphs, 
- * manages the windows etc.
+ * via the D.O. system, to AquaTerm.app, which produces renders graphs, 
+ * manages the windows, takes care of printing etc.
  * 
  *
  * Defaults are
- * ''
+ * n=0
  *
- * to choose window by title
- * 'set term next title "Window title"
+ * to choose window n
+ * 'set term aqua <n>"
  *
  */
 
@@ -107,37 +106,65 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 
 
 #define AQUA_XMAX (11.69*72)	/* = 842, paper width times screen resolution */
-#define AQUA_YMAX (8.26*72)	/* = 595, paper height times screen resolution */
+#define AQUA_YMAX (8.26*72)		/* = 595, paper height times screen resolution */
 #define AQUA_VTIC 8			
 #define AQUA_HTIC 8
-#define AQUA_VCHAR 16			/* default is 14 point characters */
+#define AQUA_VCHAR 16			/* default font is Times at 16 points */
 #define AQUA_HCHAR (AQUA_VCHAR*6/10)
 
-
+/*
+ * The class NSBezierPath doesn't implement replacementObjectForPortCoder so 
+ * we add that behaviour as a category for NSBezierPath
+ */
 @interface NSBezierPath (NSBezierPathDOCategory)
 - (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder; 
 @end
 
 /*
- * This defines the protocol for the DO connection
- * Really should be included since it is used at the
- * receiving end as well... That, however is against 
- * gnuplot guidelines for .trm files
+ * This defines the methods implemented by the server
  *
  */
-@protocol gptProtocol
-- (oneway void) gptRenderRelease:(BOOL)yesOrNo;
-//- (oneway void) gptLinetype:(int) linetype;
-- (oneway void) gptPutString:(bycopy NSString *)textString AtPoint:(bycopy NSPoint)coord WithJustification:(bycopy int) mode WithLinetype:(bycopy int) linetype;
-- (oneway void) gptSetFont:(bycopy NSString *)font;
-//- (oneway void) gptSetColor:(bycopy double) gray;
-- (oneway void) gptSetPath:(bycopy NSBezierPath *)aPath WithLinetype:(bycopy int) linetype FillColor:(bycopy double) gray PathIsFilled:(bycopy BOOL)isFilled;
-
-//- (oneway void) gptLinewidth:(double) linewidth;
-- (oneway void) gptCurrentWindow:(int) currentWindow;
-// ---- the following two are stubs -----------
-- (oneway void) gptPointsize:(double) pointsize;
-- (oneway void) gptDidSetPointsize:(double) size;
+@protocol AQTProtocol
+//
+// Render the current model, argument is normally YES unless
+// this is part of a multiplot operation with subsequent 
+// drawing to the same model
+//
+- (oneway void) renderInViewShouldRelease:(BOOL)release;
+//
+// Add a string to the current model, where:
+// justification is {LEFT=0, CENTER, RIGHT}
+// colorIndex is a number in the range -3 and upwards
+// The colors -3, -2, -1 have special meaning and 
+// colors 0 and upwards are taken modulo N (i.e cyclic)
+//
+- (oneway void) addString:(bycopy NSString *)text 
+                     atPoint:(bycopy NSPoint)point 
+                     withJustification:(bycopy int)justification 
+                     withIndexedColor:(bycopy int)colorIndex;
+//
+// Set the font for the subsequent strings added to the model
+// (mimics fontWithName: size: method in NSFont)
+//                  
+- (oneway void) setFontWithName:(bycopy NSString *)fontName size:(bycopy float)fontSize;
+//
+// Add graphic elements to the model. A "polyline" refers to any 
+// collection of line segments etc. whereas "polygon" refers to a 
+// closed surface. (Q: confusing naming scheme?)
+// IndexedColor has the same meaning as for addString and
+// color is number between 0 and 1 corresponding to an interpolation
+// between two colors. 
+//
+- (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex;
+- (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color;
+- (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex;
+- (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color;
+//
+// Select the model that will receive subsequent graphic elements
+// (Q: What does this imply for the corresponding window? Front? Show? Key?
+//  A: Definitely "show" and absolutely _not_ "front", "key" is meaningless)
+// 
+- (oneway void) selectModel:(int) currentModel;
 @end
 
 #define GOT_AQUA_PROTO
@@ -178,7 +205,7 @@ static int currentWindow = 0;
 /*
  * Minimal set of methods
  */
-- init;
+- (id)init;
 /*
  * Accessors etc.
  */
@@ -192,7 +219,7 @@ static int currentWindow = 0;
  * The actual instances of the methods
  */
 @implementation GnuTermDriver
-- init
+- (id)init
 {
 	BOOL defaultApp = YES;
 	NSString *appString;
@@ -206,12 +233,10 @@ static int currentWindow = 0;
 	 * standard locations.
 	 *
 	 */
-    server = [NSConnection rootProxyForConnectionWithRegisteredName:@"gnuplotServer" host:nil];
-
+    server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
     if (server) /* Server is running ready to go */
     {		
     	[server retain];
-    	// printf("Connected to server\n");
 	}
     else /* Server isn't running, we must fire it up */
     {
@@ -224,7 +249,6 @@ static int currentWindow = 0;
 			appString = [NSString stringWithCString:getenv("GNUTERMAPP")];
     		defaultApp = NO;
 		}
-		// printf("Trying to launch %s\n", [appString cString]); 
 		/* Try to launch application */
         if ([[NSWorkspace sharedWorkspace] launchApplication:appString] == NO) 
         {
@@ -250,31 +274,23 @@ static int currentWindow = 0;
 	    /* Wait for it to register Server methods with OS */
 	    	do {
 	      		server =[NSConnection
-			 	rootProxyForConnectionWithRegisteredName:@"gnuplotServer" host:nil];
-	    	} while (!server);	/* This could result in a hang, but I've never seen it fail. (why?) */
+			 	rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+	    	} while (!server);	/* This could result in a hang... */
     		[server retain];
 		}
     }
-    // NSLog(@"Server: %@\n", server);
     /* 
      * By limiting ourselves to known protocol
      * we speed up the messaging 
      */
-    [server setProtocolForProxy:@protocol(gptProtocol)];
+    [server setProtocolForProxy:@protocol(AQTProtocol)];
 
-    /* If the server dies we want to know about it */
+    /* If the server dies we want to know about it (FIXME: Does this work correctly) */
     [[NSNotificationCenter defaultCenter] addObserver:self 
     										 selector:@selector(senderIsInvalid:) 
     											 name:NSConnectionDidDieNotification  
     										   object:nil
     										   ]; 
-/*
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-    										 selector:@selector(senderIsInvalid:) 
-    											 name:@"listenerIsClosing"  
-    										   object:nil
-    										   ]; 
-*/
 	return self;
 }
 
@@ -293,7 +309,7 @@ static int currentWindow = 0;
 {
 	LOG(@"Lost connection to server...\nMessage: %@\n", [notification object]);
     //[server invalidate];
-    // server = 0;
+    server = nil;
 }
 
 @end
@@ -301,7 +317,7 @@ static int currentWindow = 0;
 
 enum AQUA_id {
     AQUA_DEFAULT,
-    AQUA_TITLE,
+    /* AQUA_TITLE, */
     AQUA_OTHER
 };
 
@@ -309,11 +325,11 @@ enum AQUA_id {
 static struct gen_table AQUA_opts[] =
 {
     { "d$efault", AQUA_DEFAULT },
-    { "ti$tle", AQUA_TITLE },
+    /* { "ti$tle", AQUA_TITLE }, */
     { NULL, AQUA_OTHER }
 };
 
-static char AQUA_title[MAX_LINE_LEN + 1];
+/* static char AQUA_title[MAX_LINE_LEN + 1]; */
 
 
    /**"
@@ -337,8 +353,16 @@ AQUA_options()
             /*
                 something...
             */
+            currentWindow = 0;
+            if (gnuTermAccess)
+            {
+                // set the window number
+               [[gnuTermAccess server]  selectModel:currentWindow];
+
+            }            
             c_token++;
             break;
+/*
          case AQUA_TITLE:
             c_token++;
             if (!isstring(c_token)) 
@@ -347,13 +371,14 @@ AQUA_options()
             }
             quote_str(AQUA_title, c_token, MAX_LINE_LEN + 1);
             break;
+*/
          case AQUA_OTHER:
             currentWindow = (int) real(const_express(&a));
             /* Make sure we have a connection before passing a message */
             if (gnuTermAccess)
             {
                 // set the window number
-               [[gnuTermAccess server]  gptCurrentWindow:currentWindow];
+               [[gnuTermAccess server]  selectModel:currentWindow];
 
             }
             break;	
@@ -364,16 +389,15 @@ AQUA_options()
             break;
       }
     }
-    // sprintf(term_options, "Current window \"%d\"\n", currentWindow);
 }
 
 
 TERM_PUBLIC void
 AQUA_init()
 {
-    LOG(@"Aqua Init --- order is important!");
+    LOG(@"Aqua Init");
     /*
-        * Init is called when plotting after _every_ 'set term aqua'
+        * Init is called when plotting after 'set term aqua'
         * Make sure we don't leak mem by allocating every time
         */
     if (arpool == NULL)
@@ -387,6 +411,8 @@ AQUA_init()
     }
     term->xmax = AQUA_XMAX;
     term->ymax = AQUA_YMAX;
+    // This could have been changed beforehand
+    [[gnuTermAccess server]  selectModel:currentWindow];
 }
 
 TERM_PUBLIC void
@@ -402,13 +428,10 @@ AQUA_text()
     {
         // This happens if a (stroked) path hasn't been sent
         // PM3D patches are _always_ sent immediately
-        [[gnuTermAccess server] gptSetPath:thePath 
-                            WithLinetype:currentLinetype 
-                                FillColor:currentGray 
-                            PathIsFilled:NO];    
+        [[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
         [thePath removeAllPoints];                                 
     }
-    [[gnuTermAccess server] gptRenderRelease:YES]; // Draw!
+    [[gnuTermAccess server] renderInViewShouldRelease:YES]; // Draw!
 }
 
 
@@ -421,7 +444,6 @@ TERM_PUBLIC void
 AQUA_move(unsigned int x, unsigned int y)
 {
     [thePath moveToPoint:NSMakePoint(x, y)];
-    // [[gnuTermAccess server] gptMoveTo:x :y];
 }
 
 
@@ -429,7 +451,6 @@ TERM_PUBLIC void
 AQUA_vector(unsigned int x, unsigned int y)
 {
     [thePath lineToPoint:NSMakePoint(x, y)];
-    //[[gnuTermAccess server] gptVectorTo:x :y];
 }
 
 
@@ -443,21 +464,9 @@ AQUA_linetype(int linetype)
     {
         // This happens if a (stroked) path hasn't been sent
         // PM3D patches are _always_ sent immediately
-        [[gnuTermAccess server] gptSetPath:thePath 
-                            WithLinetype:currentLinetype 
-                                FillColor:currentGray 
-                            PathIsFilled:NO];    
+        [[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
         [thePath removeAllPoints];                                 
     }
-    if (linetype < 0)
-    {
-    	if (linetype < -3)
-    	{
-			linetype = -3;
-			LOG(@"Unknown linetype");
-		}
-	}
-    // [[gnuTermAccess server] gptLinetype:linetype]; 
     currentLinetype = linetype;   
 }
 
@@ -466,24 +475,24 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
     if (!strlen(str))
 		return;
-    [[gnuTermAccess server] gptPutString:[NSString stringWithCString:str] 
-                                 AtPoint:NSMakePoint(x, y)
-                       WithJustification:currentJustificationMode
-                      	    WithLinetype:currentLinetype];    
+    [[gnuTermAccess server] addString:[NSString stringWithCString:str] 
+                            atPoint:NSMakePoint(x, y)
+                       		withJustification:currentJustificationMode
+                      	    withIndexedColor:currentLinetype];    
 }
 
 TERM_PUBLIC int 
 AQUA_justify_text (enum JUSTIFY mode)
 {
-        currentJustificationMode = mode;
-	//[[gnuTermAccess server] gptJustifyText:mode];
+    currentJustificationMode = mode;
 	return (TRUE);
 }
 
 TERM_PUBLIC int 
 AQUA_set_font(const char *font)	/* "font,size" */
 {
-	[[gnuTermAccess server] gptSetFont:[NSString stringWithCString:font]];
+	// [NSString stringWithCString:font]
+	[[gnuTermAccess server] setFontWithName:@"Times-Roman" size:16.0];
 	return (TRUE);
 }
 
@@ -491,25 +500,20 @@ TERM_PUBLIC void
 AQUA_set_pointsize(double size) /* notification of set pointsize */
 {
 	LOG(@"    AQUA_set_pointsize(%f)",size);
-	// [[gnuTermAccess server] gptDidSetPointsize:size];
 }
 
 TERM_PUBLIC void 
 AQUA_suspend(void)	/* after one plot of multiplot */
 {
-                if ([thePath isEmpty] == NO)
-                {
-                    // This happens if a (stroked) path hasn't been sent
-                    // PM3D patches are _always_ sent immediately
-                    [[gnuTermAccess server] gptSetPath:thePath 
-                                      WithLinetype:currentLinetype 
-                                         FillColor:currentGray 
-                                      PathIsFilled:NO];    
-                    [thePath removeAllPoints];                                 
-                }
-
 	LOG(@"    AQUA_suspend");
-	[[gnuTermAccess server] gptRenderRelease:NO];
+	if ([thePath isEmpty] == NO)
+	{
+		// This happens if a (stroked) path hasn't been sent
+		// PM3D patches are _always_ sent immediately
+		[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
+		[thePath removeAllPoints];                                 
+	}
+	[[gnuTermAccess server] renderInViewShouldRelease:NO];
 }
  
 TERM_PUBLIC void 
@@ -522,21 +526,20 @@ TERM_PUBLIC void
 AQUA_linewidth(double linewidth)
 {
 	LOG(@"      AQUA_linewidth(%f)",linewidth);
-	// [[gnuTermAccess server] gptLinewidth:linewidth];
-        [thePath setLineWidth:linewidth];
+    [thePath setLineWidth:linewidth];
 }
 
 TERM_PUBLIC void 
 AQUA_pointsize(double pointsize)
 {
 	LOG(@"      AQUA_pointsize(%f)",pointsize);
-	// [[gnuTermAccess server] gptPointsize:pointsize];
 }
 
 #ifdef PM3D
 	TERM_PUBLIC int 
 	AQUA_make_palette(t_sm_palette *palette)
 	{
+		/* We handle the palette in the server */
 		return(0);
 	}
 
@@ -545,17 +548,13 @@ AQUA_pointsize(double pointsize)
 	{
                 
 		LOG(@"[pm3d] AQUA_set_color(%f)", gray);
-		// [[gnuTermAccess server] gptSetColor:gray];
-                if ([thePath isEmpty] == NO)
-                {
-                    // This happens if a (stroked) path hasn't been sent before drawing PM3D patches
-                    [[gnuTermAccess server] gptSetPath:thePath 
-                                      WithLinetype:currentLinetype 
-                                         FillColor:currentGray 
-                                      PathIsFilled:NO];    
-                    [thePath removeAllPoints];                                 
-                }
-                currentGray = gray;
+		if ([thePath isEmpty] == NO)
+		{
+			// This happens if a (stroked) path hasn't been sent before drawing PM3D patches
+			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
+			[thePath removeAllPoints];                                 
+		}
+		currentGray = gray;
 	}
 
 	TERM_PUBLIC void 
@@ -563,21 +562,15 @@ AQUA_pointsize(double pointsize)
 	{
 		int i;
 		
-		// [[gnuTermAccess server] gptMoveTo:corners[0].x :corners[0].y];
-                [thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
+        [thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
 		for (i=1;i<points;i++)
 		{
-                    [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
-                    // [[gnuTermAccess server] gptVectorTo:corners[i].x :corners[i].y];
+           [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
 		}
-                // Would "closePath", omitting last line + closePath etc improve speed????
-                [[gnuTermAccess server] gptSetPath:thePath 
-                                      WithLinetype:currentLinetype 
-                                         FillColor:currentGray 
-                                      PathIsFilled:YES];
-                [thePath removeAllPoints];                                 
+		[thePath closePath];
+        [[gnuTermAccess server] addPolygon:thePath withColor:currentGray];
+        [thePath removeAllPoints];                                 
 	}
-
 #endif
 
 
@@ -626,7 +619,11 @@ START_HELP(aqua)
 "?term aqua",
 "?aqua",
 "?Aqua",
-" No options to set in the Aqua driver."
+" Syntax:",
+"       set terminal aqua {<n>}",
+"",
+" where <n> is the number of the window to display the plot in.",
+" Default window number is 0."
 END_HELP(aqua)
 #endif /* TERM_HELP */
 
