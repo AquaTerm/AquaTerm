@@ -452,6 +452,12 @@
    }
 }
 
+
+- (void)runPageLayout:(id)sender 
+{
+   [NSApp runPageLayout:(id)sender];
+}
+
 - (IBAction)refreshView:(id)sender
 {
    [canvas setNeedsDisplay:YES];
