@@ -29,6 +29,7 @@ enum {
   // NSString *_procName; 	/*" Holds the name of the process who instantiated the object "*/
   // int _procId;		/*" Holds the pid of the process who instantiated the object "*/
   NSDistantObject <AQTConnectionProtocol> *_server;	/*" The viewer app's (AquaTerm) default connection "*/
+  BOOL _serverIsLocal;
   AQTPlotBuilder *_selectedBuilder; 	/*" The object responsible for assembling a model object from client's calls"*/
   void (*_errorHandler)(NSString *msg);	/*" A callback function optionally installed by the client "*/
   void (*_eventHandler)(NSString *event); /*" A callback function optionally installed by the client "*/

@@ -29,7 +29,7 @@
 -(void)setModel:(AQTModel *)newModel;
 -(void)setClient:(id)client;
 -(void)setClientInfoName:(NSString *)name pid:(int)pid;
--(void)invalidateClient:(id)aClient;
+-(BOOL)invalidateClient:(id)aClient;
 
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
 - (char)keyPressed;

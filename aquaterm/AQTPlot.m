@@ -82,7 +82,7 @@
   }
 }
 
--(void)invalidateClient:(id)aClient
+-(BOOL)invalidateClient:(id)aClient
 {
    if (_client == aClient)
    {
@@ -90,7 +90,9 @@
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];
+      return YES;
    }
+   return NO;
 }
 
 -(void)setClient:(id)client

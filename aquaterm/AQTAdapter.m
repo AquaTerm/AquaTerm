@@ -40,6 +40,7 @@ error handling callback function for the client.
     if(localServer)
     {
       _server = localServer;
+       _serverIsLocal=YES;
     }
     else
     {
@@ -77,8 +78,11 @@ error handling callback function for the client.
    NS_HANDLER
       NSLog(@"Discarding exception...");
    NS_ENDHANDLER
-   [_builders release]; 
-   [_server release];
+   [_builders release];
+   if(_serverIsLocal == NO)
+   {
+      [_server release];
+   }
    [super dealloc];
 }
 

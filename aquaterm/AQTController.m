@@ -10,7 +10,7 @@
 #import "AQTPlot.h"
 // Needed for testing only:
 #import "AQTAdapter.h"
-//#import "AQTAdapterPrivateMethods.h"
+//#import "NSDebug.h"
 
 @implementation AQTController
 /**"
@@ -22,7 +22,7 @@
 {
   if (self =  [super init])
   {
-    handlerList = [[NSMutableArray alloc] initWithCapacity:256];
+    //handlerList = [[NSMutableArray alloc] initWithCapacity:256];
   }
   return self;
 }
@@ -47,29 +47,40 @@
 
 -(void)dealloc
 {
-  [handlerList release];
+  //[handlerList release];
   [super dealloc];
 }
-//
-// Methods from AQTConnectionProtocol
-//
+
+#pragma mark === AQTConnectionProtocol ===
+
 -(id)addAQTClient:(id)client name:(NSString *)name pid:(int)procId
 {
-  id newHandler;
-   newHandler = [[AQTPlot alloc] init];
-   [newHandler setClient:client];
-   [newHandler setClientInfoName:name pid:procId];
-   [handlerList addObject:newHandler];
-   [newHandler release];
+  id newPlot;
+   newPlot = [[AQTPlot alloc] init];
+   [newPlot setClient:client];
+   [newPlot setClientInfoName:name pid:procId];
+//   [handlerList addObject:newPlot];
+//   [newPlot release];
 
-   return newHandler;
+   return newPlot;
 }
 
 -(BOOL)removeAQTClient:(id)client
 {
-   [handlerList makeObjectsPerformSelector:@selector(invalidateClient:) withObject:client];
-   return YES;
+   NSArray *allWin = [NSApp windows];
+   NSEnumerator *enumerator = [allWin objectEnumerator];
+   BOOL didRemove = NO;
+   id win;
+   //[handlerList makeObjectsPerformSelector:@selector(invalidateClient:) withObject:client];
+   while ((win = [enumerator nextObject]))
+   {
+      didRemove = (didRemove || [[win delegate] invalidateClient:client]);
+   }
+   return didRemove;
 }
+
+#pragma mark === Actions ===
+
 
 -(IBAction)showHelp:(id)sender
 {
