@@ -22,7 +22,6 @@ static id adapter;                          // Adapter object
 
 /* declarations for functions local to aqt.c */
 
-void set_color (PLStream *);
 void proc_str (PLStream *, EscText *);
 static void esc_purge(char *, const char *);
 
@@ -57,9 +56,10 @@ void plD_dispatch_init_aqt( PLDispatchTable *pdt )
 static int currentPlot = 0;
 static int maxWindows = 30;
 
-#define AQT_Max_X       720.0
-#define AQT_Max_Y       720.0
-#define DPI             72.0
+#define AQT_Max_X       7200.0
+#define AQT_Max_Y       7200.0
+#define DPI             720.0
+#define SCALE			10.0	// DPI divided by actual screen resolution
 
 //---------------------------------------------------------------------
 //   aqt_init()
@@ -113,10 +113,12 @@ void plD_bop_aqt(PLStream *pls)
    currentPlot = currentPlot>=maxWindows?0:currentPlot;
    [adapter openPlotWithIndex:currentPlot++];
    [adapter setPlotSize:NSMakeSize(AQT_Max_X, AQT_Max_Y)];
-   [adapter setLinewidth:1.];
+   [adapter setLinewidth:SCALE];
+   [adapter setColorRed:(float)(pls->curcolor.r/255.)
+   				  green:(float)(pls->curcolor.g/255.)
+				   blue:(float)(pls->curcolor.b/255.)];
 
    pls->page++;
-   set_color(pls);
 }
 
 //---------------------------------------------------------------------
@@ -184,13 +186,15 @@ void plD_state_aqt(PLStream *pls, PLINT op)
    switch (op)
    {
       case PLSTATE_WIDTH:
-         [adapter setLinewidth:(float)pls->width];
+         [adapter setLinewidth:(float)pls->width*SCALE];
          break;
 
       case PLSTATE_COLOR0:
       case PLSTATE_COLOR1:
       case PLSTATE_FILL:
-      	 set_color(pls);
+		 [adapter setColorRed:(float)(pls->curcolor.r/255.)
+   		 		   	    green:(float)(pls->curcolor.g/255.)
+		 		         blue:(float)(pls->curcolor.b/255.)];
          break;
 
       case PLSTATE_CMAP0:
@@ -257,20 +261,6 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
 }
 
 //---------------------------------------------------------------------
-// set_color()
-//
-// sets the color for the drawing operations based on
-// the current plplot color.
-//---------------------------------------------------------------------
-
-void set_color (PLStream *pls)
-{
-	[adapter setColorRed:(float)(pls->curcolor.r/255.)
-   				   green:(float)(pls->curcolor.g/255.)
-				    blue:(float)(pls->curcolor.b/255.)];
-}
-
-//---------------------------------------------------------------------
 // proc_str()
 //
 // process strings for display
@@ -299,7 +289,7 @@ void proc_str (PLStream *pls, EscText *args)
 
    //  Set the font height - the 1.2 factor was trial and error
 
-   ft_ht = 1.2*pls->chrht * 72.0/25.4; /* ft_ht in points. ht is in mm */
+   ft_ht = 1.2*pls->chrht * DPI/25.4; /* ft_ht in points. ht is in mm */
    //
    //  Now find the angle of the text relative to the screen...
    //
