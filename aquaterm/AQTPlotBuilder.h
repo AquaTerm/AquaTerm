@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AQTGraphic.h"
 #import "AQTImage.h"
+#import "AQTClientProtocol.h"
 
 @class AQTModel;
 @interface AQTPlotBuilder : NSObject
@@ -16,7 +17,6 @@
   AQTModel *_model;	/*" The graph currently being built "*/
   int _modelRefNumber;	/*" Index into our handler's list of views "*/
   AQTColor _color;	/*" Currently selected color "*/
-  // NSMutableDictionary* _labelAttributes;
   NSString *_fontName;	/*" Currently selected font "*/
   float _fontSize;	/*" Currently selected fontsize [pt]"*/
   float _linewidth;	/*" Currently selected linewidth [pt] "*/
@@ -25,6 +25,8 @@
   int _pointCount;	/*" The current number of points in _path"*/
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
   AQTAffineTransformStruct _transform;
+  BOOL _acceptingEvents;
+  NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
 }
 
 /*" Acessors "*/
@@ -34,6 +36,8 @@
 - (void)flushBuffers;
 - (void)setSize:(NSSize)canvasSize;
 - (void)setTitle:(NSString *)title;
+- (void)setHandler:(id)newHandler;
+
 
   /*" Color handling "*/
 - (AQTColor)color;
@@ -67,5 +71,9 @@
 
   /*" Control operations "*/
 - (void)eraseRect:(NSRect)aRect;
+- (void)render;
 
+   /*" Interactions with user "*/
+- (void)setAcceptingEvents:(BOOL)flag;
+- (void)processEvent:(NSString *)event;
 @end

@@ -10,7 +10,7 @@
 #import "AQTModel.h"
 #import "AQTView.h"
 #import "AQTAdapter.h"
-#import "AQTAdapterPrivateMethods.h"
+#import "AQTPlotBuilder.h"
 
 @implementation AQTPlot
 -(id)initWithModel:(AQTModel *)aModel 
@@ -19,6 +19,7 @@
   if (self = [super init])
   {
     [self setModel:aModel];
+     [self setClientInfoName:@"No connection" pid:-1];
     [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
   }
   return self;
@@ -54,6 +55,7 @@
 
 -(void)dealloc
 {
+   NSLog(@"Over and out from AQTPlot!");
   [super dealloc];
 }
 
@@ -80,17 +82,38 @@
   }
 }
 
+-(void)invalidateClient:(id)aClient
+{
+   if (_client == aClient)
+   {
+      NSLog(@"Invalidating client");
+      [self setAcceptingEvents:NO];
+      [self setClient:nil];
+      [self setClientInfoName:@"No connection" pid:-1];
+   }
+}
+
 -(void)setClient:(id)client
 {
-   _client = client;
+   [client retain];
+   [_client release];		// let go of any temporary model not used (unlikely)
+   _client = client;		// Make it point to new model
+}
+
+-(void)setClientInfoName:(NSString *)name pid:(int)pid
+{
+   [name retain];
+   [_clientName release];		// let go of any temporary model not used (unlikely)
+   _clientName = name;		// Make it point to new model
+   _clientPID = pid;
 }
 
 -(void)setAcceptingEvents:(BOOL)flag
 {
-   _acceptingEvents = flag;
+   _acceptingEvents = flag && (_client != nil);
    if (_acceptingEvents == YES)
    {
-      [_client _processEvent:@"Okey-dokey"];
+      [_client processEvent:@"Okey-dokey"];
    }
 }
 
@@ -101,7 +124,16 @@
   _keyPressed = aKey;
   if (_acceptingEvents == YES)
   {
-     [_client _processEvent:[NSString stringWithFormat:@"Got coord: %@ and key: %c",NSStringFromPoint(pos), aKey]];
+     NS_DURING
+     [_client processEvent:[NSString stringWithFormat:@"Got coord: %@ and key: %c",NSStringFromPoint(pos), aKey]];
+     NS_HANDLER
+        NSLog([localException name]);
+        if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
+           [self invalidateClient:_client]; // invalidate client
+        else
+           [localException raise];
+     NS_ENDHANDLER
+     
   }
 }
 
@@ -114,6 +146,15 @@
 {
   return _selectedPoint;
 }
+
+#pragma mark === Delegate methods ===
+- (void)windowWillClose:(NSNotification *)notification
+{
+   // FIXME: What to do when a valid client still exists?
+   // [self invalidateClient:_client];
+   [self autorelease];
+}
+
 
 #pragma mark === From client handler ===
  

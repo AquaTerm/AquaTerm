@@ -14,7 +14,6 @@
 #import "AQTPatch.h"
 #import "AQTImage.h"
 
-
 @implementation AQTPlotBuilder
 - (id)init
 {
@@ -25,7 +24,6 @@
     [self setModel:nilModel];
     [nilModel release];
     _modelIsDirty = NO;
-//    _labelAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Times-Roman", @"AQTFontnameKey", [NSNumber numberWithFloat:18.0], @"AQTFontsizeKey", nil];
     _color.red = 0.0;
     _color.green = 0.0;
     _color.blue = 0.0;
@@ -40,8 +38,10 @@
 
 - (void)dealloc
 {
-  [_model release];
-  [super dealloc];
+   NSLog(@"Builder says bye bye!");
+   [_handler release];
+   [_model release];
+   [super dealloc];
 }
 
 - (void)setModel:(AQTModel *)newModel
@@ -79,6 +79,14 @@
   [_model setTitle:title];  
 }
 
+- (void)setHandler:(id)newHandler
+{
+   [newHandler retain];
+   [_handler release];
+   _handler = newHandler;
+}
+
+
  - (AQTColor)color {
    return _color;
  }
@@ -110,7 +118,6 @@
 
 - (void)setFontname:(NSString *)newFontname
 {
-  //[_labelAttributes setObject:newFontname forKey:@"AQTFontnameKey"];
  if (_fontName != newFontname)
   {
     NSString *oldValue = _fontName;
@@ -121,14 +128,12 @@
 
 - (float)fontsize
 {
-   return _fontSize; //[[_labelAttributes objectForKey:@"AQTFontsizeKey"] floatValue];
+   return _fontSize; 
 }
 
 - (void)setFontsize:(float)newFontsize
 {
   _fontSize = newFontsize;
-//  [_labelAttributes setObject:[NSNumber numberWithFloat:newFontsize] forKey:@"AQTFontsizeKey"];
-
 }
 
 - (float)linewidth
@@ -156,6 +161,47 @@
   _modelIsDirty = YES; // FIXME: This may not always be true.
 }
 
+- (void)render
+{
+   if (_modelIsDirty)
+   {
+      NS_DURING
+         [_handler setModel:_model];
+      NS_HANDLER
+         if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+             // [self _serverError]; Grab from AQTAdapterPrivateMethods
+            NSLog(@"Server error");
+         else
+            [localException raise];
+      NS_ENDHANDLER
+   }
+}
+
+- (void)setAcceptingEvents:(BOOL)flag
+{
+   _acceptingEvents = flag;
+   NS_DURING
+      [_handler setAcceptingEvents:flag];
+   NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+         // [self _serverError]; Grab from AQTAdapterPrivateMethods
+         NSLog(@"Server error");
+      else
+         [localException raise];
+   NS_ENDHANDLER   
+}
+
+- (void)processEvent:(NSString *)event
+{
+   NSLog(@"builder got event: %@", event);
+/*
+ if (_eventHandler != nil)
+   {
+      _eventHandler(event);
+   }
+*/
+}
+
 //
 // AQTLabel
 //
@@ -165,7 +211,6 @@
   if ([text isKindOfClass:[NSString class]])
   {
     lb = [[AQTLabel alloc] initWithString:text
-                               //attributes:_labelAttributes
                                  position:pos
                                     angle:angle
                             justification:just];
@@ -174,7 +219,6 @@
   {
     if ([text isKindOfClass:[NSAttributedString class]])
     {
-//      [text addAttributes:_labelAttributes range:NSMakeRange(0, [text length])];
       lb = [[AQTLabel alloc] initWithAttributedString:text
                                              position:pos
                                                 angle:angle

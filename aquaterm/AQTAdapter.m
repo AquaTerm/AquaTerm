@@ -16,7 +16,6 @@
 #import "AQTImage.h"
 #import "AQTPlotBuilder.h"
 #import "AQTConnectionProtocol.h"
-#import "AQTClientProtocol.h"
 
 static AQTColor colormap[AQT_COLORMAP_SIZE];
 
@@ -38,11 +37,6 @@ error handling callback function for the client.
   if(self = [super init])
   {
     _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
-    _handlers = [[NSMutableDictionary alloc] initWithCapacity:256];
-    _uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
-    _procName = [[NSString stringWithString:[[NSProcessInfo processInfo] processName]] retain];
-    _procId = [[NSProcessInfo processInfo] processIdentifier];
-    NSLog(@"procUniqueId: %@\nprocName: %@\nprocId: %d", _uniqueId, _procName, _procId);
     if(localServer)
     {
       _server = localServer;
@@ -68,34 +62,39 @@ error handling callback function for the client.
 
 - (void)dealloc
 {
-  NSLog(@"byebye from adapter %@", _uniqueId);
-  NS_DURING
-    [_server removeAQTClient:self]; // Where to place this???
-  NS_HANDLER
-    NSLog(@"Discarding exception...");
-  NS_ENDHANDLER
-  [_server release];
-  [_uniqueId release];
-  [_procName release];
-  [_builders release];
-  [_handlers release];
-  [super dealloc];
+   NSLog(@"byebye from adapter");
+   // Must come before others, see AQTPlotBuilder
+   NS_DURING
+      NSEnumerator *enumObjects = [_builders objectEnumerator];
+      AQTPlotBuilder *aBuilder;
+      while (aBuilder = [enumObjects nextObject])
+      {
+         if ([_server removeAQTClient:aBuilder] == NO)
+         {
+            NSLog(@"Couldn't remove remote client lock, leaking");
+         }
+      }
+   NS_HANDLER
+      NSLog(@"Discarding exception...");
+   NS_ENDHANDLER
+   [_builders release]; 
+   [_server release];
+   [super dealloc];
 }
 
 - (void)setAcceptingEvents:(BOOL)flag
 {
-   NSEnumerator *enumObjects = [_handlers objectEnumerator];
-   NSDistantObject <AQTClientProtocol> *aHandler;
-   NSLog(@"setAcceptingEvents:%@", flag?@"Yes":@"No");
+   NSEnumerator *enumObjects = [_builders objectEnumerator];
+   AQTPlotBuilder *aBuilder;
    if (flag == YES)
    {
       // Make sure only one view per client process events
-      while (aHandler = [enumObjects nextObject])
+      while (aBuilder = [enumObjects nextObject])
       {
-         [aHandler setAcceptingEvents:NO];
+         [aBuilder setAcceptingEvents:NO];
       }
    }
-   [_selectedHandler setAcceptingEvents:flag];
+   [_selectedBuilder setAcceptingEvents:flag];
 }
 
 /*" Optionally set an error handling routine to override default behaviour "*/
@@ -297,49 +296,34 @@ error handling callback function for the client.
 /*" Creates a new builder instance, adds it to the list of builders and makes it the selected builder "*/
 - (void)openPlotIndex:(int)refNum 
 {
-  id newHandler;
-  AQTPlotBuilder *newBuilder;
-  NS_DURING
-    newHandler = [_server addAQTClient:self name:_procName pid:_procId];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-      [self _serverError];
-    else
-      [localException raise];
-  NS_ENDHANDLER
-  if (newHandler)
-  {
-    [_handlers setObject:newHandler forKey:[NSString stringWithFormat:@"%d", refNum]];
-     //    [newHandler setProtocolForProxy:@protocol(AQTClientProtocol)]; // FIXME: test if local client
-    _selectedHandler = newHandler;
-
-    newBuilder = [[AQTPlotBuilder alloc] init];
-    [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
-    _selectedBuilder = newBuilder;
-    [newBuilder release];
-  }
+   AQTPlotBuilder *newBuilder = [[AQTPlotBuilder alloc] init];
+   id newHandler;
+   NS_DURING
+      newHandler = [_server addAQTClient:newBuilder
+                                    name:[[NSProcessInfo processInfo] processName]
+                                     pid:[[NSProcessInfo processInfo] processIdentifier]];
+   NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+         [self _serverError];
+      else
+         [localException raise];
+   NS_ENDHANDLER
+   if (newHandler)
+   {
+      [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
+      [newBuilder setHandler:newHandler];
+      _selectedBuilder = newBuilder;
+   }
+   [newBuilder release];
 }
 
 /*" Get the builder instance for refNum and make it the selected builder. If no builder exists for refNum, the selected builder remain unchanged. Returns YES on success. "*/
 - (BOOL)selectPlot:(int)refNum
 {
-  NSString *key = [NSString stringWithFormat:@"%d", refNum];
-  AQTPlotBuilder *tmpBuilder = [_builders objectForKey:key];
-  id tmpHandler = [_handlers objectForKey:key];
-  if(tmpBuilder && tmpHandler)
+  AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSString stringWithFormat:@"%d", refNum]];
+  if(tmpBuilder)
   {
     _selectedBuilder = tmpBuilder;
-    _selectedHandler = tmpHandler;
-/*
- NS_DURING
-      [_selectedHandler selectView:refNum];
-    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-        [self _serverError];
-      else
-        [localException raise];
-    NS_ENDHANDLER
-*/
     return YES;
   }
   return NO;
@@ -350,7 +334,7 @@ error handling callback function for the client.
   if (_selectedBuilder)
   {
     [_selectedBuilder eraseRect:NSMakeRect(0,0,1000,1000)]; // FIXME: !!!
-    [self render];
+    [_selectedBuilder render];
   }
   
 }
@@ -360,35 +344,9 @@ error handling callback function for the client.
 // FIXME: The semantics have changed!!! This should CLOSE the window. NOT close the connection
 // Maybe change name to avoid confusion with old meaning...
 {
- NSEnumerator *enumKeys = [_builders keyEnumerator];
-  NSString *aKey;
-  // FIXME: Check if model is dirty and that buffers are flushed,
-  // don't set model unless necessary -- just release the local
-  if (_selectedBuilder && [_selectedBuilder modelIsDirty])
-  {
-    NS_DURING
-      [_selectedHandler setModel:[_selectedBuilder model]];
-    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-        [self _serverError];
-      else
-        [localException raise];
-    NS_ENDHANDLER
-  }
-/*
-  // remove this builder & handler
-  while (aKey = [enumKeys nextObject])
-  {
-    if ([_builders objectForKey:aKey] == _selectedBuilder)
-    {
-      [_builders removeObjectForKey:aKey];
-      [_handlers removeObjectForKey:aKey];
-      break; // Found it.
-    }
-  }
-  _selectedBuilder = nil;
-  _selectedHandler = nil;
- */
+#if(1)
+   [self render]; // Debugging 
+#endif
 }
 
 - (void)setPlotSize:(NSSize)canvasSize
@@ -404,23 +362,7 @@ error handling callback function for the client.
 /*" Hand a copy of the current plot to the viewer "*/
 - (void)render 
 {
-  // FIXME: if model hasn't changed, don't update!!!
-  if (_selectedBuilder && [_selectedBuilder modelIsDirty])
-  {
-    NS_DURING
-      [_selectedHandler setModel:[_selectedBuilder model]];
-    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-        [self _serverError];
-      else
-        [localException raise];
-    NS_ENDHANDLER
-  }
-  else
-  {
-    [_selectedHandler setModel:[_selectedBuilder model]];
-    NSLog(@"*** Warning -- Rendering non-dirty model ***");
-  }
+   [_selectedBuilder render];
 }
 @end
 

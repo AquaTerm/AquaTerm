@@ -79,6 +79,8 @@
    }
    else
    {
+      NSLog(@"Server error");   
+/*
       NSLog(@"Server error, no handler installed\nTrying to reconnect");
       if([self _connectToServer])
       {
@@ -93,14 +95,8 @@
                [localException raise];
          NS_ENDHANDLER
       }
+*/
    }
 }
 
--(void)_processEvent:(NSString *)event
-{
-   if (_eventHandler != nil)
-   {
-      _eventHandler(event);
-   }
-}
 @end

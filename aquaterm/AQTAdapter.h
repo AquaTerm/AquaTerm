@@ -21,18 +21,15 @@ enum {
 
 
 @class AQTPlotBuilder;
-@protocol AQTConnectionProtocol, AQTClientProtocol;
+@protocol AQTConnectionProtocol;
 @interface AQTAdapter : NSObject
 {
   NSMutableDictionary *_builders;
-  NSMutableDictionary *_handlers;
-  BOOL _acceptingEvents;
-  NSString *_uniqueId; 	/*" A unique string used to identify this adapter in AquaTerm "*/
-  NSString *_procName; 	/*" Holds the name of the process who instantiated the object "*/
-  int _procId;		/*" Holds the pid of the process who instantiated the object "*/
+  // NSString *_uniqueId; 	/*" A unique string used to identify this adapter in AquaTerm "*/
+  // NSString *_procName; 	/*" Holds the name of the process who instantiated the object "*/
+  // int _procId;		/*" Holds the pid of the process who instantiated the object "*/
   NSDistantObject <AQTConnectionProtocol> *_server;	/*" The viewer app's (AquaTerm) default connection "*/
   AQTPlotBuilder *_selectedBuilder; 	/*" The object responsible for assembling a model object from client's calls"*/
-  NSDistantObject <AQTClientProtocol> *_selectedHandler; 	/*" The handler object in AquaTerm responsible for communication "*/
   void (*_errorHandler)(NSString *msg);	/*" A callback function optionally installed by the client "*/
   void (*_eventHandler)(NSString *event); /*" A callback function optionally installed by the client "*/
 }

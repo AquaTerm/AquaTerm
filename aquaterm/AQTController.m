@@ -10,7 +10,7 @@
 #import "AQTPlot.h"
 // Needed for testing only:
 #import "AQTAdapter.h"
-#import "AQTAdapterPrivateMethods.h"
+//#import "AQTAdapterPrivateMethods.h"
 
 @implementation AQTController
 /**"
@@ -22,7 +22,7 @@
 {
   if (self =  [super init])
   {
-    handlerList = [[NSMutableDictionary alloc] initWithCapacity:256];
+    handlerList = [[NSMutableArray alloc] initWithCapacity:256];
   }
   return self;
 }
@@ -56,41 +56,19 @@
 -(id)addAQTClient:(id)client name:(NSString *)name pid:(int)procId
 {
   id newHandler;
-/*
- if ([handlerList objectForKey:identifier])
-  {
-    newHandler = nil; // handler already exists 
-    NSLog(@"*** Error - handler already exists ***");
-  }
-  else
-  {
-*/
-    newHandler = [[AQTPlot alloc] init];
-    [newHandler setClient:client];
-    //[newHandler setOwner:self];
-//    [handlerList setObject:newHandler forKey:identifier];
-//    [newHandler release];
-//  }
-  return newHandler;
+   newHandler = [[AQTPlot alloc] init];
+   [newHandler setClient:client];
+   [newHandler setClientInfoName:name pid:procId];
+   [handlerList addObject:newHandler];
+   [newHandler release];
+
+   return newHandler;
 }
 
--(void)removeAQTClient:(id)client
+-(BOOL)removeAQTClient:(id)client
 {
-  //
-  // FIXME: The handler should be allowed to remain until final plot window is closed
-  //
-/*
- if ([handlerList objectForKey:identifier])
-  {
-    NSLog(@"Removing client!");
-    NSLog(@"handler rc: %d", [handlerList objectForKey:identifier]);
-    [handlerList removeObjectForKey:identifier];
-  }
-  else
-  {
-    NSLog(@"Not found!");
-  }
- */
+   [handlerList makeObjectsPerformSelector:@selector(invalidateClient:) withObject:client];
+   return YES;
 }
 
 -(IBAction)showHelp:(id)sender
@@ -143,7 +121,7 @@ void customEventHandler(NSString *event)
    [adapter addLabel:tmpStr position:NSMakePoint(100,100) angle:0.0 justification:0];
    [adapter setAcceptingEvents:YES];
 //   [adapter setAcceptingEvents:NO];
-   [adapter closePlot];
+   [adapter render];
 
    t = [NSAffineTransform transform];
    [t translateXBy:100 yBy:100];
@@ -157,7 +135,7 @@ void customEventHandler(NSString *event)
    [adapter setPlotTitle:@"Image (trs)"];
    [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
    [adapter addTransformedImageWithBitmap:bytes size:NSMakeSize(2,2) clipRect:NSMakeRect(50,50,100,100)];
-   [adapter closePlot];
+   [adapter render];
 
    t = [NSAffineTransform transform];
    [t translateXBy:10 yBy:10];
@@ -171,8 +149,8 @@ void customEventHandler(NSString *event)
    [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
    [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)]; // discards transform
    [adapter setAcceptingEvents:YES];
-   [adapter closePlot];
-
+   [adapter render];
+   [adapter release];
    
 /*
  for(i=0; i<1000; i++)
