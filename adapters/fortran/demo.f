@@ -265,7 +265,7 @@ C     Pixel(2,2) RGB (black)
       rgbImage(5,2) = 0
       rgbImage(6,2) = 0
       call aqtTakeColorFromColormapEntry(1)
-      call aqtAddLabel('FIXME: Images', 320., 220., 0.0, left)
+      call aqtAddLabel('Images', 320., 220., 0.0, left)
       call aqtAddImageWithBitmap(rgbImage, 2, 2, 328., 200., 4., 4.)
       call aqtAddLabel('bits', 330., 180., 0.0, center)
       call aqtAddImageWithBitmap(rgbImage, 2, 2, 360., 190., 40., 15.)
