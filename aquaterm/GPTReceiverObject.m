@@ -101,7 +101,7 @@
     
 }
     /*" Set the font to be used. Not implemented. "*/
-- (oneway void) setFontWithName:(bycopy NSString *)newFontName size:(bycopy float)newFontSize;
+- (oneway void) setFontWithName:(bycopy NSString *)newFontName size:(bycopy float)newFontSize
 {   
     //
     // FIXME: Sanity check here, please!
@@ -177,7 +177,7 @@
 }
 
     /*" FIXME: [wrong =>] Raises (creates if neccessary) window n as given by the command "set term aqua <n>" in gnuplot "*/
-- (oneway void) selectModel:(int) currentModel;
+- (oneway void) selectModel:(int) currentModel
 {
     currentFigure = (unsigned)currentModel;
     //

@@ -221,10 +221,9 @@
 				29B9732DFDCFA39411CA2CEA,
 			);
 			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
+				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -237,7 +236,7 @@
 			);
 			isa = PBXApplicationTarget;
 			name = AquaTerm1;
-			productInstallPath = "$(HOME)/Applications";
+			productInstallPath = "";
 			productName = AquaTerm;
 			productReference = 17587328FF379C6511CA2CBB;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>

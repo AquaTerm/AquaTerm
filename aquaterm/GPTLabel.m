@@ -19,7 +19,7 @@
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
 
--(id)initWithLinestyle:(int)linestyle origin:(NSPoint)aPoint justification:(int)justify angle:(float)angle string:(NSString *)string attributes:(NSDictionary *)attrs;
+-(id)initWithLinestyle:(int)linestyle origin:(NSPoint)aPoint justification:(int)justify angle:(float)angle string:(NSString *)string attributes:(NSDictionary *)attrs
 {
     self=[super init];
     if (self)

@@ -6,23 +6,13 @@
 		};
 	};
 	29B97313FDCFA39411CA2CEA = {
-		activeBuildStyle = 4A9504CDFFE6A4B311CA0CBA;
+		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA;
 		activeTarget = 29B97326FDCFA39411CA2CEA;
 		addToTargets = (
 			29B97326FDCFA39411CA2CEA,
 			F5C4C2B30199DE090143D54F,
 		);
 		breakpoints = (
-			F55ADF1E0193133201957057,
-			F5C334F4019603880143D562,
-			F5F756470197F8520143D562,
-			F5F7565601982F7B0143D562,
-			F5F75658019830830143D562,
-			F5F75659019830830143D562,
-			F5F7565A019830980143D562,
-			F5F7565F01984F4D0143D562,
-			F5C4C2A90199DAAF0143D54F,
-			F5FEAC2301A70E180143D50D,
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
@@ -114,30 +104,40 @@
 		wantsSCM = -1;
 	};
 	29B97326FDCFA39411CA2CEA = {
-		activeExec = 0;
+		activeExec = 1;
+		customExecs = {
+			macosx = (
+				F55D241501C0C79801A80104,
+			);
+		};
 		targetExecs = {
 			macosx = (
 				F5E5F6C201874BDA0143D54B,
 			);
 		};
 	};
-	F55ADF1E0193133201957057 = {
-		fileReference = F5AB08720175BC8B01EB16F3;
-		isa = PBXFileBreakpoint;
-		lineNumber = 19;
-		state = 2;
+	F55D241501C0C79801A80104 = {
+		activeArgIndex = 2147483647;
+		argumentStrings = (
+		);
+		debuggerPlugin = GDBDebugging;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		launchableReference = F55D241601C0C79801A80104;
+		shlibInfoDictList = (
+		);
+		sourceDirectories = (
+		);
+		startupPath = "<<ProductDirectory>>";
 	};
-	F5C334F4019603880143D562 = {
-		fileReference = F5AB08790175BC8B01EB16F3;
-		isa = PBXFileBreakpoint;
-		lineNumber = 26;
-		state = 2;
-	};
-	F5C4C2A90199DAAF0143D54F = {
-		fileReference = F5AB08790175BC8B01EB16F3;
-		isa = PBXFileBreakpoint;
-		lineNumber = 31;
-		state = 2;
+	F55D241601C0C79801A80104 = {
+		isa = PBXApplicationReference;
+		name = AquaTerm.app;
+		path = /Users/per/Source/AQT/aquaterm/build/AquaTerm.app;
+		refType = 0;
 	};
 	F5C4C2B30199DE090143D54F = {
 		activeExec = 0;
@@ -178,52 +178,5 @@
 		);
 		sourceDirectories = (
 		);
-	};
-	F5F756470197F8520143D562 = {
-		fileReference = F5AB08790175BC8B01EB16F3;
-		isa = PBXFileBreakpoint;
-		lineNumber = 33;
-		state = 2;
-	};
-	F5F7565601982F7B0143D562 = {
-		fileReference = F5F7565701982F7B0143D562;
-		isa = PBXFileBreakpoint;
-		lineNumber = 338;
-		state = 2;
-	};
-	F5F7565701982F7B0143D562 = {
-		isa = PBXFileReference;
-		path = NSWindow.h;
-		refType = 4;
-	};
-	F5F75658019830830143D562 = {
-		fileReference = F5F75653019824CA0143D562;
-		isa = PBXFileBreakpoint;
-		lineNumber = 35;
-		state = 2;
-	};
-	F5F75659019830830143D562 = {
-		fileReference = F5F75653019824CA0143D562;
-		isa = PBXFileBreakpoint;
-		lineNumber = 35;
-		state = 2;
-	};
-	F5F7565A019830980143D562 = {
-		fileReference = F5F75653019824CA0143D562;
-		isa = PBXFileBreakpoint;
-		lineNumber = 35;
-		state = 2;
-	};
-	F5F7565F01984F4D0143D562 = {
-		fileReference = F5AB087B0175BC8B01EB16F3;
-		isa = PBXFileBreakpoint;
-		lineNumber = 56;
-		state = 2;
-	};
-	F5FEAC2301A70E180143D50D = {
-		fileReference = F5AB086E0175BC8B01EB16F3;
-		isa = PBXFileBreakpoint;
-		lineNumber = 78;
-		state = 1;
 	};
 }
