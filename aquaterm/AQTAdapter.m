@@ -201,7 +201,7 @@ _{43:%{x,y}:%key Error } "*/
    [self setAcceptingEvents:YES];
    do {
       isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10.0]];
-      event = [self lastEvent];
+      event = [_clientManager lastEvent];
       isRunning = [event isEqualToString:@"0"]?YES:NO;
    } while (isRunning);
    [self setAcceptingEvents:NO];
