@@ -427,7 +427,8 @@ _{@"NSUnderline" 0or1}
 {
    if (_selectedBuilder)
    {
-      [_selectedBuilder eraseRect:NSMakeRect(0,0,1000,1000)]; // FIXME: !!!
+      // [_selectedBuilder eraseRect:NSMakeRect(0,0,1000,1000)]; // FIXME: !!!
+      [_selectedBuilder clearAll];
       [_selectedBuilder render];
    }
 }

@@ -16,6 +16,7 @@
 }
 -(id)initWithSize:(NSSize)canvasSize;
 -(void)setSize:(NSSize)canvasSize;
+-(NSSize)size;
 -(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;

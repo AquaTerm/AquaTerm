@@ -59,6 +59,10 @@
   canvasSize = size;
 }
 
+-(NSSize)size
+{
+   return canvasSize;
+}
 
 -(int)count
 {

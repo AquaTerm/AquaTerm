@@ -73,7 +73,7 @@
   /*" Control operations "*/
 - (void)eraseRect:(NSRect)aRect;
 - (void)render;
-// FIXME:  - (void)clearAll; // <-- implement
+- (void)clearAll; // <-- implement
 
    /*" Interactions with user "*/
 - (void)setAcceptingEvents:(BOOL)flag;

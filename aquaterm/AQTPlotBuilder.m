@@ -180,6 +180,15 @@
    }
 }
 
+- (void)clearAll
+{
+   AQTModel *newModel = [[AQTModel alloc] initWithSize:[_model size]];
+   [newModel setTitle:[_model title]];
+   [self _aqtPlotBuilderSetDefaultValues];
+   _modelIsDirty = YES;
+}
+
+
 - (void)setAcceptingEvents:(BOOL)flag
 {
    _acceptingEvents = flag;
