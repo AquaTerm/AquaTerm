@@ -11,16 +11,19 @@
 
 @interface AQTModel : AQTGraphic /*" NSObject "*/ 
 {
-    NSMutableArray	*modelObjects;	/*" An array of AQTGraphic objects (leaf or collection) "*/
-    NSString 		*title;			/*" Associate a title with the model. Default is 'Figure n'. "*/
+   NSMutableArray *modelObjects; /*" An array of AQTGraphic objects (leaf or collection) "*/
+   NSString       *title; /*" Associate a title with the model. Default is 'Figure n'. "*/
+   NSSize         canvasSize;
 }
--(id)initWithSize:(NSSize)canvasSize;
--(void)setSize:(NSSize)canvasSize;
--(NSSize)size;
+-(id)initWithCanvasSize:(NSSize)canvasSize;
+-(void)setCanvasSize:(NSSize)canvasSize;
+-(NSSize)canvasSize;
 -(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
+-(void)addObjectsFromArray:(NSArray *)graphics;
 -(NSArray *)modelObjects;
--(void)removeAllModelObjects;
+-(void)removeAllObjects;
+-(void)removeObjectAtIndex:(unsigned)i;
 -(void)setTitle:(NSString *)newTitle;
 -(NSString *)title;
 @end

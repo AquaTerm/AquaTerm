@@ -78,7 +78,7 @@
 {
    if(self = [super init])
    {
-      _model = [[AQTModel alloc] initWithSize:NSZeroSize]; 
+      _model = [[AQTModel alloc] initWithCanvasSize:NSZeroSize];  // FIXME: cf. -init;
       [self _aqtPlotBuilderSetDefaultValues];
       _colormap = [[AQTColorMap alloc] initWithColormapSize:AQT_COLORMAP_SIZE];
       [self _aqtPlotBuilderSetModelIsDirty:NO];
@@ -109,7 +109,7 @@
 - (void)setSize:(NSSize)canvasSize
 {
    _hasSize = !NSEqualSizes(NSZeroSize, canvasSize); 
-   [_model setSize:canvasSize];
+   [_model setCanvasSize:canvasSize];
 }
 
 - (void)setTitle:(NSString *)title
@@ -198,7 +198,7 @@
 
 - (void)removeAllParts
 {
-   [_model removeAllModelObjects];
+   [_model removeAllObjects];
 }
 
 - (void)clearAll 
@@ -207,7 +207,7 @@
    if (_hasSize)
    {
    // Honor size, title and background color
-      AQTModel *newModel = [[AQTModel alloc] initWithSize:[_model size]];
+      AQTModel *newModel = [[AQTModel alloc] initWithCanvasSize:[_model canvasSize]];
       [self _flushBuffers];
       [newModel setTitle:[_model title]];
       [newModel setColor:[_model color]];

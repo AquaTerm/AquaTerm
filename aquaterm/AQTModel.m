@@ -11,11 +11,9 @@
 @implementation AQTModel
 /**"
 *** A class representing a collection of objects making up the plot.
-*** The objects can be leaf object like GPTPath and GPTLabel or a
-*** collection itself (not exploited at present).
 "**/
 
--(id)initWithSize:(NSSize)size
+-(id)initWithCanvasSize:(NSSize)size
 {
   self = [super init];
   if (self)
@@ -29,7 +27,7 @@
 
 -(id)init
 {
-  return [self initWithSize:NSMakeSize(200,200)];
+  return [self initWithCanvasSize:NSMakeSize(200,200)];
 }
 
 -(void)dealloc
@@ -44,6 +42,7 @@
   [super encodeWithCoder:coder];
   [coder encodeObject:modelObjects];
   [coder encodeObject:title];
+  [coder encodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
@@ -51,18 +50,20 @@
   self = [super initWithCoder:coder];
   modelObjects = [[coder decodeObject] retain];
   title = [[coder decodeObject] retain];
+  [coder decodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
   return self;
 }
 
--(void)setSize:(NSSize)size
-{
-  canvasSize = size;
-}
 
--(NSSize)size
-{
-   return canvasSize;
-}
+ -(NSSize)canvasSize
+ {
+    return canvasSize;
+ }
+
+ -(void)setCanvasSize:(NSSize)cs
+ {
+    canvasSize = cs;
+ }
 
 -(int)count
 {
@@ -74,8 +75,12 @@
 "**/
 -(void)addObject:(AQTGraphic *)graphic
 {
-  [graphic setCanvasSize:[self canvasSize]];
   [modelObjects addObject:graphic];
+}
+
+-(void)addObjectsFromArray:(NSArray *)graphics
+{
+   [modelObjects addObjectsFromArray:graphics];   
 }
 
 -(NSArray *)modelObjects
@@ -83,9 +88,14 @@
    return modelObjects;
 }
 
--(void)removeAllModelObjects
+-(void)removeAllObjects
 {
    [modelObjects removeAllObjects];
+}
+
+-(void)removeObjectAtIndex:(unsigned)i
+{
+   [modelObjects removeObjectAtIndex:i];
 }
 
 -(void)setTitle:(NSString *)newTitle

@@ -18,7 +18,6 @@ typedef struct _AQTColor {
 
 @interface AQTGraphic : NSObject <NSCoding>
 {
-    NSSize canvasSize;
     AQTColor _color;
     NSRect _bounds;
     @protected
@@ -26,8 +25,6 @@ typedef struct _AQTColor {
 }
 
 /*" accessor methods "*/
--(NSSize)canvasSize;
--(void)setCanvasSize:(NSSize)cs;
 -(NSRect)bounds;
 -(void)setBounds:(NSRect)bounds;
 

@@ -19,6 +19,7 @@
     return self;
   return [super replacementObjectForPortCoder:portCoder];
 }  
+
 -(id)init
 {
     if (self = [super init])
@@ -43,7 +44,6 @@
 - (void)encodeWithCoder:(NSCoder *)coder
 {
   [coder encodeValueOfObjCType:@encode(AQTColor) at:&_color];
-  [coder encodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
   [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
 }
 
@@ -51,20 +51,8 @@
 {
   self = [super init];
   [coder decodeValueOfObjCType:@encode(AQTColor) at:&_color];
-  [coder decodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
   [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
   return self;
-}
-
-
--(NSSize)canvasSize
-{
-  return canvasSize;
-}
-
--(void)setCanvasSize:(NSSize)cs
-{
-  canvasSize = cs;
 }
 
 -(AQTColor)color
