@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AQTGraphic.h"
+//#import "AQTGraphic.h"
 
 @class AQTPlotBuilder;
 @protocol AQTConnectionProtocol, AQTClientProtocol;
