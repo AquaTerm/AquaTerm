@@ -13,7 +13,7 @@
 
 
 @interface AQTGraphic (AQTGraphicDrawingMethods)
-+ (NSImage *)sharedScratchPad;
+// + (NSImage *)sharedScratchPad;
 - (id)_cache;
 - (void)_setCache:(id)object;
 - (void)setAQTColor;
