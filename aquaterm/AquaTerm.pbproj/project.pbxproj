@@ -7,6 +7,8 @@
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
+				CB5B1BEE04A9C2E900EBD329,
+				CB5B1BEF04A9C2E900EBD329,
 				F5FEAC1401A6B3CE0143D50D,
 				F5E99A51036446DA01EBD329,
 				F5E99A52036446DA01EBD329,
@@ -205,12 +207,11 @@
 				29B9732DFDCFA39411CA2CEA,
 			);
 			buildSettings = {
-				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
+				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AquaTerm;
@@ -263,7 +264,6 @@ http://aquaterm.sourceforge.net</string>
 		29B97327FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				F5FEAC1501A6B3CE0143D50D,
 				F55D242401C11B5201A80104,
 				F55D242501C11B5201A80104,
 				F55D242601C11B5201A80104,
@@ -271,12 +271,12 @@ http://aquaterm.sourceforge.net</string>
 				F50F0B520205D1AF01AA2E68,
 				F50F0B560205D23401AA2E68,
 				F59F5FCB021011D301A18598,
-				F57A4138022288E5014110D6,
 				F546B4BF026B199901E9AA65,
-				F546B4C0026B199901E9AA65,
 				F5E3AFAB026D80D2012F88DF,
-				F5E99A55036446EB01EBD329,
-				F5E99A56036446EC01EBD329,
+				CB5B187304A9A49E00EBD329,
+				CB5B1BEC04A9C1EC00EBD329,
+				CB5B1BF004A9C2E900EBD329,
+				CB5B1BF104A9C2E900EBD329,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,10 +306,10 @@ http://aquaterm.sourceforge.net</string>
 				F50F0B530205D1AF01AA2E68,
 				F50F0B570205D23401AA2E68,
 				F59F5FCC021011D301A18598,
-				F57A4139022288E5014110D6,
 				F546B4C1026B199901E9AA65,
-				F546B4C2026B199901E9AA65,
 				F5E3AFAC026D80D2012F88DF,
+				CB5B187404A9A49E00EBD329,
+				CB5B1BED04A9C1EC00EBD329,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,6 +364,88 @@ http://aquaterm.sourceforge.net</string>
 //4A2
 //4A3
 //4A4
+//CB0
+//CB1
+//CB2
+//CB3
+//CB4
+		CB5B187104A9A49E00EBD329 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTController.h;
+			refType = 4;
+		};
+		CB5B187204A9A49E00EBD329 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTController.m;
+			refType = 4;
+		};
+		CB5B187304A9A49E00EBD329 = {
+			fileRef = CB5B187104A9A49E00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB5B187404A9A49E00EBD329 = {
+			fileRef = CB5B187204A9A49E00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB5B1BE504A9C0F900EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTClientHandler.h;
+			refType = 4;
+		};
+		CB5B1BE604A9C0F900EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTClientHandler.m;
+			refType = 4;
+		};
+		CB5B1BEC04A9C1EC00EBD329 = {
+			fileRef = CB5B1BE504A9C0F900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB5B1BED04A9C1EC00EBD329 = {
+			fileRef = CB5B1BE604A9C0F900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB5B1BEE04A9C2E900EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTClientProtocol.h;
+			refType = 4;
+		};
+		CB5B1BEF04A9C2E900EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = AQTConnectionProtocol.h;
+			refType = 4;
+		};
+		CB5B1BF004A9C2E900EBD329 = {
+			fileRef = CB5B1BEE04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB5B1BF104A9C2E900EBD329 = {
+			fileRef = CB5B1BEF04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//CB0
+//CB1
+//CB2
+//CB3
+//CB4
 //F50
 //F51
 //F52
@@ -435,20 +517,8 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
-		F546B4C0026B199901E9AA65 = {
-			fileRef = F5AB086D0175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F546B4C1026B199901E9AA65 = {
 			fileRef = F5AB087B0175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F546B4C2026B199901E9AA65 = {
-			fileRef = F5AB086E0175BC8B01EB16F3;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -610,18 +680,6 @@ http://aquaterm.sourceforge.net</string>
 			path = AQTBuilder.m;
 			refType = 4;
 		};
-		F57A4138022288E5014110D6 = {
-			fileRef = F57A4136022288E5014110D6;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F57A4139022288E5014110D6 = {
-			fileRef = F57A4137022288E5014110D6;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
 				F57C16A202506DE3010D3DE4,
@@ -667,18 +725,6 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
-		F5AB086D0175BC8B01EB16F3 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = GPTController.h;
-			refType = 4;
-		};
-		F5AB086E0175BC8B01EB16F3 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = GPTController.m;
-			refType = 4;
-		};
 		F5AB087A0175BC8B01EB16F3 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -703,12 +749,14 @@ http://aquaterm.sourceforge.net</string>
 		};
 		F5AB089A0175CCF101EB16F3 = {
 			children = (
-				F50F0B510205D1AF01AA2E68,
-				F50F0B500205D1AF01AA2E68,
-				F5AB086D0175BC8B01EB16F3,
-				F5AB086E0175BC8B01EB16F3,
+				CB5B187104A9A49E00EBD329,
+				CB5B187204A9A49E00EBD329,
+				CB5B1BE504A9C0F900EBD329,
+				CB5B1BE604A9C0F900EBD329,
 				F5AB087A0175BC8B01EB16F3,
 				F5AB087B0175BC8B01EB16F3,
+				F50F0B500205D1AF01AA2E68,
+				F50F0B510205D1AF01AA2E68,
 				F57A4136022288E5014110D6,
 				F57A4137022288E5014110D6,
 			);
@@ -835,29 +883,11 @@ http://aquaterm.sourceforge.net</string>
 			path = AQTExtendedMethods.h;
 			refType = 4;
 		};
-		F5E99A55036446EB01EBD329 = {
-			fileRef = F5E99A51036446DA01EBD329;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5E99A56036446EC01EBD329 = {
-			fileRef = F5E99A52036446DA01EBD329;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5FEAC1401A6B3CE0143D50D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AQTProtocol.h;
 			refType = 4;
-		};
-		F5FEAC1501A6B3CE0143D50D = {
-			fileRef = F5FEAC1401A6B3CE0143D50D;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F5FEAC2701A7219B0143D50D = {
 			children = (
