@@ -132,6 +132,7 @@
 				CBC4B3EC05E4C40D001BE8D7,
 				CBC4B42705E4C784001BE8D7,
 				CBAA608105E7AFA7009B33CD,
+				CB7C709D05EA274E00D4CD15,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -619,6 +620,63 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
+		CB7C704105EA0D5B00D4CD15 = {
+			containerPortal = 29B97313FDCFA39411CA2CEA;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = CBC4B42705E4C784001BE8D7;
+			remoteInfo = "AquaTerm (Upgraded)";
+		};
+		CB7C704205EA0D5B00D4CD15 = {
+			isa = PBXTargetDependency;
+			target = CBC4B42705E4C784001BE8D7;
+			targetProxy = CB7C704105EA0D5B00D4CD15;
+		};
+		CB7C709C05EA274E00D4CD15 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here\ncp $SRCROOT/{aquaterm,AQTAdapter}.h /usr/local/include/aquaterm/.\ncp $OBJROOT/libaquaterm.1.0.0.dylib /usr/local/lib/.\U0013\n";
+		};
+		CB7C709D05EA274E00D4CD15 = {
+			buildPhases = (
+				CB7C709C05EA274E00D4CD15,
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Install;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+				CB7C70A205EA276200D4CD15,
+			);
+			isa = PBXAggregateTarget;
+			name = Install;
+			productName = Install;
+		};
+		CB7C70A105EA276200D4CD15 = {
+			containerPortal = 29B97313FDCFA39411CA2CEA;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = CBC4B42705E4C784001BE8D7;
+			remoteInfo = "AquaTerm (Upgraded)";
+		};
+		CB7C70A205EA276200D4CD15 = {
+			isa = PBXTargetDependency;
+			target = CBC4B42705E4C784001BE8D7;
+			targetProxy = CB7C70A105EA276200D4CD15;
+		};
 		CB83AAE8054D309D00D208BA = {
 			fileRef = F50F0B540205D23401AA2E68;
 			isa = PBXBuildFile;
@@ -668,6 +726,7 @@ http://aquaterm.sourceforge.net</string>
 			};
 			buildToolPath = /usr/bin/make;
 			dependencies = (
+				CB7C704205EA0D5B00D4CD15,
 			);
 			isa = PBXLegacyTarget;
 			name = Distro;
