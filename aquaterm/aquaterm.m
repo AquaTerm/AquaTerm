@@ -8,56 +8,54 @@
 #include "aquaterm.h"
 
 #import <Foundation/Foundation.h>
-
-#import "AQTClientManager.h"
-#import "AQTPlotBuilder.h"
+#import "AQTAdapter.h"
 
 static void (*_aqtEventHandlerPtr)(int, const char *);
-static void (*_aqtErrorHandlerPtr)(const char *);
+//static void (*_aqtErrorHandlerPtr)(const char *);
 static NSAutoreleasePool *_pool;
-static AQTClientManager *_clientManager;
-static AQTPlotBuilder *_selectedBuilder;
-static id observer;
+static AQTAdapter *_adapter;
+static BOOL _mayCleanPool = YES;
 
-@implementation AQTObserver : NSObject
+void _aqtCleanPool(void)
 {
+   // wait in NSConnectionReplyMode ?
+   NSLog(@"#arpool=%d", [NSAutoreleasePool autoreleasedObjectCount]);
+   if (_mayCleanPool)
+   {
+      [_pool release];
+      _pool = [[NSAutoreleasePool alloc] init];
+   }
+   else
+   {
+      NSLog(@"Cleaning disabled");
+   }
 }
-- (void)connectionDidDie:(id)x
-{
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
-   // Make sure we can't access any invalid objects:
-   _selectedBuilder = nil;
-}   
-@end
 
 /*" Class initialization etc."*/
-int aqtInit(void)
+int aqtInit(void) // FIXME: retval?
 {
    if (!_pool)
    {
       _pool = [[NSAutoreleasePool alloc] init];
    }
-   _clientManager = [AQTClientManager sharedManager];
-   observer = [[AQTObserver alloc] init];
-   [[NSNotificationCenter defaultCenter] addObserver:observer
-                                            selector:@selector(connectionDidDie:)
-                                                name:NSConnectionDidDieNotification
-                                              object:nil];
-   
-   return [_clientManager connectToServer]?0:1;
+   if (!_adapter)
+   {
+      _adapter = [[AQTAdapter alloc] init];
+   }
+
+   return (_adapter==nil)?1:0;
 }
 
 void aqtTerminate(void)
 {
-   [_clientManager logMessage:@"adapter dealloc, terminating connection." logLevel:3];
-   [[NSNotificationCenter defaultCenter] removeObserver:observer];
-   [_clientManager terminateConnection];
-   [observer release];
+   [_adapter release];
+   _adapter = nil;
    [_pool release];
    _pool = nil;
 }
 
-void _aqtErrorTranslator(NSString *errMsg)
+/*
+ void _aqtErrorTranslator(NSString *errMsg)
 {
    NSLog(@"_aqtErrorTranslator --- %@", errMsg);
    _aqtErrorHandlerPtr([errMsg UTF8String]);
@@ -68,91 +66,78 @@ void aqtSetErrorHandler(void (*func)(const char *msg))
    _aqtErrorHandlerPtr = func;
    [_clientManager setErrorHandler:_aqtErrorTranslator];
 }
+*/
 
 void _aqtEventTranslator(int index, NSString *event)
 {
    NSLog(@"_aqtEventTranslator --- %@ from %d", event, index);
+   _mayCleanPool = NO;
    _aqtEventHandlerPtr(index, [event UTF8String]);
+   _mayCleanPool = YES;
 }
 
 void aqtSetEventHandler(void (*func)(int ref, const char *event))
 {
    _aqtEventHandlerPtr = func;
-   [_clientManager setEventHandler:_aqtEventTranslator];
+   [_adapter setEventHandler:_aqtEventTranslator];
 }
 
 /*" Control operations "*/
 void aqtOpenPlot(int refNum) // FIXME: retval?
 {
-   _selectedBuilder = [_clientManager newPlotWithIndex:refNum];
+   [_adapter openPlotWithIndex:refNum];
 }
 
-int aqtSelectPlot(int refNum)
+int aqtSelectPlot(int refNum) // FIXME: retval?
 {
-   int didChangePlot = 0;
-   AQTPlotBuilder *tmpBuilder = [_clientManager selectPlotWithIndex:refNum];
-   if (tmpBuilder != nil)
-   {
-      _selectedBuilder = tmpBuilder;
-      didChangePlot = 1;
-   }
-   return didChangePlot;
+   return [_adapter selectPlotWithIndex:refNum]?1:0;
 }
 
 void aqtSetPlotSize(float width, float height)
 {
-   [_selectedBuilder setSize:NSMakeSize(width, height)];
+   [_adapter setPlotSize:NSMakeSize(width, height)];
 }
 
 void aqtSetPlotTitle(const char *title)
 {
-   [_selectedBuilder setTitle:title?[NSString stringWithCString:title]:@"Untitled"];
+   [_adapter setPlotTitle:title?[NSString stringWithCString:title]:@"Untitled"];
 }
 
 void aqtRenderPlot(void)
 {
-   if(_selectedBuilder)
-   {
-      [_clientManager renderPlot];
-   }
-   else
-   {
-      // Just inform user about what is going on...
-      [_clientManager logMessage:@"Warning: No plot selected" logLevel:2];
-   }   
+   [_adapter renderPlot];
+   _aqtCleanPool();
 }
 
 void aqtClearPlot(void)
 {
-   [_clientManager clearPlot];
+   [_adapter clearPlot];
 }
 
 void aqtClosePlot(void)
 {
-   [_clientManager closePlot];
-   _selectedBuilder = nil;
+   [_adapter closePlot];
 }
 
 /*" Event handling "*/
 void aqtSetAcceptingEvents(int flag)
 {
-   [_clientManager setAcceptingEvents:flag?YES:NO]; 
+   [_adapter setAcceptingEvents:flag?YES:NO];
 }
 
-
-int aqtGetLastEvent(char *buffer)
+int aqtGetLastEvent(char *buffer) // FIXME: retval?
 {
-   NSString *event = [_clientManager lastEvent];
-   strncpy(buffer, [event UTF8String], MIN(EVENTBUF_SIZE - 1, [event length]));
-   buffer[MIN(EVENTBUF_SIZE - 1, [event length])] = '\0';
+   NSString *event = [_adapter lastEvent];
+   strncpy(buffer, [event UTF8String], MIN(AQT_EVENTBUF_SIZE - 1, [event length]));
+   buffer[MIN(AQT_EVENTBUF_SIZE - 1, [event length])] = '\0';
    return 0;
 }
 
-
-int aqtWaitNextEvent(char *buffer)
+int aqtWaitNextEvent(char *buffer) // FIXME: retval?
 {
-   NSString *event;
-   BOOL isRunning;
+   NSString *event  = [_adapter waitNextEvent];
+/*
+ BOOL isRunning;
    [_clientManager setAcceptingEvents:YES]; 
    do {
       isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10.0]];
@@ -160,10 +145,18 @@ int aqtWaitNextEvent(char *buffer)
       isRunning = [event isEqualToString:@"0"]?YES:NO;
    } while (isRunning);
    [_clientManager setAcceptingEvents:NO];
+*/
    
-   strncpy(buffer, [event UTF8String], MIN(EVENTBUF_SIZE - 1, [event length]));
-   buffer[MIN(EVENTBUF_SIZE - 1, [event length])] = '\0';
+   strncpy(buffer, [event UTF8String], MIN(AQT_EVENTBUF_SIZE - 1, [event length]));
+   buffer[MIN(AQT_EVENTBUF_SIZE - 1, [event length])] = '\0';
    return 0;
+}
+
+void aqtEventProcessingMode()
+{
+   // FIXME: Add this to adapter
+   [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+   _aqtCleanPool();
 }
 
 /*" Plotting related commands "*/
@@ -171,71 +164,43 @@ int aqtWaitNextEvent(char *buffer)
 /*" Colormap (utility  "*/
 int aqtColormapSize(void)
 {
-   int size = 0;
-   if (_selectedBuilder)
-   {
-      size = [_selectedBuilder colormapSize];
-   }
-   else
-   {
-      // Just inform user about what is going on...
-      [_clientManager logMessage:@"Warning: No plot selected" logLevel:2];
-   }
-   return size;
+   return [_adapter colormapSize];
 }
 
 void aqtSetColormapEntry(int entryIndex, float r, float g, float b)
 {
-   AQTColor tmpColor;
-   tmpColor.red = r;
-   tmpColor.green = g;
-   tmpColor.blue = b;
-   [_selectedBuilder setColor:tmpColor forColormapEntry:entryIndex];
+   [_adapter setColormapEntry:entryIndex red:r green:g blue:b];
 }
 
 void aqtGetColormapEntry(int entryIndex, float *r, float *g, float *b)
 {
-   AQTColor tmpColor = [_selectedBuilder colorForColormapEntry:entryIndex];
-   *r = tmpColor.red;
-   *g = tmpColor.green;
-   *b = tmpColor.blue;
+   [_adapter getColormapEntry:entryIndex red:r green:g blue:b];
 }
 
 void aqtTakeColorFromColormapEntry(int index)
 {
-   [_selectedBuilder takeColorFromColormapEntry:index];
+   [_adapter takeColorFromColormapEntry:index];
 }
 
 void aqtTakeBackgroundColorFromColormapEntry(int index)
 {
-   [_selectedBuilder takeBackgroundColorFromColormapEntry:index];
+   [_adapter takeBackgroundColorFromColormapEntry:index];
 }
 
 /*" Color handling "*/
 void aqtSetColor(float r, float g, float b)
 {
-   AQTColor newColor;
-   newColor.red = r;
-   newColor.green = g;
-   newColor.blue = b;
-   [_selectedBuilder setColor:newColor];
+   [_adapter setColorRed:r green:g blue:b];
 }
 
 void aqtSetBackgroundColor(float r, float g, float b)
 {
-   AQTColor newColor;
-   newColor.red = r;
-   newColor.green = g;
-   newColor.blue = b;
-   [_selectedBuilder setBackgroundColor:newColor];
+   [_adapter setBackgroundColorRed:r green:g blue:b];
 }
 
 void aqtGetCurrentColor(float *r, float *g, float *b)
 {
-   AQTColor tmpColor = [_selectedBuilder color];
-   *r = tmpColor.red;
-   *g = tmpColor.green;
-   *b = tmpColor.blue;
+   [_adapter getCurrentColorRed:r green:g blue:b];
 }
 
 /*" Text handling "*/
@@ -243,100 +208,109 @@ void aqtGetCurrentColor(float *r, float *g, float *b)
 {
     if (newFontname != nil)
     {
-       [_selectedBuilder setFontname:[NSString stringWithCString:newFontname]];
+       [_adapter setFontname:[NSString stringWithCString:newFontname]];
     }
 }
 
 void aqtSetFontsize(float newFontsize)
 {
-   [_selectedBuilder setFontsize:newFontsize];
+   [_adapter setFontsize:newFontsize];
 }
 
-void aqtAddLabel(const char *text, float x, float y, float angle, int just)
+void aqtAddLabel(const char *text, float x, float y, float angle, int align)
 {
    if (text != nil)
    {
-      [_selectedBuilder addLabel:[NSString stringWithCString:text] position:NSMakePoint(x,y) angle:angle justification:just];
+      [_adapter addLabel:[NSString stringWithCString:text] atPoint:NSMakePoint(x,y) angle:angle align:align];
    }
 }
 
 /*" Line handling "*/
 void aqtSetLinewidth(float newLinewidth)
 {
-   [_selectedBuilder setLinewidth:newLinewidth];
+   [_adapter setLinewidth:newLinewidth];
 }
 
 void aqtSetLineCapStyle(int capStyle)
 {
-   [_selectedBuilder setLineCapStyle:capStyle];
+   [_adapter setLineCapStyle:capStyle];
 }
 
 void aqtMoveTo(float x, float y)
 {
-   [_selectedBuilder moveToPoint:NSMakePoint(x, y)];
+   [_adapter moveToPoint:NSMakePoint(x, y)];
 }
 
 void aqtAddLineTo(float x, float y)
 {
-   [_selectedBuilder addLineToPoint:NSMakePoint(x, y)];
+   [_adapter addLineToPoint:NSMakePoint(x, y)];
 }
 
 void aqtAddPolyline(float *x, float *y, int pc)
 {
-   NSLog(@"implement line %d in %s", __LINE__, __FILE__);
+   int i; 
+   if (pc > 1)
+   {
+      [_adapter moveToPoint:NSMakePoint(x[0], y[0])];
+      for (i=1; i<pc; i++)
+      {
+         [_adapter addLineToPoint:NSMakePoint(x[i], y[i])];
+      }
+   }   
 }
 
 /*" Rect and polygon handling"*/
  void aqtMoveToVertex(float x, float y)
 {
-    [_selectedBuilder moveToVertexPoint:NSMakePoint(x,y)];
+    [_adapter moveToVertexPoint:NSMakePoint(x,y)];
 }
 
 void aqtAddEdgeToVertex(float x, float y)
 {
-   [_selectedBuilder addEdgeToPoint:NSMakePoint(x,y)];
+   [_adapter addEdgeToVertexPoint:NSMakePoint(x,y)];
 }
 
 void aqtAddPolygon(float *x, float *y, int pc)
 {
-   NSLog(@"implement line %d in %s", __LINE__, __FILE__);
+   int i;
+   if (pc > 1)
+   {
+      [_adapter moveToVertexPoint:NSMakePoint(x[0], y[0])];
+      for (i=1; i<pc; i++)
+      {
+         [_adapter addEdgeToVertexPoint:NSMakePoint(x[i], y[i])];
+      }
+   }
 }
 
 void aqtAddFilledRect(float originX, float originY, float width, float height)
 {
-   // If the filled rect covers a substantial area, it is worthwile to clear it first.
-   NSRect aRect = NSMakeRect(originX, originY, width, height);
-   if (NSWidth(aRect)*NSHeight(aRect) > 100.0)
-   {
-      [_clientManager clearPlotRect:aRect];
-   }
-   [_selectedBuilder addFilledRect:aRect];
+   [_adapter addFilledRect:NSMakeRect(originX, originY, width, height)];
 }
 
 void aqtEraseRect(float originX, float originY, float width, float height)
 {
-   [_clientManager clearPlotRect:NSMakeRect(originX, originY, width, height)];
+   [_adapter eraseRect:NSMakeRect(originX, originY, width, height)];
 }
 
 /*" Image handling "*/
-/*
- void aqtSetImageTransformM11(float m11, float m12, float m21, float m22, float tX, float tY)
+ void aqtSetImageTransform(float m11, float m12, float m21, float m22, float tX, float tY)
 {
-   NSLog(@"implement line %d in %s", __LINE__, __FILE__);
+    [_adapter setImageTransformM11:m11 m12:m12 m21:m21 m22:m22 tX:tX tY:tY];
 }
 
-void aqtResetImageTransform(void){
-   NSLog(@"implement line %d in %s", __LINE__, __FILE__);
+void aqtResetImageTransform(void)
+{
+   [_adapter resetImageTransform];
 }
 
-void aqtAddImageWithBitmap(const void *bitmap, NSSize bitmapSize, NSRect destBounds)
+void aqtAddImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float originX, float originY, float width, float height)
 {
-   NSLog(@"implement line %d in %s", __LINE__, __FILE__);
+   [_adapter addImageWithBitmap:bitmap size:NSMakeSize(pixWide, pixHigh) bounds:NSMakeRect(originX, originY, width, height)];
 }
 
-void aqtAddTransformedImageWithBitmap(const void *bitmap, NSSize bitmapSize, NSRect destBounds)
+void aqtAddTransformedImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float originX, float originY, float width, float height)
 {
-   NSLog(@"implement line %d in %s", __LINE__, __FILE__);
+   [_adapter addTransformedImageWithBitmap:bitmap size:NSMakeSize(pixWide, pixHigh) clipRect:NSMakeRect(originX, originY, width, height)];
 }
-*/
 
