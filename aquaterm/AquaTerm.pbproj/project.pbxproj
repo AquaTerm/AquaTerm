@@ -26,6 +26,7 @@
 //104
 		1058C7A0FEA54F0111CA2CBB = {
 			children = (
+				FE82528EC5B321F400CFA73B,
 				1058C7A1FEA54F0111CA2CBB,
 			);
 			isa = PBXGroup;
@@ -219,7 +220,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-DDEBUG_BOUNDS";
+				OTHER_CFLAGS = "-DAQT_APP";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AquaTerm;
 				SECTORDER_FLAGS = "";
@@ -325,6 +326,7 @@ http://aquaterm.sourceforge.net</string>
 				CBA3D843053D84DE00D208BA,
 				CB71321405444AEC00D208BA,
 				CB83AAE7054D2D8700D208BA,
+				FE8252ADC5B321F400CFA73B,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +343,7 @@ http://aquaterm.sourceforge.net</string>
 			buildActionMask = 2147483647;
 			files = (
 				1058C7A3FEA54F0111CA2CBB,
+				FE82528FC5B321F400CFA73B,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1281,6 +1284,7 @@ http://aquaterm.sourceforge.net</string>
 			children = (
 				CB5B187104A9A49E00EBD329,
 				CB5B187204A9A49E00EBD329,
+				FE8252ACC5B321F400CFA73B,
 				CBF3083904D51CF100EBD329,
 				CBF3083A04D51CF100EBD329,
 				CBF3082D04D51B9300EBD329,
@@ -1452,6 +1456,31 @@ http://aquaterm.sourceforge.net</string>
 //FE2
 //FE3
 //FE4
+		FE82528EC5B321F400CFA73B = {
+			isa = PBXFrameworkReference;
+			name = Message.framework;
+			path = /System/Library/Frameworks/Message.framework;
+			refType = 0;
+		};
+		FE82528FC5B321F400CFA73B = {
+			fileRef = FE82528EC5B321F400CFA73B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FE8252ACC5B321F400CFA73B = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = Demo.m;
+			path = /Users/ppe/Source/AQT/aquaterm/Demo.m;
+			refType = 0;
+		};
+		FE8252ADC5B321F400CFA73B = {
+			fileRef = FE8252ACC5B321F400CFA73B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		FEDD21D204EE7C22008D3E17 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
