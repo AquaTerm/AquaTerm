@@ -172,28 +172,44 @@ extern void aqtLineDrawingTest(id sender);
   }
 }
 
+-(NSString *)_aqtBugMsg
+{
+    return @"Bug report for AquaTerm 1.0.a2\n\n\
+Description:\n-----------------------\n\n\
+*\tPlease replace this item with a detailed description of the \n\
+\tproblem.  Suggestions or general comments are also welcome.\n\n\
+Repeat-By:\n-----------------------\n\n\
+*\tPlease replace this item with a description of the sequence of\n\
+\tevents that causes the problem to occur.\n\n\
+Fix:\n-----------------------\n\n\
+*\tIf possible, replace this item with a description of how to\n\
+\tfix the problem (if you don't have a fix for the problem, don't\n\
+\tinclude this section, but please do submit your report anyway).\n\n";
+/*  
+Configuration (please do not edit this section):\n\
+-----------------------------------------------\n";
+*/
+}
+
 -(IBAction)mailBug:(id)sender;
 {
-  BOOL messageSent = NO;
-  NSString *msg = @"Complex text\nwith breaks...";
+  NSString *msg = [self _aqtBugMsg];
   NSString *address = @"persquare@users.sourceforge.net";
   NSString *subject = @"AquaTerm bugreport";
-  if([NSMailDelivery hasDeliveryClassBeenConfigured])
-  {
-    messageSent = [NSMailDelivery deliverMessage:[msg stringByAddingPercentEscapes]
-                                         subject:[subject stringByAddingPercentEscapes]
-                                              to:[address stringByAddingPercentEscapes]];
-  }
-  if(messageSent == NO)
-  {
-    NSString *mailto = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", address, subject, msg];
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapes]]];
-  }
+  NSString *mailto = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", address, subject, msg]; 
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapes]]];
+}
+
+-(NSString *)_aqtMailMsg
+{
+    return @"Feedback report for AquaTerm 1.0.a2\n\n\
+Feedback:\n-----------------------\n\n\
+*\tPlease replace this item with suggestions or general comments.\n\n";
 }
 
 -(IBAction)mailFeedback:(id)sender;
 {
-  NSString *msg = @"Complex text\nwith breaks...";
+  NSString *msg = [self _aqtMailMsg];
   NSString *address = @"persquare@users.sourceforge.net";
   NSString *subject = @"AquaTerm feedback";
   NSString *mailto = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", address, subject, msg];
