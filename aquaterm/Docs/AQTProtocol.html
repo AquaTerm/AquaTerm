@@ -1,0 +1,171 @@
+<HTML><HEAD><TITLE></TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+
+<BR><BR><FONT COLOR="#000066"><H1><A NAME="//apple_ref/occ/intf/AQTProtocol">AQTProtocol</A></H1></FONT><BR>
+
+
+
+
+
+
+
+	<blockquote><DL><DT><B>Declared In:</B></DT>
+	<DD>AQTProtocol.h</DD>
+	</DL></blockquote>
+
+<BR><BR>
+
+
+<H2>Protocol Description</H2>
+No protocol description.
+
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Symbolic Constants</H2>
+	<blockquote>
+	
+		
+		<H4>Synopsis:</H4>
+		
+			<CODE><B><A NAME="//apple_ref/c/econst/AQTProtocolVersion">AQTProtocolVersion</A></B>&nbsp;&nbsp;0.2.0</CODE><BR>
+		
+		
+	
+	</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Method Types</H2>
+	<blockquote>
+	
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- getAquaTermInfo">- getAquaTermInfo</A></DD>
+		
+			<DD> <A HREF="#- renderInViewShouldRelease:">- renderInViewShouldRelease:</A></DD>
+		
+			<DD> <A HREF="#- clearRect:">- clearRect:</A></DD>
+		
+			<DD> <A HREF="#- addString:atPoint:withJustification:atAngle:withIndexedColor:">- addString:atPoint:withJustification:atAngle:withIndexedColor:</A></DD>
+		
+			<DD> <A HREF="#- setFontWithName:size:">- setFontWithName:size:</A></DD>
+		
+			<DD> <A HREF="#- addPolyline:withIndexedColor:">- addPolyline:withIndexedColor:</A></DD>
+		
+			<DD> <A HREF="#- addPolyline:withColor:">- addPolyline:withColor:</A></DD>
+		
+			<DD> <A HREF="#- addPolygon:withIndexedColor:">- addPolygon:withIndexedColor:</A></DD>
+		
+			<DD> <A HREF="#- addPolygon:withColor:">- addPolygon:withColor:</A></DD>
+		
+			<DD> <A HREF="#- selectModel:">- selectModel:</A></DD>
+		
+		</DL>
+	
+	</blockquote>
+
+
+
+
+ 
+
+	<HR WIDTH=50% ALIGN=LEFT>
+	<H2>Instance Methods</H2>
+ 
+	
+		
+		<A NAME="- addPolygon:withColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolygon:withColor:">addPolygon:withColor:</A></H3><P>
+		<CODE>- (oneway void)<B>addPolygon:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withColor:</B>(bycopy float)<EM>color</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addPolygon:withIndexedColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolygon:withIndexedColor:">addPolygon:withIndexedColor:</A></H3><P>
+		<CODE>- (oneway void)<B>addPolygon:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withIndexedColor:</B>(bycopy int)<EM>colorIndex</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addPolyline:withColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolyline:withColor:">addPolyline:withColor:</A></H3><P>
+		<CODE>- (oneway void)<B>addPolyline:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withColor:</B>(bycopy float)<EM>color</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addPolyline:withIndexedColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addPolyline:withIndexedColor:">addPolyline:withIndexedColor:</A></H3><P>
+		<CODE>- (oneway void)<B>addPolyline:</B>(bycopy NSBezierPath *)<EM>aPath</EM> <B>withIndexedColor:</B>(bycopy int)<EM>colorIndex</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- addString:atPoint:withJustification:atAngle:withIndexedColor:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/addString:atPoint:withJustification:atAngle:withIndexedColor:">addString:atPoint:withJustification:atAngle:withIndexedColor:</A></H3><P>
+		<CODE>- (oneway void)<B>addString:</B>(bycopy NSString *)<EM>text</EM> <B>atPoint:</B>(bycopy NSPoint)<EM>point</EM> <B>withJustification:</B>(bycopy int)<EM>justification</EM> <B>atAngle:</B>(bycopy float)<EM>angle</EM> <B>withIndexedColor:</B>(bycopy int)<EM>colorIndex</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- clearRect:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/clearRect:">clearRect:</A></H3><P>
+		<CODE>- (oneway void)<B>clearRect:</B>(NSRect)<EM>rect</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- getAquaTermInfo"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/getAquaTermInfo">getAquaTermInfo</A></H3><P>
+		<CODE>- (bycopy NSDictionary *)<B>getAquaTermInfo</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- renderInViewShouldRelease:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/renderInViewShouldRelease:">renderInViewShouldRelease:</A></H3><P>
+		<CODE>- (oneway void)<B>renderInViewShouldRelease:</B>(BOOL)<EM>release</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- selectModel:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/selectModel:">selectModel:</A></H3><P>
+		<CODE>- (oneway void)<B>selectModel:</B>(int)<EM>currentModel</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- setFontWithName:size:"></A><H3><A NAME="//apple_ref/occ/intfm/AQTProtocol/setFontWithName:size:">setFontWithName:size:</A></H3><P>
+		<CODE>- (oneway void)<B>setFontWithName:</B>(bycopy NSString *)<EM>fontName</EM> <B>size:</B>(bycopy float)<EM>fontSize</EM>
+			
+		</CODE><P>
+		No method description.
+	
+
+
+
+
+<P><HR>
+Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+<P>
+</BODY></HTML>

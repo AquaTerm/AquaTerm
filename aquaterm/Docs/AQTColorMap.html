@@ -1,0 +1,129 @@
+<HTML><HEAD><TITLE></TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+
+<BR><BR><FONT COLOR="#000066"><H1><A NAME="//apple_ref/occ/cl/AQTColorMap">AQTColorMap</A></H1></FONT><BR>
+
+
+
+	<blockquote><DL><DT><B>Inherits From:</B></DT>  
+	<DD>NSObject</DD>
+</DL></blockquote>
+
+
+
+
+
+	<blockquote><DL><DT><B>Declared In:</B></DT>
+	<DD>AQTColorMap.h</DD>
+	</DL></blockquote>
+
+<BR><BR>
+
+
+<H2>Class Description</H2>
+Mappings for colors both indexed and gradient for a particular AQTModel.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Instance Variables</H2>
+	<blockquote>
+	
+		<CODE>NSDictionary *<B>indexedColormap</B>;</CODE><BR>
+		<CODE>NSColor *<B>minColor</B>;</CODE><BR>
+		<CODE>NSColor *<B>maxColor</B>;</CODE><BR>
+	<P><TABLE>
+	
+		<TR><TD>indexedColormap</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>minColor</TD><TD>for continous colormaps</TD></TR>
+	
+		<TR><TD>maxColor</TD><TD>for continous colormaps</TD></TR>
+	
+	</TABLE>
+	</blockquote>
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Method Types</H2>
+	<blockquote>
+	
+		
+			Designated initializer
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- initWithColorDict:rampFrom:to:">- initWithColorDict:rampFrom:to:</A></DD>
+		
+		</DL>
+	
+		
+			accessor methods
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- colorForFloat:">- colorForFloat:</A></DD>
+		
+			<DD> <A HREF="#- colorForIndex:">- colorForIndex:</A></DD>
+		
+		</DL>
+	
+	</blockquote>
+
+
+
+
+ 
+
+	<HR WIDTH=50% ALIGN=LEFT>
+	<H2>Instance Methods</H2>
+ 
+	
+		
+		<A NAME="- colorForFloat:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/colorForFloat:">colorForFloat:</A></H3><P>
+		<CODE>- (NSColor *)<B>colorForFloat:</B>(float)<EM>grey</EM>
+			
+		</CODE><P>
+		returns a color corresponding to a point on a gradient
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- colorForIndex:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/colorForIndex:">colorForIndex:</A></H3><P>
+		<CODE>- (NSColor *)<B>colorForIndex:</B>(int)<EM>index</EM>
+			
+		</CODE><P>
+		Gnuplot uses is a color <I>index</I> to map linestyles to a set of fixed 
+colors. The <I>index</I> is taken modulo max_number_of_colors. 
+Negative numbers have special meanings (-2 = axes, -1 = grid).
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- initWithColorDict:rampFrom:to:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorMap/initWithColorDict:rampFrom:to:">initWithColorDict:rampFrom:to:</A></H3><P>
+		<CODE>- (id)<B>initWithColorDict:</B>(NSDictionary *)<EM>indexColors</EM> <B>rampFrom:</B>(NSColor *)<EM>contColorMin</EM> <B>to:</B>(NSColor *)<EM>contColorMax</EM>
+			
+		</CODE><P>
+		No method description.
+	
+
+
+
+
+<P><HR>
+Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+<P>
+</BODY></HTML>

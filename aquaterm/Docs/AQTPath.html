@@ -1,0 +1,150 @@
+<HTML><HEAD><TITLE></TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+
+<BR><BR><FONT COLOR="#000066"><H1><A NAME="//apple_ref/occ/cl/AQTPath">AQTPath</A></H1></FONT><BR>
+
+
+
+	<blockquote><DL><DT><B>Inherits From:</B></DT>  
+	<DD>AQTGraphic : NSObject</DD>
+</DL></blockquote>
+
+
+
+
+
+	<blockquote><DL><DT><B>Declared In:</B></DT>
+	<DD>AQTPath.h</DD>
+	</DL></blockquote>
+
+<BR><BR>
+
+
+<H2>Class Description</H2>
+A leaf object class representing an actual item in the plot. 
+Since the app is a viewer we do three things with the object: 
+create (once), draw (any number of times) and (eventually) dispose of it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Instance Variables</H2>
+	<blockquote>
+	
+		<CODE>NSBezierPath *<B>path</B>;</CODE><BR>
+		<CODE>BOOL <B>hasIndexedColor</B>;</CODE><BR>
+		<CODE>BOOL <B>isFilled</B>;</CODE><BR>
+		<CODE>float <B>mappedColor</B>;</CODE><BR>
+	<P><TABLE>
+	
+		<TR><TD>path</TD><TD>A collection of bezier paths sharing the same (style)properties</TD></TR>
+	
+		<TR><TD>hasIndexedColor</TD><TD>TRUE =&gt; fill and stroke in _fillColor; FALSE =&gt; stroke in _strokeColor</TD></TR>
+	
+		<TR><TD>isFilled</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>mappedColor</TD><TD>The parametrized fill color [0..1]</TD></TR>
+	
+	</TABLE>
+	</blockquote>
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Method Types</H2>
+	<blockquote>
+	
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- initWithPath:filled:color:colorIndex:indexedColor:">- initWithPath:filled:color:colorIndex:indexedColor:</A></DD>
+		
+			<DD> <A HREF="#- initWithPolyline:color:">- initWithPolyline:color:</A></DD>
+		
+			<DD> <A HREF="#- initWithPolyline:colorIndex:">- initWithPolyline:colorIndex:</A></DD>
+		
+			<DD> <A HREF="#- initWithPolygon:color:">- initWithPolygon:color:</A></DD>
+		
+			<DD> <A HREF="#- initWithPolygon:colorIndex:">- initWithPolygon:colorIndex:</A></DD>
+		
+			<DD> <A HREF="#- renderInRect:">- renderInRect:</A></DD>
+		
+		</DL>
+	
+	</blockquote>
+
+
+
+
+ 
+
+	<HR WIDTH=50% ALIGN=LEFT>
+	<H2>Instance Methods</H2>
+ 
+	
+		
+		<A NAME="- initWithPath:filled:color:colorIndex:indexedColor:"></A><H3><A NAME="//apple_ref/occ/instm/AQTPath/initWithPath:filled:color:colorIndex:indexedColor:">initWithPath:filled:color:colorIndex:indexedColor:</A></H3><P>
+		<CODE>- (id)<B>initWithPath:</B>(NSBezierPath *)<EM>aPath</EM> <B>filled:</B>(BOOL)<EM>filled</EM> <B>color:</B>(float)<EM>gray</EM> <B>colorIndex:</B>(int)<EM>cIndex</EM> <B>indexedColor:</B>(BOOL)<EM>icFlag</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- initWithPolygon:color:"></A><H3><A NAME="//apple_ref/occ/instm/AQTPath/initWithPolygon:color:">initWithPolygon:color:</A></H3><P>
+		<CODE>- (id)<B>initWithPolygon:</B>(NSBezierPath *)<EM>aPath</EM> <B>color:</B>(float)<EM>gray</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- initWithPolygon:colorIndex:"></A><H3><A NAME="//apple_ref/occ/instm/AQTPath/initWithPolygon:colorIndex:">initWithPolygon:colorIndex:</A></H3><P>
+		<CODE>- (id)<B>initWithPolygon:</B>(NSBezierPath *)<EM>aPath</EM> <B>colorIndex:</B>(int)<EM>cIndex</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- initWithPolyline:color:"></A><H3><A NAME="//apple_ref/occ/instm/AQTPath/initWithPolyline:color:">initWithPolyline:color:</A></H3><P>
+		<CODE>- (id)<B>initWithPolyline:</B>(NSBezierPath *)<EM>aPath</EM> <B>color:</B>(float)<EM>gray</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- initWithPolyline:colorIndex:"></A><H3><A NAME="//apple_ref/occ/instm/AQTPath/initWithPolyline:colorIndex:">initWithPolyline:colorIndex:</A></H3><P>
+		<CODE>- (id)<B>initWithPolyline:</B>(NSBezierPath *)<EM>aPath</EM> <B>colorIndex:</B>(int)<EM>cIndex</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- renderInRect:"></A><H3><A NAME="//apple_ref/occ/instm/AQTPath/renderInRect:">renderInRect:</A></H3><P>
+		<CODE>- (void)<B>renderInRect:</B>(NSRect)<EM>boundsRect</EM>
+			
+		</CODE><P>
+		No method description.
+	
+
+
+
+
+<P><HR>
+Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+<P>
+</BODY></HTML>

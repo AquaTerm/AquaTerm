@@ -1,0 +1,195 @@
+<HTML><HEAD><TITLE></TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+
+<BR><BR><FONT COLOR="#000066"><H1><A NAME="//apple_ref/occ/cl/AQTColorInspector">AQTColorInspector</A></H1></FONT><BR>
+
+
+
+	<blockquote><DL><DT><B>Inherits From:</B></DT>  
+	<DD>NSWindowController</DD>
+</DL></blockquote>
+
+
+
+
+
+	<blockquote><DL><DT><B>Declared In:</B></DT>
+	<DD>AQTColorInspector.h</DD>
+	</DL></blockquote>
+
+<BR><BR>
+
+
+<H2>Class Description</H2>
+AQTColorInspector is the controller class for the Color Inspector nib.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Instance Variables</H2>
+	<blockquote>
+	
+		<CODE>IBOutlet NSColorWell *<B>axisColor</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>backgroundColor</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>gridlineColor</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor1</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor2</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor3</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor4</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor5</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor6</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor7</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor8</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>lineColor9</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>maxColor</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>minColor</B>;</CODE><BR>
+		<CODE>IBOutlet NSImageView *<B>surfaceRampImage</B>;</CODE><BR>
+		<CODE>IBOutlet NSColorWell *<B>textColor</B>;</CODE><BR>
+		<CODE>id <B>theController</B>;</CODE><BR>
+		<CODE>NSImage *<B>rampImage</B>;</CODE><BR>
+		<CODE>NSBitmapImageRep *<B>bitmap</B>;</CODE><BR>
+		<CODE>unsigned char *<B>planes</B>[3];</CODE><BR>
+	<P><TABLE>
+	
+		<TR><TD>axisColor</TD><TD>color for x,y[,z] axes, tickmarks and labels</TD></TR>
+	
+		<TR><TD>backgroundColor</TD><TD>backdrop color</TD></TR>
+	
+		<TR><TD>gridlineColor</TD><TD>color for gridlines</TD></TR>
+	
+		<TR><TD>lineColor1</TD><TD>indexed color 1</TD></TR>
+	
+		<TR><TD>lineColor2</TD><TD>indexed color 2</TD></TR>
+	
+		<TR><TD>lineColor3</TD><TD>indexed color 3</TD></TR>
+	
+		<TR><TD>lineColor4</TD><TD>indexed color 4</TD></TR>
+	
+		<TR><TD>lineColor5</TD><TD>indexed color 5</TD></TR>
+	
+		<TR><TD>lineColor6</TD><TD>indexed color 6</TD></TR>
+	
+		<TR><TD>lineColor7</TD><TD>indexed color 7</TD></TR>
+	
+		<TR><TD>lineColor8</TD><TD>indexed color 8</TD></TR>
+	
+		<TR><TD>lineColor9</TD><TD>indexed color 9</TD></TR>
+	
+		<TR><TD>maxColor</TD><TD>gradient max color</TD></TR>
+	
+		<TR><TD>minColor</TD><TD>gradient min color</TD></TR>
+	
+		<TR><TD>surfaceRampImage</TD><TD>shows the gradient to the user</TD></TR>
+	
+		<TR><TD>textColor</TD><TD>Not implemented, see axisColor</TD></TR>
+	
+		<TR><TD>theController</TD><TD>sets itself at init</TD></TR>
+	
+		<TR><TD>rampImage</TD><TD>Preview of the continuos colormap (&quot;coloraxis&quot;)</TD></TR>
+	
+		<TR><TD>bitmap</TD><TD>the raw bitmap that used in rampImage</TD></TR>
+	
+		<TR><TD>planes</TD><TD>the R, G and B planes for the raw bitmap (each is 1x64 pixels)</TD></TR>
+	
+	</TABLE>
+	</blockquote>
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Method Types</H2>
+	<blockquote>
+	
+		
+			IBActions
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- applyPressed:">- applyPressed:</A></DD>
+		
+			<DD> <A HREF="#- didSetMinColor:">- didSetMinColor:</A></DD>
+		
+			<DD> <A HREF="#- didSetMaxColor:">- didSetMaxColor:</A></DD>
+		
+		</DL>
+	
+		
+			internal methods
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#- updateRampImage">- updateRampImage</A></DD>
+		
+			<DD> <A HREF="#- mainWindowChanged:">- mainWindowChanged:</A></DD>
+		
+		</DL>
+	
+	</blockquote>
+
+
+
+
+ 
+
+	<HR WIDTH=50% ALIGN=LEFT>
+	<H2>Instance Methods</H2>
+ 
+	
+		
+		<A NAME="- applyPressed:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/applyPressed:">applyPressed:</A></H3><P>
+		<CODE>- (IBAction)<B>applyPressed:</B>(id)<EM>sender</EM>
+			
+		</CODE><P>
+		create new AQTColorMap from the current settings, and update the active AQTModel
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- didSetMaxColor:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/didSetMaxColor:">didSetMaxColor:</A></H3><P>
+		<CODE>- (IBAction)<B>didSetMaxColor:</B>(id)<EM>sender</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- didSetMinColor:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/didSetMinColor:">didSetMinColor:</A></H3><P>
+		<CODE>- (IBAction)<B>didSetMinColor:</B>(id)<EM>sender</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- mainWindowChanged:"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/mainWindowChanged:">mainWindowChanged:</A></H3><P>
+		<CODE>- (void)<B>mainWindowChanged:</B>(NSNotification *)<EM>notification</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- updateRampImage"></A><H3><A NAME="//apple_ref/occ/instm/AQTColorInspector/updateRampImage">updateRampImage</A></H3><P>
+		<CODE>- (void)<B>updateRampImage</B>
+		</CODE><P>
+		display the current gradient in the inspector
+	
+
+
+
+
+<P><HR>
+Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
+<P>
+</BODY></HTML>
