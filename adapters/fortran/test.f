@@ -23,8 +23,9 @@ C
 C     Open a new graph for drawing into
       CALL aqt_open(1)
 C     Set the title (Default is "Figure n")
-      CALL aqt_title("Test of c2aqt")
-      CALL aqt_textjust(LEFT)
+      CALL aqt_title("Test of f2aqt")
+C     Set text justification: 0 = left, 1 = center, 2 = right
+      CALL aqt_textjust(0)
       DO 10 i = 0, 3
 C     Select the pen color (default is 0)
          CALL aqt_use_color(i)
@@ -45,7 +46,7 @@ C     Open a new graph for drawing into
 C     Get the size of the canvas
       CALL aqt_get_size(x_max, y_max)
 C     Set the title (Default is "Figure n")
-      CALL aqt_title("More tests of c2aqt")
+      CALL aqt_title("More tests of f2aqt")
 C     Set the linewidth (default is 1.0)
       CALL aqt_linewidth(1.0)
 C     Draw a circle
