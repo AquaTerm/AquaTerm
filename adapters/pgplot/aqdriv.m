@@ -305,50 +305,29 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       {
          static int vCount = 0;
          static int vMax = 0;
-         static int vStore = 0;
-         static NSPoint *vertices = nil;
-         LOG(@"IFUNC=20, Polygon fill"); // FIXME (clean this code)
-
+         LOG(@"IFUNC=20, Polygon fill"); 
          if (vMax == 0)
          {
             // First call
             vMax = (int)rbuf[0];
             vCount = 0;
-            if (vMax > vStore)
-            {
-               // Allocate memory
-               int tmpStoreSize = 2*vMax;
-               if (vertices)
-               {
-                  free(vertices);
-               }
-               if (vertices = (NSPoint *)malloc(tmpStoreSize*sizeof(NSPoint)))
-               {
-                  vStore = tmpStoreSize;
-                  LOG(@"vStore is now: %d", vStore);
-               }
-               else
-               {
-                  NSLog(@"Error allocating memory.");
-               }
-            }
          }
          else
          {
-            if(vertices)
+            if (vCount == 0)
             {
-               vertices[MIN(vCount, vStore-1)] = NSMakePoint(rbuf[0], rbuf[1]);
+               [adapter moveToVertexPoint:NSMakePoint(rbuf[0], rbuf[1])];
+            }
+            else
+            {
+               [adapter addEdgeToPoint:NSMakePoint(rbuf[0], rbuf[1])];
             }
             vCount++;
             if (vCount == vMax)
             {
-               if(vertices)
-               {
-                  [adapter addPolygonWithPoints:vertices pointCount:MIN(vMax, vStore)];
-               }
                vMax = 0;
             }
-         }
+         }            
       }
          break;
 
