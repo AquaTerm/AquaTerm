@@ -42,10 +42,8 @@ void initAdapter(void)
   // Either first time or an error has occurred
   [arpool release]; // clean
   arpool = [[NSAutoreleasePool alloc] init];
-#ifdef LOGGING
-  [NSAutoreleasePool resetTotalAutoreleasedObjects];
-#endif  
   adapter = [[AQTAdapter alloc] init];
+  [adapter setErrorHandler:errorHandler];
 }
 
 static int currentDevice = 0;
@@ -179,12 +177,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 10:
       LOG(@"FUNC=10, Close workstation (currentDevice = %d)", currentDevice );
       [adapter closePlot];
-/*
- [adapter autorelease];
-      adapter = nil;
-      [arpool release];
-      arpool = nil;
-*/
       break;
 
       //--- IFUNC=11, Begin picture -------------------------------------------
@@ -238,22 +230,15 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 14:
        LOG(@"IFUNC=14, End picture (%f)", rbuf[0]);
-       if (rbuf[0] != 0.0)
+       if (0 != (int)rbuf[0])
        {
-          // clear screen
-          LOG(@"Clearing screen");
-          [adapter clearPlot];
+          // Clear screen, using (ii) below
+          // Either i) specify 'V' for device capab. 7 and _close_ win after prompt
+          // or ii) specify 'N' for device capab. 7 and leave plot window open and visible, no prompt
+          //
+          // [adapter clearPlot];
+          // [adapter closePlot]
        }
-       // [adapter closePlot]
-       //
-       // Clear out the autoreleasepool at the end of every picture (move?)
-       //
-       LOG(@"Releasing arpool, freeing %d objects.",[NSAutoreleasePool totalAutoreleasedObjects]);
-        //[arpool release];
-        //arpool = [[NSAutoreleasePool alloc] init];
-#ifdef LOGGING
-       [NSAutoreleasePool resetTotalAutoreleasedObjects];
-#endif
        break;
 
       //--- IFUNC=15, Select color index --------------------------------------
@@ -301,7 +286,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        switch ([[eventData objectAtIndex:0] intValue])
        {
           case 0:
-             NSLog(@"Timeout...");
              break;
           case 1: // Mouse down
              pos = NSPointFromString([eventData objectAtIndex:1]);
