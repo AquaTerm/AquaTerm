@@ -6,14 +6,9 @@
 //  Copyright (c) 2003 AquaTerm. All rights reserved.
 //
 
-#import <ApplicationServices/ApplicationServices.h>
-
 #import "AQTAdapter.h"
-#import "AQTAdapterPrivateMethods.h"
-#import "AQTGraphic.h"
-#import "AQTImage.h"
+#import "AQTClientManager.h"
 #import "AQTPlotBuilder.h"
-#import "AQTConnectionProtocol.h"
 
 @implementation AQTAdapter
 /*" AQTAdapter is a class that provides an interface to the functionality of AquaTerm.
@@ -51,44 +46,26 @@ Event handling of user input is provided through an optional callback function.
 !{gcc main.m -o aqtex -I/Users/per/include -L/Users/per/lib -laqt -framework Foundation}
 "*/
 
-- (void)_aqtNoSelectedBuilder
-{
-   NSLog(@"Error: no valid plot selected.");
-}
-
-- (NSNumber *)_aqtKeyForBuilder:(AQTPlotBuilder *)aBuilder
-{
-   if (aBuilder != nil)
-   {
-      NSArray *keys = [_builders allKeysForObject:aBuilder];
-      if ([keys count] > 0)
-      {
-         return [keys objectAtIndex:0];
-      }
-   }
-   return nil;
-}
-
-
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
 -(id)initWithServer:(id)localServer
 {
    if(self = [super init])
    {
-      _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
-      _eventBuffer = [[NSMutableDictionary alloc] initWithCapacity:256];
-      if(localServer)
+      BOOL serverIsOK = YES;
+      _clientManager = [AQTClientManager sharedManager];
+      
+      if (localServer)
       {
-         _server = localServer;
+         [_clientManager setServer:localServer];
       }
       else
       {
-         if([self _connectToServer] == NO)
-         {
-            // FIXME: Check up on this
-            [self autorelease];
-            self = nil;
-         }
+         serverIsOK = [_clientManager connectToServer];
+      }
+      if (!serverIsOK)
+      {
+         [self autorelease];
+         self = nil;
       }
    }
    return self;
@@ -102,33 +79,14 @@ Event handling of user input is provided through an optional callback function.
 
 - (void)dealloc
 {
-   // Must come before others, see AQTPlotBuilder
-   NS_DURING
-      NSEnumerator *enumObjects = [_builders objectEnumerator];
-      AQTPlotBuilder *aBuilder;
-      while (aBuilder = [enumObjects nextObject])
-      {
-         if ([_server removeAQTClient:aBuilder] == NO)
-         {
-            NSLog(@"Couldn't remove remote client lock, leaking");
-         }
-      }
-      NS_HANDLER
-         NSLog(@"Discarding exception...");
-      NS_ENDHANDLER
-      [_builders release];
-      [_eventBuffer release];
-      if([_server isProxy])
-      {
-         [_server release];
-      }
-      [super dealloc];
+   [_clientManager terminateConnection]; 
+   [super dealloc];
 }
 
 /*" Optionally set an error handling routine of the form #customErrorHandler(NSString *errMsg) to override default behaviour. "*/
 - (void)setErrorHandler:(void (*)(NSString *errMsg))fPtr
 {
-   _errorHandler = fPtr;
+   [_clientManager setErrorHandler:fPtr];
 }
 
 /*" Optionally set an event handling routine of the form #customEventHandler(int index, NSString *event).
@@ -141,7 +99,7 @@ _{1:%{x,y}:%button MouseDownEvent }
 _{2:%{x,y}:%key KeyDownEvent } "*/
 - (void)setEventHandler:(void (*)(int index, NSString *event))fPtr
 {
-   _eventHandler = fPtr;
+   [_clientManager setEventHandler:fPtr];
 }
 
 #pragma mark === Control operations ===
@@ -152,45 +110,26 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 {
    if ([self selectPlotWithIndex:refNum])
    {
-      // already exists, just select and reset
+      // already exists, just clear it
       [self clearPlot];
    }
    else
    {
-      // create a new builder and request a new handler from the server
-      AQTPlotBuilder *newBuilder = [[AQTPlotBuilder alloc] init];
-      id newHandler;
-      NS_DURING
-         newHandler = [_server addAQTClient:newBuilder
-                                       name:[[NSProcessInfo processInfo] processName]
-                                        pid:[[NSProcessInfo processInfo] processIdentifier]];
-      NS_HANDLER
-         if ([[localException name] isEqualToString:NSInvalidSendPortException])
-            [self _serverError:[localException name]];
-         else
-            [localException raise];
-      NS_ENDHANDLER
-      if (newHandler)
-      {
-         [_builders setObject:newBuilder forKey:[NSNumber numberWithInt:refNum]];
-         [newBuilder setHandler:newHandler];
-         [newBuilder setOwner:self];
-         _selectedBuilder = newBuilder;
-      }
-      [newBuilder release];
+      _selectedBuilder = [_clientManager newPlotWithIndex:refNum];
    }
 }
 
 /*" Get the plot referenced by refNum and make it the target for subsequent commands. If no plot exists for refNum, the currently targeted plot remain unchanged. Disables event handling for previously targeted plot. Returns YES on success. "*/
 - (BOOL)selectPlotWithIndex:(int)refNum
 {
-   AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSNumber numberWithInt:refNum]];
-   if(tmpBuilder)
+   BOOL didChangePlot = NO;
+   AQTPlotBuilder *tmpBuilder = [_clientManager selectPlotWithIndex:refNum];
+   if (tmpBuilder != nil)
    {
       _selectedBuilder = tmpBuilder;
-      return YES;
+      didChangePlot = YES;
    }
-   return NO;
+   return didChangePlot;
 }
 
 /*" Set the limits of the plot area. Must be set %before any drawing command following an #openPlotWithIndex: or #clearPlot command or behaviour is undefined.  "*/
@@ -210,67 +149,47 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 {
    if(_selectedBuilder)
    {
-      [_selectedBuilder render];
+      [_clientManager renderPlot];
    }
    else
    {
-      [self _aqtNoSelectedBuilder];
+      // Just inform user about what is going on...
+      [_clientManager logMessage:@"Warning: No plot selected" logLevel:2];
    }
 }
 
 /*" Clears the current plot and resets default values. To keep plot settings, use #eraseRect: instead. "*/
 - (void)clearPlot
 {
-   if (_selectedBuilder)
-   {
-      [_selectedBuilder clearAll];
-      [_selectedBuilder render];
-   }
+      [_clientManager clearPlot];
 }
 
 /*" Closes the current plot but leaves viewer window on screen. Disables event handling. "*/
-- (void)closePlot
+- (void)closePlot 
 {
-   if (_selectedBuilder)
-   {
-      NS_DURING
-         if ([_server removeAQTClient:_selectedBuilder] == NO)
-         {
-            NSLog(@"Couldn't remove remote client lock, leaking");
-         }
-         NS_HANDLER
-            NSLog(@"Discarding exception...");
-         NS_ENDHANDLER
-         [_builders removeObjectForKey:[self _aqtKeyForBuilder:_selectedBuilder]];
-         _selectedBuilder = nil;
-   }
+   [_clientManager closePlot];
+   _selectedBuilder = nil;
 }
 
 #pragma mark === Event handling ===
 
 /*" Inform AquaTerm whether or not events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events. "*/
-- (void)setAcceptingEvents:(BOOL)flag
+- (void)setAcceptingEvents:(BOOL)flag 
 {
-   // Flush event buffer for the selected view
-   [_eventBuffer setObject:@"0" forKey:[self _aqtKeyForBuilder:_selectedBuilder]];
-   [_selectedBuilder setAcceptingEvents:flag];
+   [_clientManager setAcceptingEvents:flag]; 
 }
 
 /*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
 - (NSString *)lastEvent
 {
-   NSString *event;
-   NSNumber *key = [self _aqtKeyForBuilder:_selectedBuilder];
-   event = [[[_eventBuffer objectForKey:key] copy] autorelease];
-   [_eventBuffer setObject:@"0" forKey:key];
-   return event;
+   return [_clientManager lastEvent]; 
 }
 
 - (NSString *)waitNextEvent // FIXME: timeout? Hardcoded to 60s
 {
-   NSString *event;
+ NSString *event;
    BOOL isRunning;
-   [_selectedBuilder setAcceptingEvents:YES];
+   [self setAcceptingEvents:YES];
    do {
       isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:60.0]];
       event = [self lastEvent];
@@ -279,19 +198,8 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
          isRunning = NO;
       }
    } while (isRunning);
-   [_selectedBuilder setAcceptingEvents:NO];
+   [self setAcceptingEvents:NO];
    return event;
-}
-
-- (void)processEvent:(NSString *)event sender:(id)sender // FIXME: Make private
-{
-
-   NSNumber *key = [self _aqtKeyForBuilder:sender];
-   if (_eventHandler != nil)
-   {
-      _eventHandler([key intValue], event);
-   }
-   [_eventBuffer setObject:event forKey:key];
 }
 
 #pragma mark === Plotting commands ===
@@ -299,12 +207,17 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Return the number of color entries availabel in the currently active colormap. "*/
 - (int)colormapSize
 {
+   int size = 0;
    if (_selectedBuilder)
    {
-      return [_selectedBuilder colormapSize];
+      size = [_selectedBuilder colormapSize];
    }
-   [self _aqtNoSelectedBuilder];
-   return 0;
+   else
+   {
+      // Just inform user about what is going on...
+      [_clientManager logMessage:@"Warning: No plot selected" logLevel:2];
+   }
+   return size;
 }
 
 /*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
@@ -459,7 +372,7 @@ Default is RoundLineCapStyle. "*/
 /*" Remove any objects inside aRect."*/
 - (void)eraseRect:(NSRect)aRect
 {
-   [_selectedBuilder eraseRect:aRect];
+   NSLog(@"implement --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 }
 
 /*" Set a transformation matrix for images added by #)addTransformedImageWithBitmap:size:clipRect:, see NSImage documentation for details. "*/
@@ -495,8 +408,5 @@ Default is RoundLineCapStyle. "*/
 {
    [_selectedBuilder addTransformedImageWithBitmap:bitmap size:bitmapSize clipRect:destBounds];
 }
-
-
-
 @end
 

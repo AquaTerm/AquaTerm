@@ -11,7 +11,6 @@
 #import "AQTModel.h"
 #import "AQTLabel.h"
 #import "AQTPath.h"
-//#import "AQTPatch.h"
 #import "AQTImage.h"
 #import "AQTColorMap.h"
 
@@ -82,16 +81,22 @@
 
 - (void)dealloc
 {
-   [_handler release];
    [_model release];
    [_colormap release];
    [super dealloc];
 }
 
--(void)setOwner:(id)object
+- (BOOL)modelIsDirty
 {
-   owner = object;
+   return _modelIsDirty;
 }
+
+- (AQTModel *)model
+{
+   [self _flushBuffers];
+   return _model;
+}
+
 
 - (void)setSize:(NSSize)canvasSize
 {
@@ -101,13 +106,6 @@
 - (void)setTitle:(NSString *)title
 {
    [_model setTitle:title];
-}
-
-- (void)setHandler:(id)newHandler
-{
-   [newHandler retain];
-   [_handler release];
-   _handler = newHandler;
 }
 
 - (AQTColor)color
@@ -191,7 +189,9 @@
 
 - (void)eraseRect:(NSRect)aRect
 {
-   NS_DURING
+   NSLog(@"refactor --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+/*
+ NS_DURING
       [_handler removeGraphicsInRect:aRect];
    NS_HANDLER
       if((nil != owner) && [owner respondsToSelector:@selector(_handlerError:)])
@@ -199,74 +199,21 @@
       else
          [localException raise];
    NS_ENDHANDLER
+*/
 }
 
-- (void)render
-{
-   if (_modelIsDirty && !NSEqualSizes([_model canvasSize], NSZeroSize))
-   {
-      [self _flushBuffers];
-      [self _aqtPlotBuilderSetModelIsDirty:NO];
-      NS_DURING
-         if (_shouldAppend == YES)
-         {
-            [_handler appendPlot:_model];
-            if([_handler isProxy])
-               [_model removeAllModelObjects];
-         }
-         else
-         {
-            [_handler setPlot:_model];
-            if([_handler isProxy])
-               [_model removeAllModelObjects];
-            if(NSEqualSizes([_model canvasSize], NSZeroSize) == NO)
-            {
-               _shouldAppend = YES;
-            }
-         }
-      NS_HANDLER
-         if((nil != owner) && [owner respondsToSelector:@selector(_handlerError:)])
-            [owner _handlerError:[localException name]]; 
-         else
-            [localException raise];
-      NS_ENDHANDLER
-   }
-}
-
-- (void)clearAll
+- (void)clearAll 
 {
    // Honor size, title and background color
    AQTModel *newModel = [[AQTModel alloc] initWithSize:[_model size]];
+   [self _flushBuffers];
    [newModel setTitle:[_model title]];
    [newModel setColor:[_model color]];
    [_model release];
    _model = newModel;
    [self _aqtPlotBuilderSetDefaultValues]; // FIXME: colormap etc. too
-   [self _flushBuffers];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
-   _shouldAppend = NO;
-   [self render];
 }
-
-
-- (void)setAcceptingEvents:(BOOL)flag
-{
-   NS_DURING
-      [_handler setAcceptingEvents:flag];
-   NS_HANDLER
-      if((nil != owner) && [owner respondsToSelector:@selector(_handlerError:)])
-         [owner _handlerError:[localException name]]; 
-      else
-         [localException raise];
-   NS_ENDHANDLER
-}
-
-
-- (void)processEvent:(NSString *)event
-{
-   [owner processEvent:event sender:self]; // FIXME: Needs autoreleasing here???
-}
-
 //
 // AQTLabel
 //
@@ -304,7 +251,6 @@
 //
 // AQTPath
 //
-
 - (void)moveToPoint:(NSPoint)point
 {
    [self _flushPolygonBuffer]; // FIXME: expose flush methods in API?

@@ -32,17 +32,14 @@
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
   BOOL _shouldAppend;
   AQTAffineTransformStruct _transform;
-  NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
-  id owner;
   AQTColorMap *_colormap;
 }
 
 /*" Acessors "*/
+- (BOOL)modelIsDirty;
+- (AQTModel *)model;
 - (void)setSize:(NSSize)canvasSize;
 - (void)setTitle:(NSString *)title;
-- (void)setHandler:(id)newHandler; // factor out
-- (void)setOwner:(id)object; // factor out
-
 
   /*" Color handling "*/
 - (AQTColor)color;
@@ -80,11 +77,5 @@
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
 
   /*" Control operations "*/
-- (void)eraseRect:(NSRect)aRect;  // factor out
-- (void)render;  // factor out
-- (void)clearAll;   // factor out
-
-   /*" Interactions with user "*/
-- (void)setAcceptingEvents:(BOOL)flag;  // factor out
-- (void)processEvent:(NSString *)event;  // factor out
+- (void)clearAll;
 @end

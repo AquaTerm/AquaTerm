@@ -8,8 +8,6 @@
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSGeometry.h>
-#import <Foundation/NSDistantObject.h>
-#import <Foundation/NSDictionary.h>
 
 /*" Constants that specify linecap styles. "*/
 extern const int AQTButtLineCapStyle;
@@ -26,19 +24,14 @@ extern const int AQTAlignBaseline;
 extern const int AQTAlignBottom;
 extern const int AQTAlignTop;
 
-@protocol AQTConnectionProtocol;
-@class AQTPlotBuilder;
+@class AQTPlotBuilder, AQTClientManager;
 @interface AQTAdapter : NSObject
 {
-  /*" All instance variables are private. "*/
-  NSDistantObject <AQTConnectionProtocol> *_server; /* The viewer app's (AquaTerm) default connection */
-  NSMutableDictionary *_builders; /* The objects responsible for assembling a model object from client's calls. */
-  AQTPlotBuilder *_selectedBuilder;
-  void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
-  void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
-  id _eventBuffer;
-  id _aqtReserved1;
-  id _aqtReserved2;
+   /*" All instance variables are private. "*/
+   AQTClientManager *_clientManager;
+   AQTPlotBuilder *_selectedBuilder;
+   id _aqtReserved1;
+   id _aqtReserved2;
 }
 
 /*" Class initialization "*/
@@ -78,7 +71,7 @@ extern const int AQTAlignTop;
   /*" Text handling "*/
 - (void)setFontname:(NSString *)newFontname;
 - (void)setFontsize:(float)newFontsize;
-- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just;// FIXME: position --> atPoint
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just;
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;
