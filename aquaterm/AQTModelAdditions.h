@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "AQTModel.h"
-#import "AQTFunctions.h"
 
 @interface AQTModel (AQTModelAdditions)
 -(void)invalidate;

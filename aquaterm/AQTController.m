@@ -8,6 +8,7 @@
 
 #import "AQTController.h"
 #import "AQTPrefController.h"
+#import "AQTAdapter.h"
 
 #import "AQTPlot.h"
 #import <Message/NSMailDelivery.h>

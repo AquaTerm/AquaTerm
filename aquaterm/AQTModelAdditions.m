@@ -8,6 +8,7 @@
 
 #import "AQTModelAdditions.h"
 #import "AQTGraphicDrawingMethods.h"
+#import "AQTFunctions.h"
 
 @implementation AQTModel (AQTModelAdditions)
 -(void)invalidate
