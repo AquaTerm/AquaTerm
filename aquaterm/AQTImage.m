@@ -43,9 +43,7 @@
 
 -(NSRect)bounds
 {
-  // NSRect theBounds = NSMakeRect(0,0,0,0);
-  // theBounds.size = [image size];
-  return renderBounds; //theBounds;
+  return renderBounds;
 }
 
 -(void)updateColors:(AQTColorMap *)colorMap
