@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by Per Persson on Mon Jun 09 2003.
-//  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2003 AquaTerm. All rights reserved.
 //
 
 #import "AQTClientHandler.h"
@@ -44,7 +44,8 @@
 /*" The following methods applies to the currently selected view "*/
 -(void)setModel:(id)aModel
 {
-  // Stub model
+/*
+ // Stub model
   AQTModel *stub = [[AQTModel alloc] initWithSize:NSMakeSize(300,200)];
   AQTColorMap *cm = [[AQTColorMap alloc] init];
   AQTLabel *lb = [[AQTLabel alloc] initWithAttributedString:[[[NSAttributedString alloc]initWithString:@"Hello world!"] autorelease]
@@ -61,6 +62,12 @@
   [lb release];
   [cm release];
   [stub release];
+*/
+  AQTColorMap *cm = [[AQTColorMap alloc] init];
+  [aModel setColormap:cm];
+  [aModel updateColors:cm];
+  [owner setModel:aModel forView:currentView];
+  [cm release];
 }
 
 -(NSDictionary *)status

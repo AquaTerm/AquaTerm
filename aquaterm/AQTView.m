@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by Per Persson on Wed Apr 17 2002.
-//  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2001 AquaTerm. All rights reserved.
 //
 
 #import "AQTView.h"
@@ -14,9 +14,9 @@
 #import "AQTImage.h"
 #import "AQTColorMap.h"
 
-#define MIN_FONTSIZE 9.0
+#define AQT_MIN_FONTSIZE 9.0
 
-#define MAX(a, b) ((a)>(b)?(a):(b))
+//#define MAX(a, b) ((a)>(b)?(a):(b))
 
 @interface AQTGraphic (AQTGraphicDrawing)
 -(void)renderInRect:(NSRect)boundsRect;
@@ -120,7 +120,7 @@
   {
     NSFont *tmpFont = [[tmpString attributesAtIndex:i effectiveRange:nil] objectForKey:NSFontAttributeName];
     [tmpString addAttribute:NSFontAttributeName
-                      value:[NSFont fontWithName:[tmpFont fontName] size:MAX([tmpFont pointSize]*fontScale, MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
+                      value:[NSFont fontWithName:[tmpFont fontName] size:MAX([tmpFont pointSize]*fontScale, AQT_MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
   }
   boundingBox = [tmpString size];
   //

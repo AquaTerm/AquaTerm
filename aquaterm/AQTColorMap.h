@@ -6,7 +6,8 @@
 //  Copyright (c) 2002 Aquaterm. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 @interface AQTColorMap : NSObject	
 {

@@ -10,11 +10,6 @@
 #import <AppKit/AppKit.h>
 #import "AQTGraphic.h"
 
-/*" Justification Constants "*/
-#define justifyLeft 0
-#define justifyCenter 1
-#define justifyRight 2
-
 @interface AQTLabel : AQTGraphic /*" NSObject "*/
 {
     NSAttributedString *string;		/*" The text (label, legend etc.) "*/
