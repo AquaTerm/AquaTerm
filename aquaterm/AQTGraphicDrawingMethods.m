@@ -129,6 +129,8 @@
    NSSize tmpSize;
    NSPoint adjust = NSZeroPoint;
    NSPoint pos = NSZeroPoint;
+   float leftUnderlineEdge;
+   BOOL underlineState = NO;
    //
    // appendBezierPathWithGlyph needs a valid context...
    //
@@ -139,10 +141,28 @@
    [tmpPath moveToPoint:pos];
    for(i=0; i<strLen; i++)
    {
-      // FIXME: Honor attributes here (NSSuperscriptAttributeName, NSUnderlineStyleAttributeName) 
+      // FIXME: Honor attributes here (NSSuperscriptAttributeName, NSUnderlineStyleAttributeName)
       NSGlyph theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+     NSDictionary *attrDict = [string attributesAtIndex:i effectiveRange:nil];     
       NSSize offset = [aFont advancementForGlyph:theGlyph];
       [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+      // underlining
+      if(underlineState == NO)
+      {
+        if ([attrDict valueForKey:NSUnderlineStyleAttributeName])
+        {
+          leftUnderlineEdge = pos.x;
+          underlineState = YES;
+        }
+      }
+      else
+      {
+        if (![attrDict valueForKey:NSUnderlineStyleAttributeName])
+        {
+          [tmpPath appendBezierPathWithRect:NSMakeRect(leftUnderlineEdge, -1.0, pos.x + offset.width - leftUnderlineEdge, 0.5)];
+          underlineState = NO;
+        }
+      }
       pos.x += offset.width;
       pos.y += offset.height;
       [tmpPath moveToPoint:pos];
