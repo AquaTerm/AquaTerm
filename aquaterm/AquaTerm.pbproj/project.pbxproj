@@ -283,6 +283,8 @@
 				F55D242601C11B5201A80104,
 				F5653B8201C4B8F201A80104,
 				F53901BF01DF8C78014110A7,
+				F50F0B520205D1AF01AA2E68,
+				F50F0B560205D23401AA2E68,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -296,7 +298,6 @@
 				F5FEAC2901A7219B0143D50D,
 				F51551CD01FE762E01000102,
 				F54B0FE501FF3656014110A7,
-				F54B0FE701FF5CDC014110A7,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -315,6 +316,8 @@
 				F55D242B01C11B5201A80104,
 				F5653B8301C4B8F201A80104,
 				F53901C001DF8C78014110A7,
+				F50F0B530205D1AF01AA2E68,
+				F50F0B570205D23401AA2E68,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -374,6 +377,50 @@
 //F52
 //F53
 //F54
+		F50F0B500205D1AF01AA2E68 = {
+			isa = PBXFileReference;
+			path = AQTColorInspector.m;
+			refType = 4;
+		};
+		F50F0B510205D1AF01AA2E68 = {
+			isa = PBXFileReference;
+			path = AQTColorInspector.h;
+			refType = 4;
+		};
+		F50F0B520205D1AF01AA2E68 = {
+			fileRef = F50F0B510205D1AF01AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F50F0B530205D1AF01AA2E68 = {
+			fileRef = F50F0B500205D1AF01AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F50F0B540205D23401AA2E68 = {
+			isa = PBXFileReference;
+			path = AQTColorMap.h;
+			refType = 4;
+		};
+		F50F0B550205D23401AA2E68 = {
+			isa = PBXFileReference;
+			path = AQTColorMap.m;
+			refType = 4;
+		};
+		F50F0B560205D23401AA2E68 = {
+			fileRef = F50F0B540205D23401AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F50F0B570205D23401AA2E68 = {
+			fileRef = F50F0B550205D23401AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F51551CC01FE762E01000102 = {
 			isa = PBXFileReference;
 			name = ColorInspector.nib;
@@ -425,12 +472,6 @@
 			name = ExtendSavePanel.nib;
 			path = English.lproj/ExtendSavePanel.nib;
 			refType = 4;
-		};
-		F54B0FE701FF5CDC014110A7 = {
-			fileRef = F54B0FE601FF5CDC014110A7;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F55D241701C0F0F501A80104 = {
 			isa = PBXFileReference;
@@ -668,6 +709,8 @@
 		};
 		F5AB089A0175CCF101EB16F3 = {
 			children = (
+				F50F0B510205D1AF01AA2E68,
+				F50F0B500205D1AF01AA2E68,
 				F5AB08760175BC8B01EB16F3,
 				F5AB08770175BC8B01EB16F3,
 				F5AB086D0175BC8B01EB16F3,
@@ -690,6 +733,8 @@
 				F55D241C01C0F0F501A80104,
 				F5653B8001C4B8F201A80104,
 				F5653B8101C4B8F201A80104,
+				F50F0B540205D23401AA2E68,
+				F50F0B550205D23401AA2E68,
 			);
 			isa = PBXGroup;
 			name = Model;

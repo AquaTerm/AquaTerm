@@ -27,12 +27,12 @@
     path = [[NSBezierPath bezierPath] retain];
     [path appendBezierPath:aPath];
     mappedColor = gray;
-    indexedColor = cIndex;
+    colorIndex = cIndex;
     hasIndexedColor = icFlag;
     
     if (hasIndexedColor)
     {
-      [self setColorFromIndex:indexedColor];	
+      [self setColorFromIndex:colorIndex];	
     }
     else
     {

@@ -1,6 +1,9 @@
+//
+// GPTWindowController.h
+// Aquaterm
+//
+
 #import <Cocoa/Cocoa.h>
-// #import "GPTModel.h"
-// #import "GPTView.h"
 
 @class AQTModel, GPTView;
 

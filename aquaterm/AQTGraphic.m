@@ -62,9 +62,9 @@
     *** colors. The index is taken modulo max_number_of_colors.
     *** Negative numbers have special meanings (-2 = axes, -1 = grid).
     "**/
--(void)setColorFromIndex:(int)colorIndex
+-(void)setColorFromIndex:(int)theIndex
 {
-    switch (colorIndex % 9)
+    switch (theIndex % 9)
     {
         case -3:	// XOR, solid 
             [self setColor:[NSColor yellowColor]];
@@ -105,6 +105,15 @@
         default:
             [self setColor:[NSColor yellowColor]];
        } 
+}
+
+-(void)updateColors:(AQTColormap *)colorMap {
+    if (hasIndexedColor)
+        [self setColor:[NSString stringWithFormat:@"%d",colorIndex]];
+    else {
+        // do whatever is necessary for continuous color mode here
+        // FIXME
+    }
 }
 
 @end

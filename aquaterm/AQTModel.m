@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by per on Fri Nov 02 2001.
-//  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2001 Aquaterm. All rights reserved.
 //
 
 #import "AQTModel.h"
@@ -85,4 +85,19 @@
        [graphic renderInRect:boundsRect];
     }
 }
+
+// -- updateColors: --
+// 	override parent class' implementation
+-(void) updateColors:(AQTColormap *)colorMap;
+{
+    AQTGraphic *graphic;
+    NSEnumerator *enumerator = [modelObjects objectEnumerator];
+
+    // [self setColormap: colorMap]; // FIXME -- what was this supposed to do?
+    while ((graphic = [enumerator nextObject]))
+    {
+        [graphic updateColors:colorMap];
+    }
+}
+
 @end

@@ -3,15 +3,19 @@
 //  AquaTerm
 //
 //  Created by per on Fri Nov 02 2001.
-//  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2001 AquaTerm. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "AQTGraphic.h"
 
+@class AQTColorMap;
+
 @interface AQTModel : AQTGraphic 
 {
-    NSMutableArray	*modelObjects;	/*" An array of GPTGraphic objects (leaf or collection) "*/ 
+    NSMutableArray	*modelObjects;	/*" An array of GPTGraphic objects (leaf or collection) "*/
+    AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors -- not currently used? "*/
+
 }
 -(id)init;
 -(void)addObject:(AQTGraphic *)graphic;

@@ -1,4 +1,29 @@
 {
-    IBClasses = ({CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }); 
+    IBClasses = (
+        {
+            ACTIONS = {applyPressed = id; }; 
+            CLASS = AQTColorInspector; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                axisColor = NSColorWell; 
+                backgroundColor = NSColorWell; 
+                borderColor = NSColorWell; 
+                lineColor1 = NSColorWell; 
+                lineColor2 = NSColorWell; 
+                lineColor3 = NSColorWell; 
+                lineColor4 = NSColorWell; 
+                lineColor5 = NSColorWell; 
+                lineColor6 = NSColorWell; 
+                lineColor7 = NSColorWell; 
+                lineColor8 = NSColorWell; 
+                maxColor = NSColorWell; 
+                minColor = NSColorWell; 
+                surfaceRampImage = NSImageView; 
+                textColor = NSColorWell; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
     IBVersion = 1; 
 }
