@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.16 2003/08/05 14:29:48 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.17 2003/08/18 22:01:48 persquare Exp $
  *
  */
 
@@ -78,11 +78,12 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #endif /* PM3D */
 /* End of entries */
 
-#define AQUA_XMAX (11.69*72)  /* = 842, paper width times screen resolution */
-#define AQUA_YMAX (8.26*72)   /* = 595, paper height times screen resolution */
-#define AQUA_VTIC 8     
-#define AQUA_HTIC 8
-#define AQUA_VCHAR 16     /* default font is Times at 16 points */
+#define AQUA_SCALE_FACTOR 10.0                  /* Increase resolution */ 
+#define AQUA_XMAX (11.69*72*AQUA_SCALE_FACTOR)  /* = 842, paper width times screen resolution */
+#define AQUA_YMAX (8.26*72*AQUA_SCALE_FACTOR)   /* = 595, paper height times screen resolution */
+#define AQUA_VTIC (8*AQUA_SCALE_FACTOR)     
+#define AQUA_HTIC (8*AQUA_SCALE_FACTOR)
+#define AQUA_VCHAR (16*AQUA_SCALE_FACTOR)       /* default font is Times at 16 points */
 #define AQUA_HCHAR (AQUA_VCHAR*6/10)
 
 #define PM3D_COLORS 128
@@ -94,20 +95,19 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #ifndef TERM_PROTO_ONLY
 
 #ifdef TERM_BODY
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>
 #import "AQTAdapter.h"
-#import "AQTGraphic.h"
-/*
-#import <Foundation/NSConnection.h>
-#import <Foundation/NSDistantObject.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSPortCoder.h>
-#import <Foundation/NSException.h>
-#import <AppKit/NSColor.h>
-#import <AppKit/NSWorkspace.h>
-#import <AppKit/NSBezierPath.h>
+
+//#import <Foundation/NSConnection.h>
+//#import <Foundation/NSDistantObject.h>
+#import <Foundation/NSAutoreleasePool.h>
+//#import <Foundation/NSPortCoder.h>
+//#import <Foundation/NSException.h>
+//#import <AppKit/NSColor.h>
+//#import <AppKit/NSWorkspace.h>
+//#import <AppKit/NSBezierPath.h>
 #import <stdarg.h>
-*/
+
 
 
 /* Debugging extras */
@@ -126,8 +126,7 @@ static id adapter;    // local object manages the D.O. connection
 static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of gnuTermAccess)
 static char AQUA_title[MAX_LINE_LEN + 1];
 static t_sm_palette *aqua_palette = nil;
-static AQTColor cm[256];
-
+//static AQTColor cm[256];
 //
 // ----------------------------------------------------------------
 // Gnuplot driver implementation
@@ -189,7 +188,7 @@ TERM_PUBLIC void
 AQUA_init()
 {
   float fontSize, fontWHRatio;
-  float vTicSize, pixelWHRatio;
+  // float vTicSize, pixelWHRatio;
   LOG(@"Aqua Init");
   if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
   {
@@ -205,23 +204,23 @@ AQUA_init()
 	//adapter = [[AQTAdapter alloc] init]; 
     }
   }
-  term->xmax =842; //[[[gnuTermAccess termInfo] objectForKey:@"AQTXMax"] unsignedIntValue]; 
-  term->ymax =595; //[[[gnuTermAccess termInfo] objectForKey:@"AQTYMax"] unsignedIntValue]; 
+  term->xmax =842*AQUA_SCALE_FACTOR; //[[[gnuTermAccess termInfo] objectForKey:@"AQTXMax"] unsignedIntValue]; 
+  term->ymax =595*AQUA_SCALE_FACTOR; //[[[gnuTermAccess termInfo] objectForKey:@"AQTYMax"] unsignedIntValue]; 
   fontSize = 16; //[[[gnuTermAccess termInfo] objectForKey:@"AQTFontSize"] floatValue];
   fontWHRatio = .6; //[[[gnuTermAccess termInfo] objectForKey:@"AQTFontWHRatio"] floatValue];
-  pixelWHRatio = 1.0; //[[[gnuTermAccess termInfo] objectForKey:@"AQTPixelWHRatio"] floatValue];
-  vTicSize = AQUA_VTIC;
-  term->v_char = (unsigned int) fontSize;
-  term->h_char = (unsigned int) (fontWHRatio * fontSize);
-  term->v_tic = (unsigned int) vTicSize;
-  term->h_tic = (unsigned int) (vTicSize * pixelWHRatio);
-  //
+  //pixelWHRatio = 1.0; //[[[gnuTermAccess termInfo] objectForKey:@"AQTPixelWHRatio"] floatValue];
+  //vTicSize = AQUA_VTIC;
+ term->v_char = (unsigned int) (fontSize * AQUA_SCALE_FACTOR);
+  term->h_char = (unsigned int) (fontWHRatio * fontSize * AQUA_SCALE_FACTOR);
+  term->v_tic = (unsigned int) AQUA_VTIC;
+  term->h_tic = (unsigned int) AQUA_HTIC;  //
   // Set up the basic indexed colormap for gnuplot
   //
-  cm[0].red = 1.0;
-  cm[1].green = 1.0;
-  cm[2].blue = 1.0;
-  cm[3].red = 1.0;  cm[3].blue = 1.0;
+    [adapter setColorRed:1.0 green:1.0 blue:1.0];
+//  cm[0].red = 1.0;
+//  cm[1].green = 1.0;
+//  cm[2].blue = 1.0;
+//  cm[3].red = 1.0;  cm[3].blue = 1.0;
 //  [gnuTermAccess setColor:[NSColor cyanColor] forIndex:4];
 //  [gnuTermAccess setColor:[NSColor colorWithCalibratedRed:0.627 green:0.322 blue:0.176 alpha:1.0] forIndex:5];   // Sienna
 //  [gnuTermAccess setColor:[NSColor colorWithCalibratedRed:1.0 green: 0.647 blue:0.0 alpha:1.0] forIndex:6];      // Orange
@@ -255,20 +254,20 @@ AQUA_graphics()
 TERM_PUBLIC void
 AQUA_move(unsigned int x, unsigned int y)
 {
-    [adapter addLineAtPoint:NSMakePoint(x, y)];
+    [adapter addLineAtPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
 }
 
 TERM_PUBLIC void
 AQUA_vector(unsigned int x, unsigned int y)
 {
-  [adapter appendLineToPoint:NSMakePoint(x, y)];
+  [adapter appendLineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
 }
 
 TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
   LOG(@"AQUA_linetype(%d)", linetype);
-  [adapter setColor:cm[linetype%CYCLIC_COLORS]];
+  //[adapter setColor:cm[linetype%CYCLIC_COLORS]];
 }
 
 TERM_PUBLIC void
@@ -276,8 +275,8 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
   if (!strlen(str))
     return;
-  [adapter  addLabel:[NSString stringWithCString: str] position:NSMakePoint(x,y) angle:0.0 justification:0];
-  //[gnuTermAccess putText:str at:NSMakePoint(x,y)];
+  [adapter  addLabel:[NSString stringWithCString: str]     position:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR) angle:0.0 justification:0];
+  //[gnuTermAccess putText:str at:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR)];
 }
 
 TERM_PUBLIC int 
@@ -324,14 +323,14 @@ AQUA_point(unsigned int x, unsigned int y, int number)
   {
     double tmplw = [gnuTermAccess linewidth];
     [gnuTermAccess setLinewidth:1.0];
-    [gnuTermAccess moveToPoint:NSMakePoint(x-.5, y)];
-    [gnuTermAccess lineToPoint:NSMakePoint(x+.5, y)];
+    [gnuTermAccess moveToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR-.5, y/AQUA_SCALE_FACTOR)];
+    [gnuTermAccess lineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR +.5, y/AQUA_SCALE_FACTOR)];
     [gnuTermAccess setLinewidth: tmplw];
   }
   else
   {
-    [gnuTermAccess moveToPoint:NSMakePoint(x-.5, y)];
-    [gnuTermAccess lineToPoint:NSMakePoint(x+.5, y)];
+    [gnuTermAccess moveToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR-.5, y/AQUA_SCALE_FACTOR)];
+    [gnuTermAccess lineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR +.5, y/AQUA_SCALE_FACTOR)];
   }
 */
 //  do_point(x, y, number);
@@ -352,7 +351,7 @@ AQUA_resume(void) /* before subsequent plot of multiplot */
 TERM_PUBLIC void 
 AQUA_boxfill(int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height) /* clear part of multiplot */
 {
-  //[gnuTermAccess fillRect:NSMakeRect(x1,y1,width,height) style:style];
+  //[gnuTermAccess fillRect:NSMakeRect(x1/AQUA_SCALE_FACTOR,y1/AQUA_SCALE_FACTOR,width/AQUA_SCALE_FACTOR,height/AQUA_SCALE_FACTOR) style:style];
 }
   
 TERM_PUBLIC void 
@@ -385,13 +384,29 @@ AQUA_pointsize(double pointsize)
   TERM_PUBLIC void 
   AQUA_set_color(double gray)
   {
-    // [adapter setColorRed:gray green:gray blue:gray];
+
+  /*  [adapter setColorRed:aqua_palette->color[pm3dColor].r 
+        green:aqua_palette->color[pm3dColor].g 
+        blue:aqua_palette->color[pm3dColor].b];
+  */
   }
 
   TERM_PUBLIC void 
   AQUA_filled_polygon(int points, gpiPoint *corners)
   {
-    //[gnuTermAccess setPolygonUsing:points corners:corners];
+    int i;
+    gpiPoint *scaledPoints = (gpiPoint *)malloc(points*sizeof(gpiPoint));
+    if (scaledPoints)
+      {
+	/* Need to rescale the point coordinates */
+	for (i=0; i<points; i++)
+	  {
+	    scaledPoints[i].x = corners[i].x / AQUA_SCALE_FACTOR;
+	    scaledPoints[i].y = corners[i].y / AQUA_SCALE_FACTOR;
+	  }
+	//[gnuTermAccess setPolygonUsing:points corners:scaledPoints];
+	free(scaledPoints);
+      }
   }
 #endif /* PM3D */
 
