@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.8 2002/02/05 22:28:18 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.9 2002/04/18 12:22:16 persquare Exp $
  *
  */
 
@@ -15,7 +15,8 @@
  * AUTHORS
  *  Per Persson from openstep.trm by Robert Lutwak
  * 
- * send your comments or suggestions to (info-gnuplot@dartmouth.edu).
+ * Homepage: http://aquaterm.sourceforge.net
+ * send your comments or suggestions to (persquare@users.sourceforge.net).
  *
  * This terminal attempts to connect, via the MacOS X Distributed
  * Objects system, to the "aquatermServer."  If there is no such
@@ -103,6 +104,7 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSPortCoder.h>
 #import <Foundation/NSException.h>
+#import <AppKit/NSColor.h>
 #import <AppKit/NSWorkspace.h>
 #import <AppKit/NSBezierPath.h>
 #import <stdarg.h>
@@ -112,62 +114,107 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 // that AquaTerm responds to
 // ----------------------------------------------------------------
 //
+//
 // Since this header file is used outside of AquaTerm too,
 // the internal version number is defined explicitly here
 //
-#define AQTProtocolVersion 0.2.0
+#define AQTProtocolVersion 0.3.0
 
 @protocol AQTProtocol
-//
-// Return a version number string for AquaTerm in the form #.#.#
-// corresponding to major_version.minor_version.bugfix_version
-// as well as user settings such as default font etc.
-//
+
+/*" State-changing methods "*/
+
+- (oneway void)openModel:(int)newModel;
+- (oneway void)closeModel;
+
+/*" Methods available in both open and closed state "*/
+
 - (bycopy NSDictionary *) getAquaTermInfo;
-//
-// Render the current model, argument is normally YES unless
-// this is part of a multiplot operation with subsequent 
-// drawing to the same model
-//
-- (oneway void) renderInViewShouldRelease:(BOOL)release;
-//
-// remove all objects found _completely_ contained in rect
-//
--(oneway void) clearRect:(NSRect)rect;
-//
-// Add a string to the current model, where:
-// justification is {LEFT=0, CENTER, RIGHT}
-// angle is given in degrees
-// colorIndex is a number in the range -3 and upwards
-// The colors -3, -2, -1 have special meaning and 
-// colors 0 and upwards are taken modulo N (i.e cyclic)
-//
-- (oneway void) addString:(bycopy NSString *)text 
-                  atPoint:(bycopy NSPoint)point 
-        withJustification:(bycopy int)justification 
-                  atAngle:(bycopy float)angle		
-         withIndexedColor:(bycopy int)colorIndex;
-//
-// Set the font for the subsequent strings added to the model
-// (mimics fontWithName: size: method in NSFont)
-//                  
+/*
+Return a dictionary containing useful information such as
+version number string for AquaTerm in the form #.#.#
+corresponding to major_version.minor_version.bugfix_version
+as well as user settings such as canvas size, default font etc.
+
+The following dictionary keys are valid:
+_{AQTVersion					version number string for AquaTerm in the form #.#.#}
+_{AQTXMax						x-size of canvas in points (1/72 inch)}
+_{AQTYMax						y-size of canvas in points (1/72 inch)}
+_{AQTFontWHRatio			ratio of fontWidth to fontHeight}
+_{AQTPixelWHRatio		ratio of pixel with to height on device (always 1.0 for now)}
+_{AQTDefaultFontName	default font (Times Roman)}
+_{AQTDefaultFontSize	default font size (16p)}
+_{AQTFontName				current font}
+_{AQTFontSize				current font size}
+*/
+
+- (oneway void)setTitle:(bycopy NSString *)newTitle;
+/* Set the title for the current model, defaults to 'Figure n'. */
+
 - (oneway void) setFontWithName:(bycopy NSString *)fontName size:(bycopy float)fontSize;
+/*
+Set the font for the subsequent strings added to the model
+(mimics fontWithName: size: method in NSFont)
+*/
+
+-(oneway void)setColor:(bycopy NSColor *)aColor forIndex:(int)colorIndex;
+/* Set the NSColor for a particular entry in the colormap. */
+
+/*" Methods available only in open state "*/
+
+- (oneway void) addString:(bycopy NSString *)text
+                  atPoint:(bycopy NSPoint)point
+        withJustification:(bycopy int)justification
+                  atAngle:(bycopy float)angle
+         withIndexedColor:(bycopy int)colorIndex;
+  /*
+   Add a string to the current model, where:
+   justification is
+   _{justification value}
+   _{LEFT 0}
+   _{CENTER 1}
+   _{RIGHT 2}
+   colorIndex is a number in the range -4 and upwards.
+   Indices 0 and upwards points to an entry in the colormap.
+   The colors -4, ..., -1 have special meanings as follows:
+   _{colorIndex meaning}
+   _{-1 Grid color}
+   _{-2 Axis color}
+   _{-3 Reserved}
+   _{-4 Background color}
+   By following the (optional) special indexing scheme above, those colors will be availble to
+   the Inspector window in addition to the foreground colors.
+   Any cyclic color behaviour have to be taken care of in the client adapter.
+   */
+
 //
-// Add graphic elements to the model. A "polyline" refers to any 
-// collection of line segments etc. whereas "polygon" refers to a 
-// closed surface. (Q: confusing naming scheme?)
-// IndexedColor has the same meaning as for addString and
-// color is number between 0 and 1 corresponding to an interpolation
-// between two colors. 
+//  Add graphic elements to the model. A "polyline" refers to any
+//  collection of line segments etc. whereas "polygon" refers to a
+//  closed surface. (Q: confusing naming scheme?)
+//  IndexedColor has the same meaning as for addString and
+//  color is an NSColor object.
 //
 - (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex;
-- (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color;
+/* Add a bezierpath with color given by the current colormap to the model */
 - (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex;
-- (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color;
-//
-// Select the model that will receive subsequent calls
-// 
-- (oneway void) selectModel:(int) currentModel;
+/* Add a polygon (filled bezierpath) with color given by the current colormap to the model */
+- (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withRGBColor:(bycopy NSColor *)color;
+/* Add a bezierpath, with the given color, to the model */
+- (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withRGBColor:(bycopy NSColor *)color;
+/* Add a polygon (filled bezierpath), with the given color, to the model */
+
+- (oneway void) addBitmap:(bycopy NSData *)imageData size:(NSSize)theSize bounds:(NSRect)theBounds;
+/* Add a bitmap (TIFFRepresentation) */
+
+- (oneway void) addImageFromFile:(bycopy NSString *)filename bounds:(NSRect)theBounds;
+/*  Add an image from file, given a valid filename. (TIFF, jpg, etc.) */
+
+- (oneway void)render;
+/*  Render the model _without_ closing it */
+
+-(oneway void) clearRect:(NSRect)rect;
+/*  remove all objects found _completely_ contained in rect */
+
 @end /* AQTProtocol */
 
 static NSAutoreleasePool *arpool;   // our autorelease pool 
@@ -200,6 +247,8 @@ static inline void NOOP_(id x, ...) {;}
 #define LOG  NOOP_
 #endif	/* LOGGING */
 
+static t_sm_palette *aqua_palette = nil;
+
 // ----------------------------------------------------------------
 // AQTAdapter - A class to mediate between gnuplot C-function calls
 // and AquaTerm Objective-C remote messages
@@ -224,7 +273,9 @@ static inline void NOOP_(id x, ...) {;}
 -(void) invalidateServer;
 -(BOOL) connectToServer;
 -(void) updateInfoFromServer;
--(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease;
+
+// -(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease;
+-(void) flushBuffers;
 -(void) moveToPoint:(NSPoint)point;
 -(void) lineToPoint:(NSPoint)point;
 -(void) setLinetype:(int)linetype;
@@ -236,7 +287,10 @@ static inline void NOOP_(id x, ...) {;}
 -(void) setLinewidth:(double)linewidth;
 -(void) setFillColor:(double)gray;
 -(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners;
--(void) setFigure:(int)newFigure;
+// -(void) setFigure:(int)newFigure;
+-(void) openModel:(int)newFigure;
+-(void) closeModel;
+-(void) renderModel;
 @end 
 
 @implementation AQTAdapter
@@ -378,6 +432,7 @@ static inline void NOOP_(id x, ...) {;}
   NS_ENDHANDLER
 }
 
+/*
 -(void) flushOrphanedGraphicsRender:(BOOL)shouldRender release:(BOOL)shouldRelease
 {
   NS_DURING
@@ -399,7 +454,26 @@ static inline void NOOP_(id x, ...) {;}
         [localException raise];
     NS_ENDHANDLER
 }
+*/
 
+-(void) flushBuffers
+{
+  NS_DURING
+    if ([thePath isEmpty] == NO)
+    {
+      [server addPolyline:thePath withIndexedColor:linetype];
+      [thePath removeAllPoints];
+      // Resetting linewidth
+      [thePath setLineWidth:1.0];
+    }
+    NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+        [self invalidateServer];
+      else
+        [localException raise];
+    NS_ENDHANDLER
+
+}
 -(void) moveToPoint:(NSPoint)point
 {
   [thePath moveToPoint:point];
@@ -413,13 +487,6 @@ static inline void NOOP_(id x, ...) {;}
 -(void) setLinetype:(int)newLinetype
 {
   linetype = newLinetype;
-  /* making linewidth change state instead
-  if (newLinetype != linetype)
-  {
-    [self flushOrphanedGraphicsRender:NO release:NO];
-    linetype = newLinetype;
-  }
-  */
 }
 
 -(void) putText:(const char *)str at:(NSPoint)point
@@ -495,10 +562,12 @@ static inline void NOOP_(id x, ...) {;}
 
 -(void) fillRect:(NSRect)rect style:(int)style
 {
-  [self flushOrphanedGraphicsRender:NO release:NO];
+  // [self flushOrphanedGraphicsRender:NO release:NO];
+  [self flushBuffers];
   NS_DURING
     [server clearRect:rect];
-    [server renderInViewShouldRelease:NO];
+    // [server renderInViewShouldRelease:NO];
+    [server render];
   NS_HANDLER
     if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
       [self invalidateServer];
@@ -510,20 +579,25 @@ static inline void NOOP_(id x, ...) {;}
 -(void) setLinewidth:(double)linewidth
 {
   /* Change state here instead of linestyle */
-  [self flushOrphanedGraphicsRender:NO release:NO];
+  // [self flushOrphanedGraphicsRender:NO release:NO];
+  [self flushBuffers];
   [thePath setLineWidth:linewidth];
 }
 
 -(void) setFillColor:(double)newGray
 {
   /* FIXME: Should allow for a color resolution to improve speed */
-  [self flushOrphanedGraphicsRender:NO release:NO];
+  // [self flushOrphanedGraphicsRender:NO release:NO];
+  [self flushBuffers];
   gray = newGray;
 }
 
 -(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners
 {
   int i;
+  int cc = (int)(127*gray+.5);
+  NSColor *pColor = [NSColor colorWithCalibratedRed:aqua_palette->color[cc].r green:aqua_palette->color[cc].g blue:aqua_palette->color[cc].b alpha:1.0];
+
   NS_DURING
     [thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
     for (i=1;i< count;i++)
@@ -531,7 +605,7 @@ static inline void NOOP_(id x, ...) {;}
       [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
     }
     [thePath closePath];
-    [server addPolygon:thePath withColor:gray];
+    [server addPolygon:thePath withRGBColor:pColor];
     [thePath removeAllPoints];
     [thePath setLineWidth:1.0];
   NS_HANDLER
@@ -542,11 +616,49 @@ static inline void NOOP_(id x, ...) {;}
   NS_ENDHANDLER
 
 }
+/*
 -(void) setFigure:(int)newFigure
 {
   figure = newFigure;
   NS_DURING
     [server selectModel:figure];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+}
+*/
+
+-(void) openModel:(int)newFigure
+{
+  NS_DURING
+    [server openModel:newFigure];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+}
+
+-(void) closeModel
+{
+  NS_DURING
+    [server closeModel];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+}
+
+-(void) renderModel
+{
+  NS_DURING
+    [server render];
   NS_HANDLER
     if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
       [self invalidateServer];
@@ -624,7 +736,7 @@ AQUA_init()
   term->h_char = (unsigned int) (fontWHRatio * fontSize);
   term->v_tic = (unsigned int) vTicSize;
   term->h_tic = (unsigned int) (vTicSize * pixelWHRatio);
-  [gnuTermAccess setFigure:currentWindow];
+  // [gnuTermAccess setFigure:currentWindow];
 }
 
 TERM_PUBLIC void
@@ -635,12 +747,15 @@ AQUA_reset()
 TERM_PUBLIC void
 AQUA_text()
 {
-    [gnuTermAccess flushOrphanedGraphicsRender:YES release:YES];
+    // [gnuTermAccess flushOrphanedGraphicsRender:YES release:YES];
+    [gnuTermAccess flushBuffers];
+    [gnuTermAccess closeModel];
 }
 
 TERM_PUBLIC void
 AQUA_graphics()
 {
+    [gnuTermAccess openModel:currentWindow];
 }
 
 TERM_PUBLIC void
@@ -711,7 +826,9 @@ AQUA_set_pointsize(double size) /* notification of set pointsize */
 TERM_PUBLIC void 
 AQUA_suspend(void)  /* after one plot of multiplot */
 {
-  [gnuTermAccess flushOrphanedGraphicsRender:YES release:NO];
+  // [gnuTermAccess flushOrphanedGraphicsRender:YES release:NO];
+  [gnuTermAccess flushBuffers];
+  [gnuTermAccess render];
 }
  
 TERM_PUBLIC void 
@@ -742,7 +859,19 @@ AQUA_pointsize(double pointsize)
   TERM_PUBLIC int 
   AQUA_make_palette(t_sm_palette *palette)
   {
-    return(0); /* We handle the palette in the server */
+    int i;
+    if (palette == NULL)
+    {
+        return 128;
+    }
+    else
+    {
+        aqua_palette = palette;
+//         for (i=0;i<128;i++)
+//         {
+//             NSLog(@"palette.color[%d].r=%f\t.g=%f\t.b=%f",i, aqua_palette->color[i].r, aqua_palette->color[i].g, aqua_palette->color[i].b);
+// 	       }
+    }
   }
 
   TERM_PUBLIC void 
