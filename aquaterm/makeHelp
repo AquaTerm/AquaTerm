@@ -1,0 +1,68 @@
+#!/usr/bin/perl
+
+$adapterpath="../adapters";
+$docpath=".";
+
+&gen_preamble;
+&gen_page_heading;
+&gen_aqt_content;
+foreach $item (@ARGV) {   
+    print  "<div id=\"contentitem\">\n";
+    print "<h2>$item</h2>\n<pre>";     
+    print "<h3>ReadMe</h3>\n<pre>";     
+    open (filedata, "$adapterpath/$item/ReadMe");
+    print <filedata>;
+    close(filedata);
+    print "<h3>ReleaseNotes</h3>\n<pre>";     
+    open (filedata, "$adapterpath/$item/ReleaseNotes");
+    print <filedata>;
+    close(filedata);
+    print "</pre>\n</div>\n";
+}
+
+&gen_postamble;
+
+
+sub gen_preamble {
+    print <<END;
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+	<title>AquaTerm 1.0.a2 help</title>
+</head>
+<body>
+END
+}
+
+sub gen_page_heading {
+    print <<END;
+<!-- Header -->
+<div id="hdr">
+<h1>AquaTerm.app, your friendly plotting front-end</h1>
+This is the help file for AquaTerm 1.0.a2, which is simply a collection of info files from the release.
+For questions, please use the mailing lists at <a href="http://aquaterm.sf.net">the official website</a>.
+<br>
+</div>
+END
+}
+
+
+sub gen_aqt_content {
+foreach $item ('ReadMe', 'INSTALL', 'ReleaseNotes') {   
+    print  "<div id=\"contentitem\">\n";
+    print "<h2>$item</h2>\n<pre>"; 
+    
+    open (filedata, "$docpath/$item");
+    print <filedata>;
+    close(filedata);
+    print "</pre>\n</div>\n";
+    }
+}
+
+sub gen_postamble {
+    print <<END;
+</body>
+</html>
+END
+}
