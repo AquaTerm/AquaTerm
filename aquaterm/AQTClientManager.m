@@ -179,7 +179,7 @@
 
    while (key = [enumObjects nextObject])
    {
-      _activePlotKey = key;
+      [self setActivePlotKey:key];
       [self closePlot];
    }
    if([_server isProxy])
