@@ -173,9 +173,13 @@
                                                  rampFrom:[minColor color]
                                                        to:[maxColor color]];
     if (!frontWindowController) {
-        NSLog(@"No frontWindowController set: AQTInspector -applyPressed");
         // could be one of two things, either there really is no window
         // or it just hasn't been properly set yet
+        NSWindow *frontWindow = [[[NSApplication sharedApplication] delegate] frontWindow];
+        if(frontWindow)
+        {
+            [self setFrontWindowController:[frontWindow windowController]];
+        }
     }
     [[frontWindowController model] updateColors:tempColormap];
     [[frontWindowController viewOutlet] setNeedsDisplay:YES];
