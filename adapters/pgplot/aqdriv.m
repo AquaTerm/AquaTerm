@@ -48,7 +48,8 @@ void initAdapter(void)
   // [adapter setErrorHandler:errMsg];
 }
 
-static int currentPlot = 0;
+static int currentDevice = 0;
+static int deviceCount = 0;
 
 // ----------------------------------------------------------------
 // --- Start of PGPLOT function aqdriv()
@@ -144,15 +145,15 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=8, Select plot ----------------------------------------------
 
     case 8:
-      NSLog(@"IFUNC=8, Select plot: %d", (int)rbuf[0]);
-      currentPlot = (int)rbuf[0];
-      [adapter selectPlot:currentPlot];
+      NSLog(@"IFUNC=8, Select plot: [%d %d]", (int)rbuf[0] /* plot id */, (int)rbuf[1] /* device id */);
+      currentDevice = (int)rbuf[1];
+      [adapter selectPlot:currentDevice];
       break;
 
       //--- IFUNC=9, Open workstation -----------------------------------------
 
     case 9:
-      NSLog(@"IFUNC=9, Open workstation");
+      NSLog(@"IFUNC=9, Open workstation Append:%@", (int)rbuf[2]?@"YES":@"NO" );
       //
       // Assign the returned device unit number and success indicator.
       // Assume failure to open until the workstation is open.
@@ -164,7 +165,11 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       {
         initAdapter();
       }
-      rbuf[0] = 1.0; // The number used to select this device by IFUNC=8 (Select plot)
+      deviceCount++;
+      currentDevice = deviceCount;
+      [adapter openPlotIndex:currentDevice];// size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
+      
+      rbuf[0] = (float)currentDevice; // The number used to select this device by IFUNC=8 (Select plot)
       rbuf[1] = 1.0;
       *nbuf = 2;
       break;
@@ -172,11 +177,14 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=10, Close workstation ---------------------------------------
 
     case 10:
-      NSLog(@"FUNC=10, Close workstation");
-      [adapter autorelease];
+      NSLog(@"FUNC=10, Close workstation (currentDevice = %d)", currentDevice );
+      [adapter closePlot];
+/*
+ [adapter autorelease];
       adapter = nil;
       [arpool release];
       arpool = nil;
+*/
       break;
 
       //--- IFUNC=11, Begin picture -------------------------------------------
@@ -185,10 +193,13 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     {
       int i;
       NSLog(@"IFUNC=11, Begin picture");
-      if (!adapter)
+/*
+ if (!adapter)
       {
         initAdapter();
       }
+ */
+      [adapter clearPlot];
       [adapter setColormapEntry:0 red:0.0 green:0.0 blue:0.0]; // Background color
       [adapter setColormapEntry:1 red:1.0 green:1.0 blue:1.0]; 
       [adapter setColormapEntry:2 red:1.0 green:0.0 blue:0.0];
@@ -206,9 +217,11 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       [adapter setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
       [adapter setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
 
-      [adapter openPlotIndex:currentPlot size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
+//      [adapter openPlotIndex:currentDevice size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
       [adapter takeBackgroundColorFromColormapEntry:0];
       [adapter setLineCapStyle:AQTRoundLineCapStyle];
+      [adapter setPlotSize:NSMakeSize(rbuf[0], rbuf[1])];
+      [adapter setPlotTitle:[NSString stringWithFormat:@"Device %d", currentDevice]];
     }
       break;
 
@@ -232,12 +245,14 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=14, End picture ---------------------------------------------
 
     case 14:
-      NSLog(@"IFUNC=14, End picture");
+      NSLog(@"IFUNC=14, End picture (%f)", rbuf[0]);
       if (rbuf[0] != 0.0)
       {
         // clear screen
+        NSLog(@"Clearing screen");
+        [adapter clearPlot];
       }
-      [adapter closePlot];
+      // [adapter closePlot];
       break;
 
       //--- IFUNC=15, Select color index --------------------------------------
