@@ -11,7 +11,7 @@
 				CB5B1BEF04A9C2E900EBD329,
 			);
 			isa = PBXGroup;
-			name = Extras;
+			name = Protocols;
 			refType = 4;
 		};
 //080
@@ -281,6 +281,9 @@ http://aquaterm.sourceforge.net</string>
 				CB5B1BF104A9C2E900EBD329,
 				CBF3083704D51BCF00EBD329,
 				CBF3084104D5209800EBD329,
+				CB7288970502798C00D208BA,
+				CB7288990502798E00D208BA,
+				CBA3D83F053D784200D208BA,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,6 +316,9 @@ http://aquaterm.sourceforge.net</string>
 				CB5B187404A9A49E00EBD329,
 				CBF3083804D51BCF00EBD329,
 				CBF3084204D5209800EBD329,
+				CB7288980502798D00D208BA,
+				CB72889A0502798E00D208BA,
+				CBA3D843053D84DE00D208BA,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,11 +378,23 @@ http://aquaterm.sourceforge.net</string>
 //CB2
 //CB3
 //CB4
+		CB01FB25054054C500D208BA = {
+			fileRef = CBA3D83E053D784200D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB01FB26054054C600D208BA = {
+			fileRef = CBA3D842053D84DE00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CB05377C04DEA3A300EBD329 = {
 			isa = PBXFileReference;
 			name = Cross.tiff;
-			path = /Applications/OmniGraffle.app/Contents/Resources/Cross.tiff;
-			refType = 0;
+			path = English.lproj/Cross.tiff;
+			refType = 2;
 		};
 		CB05377D04DEA3A300EBD329 = {
 			fileRef = CB05377C04DEA3A300EBD329;
@@ -444,12 +462,67 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
+		CB6564640529BE1200D208BA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = aqtplplot.m;
+			path = /Users/per/source/sci/adapters/plplot/aqtplplot.m;
+			refType = 0;
+		};
+		CB7288970502798C00D208BA = {
+			fileRef = CBF3082D04D51B9300EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB7288980502798D00D208BA = {
+			fileRef = CBF3082E04D51B9400EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB7288990502798E00D208BA = {
+			fileRef = FEDD21D204EE7C22008D3E17;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB72889A0502798E00D208BA = {
+			fileRef = FEDD21D304EE7C22008D3E17;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBA3D83E053D784200D208BA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTAdapterPrivateMethods.h;
+			refType = 4;
+		};
+		CBA3D83F053D784200D208BA = {
+			fileRef = CBA3D83E053D784200D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBA3D842053D84DE00D208BA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTAdapterPrivateMethods.m;
+			refType = 4;
+		};
+		CBA3D843053D84DE00D208BA = {
+			fileRef = CBA3D842053D84DE00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CBAFDE0F04DE8F5F00EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = aquaTerm.trm;
-			path = /Volumes/Earth/Users/per/source/AQT/adapters/gnuplot/aquaTerm.trm;
-			refType = 0;
+			path = ../adapters/gnuplot/aquaTerm.trm;
+			refType = 2;
 		};
 		CBC8D54B04F2258500EBD329 = {
 			children = (
@@ -601,13 +674,14 @@ http://aquaterm.sourceforge.net</string>
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = aqdriv.m;
-			path = /Volumes/Earth/Users/per/source/AQT/adapters/pgplot/aqdriv.m;
-			refType = 0;
+			path = ../adapters/pgplot/aqdriv.m;
+			refType = 2;
 		};
 		CBD8F3F004D90CE100EBD329 = {
 			children = (
 				CBD8F3EF04D90CDC00EBD329,
 				CBAFDE0F04DE8F5F00EBD329,
+				CB6564640529BE1200D208BA,
 			);
 			isa = PBXGroup;
 			name = Adapters;
@@ -684,6 +758,7 @@ http://aquaterm.sourceforge.net</string>
 				CBF30BCD04D54A4000EBD329,
 				CBF30BCF04D54A4200EBD329,
 				FEDD21D404EE7C22008D3E17,
+				CB01FB25054054C500D208BA,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -699,6 +774,7 @@ http://aquaterm.sourceforge.net</string>
 				CBF30BCE04D54A4100EBD329,
 				CBF30BD004D54A4300EBD329,
 				FEDD21D504EE7C22008D3E17,
+				CB01FB26054054C600D208BA,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1149,6 +1225,8 @@ http://aquaterm.sourceforge.net</string>
 				CBF3083A04D51CF100EBD329,
 				CBF3082D04D51B9300EBD329,
 				CBF3082E04D51B9400EBD329,
+				CBA3D83E053D784200D208BA,
+				CBA3D842053D84DE00D208BA,
 				FEDD21D204EE7C22008D3E17,
 				FEDD21D304EE7C22008D3E17,
 			);
