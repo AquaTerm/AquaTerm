@@ -327,6 +327,8 @@ http://aquaterm.sourceforge.net</string>
 				CB71321405444AEC00D208BA,
 				CB83AAE7054D2D8700D208BA,
 				FE8252ADC5B321F400CFA73B,
+				FEBB59CF055CF10B00EEC8EA,
+				FEBB59D1055CF40600EEC8EA,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1284,6 +1286,8 @@ http://aquaterm.sourceforge.net</string>
 			children = (
 				CB5B187104A9A49E00EBD329,
 				CB5B187204A9A49E00EBD329,
+				FEBB59CE055CF10B00EEC8EA,
+				FEBB59D0055CF40600EEC8EA,
 				FE8252ACC5B321F400CFA73B,
 				CBF3083904D51CF100EBD329,
 				CBF3083A04D51CF100EBD329,
@@ -1477,6 +1481,30 @@ http://aquaterm.sourceforge.net</string>
 		};
 		FE8252ADC5B321F400CFA73B = {
 			fileRef = FE8252ACC5B321F400CFA73B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FEBB59CE055CF10B00EEC8EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = Bugs.m;
+			refType = 4;
+		};
+		FEBB59CF055CF10B00EEC8EA = {
+			fileRef = FEBB59CE055CF10B00EEC8EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FEBB59D0055CF40600EEC8EA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = Timing.m;
+			refType = 4;
+		};
+		FEBB59D1055CF40600EEC8EA = {
+			fileRef = FEBB59D0055CF40600EEC8EA;
 			isa = PBXBuildFile;
 			settings = {
 			};

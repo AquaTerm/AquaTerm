@@ -6,6 +6,17 @@
 //  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
 //
 
+//
+// This file contains an example of what can be done with
+// AquaTerm and the corresponding library: libaqt.dylib
+//
+// This code can be build as a stand-alone executable (tool)
+// from the command line:
+// gcc -o demo Demo.m -laqt -Framework Foundation
+// _or_
+// executed from inside AquaTerm using menu Debug -> Testview. 
+
+
 #import <Foundation/Foundation.h>
 #import "AQTAdapter.h"
 
