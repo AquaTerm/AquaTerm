@@ -36,13 +36,16 @@ _{AQTFontName				current font}
 _{AQTFontSize				current font size}
 */
 
+- (oneway void)setTitle:(bycopy NSString *)newTitle;
+/* Set the title for the current model, defaults to 'Figure n'. */
+
 - (oneway void) setFontWithName:(bycopy NSString *)fontName size:(bycopy float)fontSize;
 /*
 Set the font for the subsequent strings added to the model
 (mimics fontWithName: size: method in NSFont)
 */
 
--(oneway void)setColor:(NSColor *)aColor forIndex:(int)colorIndex;
+-(oneway void)setColor:(bycopy NSColor *)aColor forIndex:(int)colorIndex;
 /* Set the NSColor for a particular entry in the colormap. */
 
 /*" Methods available only in open state "*/
@@ -89,16 +92,9 @@ Set the font for the subsequent strings added to the model
 /* Add a polygon (filled bezierpath), with the given color, to the model */
 
 - (oneway void) addBitmap:(bycopy NSData *)imageData size:(NSSize)theSize bounds:(NSRect)theBounds;
-/* Add a raw bitmap (unsigned char) with each byte corresponding to an entry in the indexed colormap */
+/* Add a bitmap (TIFFRepresentation) */
 
-- (oneway void) addImage:(bycopy NSData *)imageData  bounds:(NSRect)theBounds;
-/*
-*** Obsolete, will go away in next official release *** 
-Add an image. The imageData must be such that an NSImage can be created from:
-NSImage *anImage = [[NSImage alloc] initWithData:imageData];
-*/
-
-- (oneway void) addImageFromFile:(bycopy NSString *)filename;
+- (oneway void) addImageFromFile:(bycopy NSString *)filename bounds:(NSRect)theBounds;
 /*  Add an image from file, given a valid filename. (TIFF, jpg, etc.) */
 
 - (oneway void)render;
