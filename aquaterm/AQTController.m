@@ -7,6 +7,8 @@
 //
 
 #import "AQTController.h"
+#import "AQTPrefController.h"
+
 #import "AQTPlot.h"
 #import <Message/NSMailDelivery.h>
 
@@ -27,6 +29,13 @@ extern void aqtLineDrawingTest(id sender);
 *** AQTController is the main controller object which coordinates all the
 *** action and manages the main DO connection.
 "**/
+
++ (void)initialize{
+   NSUserDefaults *defaults = preferences;
+   NSDictionary *appDefaults = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSHomeDirectory(), @"PDF", [NSNumber numberWithInt:1], [NSNumber numberWithInt:1], [NSNumber numberWithInt:1], [NSNumber numberWithInt:1], nil] 
+                                                           forKeys:[NSArray arrayWithObjects:@"CurrentSaveFolder", @"CurrentSaveFormat", @"ShowProcessName", @"ShowProcessId", @"ShouldAntialiasDrawing", @"ImageInterpolationLevel", nil]];
+   [defaults registerDefaults:appDefaults];
+}
 
 -(id)init
 {
@@ -156,6 +165,11 @@ extern void aqtLineDrawingTest(id sender);
 }
 
 #pragma mark === Actions ===
+-(IBAction)showPrefs:(id)sender;
+{
+   [[AQTPrefController sharedPrefController] showPrefs]; 
+   
+}
 
 -(IBAction)showHelp:(id)sender
 {

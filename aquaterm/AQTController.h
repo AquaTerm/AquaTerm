@@ -23,6 +23,7 @@
 - (void)setWindowPos:(NSWindow *)plotWindow;
 
 -(IBAction)showHelp:(id)sender;
+-(IBAction)showPrefs:(id)sender;
 -(IBAction)debug:(id)sender;
 -(IBAction)mailBug:(id)sender;
 -(IBAction)mailFeedback:(id)sender;
