@@ -20,3 +20,5 @@ AQDRIV="aqdriv.o"
 12) Do try the demos, particularly pgdemo13 and pgdemo17 ;-)
 13) make install
 
+NB. If you have libs in non-standard places, such as /sw/lib, you may need to add the -L/sw/lib flag to $LIBS in g77_gcc_AQT.conf. 
+

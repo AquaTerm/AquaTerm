@@ -1,3 +1,39 @@
+2004-03-16 22:05  persquare
+
+	* ReadMe, ReleaseNotes: Visual appearance changes.
+
+2004-03-16 14:26  persquare
+
+	* ReadMe, ReleaseNotes: Cleaning.
+
+2004-03-16 13:59  persquare
+
+	* README: Cleaning.
+
+2004-03-04 23:30  persquare
+
+	* aqdriv.m: Reorder aqt calls to fix problem with first page not
+	  showing and subsequent pages placed at the bottom of the screen,
+	  only titlebar visible.  Removing autoreleasepool cruft.
+
+2004-03-04 23:27  persquare
+
+	* g77_gcc_AQT.conf, xlf_gcc_AQT.conf: Add install_name to shared
+	  lib. Unfortunately had to hardcode /usr/local/lib.
+
+2004-02-07 01:49  persquare
+
+	* README: Providing up-to-date build info.
+
+2004-02-07 01:43  persquare
+
+	* g77_gcc_AQT.conf, xlf_gcc_AQT.conf: Shaping up .conf files to
+	  build shared libpgplot.
+
+2003-12-29 23:17  persquare
+
+	* ChangeLog: Update.
+
 2003-12-29 23:12  persquare
 
 	* aqdriv.m, README, xlf_gcc_AQT.conf: Update to 1.0.a1.
@@ -5,17 +41,17 @@
 2003-11-18 23:37  persquare
 
 	* aqdriv.m: Use new addEdgeToPoint: method for building polygons to
-	get rid of malloc'd buffer.
+	  get rid of malloc'd buffer.
 
 2003-11-11 22:05  persquare
 
 	* aqdriv.m: Fixing leaks. Note to self: create/destroy arpool in
-	_same_ context.
+	  _same_ context.
 
 2003-11-06 12:22  persquare
 
 	* aqdriv.m: Cleanup. Changing behaviour wrt endplot, now leaves
-	plot onscreen.
+	  plot onscreen.
 
 2003-11-06 01:32  persquare
 
@@ -36,7 +72,7 @@
 2003-10-25 01:00  persquare
 
 	* aqdriv.m: Updating syntax. Disabling poolrelease since it caused
-	segfault.
+	  segfault.
 
 2003-10-22 16:13  persquare
 
@@ -57,7 +93,7 @@
 2003-09-03 11:39  persquare
 
 	* aqdriv.m: Modifying image handling, allowing transformation
-	matrix. FIXME: pgplot specific code in AQTView for testing.
+	  matrix. FIXME: pgplot specific code in AQTView for testing.
 
 2003-08-27 11:16  persquare
 
@@ -66,7 +102,7 @@
 2003-08-23 21:44  persquare
 
 	* aqdriv.m: Allow multiple open plots. Temporarily enable excessive
-	logging to highlight some problems in driver.
+	  logging to highlight some problems in driver.
 
 2003-08-21 13:45  persquare
 
@@ -75,13 +111,13 @@
 2003-08-20 17:07  persquare
 
 	* aqdriv.m: Line handling in drivers and adapter done. Added pm3d
-	to gnuplot. Moving "smartness" from drivers to builder class.
+	  to gnuplot. Moving "smartness" from drivers to builder class.
 
 2003-08-19 22:05  persquare
 
 	* aqdriv.m: Adding lineCapStyle control to AQTPath. Adding
-	-addFilledRect:, -addPolylineWithPoints: and renaming a few
-	methods.
+	  -addFilledRect:, -addPolylineWithPoints: and renaming a few
+	  methods.
 
 2003-08-19 17:02  persquare
 
@@ -94,8 +130,8 @@
 2003-08-14 14:23  persquare
 
 	* aqdriv.m: Adding error handling in the adapter. Optional error
-	handler callback function in client. Adapter checks for server
-	compatibility.
+	  handler callback function in client. Adapter checks for server
+	  compatibility.
 
 2003-08-07 11:16  persquare
 
@@ -120,12 +156,12 @@
 2002-12-18 14:42  persquare
 
 	* aqdriv.m: Interactive devices _needs_ this to draw intermediate
-	plots.
+	  plots.
 
 2002-10-11 17:58  persquare
 
 	* aqdriv.m: Setting default colors 0-15 on driver init. Fix for bug
-	#593895
+	  #593895
 
 2002-08-12 17:05  persquare
 
@@ -142,13 +178,13 @@
 2002-04-18 17:02  persquare
 
 	* aqdriv.m: Added buffering to polyline and polygon. An order of
-	magnitude or more in speedup most of the time, still slow in some
-	cases (don't know why).
+	  magnitude or more in speedup most of the time, still slow in some
+	  cases (don't know why).
 
 2002-02-26 00:02  persquare
 
 	* aqdriv.m: Synching with aquaterm. Not fully functional, restart
-	AQT to reset default colormap.
+	  AQT to reset default colormap.
 
 2002-02-11 14:10  persquare
 
@@ -157,5 +193,5 @@
 2002-02-11 13:18  persquare
 
 	* README, aqdriv.m, g77_cc_AQT.conf, iand.c: Adding support for
-	PGPLOT
+	  PGPLOT
 
