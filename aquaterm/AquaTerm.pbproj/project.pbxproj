@@ -70,6 +70,7 @@
 			children = (
 				CBC4B40F05E4C40D001BE8D7,
 				CBC4B44B05E4C784001BE8D7,
+				CB4CEEBE0708AF8400E72EE9,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -104,6 +105,7 @@
 				CBC4B42705E4C784001BE8D7,
 				CBAA608105E7AFA7009B33CD,
 				CB7C709D05EA274E00D4CD15,
+				CB4CEEBD0708AF8400E72EE9,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -122,6 +124,7 @@
 				CBF17AA505EE6BE600AAB4C4,
 				19C28FACFE9D520D11CA2CBB,
 				CBC4B44A05E4C784001BE8D7,
+				CB4CEEBF0708AF8400E72EE9,
 			);
 			isa = PBXGroup;
 			name = AquaTerm;
@@ -318,6 +321,296 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		CB4CEEB80708AF8400E72EE9 = {
+			buildActionMask = 2147483647;
+			files = (
+				CB4CEEC10708AFD300E72EE9,
+				CB4CEEC20708AFD400E72EE9,
+				CB4CEEC30708AFD400E72EE9,
+				CB4CEEC40708AFD500E72EE9,
+				CB4CEEC80708AFD900E72EE9,
+				CB4CEEC90708AFDA00E72EE9,
+				CB4CEECC0708AFDD00E72EE9,
+				CB4CEECE0708AFDE00E72EE9,
+				CB4CEED00708AFE000E72EE9,
+				CB4CEED10708AFE200E72EE9,
+				CB4CEED30708AFE300E72EE9,
+				CB4CEED40708AFE400E72EE9,
+				CB4CEED50708AFEE00E72EE9,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB4CEEB90708AF8400E72EE9 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB4CEEBA0708AF8400E72EE9 = {
+			buildActionMask = 2147483647;
+			files = (
+				CB4CEEC50708AFD600E72EE9,
+				CB4CEEC60708AFD600E72EE9,
+				CB4CEEC70708AFD700E72EE9,
+				CB4CEECA0708AFDC00E72EE9,
+				CB4CEECB0708AFDD00E72EE9,
+				CB4CEECD0708AFDE00E72EE9,
+				CB4CEECF0708AFE000E72EE9,
+				CB4CEED20708AFE200E72EE9,
+				CB4CEED60708AFEE00E72EE9,
+				CB4CEED70708AFEF00E72EE9,
+				CB4CEED80708AFEF00E72EE9,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB4CEEBB0708AF8400E72EE9 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB4CEEBC0708AF8400E72EE9 = {
+			buildActionMask = 2147483647;
+			files = (
+				CB4CEF480708B04B00E72EE9,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB4CEEBD0708AF8400E72EE9 = {
+			buildPhases = (
+				CB4CEEB80708AF8400E72EE9,
+				CB4CEEB90708AF8400E72EE9,
+				CB4CEEBA0708AF8400E72EE9,
+				CB4CEEBB0708AF8400E72EE9,
+				CB4CEEBC0708AF8400E72EE9,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INFOPLIST_FILE = "Fwk-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-framework Carbon";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Fwk;
+				REZ_EXECUTABLE = NO;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost";
+			};
+			dependencies = (
+			);
+			isa = PBXNativeTarget;
+			name = Fwk;
+			productName = Fwk;
+			productReference = CB4CEEBE0708AF8400E72EE9;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>Fwk</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.MySoftwareCompany.Fwk</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+</dict>
+</plist>
+";
+			productType = "com.apple.product-type.framework";
+		};
+		CB4CEEBE0708AF8400E72EE9 = {
+			explicitFileType = wrapper.framework;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = Fwk.framework;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CB4CEEBF0708AF8400E72EE9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			name = "Fwk-Info.plist";
+			path = "/Users/per/Documents/Source/aquaterm/Fwk-Info.plist";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		CB4CEEC10708AFD300E72EE9 = {
+			fileRef = F59F5FC9021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC20708AFD400E72EE9 = {
+			fileRef = CBB06FE805740EB900D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC30708AFD400E72EE9 = {
+			fileRef = CB5B1BEF04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC40708AFD500E72EE9 = {
+			fileRef = F50F0B540205D23401AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC50708AFD600E72EE9 = {
+			fileRef = CBF3082E04D51B9400EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC60708AFD600E72EE9 = {
+			fileRef = F55D241A01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC70708AFD700E72EE9 = {
+			fileRef = F59F5FCA021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC80708AFD900E72EE9 = {
+			fileRef = F55D241701C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEEC90708AFDA00E72EE9 = {
+			fileRef = F5653B8001C4B8F201A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEECA0708AFDC00E72EE9 = {
+			fileRef = CB77583A056B83E300D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEECB0708AFDD00E72EE9 = {
+			fileRef = CBB8466F056C0A4B00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEECC0708AFDD00E72EE9 = {
+			fileRef = CB2DDBAB056D10FB00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEECD0708AFDE00E72EE9 = {
+			fileRef = F55D241801C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEECE0708AFDE00E72EE9 = {
+			fileRef = CBB8466E056C0A4B00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEECF0708AFE000E72EE9 = {
+			fileRef = F5653B8101C4B8F201A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED00708AFE000E72EE9 = {
+			fileRef = FEDD21D204EE7C22008D3E17;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED10708AFE200E72EE9 = {
+			fileRef = F55D241B01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED20708AFE200E72EE9 = {
+			fileRef = CBB06FE905740EB900D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED30708AFE300E72EE9 = {
+			fileRef = CB5B1BEE04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED40708AFE400E72EE9 = {
+			fileRef = CBF3082D04D51B9300EBD329;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		CB4CEED50708AFEE00E72EE9 = {
+			fileRef = F55D241901C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED60708AFEE00E72EE9 = {
+			fileRef = F50F0B550205D23401AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED70708AFEF00E72EE9 = {
+			fileRef = FEDD21D304EE7C22008D3E17;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEED80708AFEF00E72EE9 = {
+			fileRef = F55D241C01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB4CEF480708B04B00E72EE9 = {
+			fileRef = 29B97325FDCFA39411CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CB58A1F406F9A53300AF8A5E = {
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -360,6 +653,19 @@
 		};
 		CB58A20206F9A62300AF8A5E = {
 			fileRef = CB58A1FF06F9A60900AF8A5E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB58A23A06FA0FB600AF8A5E = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.rtf;
+			path = ReadMe.rtf;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		CB58A23B06FA0FB600AF8A5E = {
+			fileRef = CB58A23A06FA0FB600AF8A5E;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -662,7 +968,6 @@
 				CBC4B3FC05E4C40D001BE8D7,
 				CBC4B40905E4C40D001BE8D7,
 				CBC4B40C05E4C40D001BE8D7,
-				CBC4B40D05E4C40D001BE8D7,
 			);
 			buildRules = (
 			);
@@ -678,6 +983,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = libaquaterm.1.0.0;
 				SECTORDER_FLAGS = "";
+				UNSTRIPPED_PRODUCT = YES;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
@@ -899,15 +1205,6 @@
 			isa = PBXRezBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CBC4B40D05E4C40D001BE8D7 = {
-			buildActionMask = 8;
-			files = (
-			);
-			isa = PBXShellScriptBuildPhase;
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "#cp $SRCROOT/AQTAdapter.h $HOME/include/aquaterm/.\n#cp $SRCROOT/aquaterm.h $HOME/include/aquaterm/.\n#cp $SRCROOT/build/libaquaterm.1.0.0.dylib $HOME/lib/.  \n#ln -s $HOME/lib/libaquaterm.1.0.0.dylib $HOME/lib libaquaterm.dylib ";
-		};
 		CBC4B40F05E4C40D001BE8D7 = {
 			explicitFileType = "compiled.mach-o.dylib";
 			includeInIndex = 0;
@@ -1032,6 +1329,7 @@
 				CB9B70CD065A0AD100563010,
 				CB58A20006F9A60900AF8A5E,
 				CB58A20106F9A60900AF8A5E,
+				CB58A23B06FA0FB600AF8A5E,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1464,6 +1762,7 @@
 				CBD6C05E066284A70096ACB5,
 				CB7217FB06072ABA008DCEAD,
 				F57C16A202506DE3010D3DE4,
+				CB58A23A06FA0FB600AF8A5E,
 				CB72184806072CF6008DCEAD,
 				CB0C496E065ABF7C00AC22F7,
 				CBAA608305E7AFF0009B33CD,
