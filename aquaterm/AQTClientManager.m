@@ -13,6 +13,34 @@
 #import "AQTConnectionProtocol.h"
 
 @implementation AQTClientManager
+- (void)_aqtHandlerError:(NSString *)msg
+{
+   // FIXME: stuff @"42:Server error" in all event buffers/handlers ?
+   [self logMessage:[NSString stringWithFormat:@"Handler error: %@", msg] logLevel:1];
+   errorState = YES;
+}
+
+- (void)clearErrorState
+{
+   BOOL serverDidDie = NO;
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   NS_DURING
+      [_server ping];
+   NS_HANDLER
+      [self logMessage:@"Server not responding." logLevel:1];
+      serverDidDie = YES;
+   NS_ENDHANDLER
+
+   if (serverDidDie)
+   {
+      [self terminateConnection];
+   }
+   else
+   {
+      [self closePlot];
+   }
+   errorState = NO;
+}
 
 + (AQTClientManager *)sharedManager
 {
@@ -64,7 +92,8 @@
    [newActivePlotKey retain];
    [_activePlotKey release];
    _activePlotKey = newActivePlotKey;
-   [self logMessage:[NSString stringWithFormat:@"Active plot: %d", [_activePlotKey intValue]] logLevel:3];
+   [self logMessage:_activePlotKey?[NSString stringWithFormat:@"Active plot: %d", [_activePlotKey intValue]]:@"**** plot invalid ****"
+           logLevel:3];
 }
 
 - (BOOL)connectToServer
@@ -185,6 +214,7 @@
 
 - (NSNumber *)keyForPlotController:(AQTPlotController *)pc
 {
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (pc != nil)
    {
       NSArray *keys = [_plotControllers allKeysForObject:pc];
@@ -198,11 +228,22 @@
 
 - (AQTPlotBuilder *)newPlotWithIndex:(int)refNum
 {
-   // FIXME
    AQTPlotBuilder *newBuilder;
-   NSNumber *key = [NSNumber numberWithInt:refNum];
-   AQTPlotController *pc = [[AQTPlotController alloc] init];
+   NSNumber *key;
+   AQTPlotController *pc;
    id newHandler;
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+
+   if (errorState == YES)
+   {
+      [self clearErrorState];
+      if (_server == nil)
+         [self connectToServer];
+   }
+   
+   key = [NSNumber numberWithInt:refNum];
+   pc = [[AQTPlotController alloc] init];
+
    NS_DURING
       newHandler = [_server addAQTClient:pc
                                     name:[[NSProcessInfo processInfo] processName]
@@ -233,8 +274,15 @@
 
 - (AQTPlotBuilder *)selectPlotWithIndex:(int)refNum
 {
-   NSNumber *key = [NSNumber numberWithInt:refNum];
-   AQTPlotBuilder *aBuilder = [_builders objectForKey:key];
+   NSNumber *key;
+   AQTPlotBuilder *aBuilder;
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+
+   if (errorState == YES) return nil; // FIXME: Clear error state here too???
+
+   key = [NSNumber numberWithInt:refNum];
+   aBuilder = [_builders objectForKey:key];
+
    if(aBuilder != nil)
    {
       [self setActivePlotKey:key];
@@ -242,9 +290,14 @@
    return aBuilder;
 }
 
-- (void)renderPlot 
+- (void)renderPlot // FIXME: check _activePlotKey
 {
-   AQTPlotBuilder *pb = [_builders objectForKey:_activePlotKey];
+   AQTPlotBuilder *pb;
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+
+   if (errorState == YES || _activePlotKey == nil) return;
+
+   pb = [_builders objectForKey:_activePlotKey];
    if ([pb modelIsDirty])
    {
       AQTPlotController *pc = [_plotControllers objectForKey:_activePlotKey];
@@ -257,17 +310,27 @@
    }
 }
 
-- (void)clearPlot
+- (void)clearPlot  // FIXME: check _activePlotKey
 {
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   if (errorState == YES || _activePlotKey == nil) return;
+
    [[_builders objectForKey:_activePlotKey] clearAll];
    [[_plotControllers objectForKey:_activePlotKey] setShouldAppendPlot:NO];
    [self renderPlot];
 }
 
-- (void)clearPlotRect:(NSRect)aRect
+- (void)clearPlotRect:(NSRect)aRect  // FIXME: check _activePlotKey
 {
-   AQTPlotBuilder *pb = [_builders objectForKey:_activePlotKey];
-   AQTPlotController *pc = [_plotControllers objectForKey:_activePlotKey];
+   AQTPlotBuilder *pb;
+   AQTPlotController *pc;
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+
+   if (errorState == YES || _activePlotKey == nil) return;
+
+   pb = [_builders objectForKey:_activePlotKey];
+   pc = [_plotControllers objectForKey:_activePlotKey];
+
    if ([pb modelIsDirty])
    {
       [pc updatePlotWithModel:[pb model]]; // Push any pending output to the viewer, don't draw
@@ -283,6 +346,12 @@
 
 - (void)closePlot
 {
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   if (_activePlotKey == nil)
+   {
+      NSLog(@"_activePlotKey == nil, discards...");
+      return;
+   }
    NS_DURING
       if ([_server removeAQTClient:[_plotControllers objectForKey:_activePlotKey]] == NO)
       {
@@ -296,14 +365,21 @@
    [self setActivePlotKey:nil];
 }
 
-- (void)setAcceptingEvents:(BOOL)flag 
+- (void)setAcceptingEvents:(BOOL)flag  // FIXME: check _activePlotKey
 {
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   if (errorState == YES || _activePlotKey == nil) return;
    [[_plotControllers objectForKey:_activePlotKey] setAcceptingEvents:flag];
 }
 
 - (void)processEvent:(NSString *)event sender:(id)sender
 {
+   // FIXME: Check for nil-key, possibly embedd -keyForPlotController: code here.
    NSNumber *key = [self keyForPlotController:(AQTPlotController *)sender];
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+
+   if (_activePlotKey == nil) return;
+
    if (_eventHandler != nil)
    {
       _eventHandler([key intValue], event);
@@ -311,9 +387,14 @@
    [_eventBuffer setObject:event forKey:key];
 }
 
-- (NSString *)lastEvent 
+- (NSString *)lastEvent  // FIXME: check _activePlotKey
 {
    NSString *event;
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+
+   if (errorState == YES) return @"42:Server error";
+   if (_activePlotKey == nil) return @"43:No plot selected";
+   
    event = [[[_eventBuffer objectForKey:_activePlotKey] copy] autorelease];
    [_eventBuffer setObject:@"0" forKey:_activePlotKey];
    return event;

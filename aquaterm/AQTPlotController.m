@@ -67,7 +67,7 @@
          [self setShouldAppendPlot:YES];
       }
    NS_HANDLER
-      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
       [self setHandler:nil];
    NS_ENDHANDLER
 }
@@ -77,7 +77,7 @@
    NS_DURING
       [_handler draw];
    NS_HANDLER
-      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
       [self setHandler:nil];
    NS_ENDHANDLER
 }
@@ -87,7 +87,7 @@
    NS_DURING
       [_handler removeGraphicsInRect:aRect];
    NS_HANDLER
-      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
       [self setHandler:nil];
    NS_ENDHANDLER
 }
@@ -97,7 +97,7 @@
    NS_DURING
       [_handler setAcceptingEvents:flag];
    NS_HANDLER
-      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
       [self setHandler:nil];
    NS_ENDHANDLER   
 }

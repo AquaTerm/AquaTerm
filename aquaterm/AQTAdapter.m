@@ -109,7 +109,9 @@ Currently supported events are:
 _{event description}
 _{0 NoEvent }
 _{1:%{x,y}:%button MouseDownEvent }
-_{2:%{x,y}:%key KeyDownEvent } "*/
+_{2:%{x,y}:%key KeyDownEvent } 
+_{42:%{x,y}:%key ServerError }
+_{43:%{x,y}:%key Error } "*/
 - (void)setEventHandler:(void (*)(int index, NSString *event))fPtr
 {
    [_clientManager setEventHandler:fPtr];
@@ -118,25 +120,8 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 - (void)connectionDidDie:(id)x
 {
    NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
-   // Store for cleanup _later_
-   //_aqtReserved1 = _clientManager; 
    // Make sure we can't access any invalid objects:
    _selectedBuilder = nil;
-   _clientManager = nil;
-}
-
-- (BOOL)_aqtRestoreConnection
-{
-   BOOL connected = YES;
-   // [_aqtReserved1 release];
-   _clientManager = [AQTClientManager sharedManager];
-   [_clientManager terminateConnection];
-   connected = [_clientManager connectToServer];
-   if (!connected)
-   {
-      _clientManager=nil;
-   }
-   return connected;
 }
 
 #pragma mark === Control operations ===
@@ -145,13 +130,8 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
 - (void)openPlotWithIndex:(int)refNum
 {
-   
-   if (_clientManager == nil)
-   {
-      BOOL isOK = [self _aqtRestoreConnection];
-      NSLog(@"isOK = %@", isOK?@"YES":@"NO");
-   }
-   if ([self selectPlotWithIndex:refNum])
+   // FIXME: Move this functionality to AQTClientManager
+   if ([self selectPlotWithIndex:refNum]) 
    {
       // already exists, just clear it
       [self clearPlot];
@@ -228,18 +208,15 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    return [_clientManager lastEvent]; 
 }
 
-- (NSString *)waitNextEvent // FIXME: timeout? Hardcoded to 60s
+- (NSString *)waitNextEvent // FIXME: timeout? Hardcoded to 10s
 {
  NSString *event;
    BOOL isRunning;
    [self setAcceptingEvents:YES];
    do {
-      isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:60.0]];
+      isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10.0]];
       event = [self lastEvent];
-      if (![event isEqualToString:@"0"])
-      {
-         isRunning = NO;
-      }
+      isRunning = [event isEqualToString:@"0"]?YES:NO;
    } while (isRunning);
    [self setAcceptingEvents:NO];
    return event;

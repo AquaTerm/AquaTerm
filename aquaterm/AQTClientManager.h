@@ -19,6 +19,7 @@
    void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
    id _eventBuffer;
    int _logLimit;
+   BOOL errorState;
 }
 + (AQTClientManager *)sharedManager;
 - (void)setServer:(id)server;
