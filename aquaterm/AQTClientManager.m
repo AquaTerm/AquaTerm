@@ -25,6 +25,9 @@
 - (void)clearErrorState
 {
    BOOL serverDidDie = NO;
+
+   [self logMessage:@"Trying to recover from error." logLevel:3];
+
    NS_DURING
       [_server ping];
    NS_HANDLER
@@ -110,8 +113,8 @@
          }
       }
    }
-   NS_DURING
-      if (_server) {
+   if (_server) {
+      NS_DURING
          if ([_server conformsToProtocol:@protocol(AQTConnectionProtocol)]) {
             int a,b,c;
             [_server retain];
@@ -123,12 +126,13 @@
             [self logMessage:@"server is too old info" logLevel:1];
             _server = nil;
          }
-      }
-      NS_HANDLER
-         [localException raise];
-      NS_ENDHANDLER
-      [self logMessage:didConnect?@"Connected!":@"Could not connect" logLevel:1];
-      return didConnect;
+         NS_HANDLER
+            // [localException raise];
+            [self logMessage:@"An error occurred while talking to the server" logLevel:1];
+         NS_ENDHANDLER
+   }
+   [self logMessage:didConnect?@"Connected!":@"Could not connect" logLevel:1];
+   return didConnect;
 }
 
 // This is still troublesome... Needs to figure out if user is running from remote machine. NSTask
@@ -163,6 +167,7 @@
       [_server release];
       _server = nil;
    }
+   [self logMessage:@"Terminating connection." logLevel:1];
 }
 
 #pragma mark ==== Accessors ====
@@ -223,7 +228,9 @@
                                  name:[[NSProcessInfo processInfo] processName]
                                   pid:[[NSProcessInfo processInfo] processIdentifier]];
    NS_HANDLER
-      [localException raise];
+      // [localException raise];
+      [self _aqtHandlerError:[localException name]];
+      newPlot = nil;
    NS_ENDHANDLER
    if (newPlot) {
       [newPlot setClient:self];
@@ -274,7 +281,8 @@
          }
          [thePlot draw];
       NS_HANDLER
-         [localException raise];
+         // [localException raise];
+         [self _aqtHandlerError:[localException name]];
       NS_ENDHANDLER
    }
 }
@@ -299,7 +307,8 @@
       [thePlot setModel:[newBuilder model]];
       [thePlot draw];
    NS_HANDLER
-      [localException raise];
+      // [localException raise];
+      [self _aqtHandlerError:[localException name]];
    NS_ENDHANDLER
    [newBuilder release];
    return newBuilder;
@@ -329,7 +338,8 @@
       [thePlot removeGraphicsInRect:aRect];
       // [thePlot draw];
    NS_HANDLER
-      [localException raise];
+      // [localException raise];
+      [self _aqtHandlerError:[localException name]];
    NS_ENDHANDLER
 }
 
@@ -340,7 +350,7 @@
    NS_DURING
       [[_plots objectForKey:_activePlotKey] setClient:nil];
    NS_HANDLER
-      [self logMessage:@"Discarding exception..." logLevel:1];
+      [self logMessage:@"Closing plot, discarding exception..." logLevel:2];
    NS_ENDHANDLER
    [_plots removeObjectForKey:_activePlotKey];
    [_builders removeObjectForKey:_activePlotKey];
