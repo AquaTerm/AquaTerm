@@ -124,6 +124,7 @@
 				F57C16A102506DE3010D3DE4,
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
+				CBD8F3F004D90CE100EBD329,
 				F55D7FF10219BEF4014110D6,
 			);
 			isa = PBXGroup;
@@ -155,6 +156,7 @@
 				F54B0FE601FF5CDC014110A7,
 				F5E70370026D8645012F88DF,
 				F55BA2E303589FD301D20925,
+				CB15638804DA587B00EBD329,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -289,6 +291,7 @@ http://aquaterm.sourceforge.net</string>
 				F5B46F320209827F01A80104,
 				F5E70372026D8645012F88DF,
 				F55BA2E503589FD301D20925,
+				CB15638904DA587B00EBD329,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,6 +370,18 @@ http://aquaterm.sourceforge.net</string>
 //CB2
 //CB3
 //CB4
+		CB15638804DA587B00EBD329 = {
+			isa = PBXFileReference;
+			name = Cross.tiff;
+			path = "/Volumes/per-1/source/from pbook/Cross.tiff";
+			refType = 0;
+		};
+		CB15638904DA587B00EBD329 = {
+			fileRef = CB15638804DA587B00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CB5B187104A9A49E00EBD329 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -438,6 +453,21 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		CBD8F3EF04D90CDC00EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = aqdriv.m;
+			path = /Volumes/Earth/Users/per/source/AQT/adapters/pgplot/aqdriv.m;
+			refType = 0;
+		};
+		CBD8F3F004D90CE100EBD329 = {
+			children = (
+				CBD8F3EF04D90CDC00EBD329,
+			);
+			isa = PBXGroup;
+			name = Adapters;
+			refType = 4;
 		};
 		CBF3082D04D51B9300EBD329 = {
 			fileEncoding = 30;
