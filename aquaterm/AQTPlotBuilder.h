@@ -13,7 +13,8 @@
 
 // This is the maximum practically useable path length due to the way Quartz renders a path
 // FIXME: establish some "optimal" value
-#define MAX_PATH_POINTS 256
+#define MAX_POLYLINE_POINTS 64
+#define MAX_POLYGON_POINTS 256
 
 @class AQTModel, AQTColorMap;
 @interface AQTPlotBuilder : NSObject
@@ -24,8 +25,10 @@
   float _fontSize;	/*" Currently selected fontsize [pt]"*/
   float _linewidth;	/*" Currently selected linewidth [pt] "*/
   int _capStyle; /*" Currently selected linecap style "*/
-  NSPoint _path[MAX_PATH_POINTS];	/*" A cache for coalescing connected line segments into a single path "*/
-  int _pointCount;	/*" The current number of points in _path"*/
+  NSPoint _polylinePoints[MAX_POLYLINE_POINTS];	/*" A cache for coalescing connected line segments into a single path "*/
+  int _polylinePointCount;	/*" The current number of points in _polylinePoints"*/
+  NSPoint _polygonPoints[MAX_POLYGON_POINTS];	/*" A cache for coalescing connected line segments into a single path "*/
+  int _polygonPointCount;	/*" The current number of points in _polylinePoints"*/
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
   BOOL _shouldAppend;
   AQTAffineTransformStruct _transform;
@@ -70,6 +73,8 @@
 //- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 
   /*" Filled areas"*/
+- (void)moveToVertexPoint:(NSPoint)point;
+- (void)addEdgeToPoint:(NSPoint)point; 
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; // AQTPatch
 //- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 - (void)addFilledRect:(NSRect)aRect;

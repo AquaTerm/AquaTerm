@@ -285,6 +285,16 @@ _{@"NSUnderline" 0or1}
    [_selectedBuilder addPolylineWithPoints:points pointCount:pc];
 }
 
+- (void)moveToVertexPoint:(NSPoint)point
+{
+   [_selectedBuilder moveToVertexPoint:point];
+}
+
+- (void)addEdgeToPoint:(NSPoint)point
+{
+   [_selectedBuilder addEdgeToPoint:point];
+}
+
 /*" Add a sequence of line segments specified by a list of start-, end-, and joincoordinate(s) in x and y. Parameter pc is number of line segments + 1.
 - (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
 {

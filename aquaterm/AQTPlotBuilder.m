@@ -36,13 +36,25 @@
    // Any coalescing of render call may be performed here (use timer)
 }
 
-- (BOOL)_flushLineSegmentBuffer
+- (BOOL)_flushPolylineBuffer
 {
    BOOL didFlush = NO;
-   if (_pointCount > 1)
+   if (_polylinePointCount > 1)
    {
-      [self addPolylineWithPoints:_path pointCount:_pointCount];
-      _pointCount = 0;
+      [self addPolylineWithPoints:_polylinePoints pointCount:_polylinePointCount];
+      _polylinePointCount = 0;
+      didFlush = YES;
+   }
+   return didFlush;
+}
+
+- (BOOL)_flushPolygonBuffer
+{
+   BOOL didFlush = NO;
+   if (_polygonPointCount > 1)
+   {
+      [self addPolygonWithPoints:_polygonPoints pointCount:_polygonPointCount];
+      _polygonPointCount = 0;
       didFlush = YES;
    }
    return didFlush;
@@ -51,10 +63,9 @@
 -(void)_flushBuffers
 {
    // Possibly more stuff??
-   [self _flushLineSegmentBuffer];
+   [self _flushPolylineBuffer];
+   [self _flushPolygonBuffer];
 }
-
-
 
 - (id)init
 {
@@ -167,7 +178,7 @@
 {
    if (newLinewidth != _linewidth)
    {
-      [self _flushLineSegmentBuffer];
+      [self _flushPolylineBuffer];
       _linewidth = newLinewidth;
    }
 }
@@ -294,36 +305,36 @@
 
 - (void)moveToPoint:(NSPoint)point
 {
-   if (_pointCount > 1)
+   if (_polylinePointCount > 1)
    {
       // Only flush if this creates a disjoint path,
       // if the point is just the latest endpoint, skip it
-      if (!NSEqualPoints(point, _path[_pointCount-1]))
+      if (!NSEqualPoints(point, _polylinePoints[_polylinePointCount-1]))
       {
-         [self _flushLineSegmentBuffer];
-         _path[0]=point;
-         _pointCount = 1;
+         [self _flushPolylineBuffer];
+         _polylinePoints[0]=point;
+         _polylinePointCount = 1;
       }
    }
    else
    {
       // This is an initial move or a move-after-move case,
       // just accept it
-      _path[0]=point;
-      _pointCount = 1;
+      _polylinePoints[0]=point;
+      _polylinePointCount = 1;
    }
 }
 
 - (void)addLineToPoint:(NSPoint)point
 {
-   _path[_pointCount]=point;
-   _pointCount++;
-   if (_pointCount == MAX_PATH_POINTS)
+   _polylinePoints[_polylinePointCount]=point;
+   _polylinePointCount++;
+   if (_polylinePointCount == MAX_POLYLINE_POINTS)
    {
-      // NSLog(@"---- Reaching path limit (%d) ----", MAX_PATH_POINTS);
+      // NSLog(@"---- Reaching path limit (%d) ----", MAX_POLYLINE_POINTS);
       // Split the line
-      [self addPolylineWithPoints:_path pointCount:_pointCount];
-      _pointCount = 0;
+      [self addPolylineWithPoints:_polylinePoints pointCount:_polylinePointCount];
+      _polylinePointCount = 0;
       [self moveToPoint:point];
    }
    [self _aqtPlotBuilderSetModelIsDirty:YES];
@@ -356,6 +367,44 @@
 //
 // AQTPatch
 //
+
+- (void)moveToVertexPoint:(NSPoint)point
+{
+   if (_polygonPointCount > 1)
+   {
+      // Only flush if this creates a disjoint path,
+      // if the point is just the latest endpoint, skip it
+      if (!NSEqualPoints(point, _polygonPoints[_polygonPointCount-1]))
+      {
+         [self _flushPolygonBuffer];
+         _polygonPoints[0]=point;
+         _polygonPointCount = 1;
+      }
+   }
+   else
+   {
+      // This is an initial move or a move-after-move case,
+      // just accept it
+      _polygonPoints[0]=point;
+      _polygonPointCount = 1;
+   }
+}
+
+- (void)addEdgeToPoint:(NSPoint)point
+{
+   _polygonPoints[_polygonPointCount]=point;
+   _polygonPointCount++;
+   if (_polygonPointCount == MAX_POLYGON_POINTS)
+   {
+      // NSLog(@"---- Reaching path limit (%d) ----", MAX_POLYGON_POINTS);
+      // Split the line
+      [self addPolygonWithPoints:_polygonPoints pointCount:_polygonPointCount];
+      _polygonPointCount = 0;
+      [self moveToVertexPoint:point];
+   }
+   [self _aqtPlotBuilderSetModelIsDirty:YES];
+}
+
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
    AQTPatch *tmpPatch;

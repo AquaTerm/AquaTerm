@@ -71,12 +71,12 @@ enum {
 - (int)colormapSize;
 - (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b;
 - (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b;
+- (void)takeColorFromColormapEntry:(int)index;
+- (void)takeBackgroundColorFromColormapEntry:(int)index;
 
   /*" Color handling "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b;
-- (void)takeColorFromColormapEntry:(int)index;
 - (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b;
-- (void)takeBackgroundColorFromColormapEntry:(int)index;
 - (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b;
 
   /*" Text handling "*/
