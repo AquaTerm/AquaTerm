@@ -17,7 +17,11 @@
 // executed from AquaTerm using menu Debug -> Timing tests.
 
 #import <Foundation/Foundation.h>
-#import "AQTAdapter.h"
+#ifdef AQT_APP
+#import <AppKit/AppKit.h>
+#import "AQTController.h"
+#endif
+#import <aquaterm/AQTAdapter.h>
 
 #ifndef AQT_APP
 void aqtStringDrawingTest(AQTAdapter *adapter);

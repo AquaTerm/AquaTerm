@@ -19,8 +19,9 @@
 #import <Foundation/Foundation.h>
 #ifdef AQT_APP
 #import <AppKit/AppKit.h>
+#import "AQTController.h"
 #endif
-#import "AQTAdapter.h"
+#import <aquaterm/AQTAdapter.h>
 
 // Testing the use of a callback function to handle errors in the server
 static void customEventHandler(int index, NSString *event)
@@ -36,7 +37,10 @@ int main(void)
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   AQTAdapter *adapter = [[AQTAdapter alloc] init];
+  NSLog(@"Hello");
   aqtDebug(adapter);
+  [adapter release];
+  [pool release];
   return 0;
 }
 void aqtDebug(AQTAdapter *adapter)
@@ -62,14 +66,14 @@ void aqtDebug(id sender)
      [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(4,2)];
      [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(7,1)];
      [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(8,2)];
-     [adapter addLabel:attrStr position:NSMakePoint(200, 200) angle:0.0 align:AQTAlignLeft];
+     [adapter addLabel:attrStr atPoint:NSMakePoint(200, 200) angle:0.0 align:AQTAlignLeft];
      [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:0] range:NSMakeRange(0, 11)];
      [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(0,3)];
      [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(4,1)];
-     [adapter addLabel:attrStr position:NSMakePoint(200, 300) angle:0.0 align:AQTAlignLeft];
-     [adapter addLabel:attrStr position:NSMakePoint(100, 200) angle:90.0 align:AQTAlignCenter];
+     [adapter addLabel:attrStr atPoint:NSMakePoint(200, 300) angle:0.0 align:AQTAlignLeft];
+     [adapter addLabel:attrStr atPoint:NSMakePoint(100, 200) angle:90.0 align:AQTAlignCenter];
   }
   
   [adapter renderPlot];
-  [adapter closePlot];
+  //[adapter closePlot];
 }
