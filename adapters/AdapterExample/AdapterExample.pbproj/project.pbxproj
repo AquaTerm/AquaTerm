@@ -16,6 +16,7 @@
 				F54BF39E01A1D1A101000112,
 				F54BF39F01A1D1A101000112,
 				F54BF3A501A1D59D01000112,
+				F5FEAC0E01A6B1730143D50D,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -267,7 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F54BF3A001A1D1A101000112,
-				F54BF3A601A1D59D01000112,
+				F5FEAC0F01A6B1730143D50D,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -372,8 +373,13 @@
 			path = gptProtocol.h;
 			refType = 4;
 		};
-		F54BF3A601A1D59D01000112 = {
-			fileRef = F54BF3A501A1D59D01000112;
+		F5FEAC0E01A6B1730143D50D = {
+			isa = PBXFileReference;
+			path = AQTProtocol.h;
+			refType = 4;
+		};
+		F5FEAC0F01A6B1730143D50D = {
+			fileRef = F5FEAC0E01A6B1730143D50D;
 			isa = PBXBuildFile;
 			settings = {
 			};

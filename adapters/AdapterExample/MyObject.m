@@ -1,6 +1,5 @@
 #import "MyObject.h"
-#import "gptProtocol.h"
-
+#import "AQTProtocol.h"
 
 #define justifyLeft 0
 #define justifyCenter 1
@@ -29,7 +28,7 @@
 @end
 
 
-@implementation MyObject
+@implementation MyObject 
 - (IBAction)connectAction:(id)sender
 {
     //
@@ -40,7 +39,7 @@
       //
       // Try to establish connection
       //
-      server = [NSConnection rootProxyForConnectionWithRegisteredName:@"gnuplotServer" host:nil];
+      server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
       if (nil==server)
       {
         //
@@ -56,10 +55,15 @@
         [server retain];
         [statusOutlet setStringValue:@"Connected to AquaTerm!"];
         //
-        // Open a window
+        // Set the protocol for the conversation
         //
-        [server gptCurrentWindow:1];
-        [server gptRenderRelease:YES];
+        [server setProtocolForProxy:@protocol(AQTProtocol)];
+        //
+        // Select a model to write to and show the corresponding window
+        // (will create the window if neccessary)
+        //
+        [server selectModel:1];
+        [server renderInViewShouldRelease:YES];
       }
     }
     else
@@ -72,8 +76,6 @@
 {
     NSPoint aPoint = NSMakePoint(AQUA_XMAX*randomNumber(), AQUA_YMAX*randomNumber());
     NSBezierPath *aPath = [NSBezierPath bezierPath];
-    int strokeColor = (int)randomNumber()*8;	// Eight fixed colors
-    double fillColor =  randomNumber();			// Colormap [0 1]
     
     [aPath moveToPoint:aPoint];
     do {
@@ -83,28 +85,32 @@
     
     if (randomNumber() < 0.5)
     {
-      // Fill path
-       [server gptSetPath:aPath WithLinetype:strokeColor FillColor:fillColor PathIsFilled:YES];     
+      // Polygon
+       [server addPolygon:aPath withColor:randomNumber() /* [0..1] */];  
     }
     else
     {
-      // Stroke path
-      [server gptSetPath:aPath WithLinetype:strokeColor FillColor:0 PathIsFilled:NO];
+      // Polyline
+      [server addPolyline:aPath withIndexedColor:(int)(8*randomNumber()) /* {0,1,...,7} */];
     } 
-    [server gptRenderRelease:NO];
+    [server renderInViewShouldRelease:NO];
 }
 
 - (IBAction)addTextAction:(id)sender
 {
   NSPoint aPoint= NSMakePoint(AQUA_XMAX*randomNumber(), AQUA_YMAX*randomNumber());
-  int aColor = (int)randomNumber()*8; // Eight fixed colors		
 
-  [server gptPutString:@"Hello world!" AtPoint:aPoint WithJustification:justifyLeft WithLinetype:aColor];
-  [server gptRenderRelease:NO];
+  [server addString:@"Hello world!" 
+          atPoint:aPoint 
+          withJustification:justifyLeft 
+          withIndexedColor:(int)(8*randomNumber()) /* {0,1,...,7} */];
+          
+  [server renderInViewShouldRelease:NO];
 }
+
 - (IBAction)releaseAction:(id)sender
 {
-  [server gptRenderRelease:YES];
+  [server renderInViewShouldRelease:YES];
 }
 
 float randomNumber(void)
