@@ -273,10 +273,18 @@ for (i=0; i<32; i++)
 
 
 // Text
+[adapter setFontname:@"Times-Roman"];
+NSString *s = [NSString stringWithFormat:@"Unicode: %C %C %C %C%C%C%C%C", 0x2124, 0x2133, 0x5925, 0x2654, 0x2655, 0x2656, 0x2657, 0x2658]; 
+NSMutableAttributedString *as = [[NSMutableAttributedString alloc] initWithString:s];
+[as setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:@"AppleSymbols", @"AQTFontname", nil] range:NSMakeRange(9,11)];
+[as setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:@"Song Regular", @"AQTFontname", nil] range:NSMakeRange(13,1)];
+
+
 [adapter takeColorFromColormapEntry:1];
 [adapter setFontname:@"Times-Roman"];
-[adapter setFontsize:16.0];
-[adapter addLabel:@"Times-Roman 16pt" atPoint:NSMakePoint(320, 150) angle:0.0 align:AQTAlignLeft];
+[adapter setFontsize:12.0];
+[adapter addLabel:as atPoint:NSMakePoint(320,150)];
+//[adapter addLabel:@"Times-Roman 16pt" atPoint:NSMakePoint(320, 150) angle:0.0 align:AQTAlignLeft];
 [adapter takeColorFromColormapEntry:2];
 [adapter setFontname:@"Times-Italic"];
 [adapter setFontsize:16.0];
