@@ -946,6 +946,34 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		CBB800C60723A4740068A0C9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AQTStringDrawingAdditions.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CBB800C70723A4740068A0C9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AQTStringDrawingAdditions.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CBB800C80723A4740068A0C9 = {
+			fileRef = CBB800C60723A4740068A0C9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBB800C90723A4740068A0C9 = {
+			fileRef = CBB800C70723A4740068A0C9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CBB8466E056C0A4B00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -1263,6 +1291,7 @@
 				CBC4B43105E4C784001BE8D7,
 				CB9B70D3065A0B9C00563010,
 				CB2CC10F0677017B0042863D,
+				CBB800C80723A4740068A0C9,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1390,6 +1419,7 @@
 				CBC4B44405E4C784001BE8D7,
 				CB9B70D4065A0B9C00563010,
 				CB2CC1100677017B0042863D,
+				CBB800C90723A4740068A0C9,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1811,6 +1841,8 @@
 				F5E3AFAA026D80D2012F88DF,
 				CB71321105444AEC00D208BA,
 				CB71321205444AEC00D208BA,
+				CBB800C60723A4740068A0C9,
+				CBB800C70723A4740068A0C9,
 			);
 			isa = PBXGroup;
 			name = View;
