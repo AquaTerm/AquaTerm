@@ -1,0 +1,570 @@
+2002-12-09 10:24  persquare
+
+	* ReadMe.txt, ToDo: Updating notes.
+
+2002-12-09 10:06  persquare
+
+	* GPTController.m: Fixing Help menu entry. Broken by API change?
+
+2002-12-04 12:43  persquare
+
+	* AQTLabel.m, GPTWindowController.m: Fixing scaling of text, broken
+	sinces addition of plplot.  Making window respect aspect ratio of
+	plot.
+
+2002-10-21 16:55  persquare
+
+	* English.lproj/MainMenu1.nib/: info.nib, objects.nib: Sync nib
+
+2002-10-21 16:45  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Sync project
+
+2002-10-21 16:44  persquare
+
+	* English.lproj/AQTWindow.nib/: classes.nib, info.nib, objects.nib:
+	Changing max size
+
+2002-10-21 16:38  persquare
+
+	* AQTBuilder.h, AQTBuilder.m, AQTGraphic.h, AQTGraphic.m,
+	AQTImage.m, AQTLabel.h, AQTLabel.m, AQTModel.h, AQTModel.m,
+	AQTPath.h, AQTPath.m, AQTView.h, AQTView.m, GPTController.m,
+	GPTWindowController.h, GPTWindowController.m: Adding functionality:
+	client settable canvas size, attributed strings in preparation for
+	plplot adapter.
+
+2002-10-21 16:33  persquare
+
+	* AQTBaseMethods.h, AQTExtendedMethods.h, AQTProtocol.h: Splitting
+	AQTProtocol into two parts, separating Foundation and AppKit
+	dependencies. AQTProtocol.h provides backwards compatibility.
+
+2002-10-12 23:38  persquare
+
+	* ReadMe.txt: Updated info
+
+2002-10-12 23:33  persquare
+
+	* English.lproj/Credits.rtf: Updated info
+
+2002-10-12 20:44  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Bump version to 0.3.1
+
+2002-10-12 20:36  persquare
+
+	* English.lproj/AquaTerm.icns: Adding icons
+
+2002-10-12 19:52  persquare
+
+	* AquaTerm.pbproj/: bsavage.pbxuser, per.pbxuser, ppe.pbxuser,
+	project.pbxproj: Cleanup, I hope...
+
+2002-10-12 17:01  persquare
+
+	* GPTController.m: Fixing problem with save/copy drawing background
+	and border.
+
+2002-04-24 17:31  persquare
+
+	* ReadMe.txt: Update for 0.3.0 release
+
+2002-04-24 16:39  persquare
+
+	* English.lproj/help.html: Update link to docs.
+
+2002-04-19 16:02  persquare
+
+	* AQTColorInspector.h, AQTColorInspector.m, GPTController.h,
+	GPTController.m: Fixing mainWindow tracking and window closing
+	which in turn fixes print/save/copy bug. Cleaning.
+
+2002-04-19 16:00  persquare
+
+	* AQTView.h, AQTView.m: Fixing dealloc bug, cleaning
+
+2002-04-18 23:44  persquare
+
+	* GPTController.m: Fixing bug when saving or copying due to moving
+	model ownership from windowcontroller to view
+
+2002-04-18 11:40  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Merging GPTView and AQTPrintView
+	into AQTView, replacing GPTWindow.nib with AQTWindow
+
+2002-04-18 11:23  persquare
+
+	* AQTBuilder.m, AQTColorInspector.m, GPTController.h,
+	GPTController.m, GPTWindowController.h, GPTWindowController.m:
+	Changes to use AQTView instead of GPTView/AQTPrintView, some
+	cleaning up too...
+
+2002-04-18 11:12  persquare
+
+	* AQTPrintView.h, AQTPrintView.m, AQTView.h, AQTView.m, GPTView.h,
+	GPTView.m, AquaTerm.pbproj/project.pbxproj: Merging GPTView and
+	AQTPrintView into AQTView, replacing GPTWindow.nib with AQTWindow
+
+2002-04-18 11:05  persquare
+
+	* English.lproj/AQTWindow.nib/: classes.nib, info.nib, objects.nib:
+	Merging GPTView and AQTPrintView into AQTView, replacing
+	GPTWindow.nib with AQTWindow
+
+2002-04-17 11:14  persquare
+
+	* GPTController.m: Fixing the long standing bug with DO calls
+	becoming out of sync.
+
+2002-03-27 13:09  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: pxproj didn't get updated
+
+2002-03-27 12:57  persquare
+
+	* AQTBuilder.h, AQTBuilder.m, AQTModel.h, AQTModel.m,
+	GPTController.m, GPTWindowController.h, GPTWindowController.m:
+	Added setTitle: Added timing functions to ease adapter
+	optimization, general cleanup
+
+2002-03-27 12:55  persquare
+
+	* AQTProtocol.h, AQTProtocol.mdoc: Added setTitle:, removed
+	-addImage::, updated docs
+
+2002-03-27 12:51  persquare
+
+	* AQTImage.m: Cleanup
+
+2002-03-27 12:49  persquare
+
+	* English.lproj/ColorInspector.nib/classes.nib,
+	English.lproj/ColorInspector.nib/info.nib,
+	English.lproj/ColorInspector.nib/objects.nib, AQTColorInspector.h,
+	AQTColorInspector.m, AQTColorMap.m: Revised inspector
+
+2002-03-07 18:53  persquare
+
+	* GPTView.m: Stylefix. Getting rid of warnings
+
+2002-03-07 18:30  persquare
+
+	* AQTColorInspector.h, AQTColorInspector.m: Color inspector now
+	updates itself from the colormap of the frontmost window. Changing
+	colors partly implemented, only 9 linecolors and back, axis, grid
+	accessible from inspector.
+
+2002-03-07 18:27  persquare
+
+	* AQTColorMap.h, AQTColorMap.m, AQTModel.h, AQTModel.m, GPTView.m:
+	Implementing a completely configurable color indexing, most notably
+	background and other specials.
+
+2002-03-07 18:23  persquare
+
+	* AQTBuilder.m: Fixing a problem with images not behaving according
+	to isFlipped: flag
+
+2002-03-07 08:28  persquare
+
+	* AQTBuilder.m, AQTImage.m, AQTProtocol.h, AQTProtocol.mdoc:
+	Changes to fix crashing bug when printing
+
+2002-02-25 23:37  persquare
+
+	* AQTColorMap.m: Initial colormap set to 16 colors. Using yellow to
+	indicate non-initialized color.
+
+2002-02-25 23:36  persquare
+
+	* AQTBuilder.m: Check for valid model before closing
+
+2002-02-23 22:09  persquare
+
+	* GPTController.h, GPTController.m, GPTWindowController.m:
+	Preloading window nib-file to work around bug that will open
+	multiple windows when plotting repatedly to AQT with no previously
+	open windows.
+
+2002-02-21 00:44  persquare
+
+	* AQTBuilder.m, AQTColorMap.m: cleanup
+
+2002-02-20 23:13  persquare
+
+	* AQTColorMap.h, AQTColorMap.m, AQTImage.m, AQTModel.h, AQTModel.m,
+	AQTPath.h, AQTPath.m, AQTProtocol.h, GPTController.h,
+	GPTController.m, GPTWindowController.h, GPTWindowController.m,
+	ToDo, AquaTerm.pbproj/project.pbxproj: Changes in anticipation of
+	v0.3.0
+
+2002-02-20 23:08  persquare
+
+	* AQTBuilder.h, AQTBuilder.m, GPTReceiverObject.h,
+	GPTReceiverObject.m: Replacing GPTReceiverObject and moving DO code
+	to GPTController
+
+2002-02-20 22:22  persquare
+
+	* AQTProtocol.mdoc: Adding AQTProtocol.mdoc needed for
+	documentation of AQTProtocol
+
+2002-02-20 22:19  persquare
+
+	* ReadMe.rtf, ReadMe.txt: Moving ReadMe.rtf to ReadMe.txt
+
+2002-02-20 22:14  persquare
+
+	* Docs/: AQTColorInspector.html, AQTColorMap.html, AQTGraphic.html,
+	AQTLabel.html, AQTModel.html, AQTPath.html, AQTPrintView.html,
+	AQTProtocol.html, AquaTerm.graffle, AquaTerm.jpg,
+	AquaTermOverview.pdf: Removing static docs, class docs are
+	generated by target Docs in PB
+
+2002-02-20 22:10  persquare
+
+	* Docs/: GPTColorExtras.rtf, GPTController.html, GPTController.rtf,
+	GPTGraphic.html, GPTGraphic.rtf, GPTInfoDelegate.html,
+	GPTInfoDelegate.rtf, GPTInfoWindowController.html,
+	GPTInfoWindowController.rtf, GPTLabel.html, GPTLabel.rtf,
+	GPTModel.html, GPTModel.rtf, GPTPath.html, GPTPath.rtf,
+	GPTReceiverObject.html, GPTReceiverObject.rtf, GPTView.html,
+	GPTView.rtf, GPTWindowController.html, GPTWindowController.rtf,
+	ReadMe.txt, gptProtocol.html, gptProtocol.rtf: Removing static
+	docs, class docs are generated by target Docs in PB
+
+2002-02-12 22:33  persquare
+
+	* makedocs, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj: Adding docs target and script
+	makedocs. Can't set path to script properly, darn
+
+2002-02-12 18:02  bobsavage
+
+	* GPTController.h, GPTController.m: fixed the more severe
+	(freezing) part of BUG #507536. Still can select Save as..., but
+	now at least it won't lock up
+
+2002-02-11 20:46  bobsavage
+
+	* AQTColorInspector.m, aqt-test.py,
+	AquaTerm.pbproj/bsavage.pbxuser: fixed colormap not updating bug;
+	adding aqt-test.py (test automation script)
+
+2002-02-11 13:57  persquare
+
+	* GPTReceiverObject.m: Initial support for images in AquaTerm
+
+2002-02-11 13:13  persquare
+
+	* AQTImage.h, AQTImage.m, AQTProtocol.h,
+	AquaTerm.pbproj/project.pbxproj: Initial support for images in
+	AquaTerm
+
+2002-02-07 08:50  bobsavage
+
+	* AQTColorInspector.m, AquaTerm.pbproj/bsavage.pbxuser: fixed
+	colorinspector over everything problem, identified colorinspector
+	cannot update windows until the first click on a window problem
+
+2002-02-07 08:16  bobsavage
+
+	* AQTColorInspector.h, AQTColorInspector.m, AQTPath.m,
+	AquaTerm.pbproj/bsavage.pbxuser, AquaTerm.pbproj/project.pbxproj,
+	English.lproj/ColorInspector.nib/info.nib,
+	English.lproj/ColorInspector.nib/objects.nib: Applying Per's patch,
+	changing line color works, changing gradient color works, changing
+	grid color works. BG color cannot be set, yet, nor can text. Click
+	on window once to make it update the first time.
+
+2002-02-05 23:31  persquare
+
+	* AQTPath.m: Take one on fixing problems with linewidth
+
+2002-02-04 09:27  bobsavage
+
+	* Docs/: AQTColorInspector.html, AQTColorMap.html, AQTGraphic.html,
+	AQTLabel.html, AQTModel.html, AQTPath.html, AQTPrintView.html,
+	AQTProtocol.html: adding the following to Docs/ : AQTProtocol.html
+	AQTPrintView.html AQTPath.html AQTModel.html AQTLabel.html
+	AQTGraphic.html AQTColorMap.html AQTColorInspector.html
+
+2002-02-04 09:24  bobsavage
+
+	* Docs/: GPTColorExtras.html, GPTController.html,
+	GPTReceiverObject.html, GPTView.html, GPTWindowController.html:
+	regenerated html DOCS using autodoc
+
+2002-02-04 09:14  bobsavage
+
+	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.h,
+	AQTColorMap.m, AQTGraphic.h, AQTGraphic.m, AQTLabel.h, AQTLabel.m,
+	AQTModel.h, AQTModel.m, AQTPath.h, AQTPath.m, GPTView.m: adding
+	more autodoc formatted notes, deleting some cruft. Builds clean.
+	Runs and displays from Gnuplot. Color inspector displays, but it
+	does not update the colors in the active model
+
+2002-01-31 22:38  bobsavage
+
+	* AquaTerm.pbproj/bsavage.pbxuser, Docs/AquaTerm.graffle,
+	Docs/AquaTerm.jpg: Updating class diagram
+
+2002-01-31 17:05  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Updating project (cosmetic)
+
+2002-01-31 16:58  persquare
+
+	* GPTColorExtras.h, GPTColorExtras.m: Removing category
+	GPTColorExtras
+
+2002-01-31 16:54  persquare
+
+	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.m,
+	GPTController.h, GPTController.m, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj,
+	English.lproj/ColorInspector.nib/classes.nib,
+	English.lproj/ColorInspector.nib/info.nib,
+	English.lproj/ColorInspector.nib/objects.nib,
+	English.lproj/ExtendSavePanel.nib/info.nib,
+	English.lproj/ExtendSavePanel.nib/objects.nib,
+	English.lproj/MainMenu1.nib/classes.nib,
+	English.lproj/MainMenu1.nib/info.nib,
+	English.lproj/MainMenu1.nib/objects.nib: Added live colormap
+	previewing for inspector. Added menu entry to show info (inspector)
+	window. Added stubs for notifications to inspector. Fixed broken
+	nib
+
+2002-01-31 09:32  bobsavage
+
+	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.h,
+	AQTColorMap.m, AQTGraphic.h, AQTGraphic.m, AQTLabel.m, AQTModel.h,
+	AQTModel.m, AQTPath.h, AQTPath.m, GPTColorExtras.m,
+	GPTReceiverObject.h, GPTReceiverObject.m,
+	AquaTerm.pbproj/bsavage.pbxuser: committing AQT020129.patch from
+	Per. Builds and runs cleanly
+
+2002-01-30 15:36  persquare
+
+	* AQTProtocol.h: Updated comments to reflect the current state of
+	things
+
+2002-01-29 13:25  persquare
+
+	* English.lproj/ExtendSavePanel.nib/: classes.nib, info.nib,
+	objects.nib: Add nibs needed for extended save panel
+
+2002-01-28 21:29  bobsavage
+
+	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.h,
+	AQTColorMap.m, AQTGraphic.h, AQTGraphic.m, AQTLabel.h, AQTModel.h,
+	AQTModel.m, AQTPath.h, AQTPath.m, GPTWindowController.h,
+	AquaTerm.pbproj/bsavage.pbxuser, AquaTerm.pbproj/project.pbxproj,
+	English.lproj/ColorInspector.nib/classes.nib,
+	English.lproj/ColorInspector.nib/info.nib,
+	English.lproj/ColorInspector.nib/objects.nib: added first
+	incarnation of AQTColorInspector, and AQTColorMap. Brought
+	ColorInspector.nib in line with Per's ideas. Status: Does not use
+	the new colormap code. Still runs and uses the old methods. Does
+	not build without warnings -- surface color method is empty (should
+	return color). Still need to hook up inspector class' show window
+	to something in main nib.
+
+2002-01-24 00:03  persquare
+
+	* help.html, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj, English.lproj/help.html: moving
+	files
+
+2002-01-23 23:50  persquare
+
+	* GPTController.h, GPTController.m, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj: Added user selectable save format
+	(eps/pdf) to SaveAs dialog
+
+2002-01-23 19:27  persquare
+
+	* GPTController.h, GPTController.m, help.html,
+	AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj,
+	English.lproj/MainMenu1.nib/classes.nib,
+	English.lproj/MainMenu1.nib/info.nib,
+	English.lproj/MainMenu1.nib/objects.nib: Adding HTML help
+
+2002-01-23 19:20  bobsavage
+
+	* GPTView.m: minor comment change
+
+2002-01-23 17:37  bobsavage
+
+	* GPTInfoDelegate.h, GPTInfoDelegate.m, GPTInfoWindowController.h,
+	GPTInfoWindowController.m, AquaTerm.pbproj/bsavage.pbxuser,
+	AquaTerm.pbproj/project.pbxproj: removing GPTInfoXXX and Aquaterm2
+	target
+
+2002-01-23 08:35  bobsavage
+
+	* GPTInfoDelegate.h, GPTReceiverObject.m, GPTView.m,
+	GPTWindowController.h, GPTWindowController.m,
+	AquaTerm.pbproj/bsavage.pbxuser, AquaTerm.pbproj/project.pbxproj,
+	English.lproj/ColorInspector.nib/classes.nib,
+	English.lproj/ColorInspector.nib/info.nib,
+	English.lproj/ColorInspector.nib/objects.nib: commenting on
+	structure, and adding rough draft of color inspector
+
+2002-01-23 03:24  bobsavage
+
+	* AQTGraphic.h, AQTGraphic.m, AQTLabel.h, AQTLabel.m, AQTPath.m,
+	GPTColorExtras.h, GPTColorExtras.m,
+	AquaTerm.pbproj/bsavage.pbxuser: committing color changes in
+	preparation for method to change colors at run time
+
+2002-01-16 11:44  persquare
+
+	* ToDo: More to do in ToDo
+
+2002-01-16 11:12  persquare
+
+	* GPTView.m: Applied clean up patch from bobsavage
+
+2002-01-14 23:37  persquare
+
+	* ToDo: Added ToDo
+
+2002-01-11 09:52  persquare
+
+	* AQTPrintView.h, AQTPrintView.m: Adding print/save/copy view
+
+2002-01-10 15:12  persquare
+
+	* GPTController.h, GPTController.m, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj,
+	English.lproj/MainMenu1.nib/classes.nib,
+	English.lproj/MainMenu1.nib/info.nib,
+	English.lproj/MainMenu1.nib/objects.nib: Implemented saveAs and
+	copy, fixed printing
+
+2001-12-28 15:52  persquare
+
+	* ReadMe.rtf: Instructions on how to get gnuplot sources
+
+2001-12-28 15:44  persquare
+
+	* ReadMe.rtf: Adding a readme file
+
+2001-12-13 14:26  persquare
+
+	* GPTReceiverObject.m, AquaTerm.pbproj/ppe.pbxuser,
+	AquaTerm.pbproj/project.pbxproj: Minor changes, prepare for release
+
+2001-12-13 01:15  persquare
+
+	* AQTLabel.m, AQTProtocol.h, GPTReceiverObject.m,
+	AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj: minor
+	fixes
+
+2001-12-10 21:27  persquare
+
+	* GPTView.m: fixed a versionbug
+
+2001-12-10 17:08  persquare
+
+	* AQTGraphic.h, AQTGraphic.m, AQTLabel.h, AQTLabel.m, AQTModel.h,
+	AQTModel.m, AQTPath.h, AQTPath.m, AQTProtocol.h, GPTController.h,
+	GPTController.m, GPTGraphic.h, GPTGraphic.m, GPTLabel.h,
+	GPTLabel.m, GPTModel.h, GPTModel.m, GPTPath.h, GPTPath.m,
+	GPTReceiverObject.h, GPTReceiverObject.m, GPTWindowController.h,
+	GPTWindowController.m, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj: Added -(void)clearRect: to remove
+	graphics inside rect
+
+2001-12-07 11:01  persquare
+
+	* GPTLabel.m, GPTReceiverObject.m, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj: fixed (scary/daft) typos
+
+2001-12-04 22:39  persquare
+
+	* AQTProtocol.h, GPTLabel.h, GPTLabel.m, GPTReceiverObject.m,
+	AquaTerm.pbproj/ppe.pbxuser, English.lproj/MainMenu1.nib/info.nib,
+	English.lproj/MainMenu1.nib/objects.nib: Added text rotation
+	capabilities
+
+2001-12-04 19:12  persquare
+
+	* AQTProtocol.h, GPTController.h, GPTController.m,
+	GPTReceiverObject.h, GPTReceiverObject.m,
+	AquaTerm.pbproj/ppe.pbxuser, AquaTerm.pbproj/project.pbxproj:
+	Extended protocol and implemented setFontWithName:size:
+
+2001-11-18 00:15  persquare
+
+	* GPTController.m, GPTReceiverObject.m, GPTWindowController.m,
+	AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj,
+	English.lproj/Credits.rtf, English.lproj/InfoPlist.strings,
+	English.lproj/MainMenu1.nib/info.nib,
+	English.lproj/MainMenu1.nib/objects.nib: Fixed window display bug,
+	added version info, cosmetic fixes
+
+2001-11-17 16:38  persquare
+
+	* AQTProtocol.h, GPTReceiverObject.h, GPTReceiverObject.m,
+	gptProtocol.h, gptProtocol.mdoc, AquaTerm.pbproj/per.pbxuser,
+	AquaTerm.pbproj/project.pbxproj: Replaced gptProtocol.h with
+	AQTProtocol.h
+
+2001-11-13 14:08  persquare
+
+	* GPTColorExtras.h, GPTColorExtras.m, GPTController.h,
+	GPTController.m, GPTGraphic.h, GPTGraphic.m, GPTInfoDelegate.h,
+	GPTInfoDelegate.m, GPTInfoWindowController.h,
+	GPTInfoWindowController.m, GPTLabel.h, GPTLabel.m, GPTModel.h,
+	GPTModel.m, GPTPath.h, GPTPath.m, GPTReceiverObject.h,
+	GPTReceiverObject.m, GPTView.h, GPTView.m, GPTWindowController.h,
+	GPTWindowController.m, gptProtocol.h, gptProtocol.mdoc, main.m,
+	AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/ppe.pbxuser,
+	AquaTerm.pbproj/project.pbxproj, Docs/AquaTerm.graffle,
+	Docs/AquaTermOverview.pdf, Docs/GPTColorExtras.html,
+	Docs/GPTColorExtras.rtf, Docs/GPTController.html,
+	Docs/GPTController.rtf, Docs/GPTGraphic.html, Docs/GPTGraphic.rtf,
+	Docs/GPTInfoDelegate.html, Docs/GPTInfoDelegate.rtf,
+	Docs/GPTInfoWindowController.html,
+	Docs/GPTInfoWindowController.rtf, Docs/GPTLabel.html,
+	Docs/GPTLabel.rtf, Docs/GPTModel.html, Docs/GPTModel.rtf,
+	Docs/GPTPath.html, Docs/GPTPath.rtf, Docs/GPTReceiverObject.html,
+	Docs/GPTReceiverObject.rtf, Docs/GPTView.html, Docs/GPTView.rtf,
+	Docs/GPTWindowController.html, Docs/GPTWindowController.rtf,
+	Docs/gptProtocol.html, Docs/gptProtocol.rtf,
+	English.lproj/InfoPlist.strings,
+	English.lproj/MainMenu1.nib/classes.nib,
+	English.lproj/MainMenu1.nib/info.nib,
+	English.lproj/MainMenu1.nib/objects.nib: Initial revision
+
+2001-11-13 14:08  persquare
+
+	* GPTColorExtras.h, GPTColorExtras.m, GPTController.h,
+	GPTController.m, GPTGraphic.h, GPTGraphic.m, GPTInfoDelegate.h,
+	GPTInfoDelegate.m, GPTInfoWindowController.h,
+	GPTInfoWindowController.m, GPTLabel.h, GPTLabel.m, GPTModel.h,
+	GPTModel.m, GPTPath.h, GPTPath.m, GPTReceiverObject.h,
+	GPTReceiverObject.m, GPTView.h, GPTView.m, GPTWindowController.h,
+	GPTWindowController.m, gptProtocol.h, gptProtocol.mdoc, main.m,
+	AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/ppe.pbxuser,
+	AquaTerm.pbproj/project.pbxproj, Docs/AquaTerm.graffle,
+	Docs/AquaTermOverview.pdf, Docs/GPTColorExtras.html,
+	Docs/GPTColorExtras.rtf, Docs/GPTController.html,
+	Docs/GPTController.rtf, Docs/GPTGraphic.html, Docs/GPTGraphic.rtf,
+	Docs/GPTInfoDelegate.html, Docs/GPTInfoDelegate.rtf,
+	Docs/GPTInfoWindowController.html,
+	Docs/GPTInfoWindowController.rtf, Docs/GPTLabel.html,
+	Docs/GPTLabel.rtf, Docs/GPTModel.html, Docs/GPTModel.rtf,
+	Docs/GPTPath.html, Docs/GPTPath.rtf, Docs/GPTReceiverObject.html,
+	Docs/GPTReceiverObject.rtf, Docs/GPTView.html, Docs/GPTView.rtf,
+	Docs/GPTWindowController.html, Docs/GPTWindowController.rtf,
+	Docs/gptProtocol.html, Docs/gptProtocol.rtf,
+	English.lproj/InfoPlist.strings,
+	English.lproj/MainMenu1.nib/classes.nib,
+	English.lproj/MainMenu1.nib/info.nib,
+	English.lproj/MainMenu1.nib/objects.nib: Initial import
+
