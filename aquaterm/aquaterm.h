@@ -47,6 +47,10 @@ int aqtWaitNextEvent(char *buffer);
 
 /*" Plotting related commands "*/
 
+/*" Clip rect, applies to all objects "*/
+void aqtSetClipRect(float originX, float originY, float width, float height);
+void aqtSetDefaultClipRect(void);
+
 /*" Colormap (utility  "*/
 int aqtColormapSize(void);
 void aqtSetColormapEntry(int entryIndex, float r, float g, float b);
@@ -64,6 +68,7 @@ void aqtGetBackgroundColor(float *r, float *g, float *b);
 void aqtSetFontname(const char *newFontname);
 void aqtSetFontsize(float newFontsize);
 void aqtAddLabel(const char *text, float x, float y, float angle, int align);
+void aqtAddShearedLabel(const char *text, float x, float y, float angle, float shearAngle, int align);
 
 /*" Line handling "*/
 void aqtSetLinewidth(float newLinewidth);

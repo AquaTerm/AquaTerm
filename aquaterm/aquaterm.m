@@ -135,6 +135,17 @@ void aqtEventProcessingMode()
 
 /*" Plotting related commands "*/
 
+/*" Clip rect, applies to all objects "*/
+void aqtSetClipRect(float originX, float originY, float width, float height)
+{
+   [_adapter setClipRect:NSMakeRect(originX, originY, width, height)];
+}
+
+void aqtSetDefaultClipRect(void)
+{ 
+   [_adapter setDefaultClipRect];
+}
+
 /*" Colormap (utility  "*/
 int aqtColormapSize(void)
 {
@@ -203,6 +214,15 @@ void aqtAddLabel(const char *text, float x, float y, float angle, int align)
       [_adapter addLabel:[NSString stringWithCString:text] atPoint:NSMakePoint(x,y) angle:angle align:align];
    }
 }
+
+void aqtAddShearedLabel(const char *text, float x, float y, float angle, float shearAngle, int align)
+{
+   if (text != nil)
+   {
+      [_adapter addLabel:[NSString stringWithCString:text] atPoint:NSMakePoint(x,y) angle:angle shearAngle:shearAngle align:align];
+   }
+}
+
 
 /*" Line handling "*/
 void aqtSetLinewidth(float newLinewidth)
@@ -298,6 +318,7 @@ void aqtAddImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float o
    [_adapter addImageWithBitmap:bitmap size:NSMakeSize(pixWide, pixHigh) bounds:NSMakeRect(originX, originY, width, height)];
 }
 
+// FIXME: This function maps to a deprecated method in AQTAdapter. It overrides the global clipRect setting.
 void aqtAddTransformedImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float originX, float originY, float width, float height)
 {
    [_adapter addTransformedImageWithBitmap:bitmap size:NSMakeSize(pixWide, pixHigh) clipRect:NSMakeRect(originX, originY, width, height)];
