@@ -15,13 +15,12 @@
     AQTBuilder 			*builder;				/*" Implements AQTProtocol methods "*/
     NSMutableArray 		*gptWindowControllers;	/*" Array of windowcontrollers "*/
     NSWindow			*frontWindow;			/*" The main (frontmost) window of the app "*/
+    AQTView				*frontView;
     NSPopUpButton 		*saveFormatPopup;
     NSBox				*extendSavePanelView;	
     AQTColorInspector 	*inspector;
     NSConnection		*doConnection;
 }
-
-/* FAQ: since the window controller is made a delegate of the window (in the NIB) does that mean that it has "first access" to all window calls??? */
 
 -(id)init;
 -(void)awakeFromNib;

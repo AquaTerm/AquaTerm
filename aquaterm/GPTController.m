@@ -52,6 +52,16 @@
                                            selector:@selector(mainWindowChanged:)
                                                name:NSWindowDidBecomeMainNotification
                                              object:nil];
+
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(mainWindowResigned:)
+                                               name:NSWindowDidResignMainNotification
+                                             object:nil];
+
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(windowClosing:)
+                                               name:NSWindowWillCloseNotification
+                                             object:nil];
 }
 
 -(void)dealloc
@@ -64,12 +74,28 @@
 
 -(void)setFrontWindow:(NSWindow *)mainWindow
 {
-  frontWindow = mainWindow;
+  NSWindowController *controller = [mainWindow windowController];
+
+  if (controller && [controller isKindOfClass:[GPTWindowController class]])
+  {
+    frontWindow = mainWindow;
+    frontView = [[frontWindow windowController] viewOutlet];
+  }
+  else
+  {
+    frontWindow = nil;
+    frontView = nil;
+  }
 }
 
 -(NSWindow *)frontWindow
 {
   return frontWindow;
+}
+
+-(AQTView *)frontView
+{
+  return frontView;
 }
 
 /**"
@@ -78,11 +104,27 @@
 "**/
 -(void)mainWindowChanged:(NSNotification *)notification
 {
-  NSWindowController *controller = [[notification object] windowController];
+  [self setFrontWindow:[notification object]];
+}
 
-  if([controller isKindOfClass:[GPTWindowController class]])
+-(void)mainWindowResigned:(NSNotification *)notification
+{
+  [self setFrontWindow:nil];
+}
+
+-(void)windowClosing:(NSNotification *)notification
+{
+  NSWindowController *controller = [[notification object] windowController];
+  unsigned index;
+
+  if(controller && [controller isKindOfClass:[GPTWindowController class]])
   {
-    [self setFrontWindow:[notification object]];
+    index = [gptWindowControllers indexOfObjectIdenticalTo:controller];
+    if(index != NSNotFound)
+    {
+      [[controller retain] autorelease];	// From the docs it seems like _autorelease_ is required.
+      [gptWindowControllers removeObjectAtIndex:index];
+    }
   }
 }
 
@@ -129,13 +171,9 @@
   return (GPTWindowController *)nil;
 }
 
-
-// static NSRect tempFrame;
-
 - (void)printOperationDidRun:(NSPrintOperation *)printOperation success:(BOOL)success  contextInfo:(AQTView *)printView
 {
   [printView setIsPrinting:NO];
-  // [printView setFrame:tempFrame];
 }
 
 /**"
@@ -149,6 +187,11 @@
   NSSize paperSize = [printInfo paperSize];
   NSPrintOperation *printOp;
 
+  if (!frontWindow)
+  {
+    return;
+  }
+
   paperSize.width -= ([printInfo leftMargin] + [printInfo rightMargin]);
   paperSize.height -= ([printInfo topMargin] + [printInfo bottomMargin]);
   if ([printInfo orientation] == NSPortraitOrientation)
@@ -161,19 +204,14 @@
   }
 
   printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
-  [printView setModel:[[[frontWindow windowController] viewOutlet] model]];
-  // printView = [[frontWindow windowController] viewOutlet];
-  // tempFrame = [printView frame];
-  // [printView setFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
+  [printView setModel:[frontView model]];
   [printView setIsPrinting:YES];
-  //[printView setPrintBounds:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
 
   printOp = [NSPrintOperation printOperationWithView:printView];
   (void)[printOp runOperationModalForWindow:frontWindow
                                    delegate:self
                              didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
                                 contextInfo:printView];
-  // [printView setIsPrinting:NO];
   [printView release];
 }
 
@@ -181,7 +219,8 @@
 {
   NSSavePanel *savePanel = [NSSavePanel savePanel];
   // trying to avert situation where saveas command with no window locks up AQT
-  if (!frontWindow) {
+  if (!frontWindow)
+  {
     NSLog(@"Save as... selected without a window");
     return;
   }
@@ -209,7 +248,7 @@
   if (NSFileHandlingPanelOKButton == returnCode)
   {
     printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
-    [printView setModel:[[[frontWindow windowController] viewOutlet] model]];
+    [printView setModel:[frontView model]];
     filename = [[theSheet filename] stringByDeletingPathExtension];
     if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
     {
@@ -230,18 +269,21 @@
   //
   // Copy figure to pasteboard as EPS (FIXME: format should be set in prefs)
   //
-  NSData *data;
   NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-  AQTView *printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
-  [printView setModel:[[[frontWindow windowController] viewOutlet] model]];
-  data = [printView dataWithEPSInsideRect:[printView bounds]];
-  [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, NSStringPboardType, nil] owner:nil];
-  if (YES !=[pasteboard setData:data forType:NSStringPboardType])
-    NSLog(@"write to pasteboard failed");
-  /* --- what's wrong with this?
-    data = [printView dataWithEPSInsideRect: [printView bounds]];
-  [printView writeEPSInsideRect:[printView bounds] toPasteboard:[NSPasteboard generalPasteboard]];
-  */
+  AQTView *printView;
+  
+  if (!frontWindow)
+  {
+    NSLog(@"copy selected without a window");
+    return;
+  }
+
+  printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
+  [printView setModel:[frontView model]];
+  [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];
+
+  [pasteboard setData:[printView dataWithPDFInsideRect:[printView bounds]] forType:NSPDFPboardType];
+  [pasteboard setData:[printView dataWithEPSInsideRect:[printView bounds]] forType:NSPostScriptPboardType];
   [printView release];
 }
 

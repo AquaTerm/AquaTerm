@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class GPTWindowController, AQTColorMap;
+@class GPTWindowController, AQTColorMap, AQTView;
 
 @interface AQTColorInspector : NSWindowController
 {
@@ -36,13 +36,12 @@
     int colorCount;
     IBOutlet NSTextField *infoText;		
     
-    GPTWindowController *frontWindowController; 	/*" Keeps track of the windowController of the front window "*/
-
+    AQTView *currentView;	/*" Keeps track of the AQTView of the front window "*/
     AQTColorMap *localColormap;
 }
 
 /*" Accessor methods "*/
-- (void)setFrontWindowController:(GPTWindowController *)newWindowController;
+- (void)setMainWindow:(NSWindow *)mainWindow;
 - (void)setColormap:(AQTColorMap *)newColormap;
 /*" IBActions "*/
 - (IBAction)applyPressed:(id)sender;
@@ -50,6 +49,7 @@
 /*" internal methods "*/
 - (void)updatePopUp;
 - (void)mainWindowChanged:(NSNotification *)notification;
+- (void)mainWindowResigned:(NSNotification *)notification;
 - (void)updateVisibleState;
 - (void)updateColormap;
 @end

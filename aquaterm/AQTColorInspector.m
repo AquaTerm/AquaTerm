@@ -9,6 +9,7 @@
 #import "AQTColorInspector.h"
 #import "AQTColorMap.h"
 #import "AQTModel.h"
+#import "AQTView.h"
 #import "GPTController.h"
 #import "GPTWindowController.h"
 
@@ -19,24 +20,9 @@
 
 - (id)init
 {
-  AQTColorMap *tempColormap;
-  NSWindow *frontWindow = [[[NSApplication sharedApplication] delegate] frontWindow];
   if (self = [super initWithWindowNibName:@"ColorInspector"])
   {
-    // User could open inspector panel before opening a graph window
-    if(frontWindow)
-    {
-      // Read colormap from front window
-      [self setFrontWindowController:[frontWindow windowController]];
-      tempColormap = [[[[frontWindowController viewOutlet] model] colormap] copy]; // Copy implicitly retains object
-    }
-    else
-    {
-      // FIXME: should read default colormap since there is no graph window open
-      tempColormap = [[AQTColorMap alloc] init];
-    }
-    [self setColormap:tempColormap];
-    [tempColormap release];
+    localColormap = [[AQTColorMap alloc] init];
   }
   return self;
 }
@@ -44,49 +30,62 @@
 -(void)dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [localColormap dealloc];
+  [super dealloc];
 }
 
-
--(void)awakeFromNib
+-(void)windowDidLoad
 {
+  [super windowDidLoad];
+  [self setMainWindow:[NSApp mainWindow]];
+
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(mainWindowChanged:)
                                                name:NSWindowDidBecomeMainNotification
                                              object:nil];
-
-  [self updatePopUp];
-  [self updateVisibleState];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(mainWindowResigned:)
+                                               name:NSWindowDidResignMainNotification
+                                             object:nil];
 }
 
-- (void)setFrontWindowController:(GPTWindowController *)newWindowController
+-(void)mainWindowChanged:(NSNotification *)notification
 {
-  AQTColorMap *tempColormap;
-  AQTModel *model;
-  // First check that it is an actual update
-  if (newWindowController != frontWindowController)
-  {
-    frontWindowController = newWindowController;
-    if (frontWindowController)
-    {
-      model = [[frontWindowController viewOutlet] model];
-      tempColormap = [[model colormap] copy]; 
-      [self setColormap:tempColormap];
-      [tempColormap release];
+  [self setMainWindow:[notification object]];
+}
 
-      [infoText setStringValue:[NSString stringWithFormat:@"%d objects in %f seconds", [model count], [model timeTaken]]];
-      [self updatePopUp];
-      [self updateVisibleState];
-    }
+-(void)mainWindowResigned:(NSNotification *)notification
+{
+  [self setMainWindow:nil];
+}
+
+- (void)setMainWindow:(NSWindow *)mainWindow
+{
+  NSWindowController *controller = [mainWindow windowController];
+
+  if (controller && [controller isKindOfClass:[GPTWindowController class]])
+  {
+    currentView = [(GPTWindowController *)controller viewOutlet];
+    [self setColormap:[[currentView model] colormap]];
   }
+  else
+  {
+    currentView = nil;
+    [self setColormap:[[[AQTColorMap alloc] init] autorelease]];
+  }
+  [infoText setStringValue:[NSString stringWithFormat:@"%d objects in %f seconds",
+    [[currentView model] count],
+    [[currentView model] timeTaken]]];
+  [self updatePopUp];
+  [self updateVisibleState];
 }
 
 #define specialsCount 4
 
 -(void)setColormap:(AQTColorMap *)newColormap
 {
-  [newColormap retain];
-  [localColormap release];
-  localColormap = newColormap;
+  [localColormap autorelease];
+  localColormap = [newColormap copy];
   colorCount = [[localColormap colorList] count] - specialsCount;
 }
 
@@ -153,34 +152,19 @@
   [localColormap setColor:[lineColor6 color] forIndex: cRange + 5];
   [localColormap setColor:[lineColor7 color] forIndex: cRange + 6];
   [localColormap setColor:[lineColor8 color] forIndex: cRange + 7];
-  
+
 }
 
 - (IBAction)applyPressed:(id)sender
   /*" create new AQTColorMap from the current settings, and update the active AQTModel "*/
 {
   [self updateColormap];
-
-  if (!frontWindowController) {
-    // could be one of two things, either there really is no window
-    // or it just hasn't been properly set yet
-    NSWindow *frontWindow = [[[NSApplication sharedApplication] delegate] frontWindow];
-    if(frontWindow)
-    {
-      [self setFrontWindowController:[frontWindow windowController]];
-    }
-  }
-  [[[frontWindowController viewOutlet] model] updateColors:localColormap];
-  [[frontWindowController viewOutlet] setNeedsDisplay:YES];
-}
-
--(void)mainWindowChanged:(NSNotification *)notification
-{
-  if([[[notification object] windowController] isKindOfClass:[GPTWindowController class]])
+  if (currentView)
   {
-    // Store a ref to the windowController rather than the model since we need access to the view as well. PP
-    [self setFrontWindowController:[[notification object] windowController]];
+    [[currentView model] updateColors:localColormap];
+    [currentView setNeedsDisplay:YES];
   }
 }
+
 @end
 
