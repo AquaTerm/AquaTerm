@@ -26,6 +26,7 @@
 - (void)showPrefs {
    [imageInterpolateLevel selectItemAtIndex:[preferences integerForKey:@"ImageInterpolationLevel"]];
    [shouldAntialiasSwitch setIntValue:[preferences integerForKey:@"ShouldAntialiasDrawing"]];
+   [limitMinimumLinewidthSwitch setIntValue:[preferences integerForKey:@"limitMinimumLinewidth"]];
    [showProcessNameSwitch setIntValue:[preferences integerForKey:@"ShowProcessName"]];
    [showProcessIdSwitch setIntValue:[preferences integerForKey:@"ShowProcessId"]];
    [self updateTitleExample:self];
@@ -46,6 +47,7 @@
 {
    [preferences setInteger:[imageInterpolateLevel indexOfSelectedItem] forKey:@"ImageInterpolationLevel"];
    [preferences setInteger:[shouldAntialiasSwitch intValue] forKey:@"ShouldAntialiasDrawing"];
+   [preferences setInteger:[limitMinimumLinewidthSwitch intValue] forKey:@"limitMinimumLinewidth"];
    [preferences setInteger:[showProcessNameSwitch intValue] forKey:@"ShowProcessName"];
    [preferences setInteger:[showProcessIdSwitch intValue] forKey:@"ShowProcessId"];
    [prefWindow orderOut:self];

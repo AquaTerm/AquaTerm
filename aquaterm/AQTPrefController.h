@@ -9,6 +9,7 @@
    IBOutlet NSWindow *prefWindow;
    IBOutlet NSPopUpButton *imageInterpolateLevel;
    IBOutlet NSButton *shouldAntialiasSwitch;
+   IBOutlet NSButton *limitMinimumLinewidthSwitch;
    IBOutlet NSButton *showProcessNameSwitch;
    IBOutlet NSButton *showProcessIdSwitch;
    IBOutlet NSTextField *titleExample;

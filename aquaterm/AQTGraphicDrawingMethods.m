@@ -20,6 +20,10 @@
 - (NSGlyph)_defaultGlyphForChar:(unichar)theChar;
 @end
 
+/* _aqtMinimumLinewidth is used by view to pass user prefs to line drawing routine,
+   this is ugly, but I can't see a simple way to do it without affecting performance. */
+static float _aqtMinimumLinewidth; 
+
 @implementation AQTGraphic (AQTGraphicDrawingMethods)
 + (NSImage *)sharedScratchPad
 {
@@ -77,6 +81,9 @@
    NSRect tmpRect = NSZeroRect;
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
+
+   _aqtMinimumLinewidth = [[NSUserDefaults standardUserDefaults] boolForKey:@"limitMinimumLinewidth"]?0.25:0.0; // FIXME: make limit (0.25) a pref
+
    while ((graphic = [enumerator nextObject]))
    {
 /*       NSRect graphRect = [graphic updateBounds];
@@ -385,11 +392,13 @@
 @implementation AQTPath (AQTPathDrawing)
 -(void)_aqtPathUpdateCache
 {
+   float lw = [self isFilled]?1.0:linewidth; // FIXME: this is a hack to avoid tiny gaps between filled patches
    NSBezierPath *scratch = [NSBezierPath bezierPath];
    [scratch appendBezierPathWithPoints:path count:pointCount];
    [scratch setLineJoinStyle:NSRoundLineJoinStyle];
    [scratch setLineCapStyle:lineCapStyle];
-   [scratch setLineWidth:[self isFilled]?1.0:linewidth];
+   [scratch setLineWidth:(lw<_aqtMinimumLinewidth)?_aqtMinimumLinewidth:lw];
+   //[scratch setLineWidth:[self isFilled]?1.0:linewidth]; // FIXME: this is a hack to avoid tiny gaps between filled patches
    if([self isFilled])
    {
       [scratch closePath];
