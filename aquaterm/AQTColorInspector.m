@@ -25,9 +25,9 @@
     // User could open inspector panel before opening a graph window
     if(frontWindow)
     {
-      [self setFrontWindowController:[frontWindow windowController]];
-    // we should set the colors of each of the color wells by 
-      // reading the colormap from the front window 
+        [self setFrontWindowController:[frontWindow windowController]];
+        // we should set the colors of each of the color wells by 
+        // reading the colormap from the front window 
     }
     else
     {
@@ -70,12 +70,16 @@
                                              object:nil];
 
     // This is not possible to do in the init!
-  // FIXME: rather than just updating the ramp image, all colors should be updated
+    // FIXME: rather than just updating the ramp image, all colors should be updated
+    // also the ramp colors are not accurate for some reason.
+    // -- probably not worth fixing, though because a better thing would be to load
+    // the colors from the users defaults, and force them on the inspector here.
     [self updateRampImage];
 }
 
 -(GPTWindowController *)frontWindowController
 {
+  // do we really need this method? who is going to call it?
   return frontWindowController;
 }
 
@@ -168,6 +172,11 @@
     tempColormap = [[AQTColorMap alloc] initWithColorDict:colorDICT
                                                  rampFrom:[minColor color]
                                                        to:[maxColor color]];
+    if (!frontWindowController) {
+        NSLog(@"No frontWindowController set: AQTInspector -applyPressed");
+        // could be one of two things, either there really is no window
+        // or it just hasn't been properly set yet
+    }
     [[frontWindowController model] updateColors:tempColormap];
     [[frontWindowController viewOutlet] setNeedsDisplay:YES];
     [tempColormap release];
