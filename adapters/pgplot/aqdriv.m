@@ -303,18 +303,17 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        while ([event isEqualToString:@"0"]);
        [adapter setAcceptingEvents:NO];
        NSLog(event);
-       // FIXME: Dissect the event here...
+       // Dissect the event here...
        eventData = [event componentsSeparatedByString:@":"];
        switch ([[eventData objectAtIndex:0] intValue])
        {
           case 1: // Mouse down
              pos = NSPointFromString([eventData objectAtIndex:1]);
-             key = 'A';
+             key = ([[eventData objectAtIndex:2] intValue]==1)?'A':'X';
              break;
           case 2: // Key down
              pos = NSPointFromString([eventData objectAtIndex:1]);
              key = [[eventData objectAtIndex:2] lossyCString][0];
-             NSLog(@"Key down:%c", key);
              break;
           default:
              NSLog(@"Unknown event, discarding.");
