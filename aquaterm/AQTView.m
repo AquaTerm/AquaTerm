@@ -340,6 +340,7 @@
     [tmpImage release];
     [tmpBitmap release];
   }
+#if(1)
   {
     NSAffineTransform *transf = [NSAffineTransform transform];
     NSGraphicsContext *context = [NSGraphicsContext currentContext];
@@ -354,22 +355,29 @@
     // Position local coordinate system and apply justification
     //
     [context saveGraphicsState];
-    [NSBezierPath clipRect:_bounds];
+//    [NSBezierPath clipRect:_bounds];
     [transf setTransformStruct:tmpStruct];
-    [transf invert];
+//    [transf invert];
     [transf concat];
 /*   [_cache drawInRect:_bounds
              fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
             operation:NSCompositeSourceOver
              fraction:1.0];
 */
-    [_cache setFlipped:YES];
+//    [_cache setFlipped:YES];
    [_cache drawAtPoint:NSMakePoint(0,0)
               fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
              operation:NSCompositeSourceOver
               fraction:1.0];
     [context restoreGraphicsState];
   }
+#else
+  [_cache drawInRect:_bounds
+            fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
+           operation:NSCompositeSourceOver
+            fraction:1.0];
+#endif
+  
   
 }
 @end

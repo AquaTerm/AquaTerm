@@ -101,11 +101,12 @@
 
 -(IBAction)test:(id)sender
 {
-
+  NSAffineTransform *t;
+  NSAffineTransformStruct ts;
    AQTAdapter *adapter = [[AQTAdapter alloc] initWithServer:self];
   NSMutableAttributedString *tmpStr = [[NSMutableAttributedString alloc] initWithString:@"Fancy string!"];
    NSPoint polygon[5];
-   char bytes[12]={
+   unsigned char bytes[12]={
       255, 0, 0,
       0, 255, 0,
       0, 0, 255,
@@ -126,6 +127,34 @@
    [adapter addLabel:@"Right" position:NSMakePoint(200,170) angle:0.0 justification:2];
    [tmpStr addAttribute:@"AQTFancyAttribute" value:@"superscript" range:NSMakeRange(3,5)];
    [adapter addLabel:tmpStr position:NSMakePoint(100,100) angle:0.0 justification:2];
+   [adapter closePlot];
+
+   t = [NSAffineTransform transform];
+   [t translateXBy:10 yBy:10];
+   [t rotateByDegrees:30.0];
+   [t scaleBy:10];
+   ts = [t transformStruct];
+   NSLog(@"ts (m11 m12 m21 m22 tx ty)= (%f %f %f %f %f %f)", ts.m11, ts.m12, ts.m21, ts.m22, ts.tX, ts.tY);
+   [adapter openPlotIndex:3];
+   [adapter setPlotSize:NSMakeSize(200,200)];
+   [adapter setPlotTitle:@"Image (trs)"];
+   [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
+   [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)];
+   [adapter closePlot];
+
+   t = [NSAffineTransform transform];
+   [t translateXBy:10 yBy:10];
+   [t scaleBy:10];
+   [t rotateByDegrees:30.0];
+   ts = [t transformStruct];
+   NSLog(@"ts (m11 m12 m21 m22 tx ty)= (%f %f %f %f %f %f)", ts.m11, ts.m12, ts.m21, ts.m22, ts.tX, ts.tY);
+   [adapter openPlotIndex:4];
+   [adapter setPlotSize:NSMakeSize(200,200)];
+   [adapter setPlotTitle:@"Image (tsr)"];
+   [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
+   [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)];
+   [adapter closePlot];
+
    
 /*
  for(i=0; i<1000; i++)
@@ -165,7 +194,8 @@
    polygon[3]=NSMakePoint(xf+10., 20.);
    polygon[4]=NSMakePoint(xf+10., 10.);
    [adapter addPolygonWithPoints:polygon pointCount:5];
- */
+
    [adapter closePlot];
+*/
 }
 @end
