@@ -40,8 +40,8 @@
 /*" Acessors "*/
 - (void)setSize:(NSSize)canvasSize;
 - (void)setTitle:(NSString *)title;
-- (void)setHandler:(id)newHandler;
-- (void)setOwner:(id)object;
+- (void)setHandler:(id)newHandler; // factor out
+- (void)setOwner:(id)object; // factor out
 
 
   /*" Color handling "*/
@@ -80,11 +80,11 @@
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
 
   /*" Control operations "*/
-- (void)eraseRect:(NSRect)aRect;
-- (void)render;
-- (void)clearAll; 
+- (void)eraseRect:(NSRect)aRect;  // factor out
+- (void)render;  // factor out
+- (void)clearAll;   // factor out
 
    /*" Interactions with user "*/
-- (void)setAcceptingEvents:(BOOL)flag;
-- (void)processEvent:(NSString *)event;
+- (void)setAcceptingEvents:(BOOL)flag;  // factor out
+- (void)processEvent:(NSString *)event;  // factor out
 @end

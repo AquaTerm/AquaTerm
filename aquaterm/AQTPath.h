@@ -20,9 +20,12 @@
    NSPointArray dynamicPathStore;
    int pointCount;
    float linewidth;
-   int lineCapStyle; 
+   int lineCapStyle;
+   BOOL isFilled;
 }
 - (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount;
 - (void)setLinewidth:(float)lw;
 - (void)setLineCapStyle:(int)capStyle;
+- (void)setIsFilled:(BOOL)flag;
+- (BOOL)isFilled;
 @end

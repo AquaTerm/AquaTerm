@@ -10,7 +10,7 @@
 #import "AQTGraphic.h"
 #import "AQTModel.h"
 #import "AQTView.h"
-#import "AQTAdapter.h"
+//#import "AQTAdapter.h"
 #import "AQTPlotBuilder.h"
 #import "AQTGraphicDrawingMethods.h"
 

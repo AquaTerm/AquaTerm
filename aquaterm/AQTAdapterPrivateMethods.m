@@ -1,10 +1,8 @@
 #import "AQTAdapterPrivateMethods.h"
-
-
+#import "AQTConnectionProtocol.h"
 @implementation AQTAdapter (AQTAdapterPrivateMethods)
 - (BOOL)_connectToServer
 {
-
    BOOL didConnect = NO;
    _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
    if (!_server)
@@ -62,7 +60,8 @@
    NSURL *appURL;
 
    if (getenv("AQUATERM_PATH") == (char *)NULL)
-   { // No, search for it in standard locations
+   {
+      // No, search for it in standard locations
       NSURL *tmpURL;
       appURL = (LSFindApplicationForInfo(NULL, NULL, (CFStringRef)@"AquaTerm.app", NULL, (CFURLRef *)&tmpURL) == noErr)?tmpURL:nil;
    }

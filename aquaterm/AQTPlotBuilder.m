@@ -11,7 +11,7 @@
 #import "AQTModel.h"
 #import "AQTLabel.h"
 #import "AQTPath.h"
-#import "AQTPatch.h"
+//#import "AQTPatch.h"
 #import "AQTImage.h"
 #import "AQTColorMap.h"
 
@@ -392,11 +392,14 @@
 
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
-   AQTPatch *tmpPatch;
-   tmpPatch = [[AQTPatch alloc] initWithPoints:points pointCount:pc];
-   [tmpPatch setColor:_color];
-   [_model addObject:tmpPatch];
-   [tmpPatch release];
+   AQTPath *tmpPath;
+   tmpPath = [[AQTPath alloc] initWithPoints:points pointCount:pc];
+   [tmpPath setColor:_color];
+   [tmpPath setLinewidth:0.25]; // FIXME: What to do about the see-through edges?
+   //[tmpPath setLineCapStyle:_capStyle];
+   [tmpPath setIsFilled:YES];
+   [_model addObject:tmpPath];
+   [tmpPath release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 

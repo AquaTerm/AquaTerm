@@ -10,10 +10,9 @@
 
 #import "AQTLabel.h"
 #import "AQTPath.h"
-#import "AQTPatch.h"
+//#import "AQTPatch.h"
 #import "AQTImage.h"
-// Needed for constants...
-#import "AQTAdapter.h" 
+
 
 //
 // Using an undocumented method in NSFont.
@@ -96,6 +95,7 @@
 @end
 
 @implementation AQTLabel (AQTLabelDrawing)
+
 
 -(void)_aqtLabelUpdateCache
 {
@@ -297,15 +297,15 @@
    // vAlign:
    switch (justification & 0x1C)
    {
-      case AQTAlignMiddle: // align middle wrt *font size*
+      case 0x00:// AQTAlignMiddle: // align middle wrt *font size*
          adjust.y = -([aFont descender] + [aFont capHeight])*0.5; 
          break;
-      case AQTAlignBaseline: // align baseline (do nothing)
+      case 0x04:// AQTAlignBaseline: // align baseline (do nothing)
          break;
-      case AQTAlignBottom: // align bottom wrt *bounding box*
+      case 0x08:// AQTAlignBottom: // align bottom wrt *bounding box*
          adjust.y = -[tmpPath bounds].origin.y;
          break;
-      case AQTAlignTop: // align top wrt *bounding box*
+      case 0x10:// AQTAlignTop: // align top wrt *bounding box*
          adjust.y = -([tmpPath bounds].origin.y + tmpSize.height) ;
          break;
       default:
@@ -352,6 +352,10 @@
    [scratch setLineJoinStyle:NSRoundLineJoinStyle];
    [scratch setLineCapStyle:lineCapStyle];
    [scratch setLineWidth:linewidth];
+   if([self isFilled])
+   {
+      [scratch closePath];
+   }
    [self _setCache:scratch];
 }
 
@@ -373,10 +377,15 @@
    {
       [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
       [_cache stroke];
+      if ([self isFilled])
+      {
+         [_cache fill];
+      }
    }
 }
 @end
 
+/*
 @implementation AQTPatch (AQTPatchDrawing)
 -(void)_aqtPatchUpdateCache
 {
@@ -410,7 +419,7 @@
    }
 }
 @end
-
+*/
 
 @implementation AQTImage (AQTImageDrawing)
 -(void)renderInRect:(NSRect)boundsRect

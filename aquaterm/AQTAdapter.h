@@ -11,24 +11,20 @@
 #import <Foundation/NSDistantObject.h>
 #import <Foundation/NSDictionary.h>
 
+/*" Constants that specify linecap styles. "*/
+extern const int AQTButtLineCapStyle;
+extern const int AQTRoundLineCapStyle;
+extern const int AQTSquareLineCapStyle;
 
-
-enum {
-  AQTButtLineCapStyle = 0,
-  AQTRoundLineCapStyle = 1,
-  AQTSquareLineCapStyle = 2
-};
-
-enum {
-   AQTAlignLeft = 0x00,
-   AQTAlignCenter = 0x01,
-   AQTAlignRight = 0x02,
-   AQTAlignMiddle = 0x00,
-   AQTAlignBaseline = 0x04,
-   AQTAlignBottom = 0x08,
-   AQTAlignTop = 0x10
-};
-
+/*" Constants that specify horizontal alignment for labels. "*/
+extern const int AQTAlignLeft;
+extern const int AQTAlignCenter;
+extern const int AQTAlignRight;
+/*" Constants that specify vertical alignment for labels. "*/
+extern const int AQTAlignMiddle;
+extern const int AQTAlignBaseline;
+extern const int AQTAlignBottom;
+extern const int AQTAlignTop;
 
 @protocol AQTConnectionProtocol;
 @class AQTPlotBuilder;
@@ -82,7 +78,7 @@ enum {
   /*" Text handling "*/
 - (void)setFontname:(NSString *)newFontname;
 - (void)setFontsize:(float)newFontsize;
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle align:(int)just;// FIXME: position --> atPoint
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just;// FIXME: position --> atPoint
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;
@@ -92,9 +88,9 @@ enum {
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
 
   /*" Rect and polygon handling"*/
-- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc;
 - (void)moveToVertexPoint:(NSPoint)point;
-- (void)addEdgeToPoint:(NSPoint)point; 
+- (void)addEdgeToVertexPoint:(NSPoint)point; 
+- (void)addPolygonWithVertexPoints:(NSPoint *)points pointCount:(int)pc;
 - (void)addFilledRect:(NSRect)aRect;
 - (void)eraseRect:(NSRect)aRect;
 

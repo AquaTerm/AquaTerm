@@ -11,6 +11,7 @@
 #import "AQTGraphic.h"
 #import "AQTModel.h"
 
+
 @interface AQTGraphic (AQTGraphicDrawingMethods)
 + (NSImage *)sharedScratchPad;
 -(id)_cache;

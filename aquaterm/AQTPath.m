@@ -70,6 +70,7 @@
 - (void)encodeWithCoder:(NSCoder *)coder
 {
   [super encodeWithCoder:coder];
+  [coder encodeValueOfObjCType:@encode(BOOL) at:&isFilled];
   [coder encodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder encodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
@@ -79,6 +80,7 @@
 -(id)initWithCoder:(NSCoder *)coder
 {
   self = [super initWithCoder:coder];
+  [coder decodeValueOfObjCType:@encode(BOOL) at:&isFilled];
   [coder decodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder decodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder decodeValueOfObjCType:@encode(int) at:&pointCount];
@@ -95,5 +97,13 @@
 - (void)setLineCapStyle:(int)capStyle
 {
   lineCapStyle = capStyle;
+}
+- (void)setIsFilled:(BOOL)flag
+{
+   isFilled = flag;
+}
+- (BOOL)isFilled
+{
+   return isFilled;
 }
 @end

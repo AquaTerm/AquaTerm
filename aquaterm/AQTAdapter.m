@@ -125,12 +125,10 @@ Event handling of user input is provided through an optional callback function.
       [super dealloc];
 }
 
-/*" Inform AquaTerm whether or events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events. "*/
-- (void)setAcceptingEvents:(BOOL)flag
+/*" Optionally set an error handling routine of the form #customErrorHandler(NSString *errMsg) to override default behaviour. "*/
+- (void)setErrorHandler:(void (*)(NSString *errMsg))fPtr
 {
-   // Flush event buffer for the selected view
-   [_eventBuffer setObject:@"0" forKey:[self _aqtKeyForBuilder:_selectedBuilder]];
-   [_selectedBuilder setAcceptingEvents:flag];
+   _errorHandler = fPtr;
 }
 
 /*" Optionally set an event handling routine of the form #customEventHandler(int index, NSString *event).
@@ -146,52 +144,157 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    _eventHandler = fPtr;
 }
 
-/*" Optionally set an error handling routine of the form #customErrorHandler(NSString *errMsg) to override default behaviour. "*/
-- (void)setErrorHandler:(void (*)(NSString *errMsg))fPtr
+#pragma mark === Control operations ===
+
+/* Creates a new builder instance, adds it to the list of builders and makes it the selected builder. If the referenced builder exists, it is selected and cleared. */
+/*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
+- (void)openPlotWithIndex:(int)refNum
 {
-   _errorHandler = fPtr;
+   if ([self selectPlotWithIndex:refNum])
+   {
+      // already exists, just select and reset
+      [self clearPlot];
+   }
+   else
+   {
+      // create a new builder and request a new handler from the server
+      AQTPlotBuilder *newBuilder = [[AQTPlotBuilder alloc] init];
+      id newHandler;
+      NS_DURING
+         newHandler = [_server addAQTClient:newBuilder
+                                       name:[[NSProcessInfo processInfo] processName]
+                                        pid:[[NSProcessInfo processInfo] processIdentifier]];
+      NS_HANDLER
+         if ([[localException name] isEqualToString:NSInvalidSendPortException])
+            [self _serverError:[localException name]];
+         else
+            [localException raise];
+      NS_ENDHANDLER
+      if (newHandler)
+      {
+         [_builders setObject:newBuilder forKey:[NSNumber numberWithInt:refNum]];
+         [newBuilder setHandler:newHandler];
+         [newBuilder setOwner:self];
+         _selectedBuilder = newBuilder;
+      }
+      [newBuilder release];
+   }
 }
 
-/*" Set the current color, used for all subsequent items, using explicit RGB components. "*/
-- (void)setColorRed:(float)r green:(float)g blue:(float)b
+/*" Get the plot referenced by refNum and make it the target for subsequent commands. If no plot exists for refNum, the currently targeted plot remain unchanged. Disables event handling for previously targeted plot. Returns YES on success. "*/
+- (BOOL)selectPlotWithIndex:(int)refNum
 {
-   AQTColor newColor;
-   newColor.red = r;
-   newColor.green = g;
-   newColor.blue = b;
-   [_selectedBuilder setColor:newColor];
+   AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSNumber numberWithInt:refNum]];
+   if(tmpBuilder)
+   {
+      _selectedBuilder = tmpBuilder;
+      return YES;
+   }
+   return NO;
 }
 
-/*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the colormap. "*/
-- (void)takeColorFromColormapEntry:(int)index
+/*" Set the limits of the plot area. Must be set %before any drawing command following an #openPlotWithIndex: or #clearPlot command or behaviour is undefined.  "*/
+- (void)setPlotSize:(NSSize)canvasSize
 {
-   [_selectedBuilder takeColorFromColormapEntry:index];
+   [_selectedBuilder setSize:canvasSize];
 }
 
-/*" Set the background color, overriding any previous color, using explicit RGB components. "*/
-- (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b
+/*" Set title to appear in window titlebar, also default name when saving. "*/
+- (void)setPlotTitle:(NSString *)title
 {
-   AQTColor newColor;
-   newColor.red = r;
-   newColor.green = g;
-   newColor.blue = b;
-   [_selectedBuilder setBackgroundColor:newColor];
+   [_selectedBuilder setTitle:title?title:@"Untitled"];
 }
 
-/*" Set the background color, overriding any previous color, using the color stored at the position given by index in the colormap. "*/
-- (void)takeBackgroundColorFromColormapEntry:(int)index
+/*" Render the current plot in the viewer. "*/
+- (void)renderPlot
 {
-   [_selectedBuilder takeBackgroundColorFromColormapEntry:index];
+   if(_selectedBuilder)
+   {
+      [_selectedBuilder render];
+   }
+   else
+   {
+      [self _aqtNoSelectedBuilder];
+   }
 }
 
-/*" Get current RGB color components by reference. "*/
-- (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b
+/*" Clears the current plot and resets default values. To keep plot settings, use #eraseRect: instead. "*/
+- (void)clearPlot
 {
-   AQTColor tmpColor = [_selectedBuilder color];
-   *r = tmpColor.red;
-   *g = tmpColor.green;
-   *b = tmpColor.blue;
+   if (_selectedBuilder)
+   {
+      [_selectedBuilder clearAll];
+      [_selectedBuilder render];
+   }
 }
+
+/*" Closes the current plot but leaves viewer window on screen. Disables event handling. "*/
+- (void)closePlot
+{
+   if (_selectedBuilder)
+   {
+      NS_DURING
+         if ([_server removeAQTClient:_selectedBuilder] == NO)
+         {
+            NSLog(@"Couldn't remove remote client lock, leaking");
+         }
+         NS_HANDLER
+            NSLog(@"Discarding exception...");
+         NS_ENDHANDLER
+         [_builders removeObjectForKey:[self _aqtKeyForBuilder:_selectedBuilder]];
+         _selectedBuilder = nil;
+   }
+}
+
+#pragma mark === Event handling ===
+
+/*" Inform AquaTerm whether or not events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events. "*/
+- (void)setAcceptingEvents:(BOOL)flag
+{
+   // Flush event buffer for the selected view
+   [_eventBuffer setObject:@"0" forKey:[self _aqtKeyForBuilder:_selectedBuilder]];
+   [_selectedBuilder setAcceptingEvents:flag];
+}
+
+/*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
+- (NSString *)lastEvent
+{
+   NSString *event;
+   NSNumber *key = [self _aqtKeyForBuilder:_selectedBuilder];
+   event = [[[_eventBuffer objectForKey:key] copy] autorelease];
+   [_eventBuffer setObject:@"0" forKey:key];
+   return event;
+}
+
+- (NSString *)waitNextEvent // FIXME: timeout? Hardcoded to 60s
+{
+   NSString *event;
+   BOOL isRunning;
+   [_selectedBuilder setAcceptingEvents:YES];
+   do {
+      isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:60.0]];
+      event = [self lastEvent];
+      if (![event isEqualToString:@"0"])
+      {
+         isRunning = NO;
+      }
+   } while (isRunning);
+   [_selectedBuilder setAcceptingEvents:NO];
+   return event;
+}
+
+- (void)processEvent:(NSString *)event sender:(id)sender // FIXME: Make private
+{
+
+   NSNumber *key = [self _aqtKeyForBuilder:sender];
+   if (_eventHandler != nil)
+   {
+      _eventHandler([key intValue], event);
+   }
+   [_eventBuffer setObject:event forKey:key];
+}
+
+#pragma mark === Plotting commands ===
 
 /*" Return the number of color entries availabel in the currently active colormap. "*/
 - (int)colormapSize
@@ -223,6 +326,47 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    *b = tmpColor.blue;
 }
 
+/*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the colormap. "*/
+- (void)takeColorFromColormapEntry:(int)index
+{
+   [_selectedBuilder takeColorFromColormapEntry:index];
+}
+
+/*" Set the background color, overriding any previous color, using the color stored at the position given by index in the colormap. "*/
+- (void)takeBackgroundColorFromColormapEntry:(int)index
+{
+   [_selectedBuilder takeBackgroundColorFromColormapEntry:index];
+}
+
+/*" Set the current color, used for all subsequent items, using explicit RGB components. "*/
+- (void)setColorRed:(float)r green:(float)g blue:(float)b
+{
+   AQTColor newColor;
+   newColor.red = r;
+   newColor.green = g;
+   newColor.blue = b;
+   [_selectedBuilder setColor:newColor];
+}
+
+/*" Set the background color, overriding any previous color, using explicit RGB components. "*/
+- (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b
+{
+   AQTColor newColor;
+   newColor.red = r;
+   newColor.green = g;
+   newColor.blue = b;
+   [_selectedBuilder setBackgroundColor:newColor];
+}
+
+/*" Get current RGB color components by reference. "*/
+- (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b
+{
+   AQTColor tmpColor = [_selectedBuilder color];
+   *r = tmpColor.red;
+   *g = tmpColor.green;
+   *b = tmpColor.blue;
+}
+
 /*" Set the font to be used. Applies to all future operations. Default is Times-Roman."*/
 - (void)setFontname:(NSString *)newFontname
 {
@@ -235,6 +379,26 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    [_selectedBuilder setFontsize:newFontsize];
 }
 
+/*" Add text at coordinate given by pos, rotated by angle degrees and aligned vertically and horisontally (with respect to pos and rotation) according to align. Horizontal and vertical align may be combined by an OR operation, e.g. (AQTAlignCenter | AQTAlignMiddle).
+_{HorizontalAlign Description}
+_{AQTAlignLeft LeftAligned}
+_{AQTAlignCenter Centered}
+_{AQTAlignRight RightAligned}
+_{VerticalAlign -}
+_{AQTAlignMiddle ApproxCenter}
+_{AQTAlignBaseline Normal}
+_{AQTAlignBottom BottomBoundsOfTHISString}
+_{AQTAlignTop TopBoundsOfTHISString}
+The text can be either an NSString or an NSAttributedString. By using NSAttributedString a subset of the attributes defined in AppKit may be used to format the string beyond the fontface ans size. The currently supported attributes are
+_{Attribute value}
+_{@"NSSuperScript" raise-level}
+_{@"NSUnderline" 0or1}
+"*/
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just
+{
+   [_selectedBuilder addLabel:text position:pos angle:angle justification:just];
+}
+
 /*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth.  Default linewidth is 1pt."*/
 - (void)setLinewidth:(float)newLinewidth
 {
@@ -243,28 +407,13 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 
 /*" Set the current line cap style (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same cap style.
 _{capStyle Description}
-_{0 ButtLineCapStyle}
-_{1 RoundLineCapStyle}
-_{2 SquareLineCapStyle}
+_{AQTButtLineCapStyle ButtLineCapStyle}
+_{AQTRoundLineCapStyle RoundLineCapStyle}
+_{AQTSquareLineCapStyle SquareLineCapStyle}
 Default is RoundLineCapStyle. "*/
 - (void)setLineCapStyle:(int)capStyle
 {
    [_selectedBuilder setLineCapStyle:capStyle];
-}
-
-/*" Add text at coordinate given by pos, rotated by angle degrees and aligned (with respect to pos, along the rotated baseline) according to align.
-_{align Description}
-_{0 LeftAligned}
-_{1 Centered}
-_{2 RightAligned}
-The text can be either an NSString or an NSAttributedString. By using NSAttributedString a subset of the attributes defined in AppKit may be used to format the string beyond the fontface ans size. The currently supported attributes are
-_{Attribute value}
-_{@"NSSuperScript" raise-level}
-_{@"NSUnderline" 0or1}
-"*/
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle align:(int)just
-{
-   [_selectedBuilder addLabel:text position:pos angle:angle justification:just];
 }
 
 /*" Moves the current point (in canvas coordinates) in preparation for a new sequence of line segments. "*/
@@ -290,13 +439,13 @@ _{@"NSUnderline" 0or1}
    [_selectedBuilder moveToVertexPoint:point];
 }
 
-- (void)addEdgeToPoint:(NSPoint)point
+- (void)addEdgeToVertexPoint:(NSPoint)point
 {
    [_selectedBuilder addEdgeToPoint:point];
 }
 
 /*" Add a polygon specified by a list of corner points. Number of corners is passed in pc."*/
-- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
+- (void)addPolygonWithVertexPoints:(NSPoint *)points pointCount:(int)pc
 {
    [_selectedBuilder addPolygonWithPoints:points pointCount:pc];
 }
@@ -348,143 +497,6 @@ _{@"NSUnderline" 0or1}
 }
 
 
-#pragma mark === Control operations ===
-- (void)processEvent:(NSString *)event sender:(id)sender // FIXME: Make private
-{
 
-   NSNumber *key = [self _aqtKeyForBuilder:sender];
-   if (_eventHandler != nil)
-   {
-      _eventHandler([key intValue], event);
-   }
-   [_eventBuffer setObject:event forKey:key];
-}
-
-/*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
-- (NSString *)lastEvent
-{
-   NSString *event;
-   NSNumber *key = [self _aqtKeyForBuilder:_selectedBuilder];
-   event = [[[_eventBuffer objectForKey:key] copy] autorelease];
-   [_eventBuffer setObject:@"0" forKey:key];
-   return event;
-}
-
-- (NSString *)waitNextEvent // FIXME: timeout? Hardcoded to 60s
-{
-   NSString *event;
-   BOOL isRunning;
-   [_selectedBuilder setAcceptingEvents:YES];
-   do {
-      isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:60.0]];
-      event = [self lastEvent];
-      if (![event isEqualToString:@"0"])
-      {
-         isRunning = NO;
-      }
-   } while (isRunning);
-   [_selectedBuilder setAcceptingEvents:NO];
-   return event;
-}
-
-/* Creates a new builder instance, adds it to the list of builders and makes it the selected builder. If the referenced builder exists, it is selected and cleared. */
-/*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
-- (void)openPlotWithIndex:(int)refNum
-{
-   if ([self selectPlotWithIndex:refNum])
-   {
-      // already exists, just select and reset
-      [self clearPlot];
-   }
-   else
-   {
-      // create a new builder and request a new handler from the server
-      AQTPlotBuilder *newBuilder = [[AQTPlotBuilder alloc] init];
-      id newHandler;
-      NS_DURING
-         newHandler = [_server addAQTClient:newBuilder
-                                       name:[[NSProcessInfo processInfo] processName]
-                                        pid:[[NSProcessInfo processInfo] processIdentifier]];
-      NS_HANDLER
-         if ([[localException name] isEqualToString:NSInvalidSendPortException])
-            [self _serverError:[localException name]];
-         else
-            [localException raise];
-      NS_ENDHANDLER
-      if (newHandler)
-      {
-         [_builders setObject:newBuilder forKey:[NSNumber numberWithInt:refNum]];
-         [newBuilder setHandler:newHandler];
-         [newBuilder setOwner:self];
-         _selectedBuilder = newBuilder;
-      }
-      [newBuilder release];
-   }
-}
-
-/*" Get the plot referenced by refNum and make it the target for subsequent commands. If no plot exists for refNum, the currently targeted plot remain unchanged. Disables event handling for previously targeted plot. Returns YES on success. "*/
-- (BOOL)selectPlotWithIndex:(int)refNum
-{
-   AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSNumber numberWithInt:refNum]];
-   if(tmpBuilder)
-   {
-      _selectedBuilder = tmpBuilder;
-      return YES;
-   }
-   return NO;
-}
-
-/*" Clears the current plot and resets default values. To keep plot settings, use #eraseRect: instead. "*/
-- (void)clearPlot
-{
-   if (_selectedBuilder)
-   {
-      [_selectedBuilder clearAll];
-      [_selectedBuilder render];
-   }
-}
-
-/*" Closes the current plot but leaves viewer window on screen. Disables event handling. "*/
-- (void)closePlot
-{
-   if (_selectedBuilder)
-   {
-      NS_DURING
-         if ([_server removeAQTClient:_selectedBuilder] == NO)
-         {
-            NSLog(@"Couldn't remove remote client lock, leaking");
-         }
-      NS_HANDLER
-         NSLog(@"Discarding exception...");
-      NS_ENDHANDLER
-      [_builders removeObjectForKey:[self _aqtKeyForBuilder:_selectedBuilder]];
-      _selectedBuilder = nil; 
-   }
-}
-
-/*" Set the limits of the plot area. Must be set %before any drawing command following an #openPlotWithIndex: or #clearPlot command or behaviour is undefined.  "*/
-- (void)setPlotSize:(NSSize)canvasSize
-{
-   [_selectedBuilder setSize:canvasSize];
-}
-
-/*" Set title to appear in window titlebar, also default name when saving. "*/
-- (void)setPlotTitle:(NSString *)title
-{
-   [_selectedBuilder setTitle:title?title:@"Untitled"];
-}
-
-/*" Render the current plot in the viewer. "*/
-- (void)renderPlot
-{
-   if(_selectedBuilder)
-   {
-      [_selectedBuilder render];
-   }
-   else
-   {
-      [self _aqtNoSelectedBuilder];
-   }
-}
 @end
 
