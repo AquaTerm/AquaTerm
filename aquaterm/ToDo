@@ -11,6 +11,9 @@ Colormaps
  - set from inspector panel
  - set from client app too?
 
+Drag & Drop
+ - should AquaTerm provide dnd?
+
 General
  - rewrite GPTXxxx classes and rename AQTXxxx
 
