@@ -1,28 +1,28 @@
-C   demo.f
-C   AquaTerm
-C 
-C   Created by Per Persson on Fri Nov 07 2003.
-C   Copyright (c) 2003 __MyCompanyName__. All rights reserved.
-C 
-C 
-C  This file contains an example of what can be done with
-C  AquaTerm and the corresponding library: libaquaterm.dylib
-C 
-C  This code can be build as a stand-alone executable (tool)
-C  from the command line:
-C  gcc -o demo demo.c -laquaterm -lobjc
+C     demo.f
+C     AquaTerm
+C     
+C     Created by Per Persson on Fri Nov 07 2003.
+C     Modified by Joe Koski on Mon Feb 09 2004.
+C     Copyright (c) 2003-2004 AquaTerm Project. All rights reserved.
+C     
+C     
+C     This file contains an example of what can be done with
+C     AquaTerm and the corresponding library: libaquaterm.dylib
+C     
       program demo
       integer i
       character*64 strBuf
+C     output strings
+      character numstr1*1,numstr13*13,numstr30*30
       real xPtr, yPtr, x, y, f, lw, r
       dimension xPtr(128) 
       dimension yPtr(128) 
       parameter (pi = 3.14152692)
       integer middle, baseline, bottom, top, left, center, right
       integer rgbImage(2,2)
-
+C     
 C     labels (probably better ways to do this...)
-C
+C     
 C     verticalAlign: {middle, baseline, bottom, top} = {0,4,8,16}
       middle = 0
       baseline = 4
@@ -32,12 +32,14 @@ C     horizontalAlign: {left, center, right} = {0,1,2}
       left = 0
       center = 1
       right = 2
-C      
+C     
 C     Initialize. Do it or fail miserably...
       call aqtInit()
 C     Open up a plot for drawing
       call aqtOpenPlot(1)
-      call aqtSetPlotSize(620.0,420.0)
+      width=620.0
+      height=420.0
+      call aqtSetPlotSize(width, height)
       call aqtSetPlotTitle('Testview')
 C     Set colormap
 C     white
@@ -61,7 +63,11 @@ C     Set color explicitly
       call aqtSetColor(0.0, 0.0, 0.0)
       call aqtSetFontname('Helvetica')
       call aqtSetFontsize(12.0)
-      call aqtAddLabel('Testview', 4.0, 412.0, 0.0, 0)
+      iwidth=width
+      iheight=height
+      write(numstr30,140)iwidth,iheight
+ 140  format('Testview ',I3,'x',I3,' pt')
+      call aqtAddLabel(numstr30, 4.0, 412.0, 0.0, 0)
 C     Frame plot
       call aqtMoveTo(20., 20.)
       call aqtAddLineTo(600.,20.)
@@ -70,7 +76,10 @@ C     Frame plot
       call aqtAddLineTo(20.,20.)
       call aqtAddLabel('Frame 600x400 pt', 24., 30., 0.0, 0)
 C     Colormap
-      call aqtAddLabel('Custom colormap', 30., 390., 0.0, 0)
+C     write Custom colormap string
+      write(numstr30,120)
+ 120  format('Custom colormap (showing 8 out of 256 entries)')
+      call aqtAddLabel(numstr30, 30., 390., 0.0, 0)
 C     Display the colormap, but first create a background for the white box...
       call aqtSetColor(0.8, 0.8, 0.8)
 
@@ -79,13 +88,15 @@ C     Display the colormap, but first create a background for the white box...
       do 10 i = 0, 7
          call aqtTakeColorFromColormapEntry(i)
          call aqtAddFilledRect(30.+f*30., 350., 20., 20.)
-C  Print the color index
+C     Print the color index
          call aqtSetColor(0.5, 0.5, 0.5)
-C  FIXME: how do I create formatted strings? 
-         call aqtAddLabel('X', 40.+f*30., 360., 0.0, middle+center)
+C     Writing with a format to internal character variables
+         write(numstr1,100)i
+ 100     format(I1)
+         call aqtAddLabel(numstr1, 40.+f*30., 360., 0.0, middle+center)
          f = f+1.0
  10   end do
-C     Continuos colors
+C     Continuous colors
       call aqtRenderPlot()
       call aqtTakeColorFromColormapEntry(1)
       call aqtAddLabel('Continuous colors',320., 390., 0.0, 0)
@@ -109,9 +120,11 @@ C     Lines
          call aqtSetLinewidth(f/2.0)
          call aqtMoveTo(30., 200.5+f*10.)
          call aqtAddLineTo(200., 200.5+f*10.)
-C     FIXME: how do I create formatted strings? 
-C     sprintf(strBuf, "linewidth %3.1f", lw)
-      call aqtAddLabel('linewidth x.x', 210., 201.5+f*10., 0.0, left)
+C     write to 3 character string
+         fhalf = f/2.0
+         write(numstr13,110)fhalf
+ 110     format('linewidth ',f3.1)
+         call aqtAddLabel(numstr13, 210., 201.5+f*10., 0.0, left)
  30   end do
 C     linecap styles
       call aqtSetLinewidth(11.0)
