@@ -47,7 +47,7 @@
          }
       }
       NS_HANDLER
-         if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+         if ([[localException name] isEqualToString:NSInvalidSendPortException])
             [self _serverError:[localException name]];
          else
             [localException raise];

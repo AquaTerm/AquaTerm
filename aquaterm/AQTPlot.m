@@ -200,7 +200,7 @@
       NS_DURING
          [_client processEvent:event];
       NS_HANDLER
-         if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
+         if ([[localException name] isEqualToString:NSObjectInaccessibleException])
             [self invalidateClient:_client]; // invalidate client
          else
             [localException raise];
