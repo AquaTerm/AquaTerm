@@ -143,16 +143,23 @@
    NSURL *appURL;
    OSStatus status;
    
-   if (getenv("AQUATERM_PATH") == (char *)NULL) {
-      // No, search for it based on creator code, choose latest version
-      NSURL *tmpURL;
-      status = LSFindApplicationForInfo('AqTS', NULL, NULL, NULL, (CFURLRef *)&tmpURL);
-      appURL = (status == noErr)?tmpURL:nil;
-      [appURL autorelease];
-   } else {
+   if (getenv("AQUATERM_PATH") != (char *)NULL) {
       appURL = [NSURL fileURLWithPath:[NSString stringWithCString:getenv("AQUATERM_PATH")]];
+      status = LSOpenCFURLRef((CFURLRef)appURL, NULL);
+   } else {
+      // Look for AquaTerm at default location
+      status = LSOpenCFURLRef((CFURLRef)[NSURL fileURLWithPath:@"/Applications/AquaTerm.app"], NULL);
+      if (status != noErr) {
+         // No, search for it based on creator code, choose latest version
+         NSURL *tmpURL;
+         status = LSFindApplicationForInfo('AqTS', NULL, NULL, NULL, (CFURLRef *)&tmpURL);
+         [self logMessage:[NSString stringWithFormat:@"LSFindApplicationForInfo = %d", status] logLevel:2];
+         appURL = (status == noErr)?tmpURL:nil;
+         [appURL autorelease];
+         status = LSOpenCFURLRef((CFURLRef)appURL, NULL);
+      }
    }
-   status = LSOpenCFURLRef((CFURLRef)appURL, NULL);
+   [self logMessage:[NSString stringWithFormat:@"LSOpenCFURLRef = %d", status] logLevel:2];
    return (status == noErr);
 }
 
