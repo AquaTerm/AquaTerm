@@ -1,0 +1,23 @@
+To install at default locations:
+1) Drag AquaTerm.app to /Applications
+2) Copy libaquaterm.1.0.0.dylib (in ./lib) to /usr/local/lib/ 
+3) Create a link libaquaterm.dylib -> libaquaterm.1.0.0.dylib
+4) Copy the contents of ./include to /usr/local/include
+
+This is the result:
+
+/usr/local/
+	include/aquaterm/
+		aquaterm.h
+		AQTAdapter.h
+	lib/
+		libaquaterm.1.0.0.dylib
+		libaquaterm.dylib -> libaquaterm.1.0.0.dylib
+
+Check out ./docs/AQTAdapter.html and AQTAdapter.h and aquaterm.h.
+Run the makefiles in C/ and fortran/
+The executables ./demo should produce the same result as menu option Debug->Testview in AquaTerm
+
+Full source in ./aquaterm/
+
+More docs later... 

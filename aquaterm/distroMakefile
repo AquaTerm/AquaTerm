@@ -1,0 +1,66 @@
+ifndef $(BUILD_DIR)
+BUILD_DIR=$(OBJROOT)
+endif
+
+PACKAGE=AquaTerm
+VERSION=1.0.0
+## RELEASENAME=AquaTerm1.0.a2
+RELEASENAME=$(PACKAGE)$(VERSION)
+DISTRO_DIR=$(BUILD_DIR)/distro
+DEST=$(DISTRO_DIR)/$(RELEASENAME)
+APPSRCDIR=$(SRCROOT)
+ADAPTSRCDIR=$(SRCROOT)/../adapters
+
+all:pre app lib headers adapters info doc post
+
+pre:
+	-rm -rf $(DEST)
+	mkdir -p $(DEST)
+
+post:
+	ls -Rp $(DEST) 
+
+app:
+	cp -RPf $(BUILD_DIR)/AquaTerm.app $(DEST)/.
+
+lib:
+	mkdir -p $(DEST)/lib
+	cp $(BUILD_DIR)/libaquaterm.$(VERSION).dylib $(DEST)/lib/.
+
+headers:
+	mkdir -p $(DEST)/include
+	cp $(APPSRCDIR)/{AQTAdapter,aquaterm}.h $(DEST)/include/.
+
+adapters:cee fortran gnuplot pgplot plplot
+
+info:
+	cp $(APPSRCDIR)/{INSTALL,ReadMe.txt} $(DEST)/.
+
+doc:
+	@echo "Skipping docs..."
+
+clean:
+	-rm -rf $(DISTRO_DIR)
+
+## -------------------------
+## - adapters
+## -------------------------
+cee:
+	mkdir -p $(DEST)/c
+	cp $(ADAPTSRCDIR)/c/{demo.c,eventdemo1.c,eventdemo2.c,Makefile,README} $(DEST)/c/.
+
+fortran:
+	mkdir -p $(DEST)/fortran
+	cp $(ADAPTSRCDIR)/fortran/{demo.f,eventdemo1.f,f2aqt.{h,m},f2aquaterm.m,Makefile,README} $(DEST)/fortran/.
+
+gnuplot:
+	mkdir -p $(DEST)/gnuplot
+	cp $(ADAPTSRCDIR)/gnuplot/{aquaTerm.trm,ReadMe.txt} $(DEST)/gnuplot/.
+
+pgplot:
+	mkdir -p $(DEST)/pgplot
+	cp $(ADAPTSRCDIR)/pgplot/{aqdriv.m,g77_gcc_AQT.conf,xlf_gcc_AQT.conf,README} $(DEST)/pgplot/.
+
+plplot:
+	mkdir -p $(DEST)/plplot
+	cp $(ADAPTSRCDIR)/plplot/{aqtplplot.{h,m},README} $(DEST)/plplot/.
