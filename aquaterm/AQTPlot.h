@@ -25,11 +25,12 @@
   IBOutlet NSBox *extendSavePanelView;
   IBOutlet NSPopUpButton *saveFormatPopUp;
 }
--(id)canvas;
--(void)setClient:(id)client;
--(void)setClientInfoName:(NSString *)name pid:(int)pid;
--(BOOL)invalidateClient:(id)aClient;
+- (id)canvas;
+- (void)setClient:(id)client;
+- (void)setClientInfoName:(NSString *)name pid:(int)pid;
+- (BOOL)invalidateClient:(id)aClient;
 
 - (void)processEvent:(NSString *)theEvent;
 
+- (IBAction)refreshView:(id)sender;
 @end

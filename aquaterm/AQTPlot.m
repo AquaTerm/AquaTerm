@@ -407,4 +407,9 @@
       [printView release];
    }
 }
+
+- (IBAction)refreshView:(id)sender
+{
+   [canvas setNeedsDisplay:YES];
+}
 @end
