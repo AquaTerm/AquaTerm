@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.17 2003/08/18 22:01:48 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.18 2003/08/19 09:03:36 persquare Exp $
  *
  */
 
@@ -95,20 +95,10 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #ifndef TERM_PROTO_ONLY
 
 #ifdef TERM_BODY
-//#import <Foundation/Foundation.h>
 #import "AQTAdapter.h"
 
-//#import <Foundation/NSConnection.h>
-//#import <Foundation/NSDistantObject.h>
 #import <Foundation/NSAutoreleasePool.h>
-//#import <Foundation/NSPortCoder.h>
-//#import <Foundation/NSException.h>
-//#import <AppKit/NSColor.h>
-//#import <AppKit/NSWorkspace.h>
-//#import <AppKit/NSBezierPath.h>
 #import <stdarg.h>
-
-
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
@@ -119,14 +109,11 @@ static inline void NOOP_(id x, ...) {;}
 #define LOG  NOOP_
 #endif	/* LOGGING */
 
-#define BUFMAX 50
-
 static NSAutoreleasePool *arpool;   // our autorelease pool 
 static id adapter;    // local object manages the D.O. connection
 static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of gnuTermAccess)
 static char AQUA_title[MAX_LINE_LEN + 1];
 static t_sm_palette *aqua_palette = nil;
-//static AQTColor cm[256];
 //
 // ----------------------------------------------------------------
 // Gnuplot driver implementation
@@ -188,7 +175,6 @@ TERM_PUBLIC void
 AQUA_init()
 {
   float fontSize, fontWHRatio;
-  // float vTicSize, pixelWHRatio;
   LOG(@"Aqua Init");
   if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
   {
@@ -201,30 +187,18 @@ AQUA_init()
     {
       printf("Error -- no adapter!\n");
       exit(1);
-	//adapter = [[AQTAdapter alloc] init]; 
     }
   }
-  term->xmax =842*AQUA_SCALE_FACTOR; //[[[gnuTermAccess termInfo] objectForKey:@"AQTXMax"] unsignedIntValue]; 
-  term->ymax =595*AQUA_SCALE_FACTOR; //[[[gnuTermAccess termInfo] objectForKey:@"AQTYMax"] unsignedIntValue]; 
-  fontSize = 16; //[[[gnuTermAccess termInfo] objectForKey:@"AQTFontSize"] floatValue];
-  fontWHRatio = .6; //[[[gnuTermAccess termInfo] objectForKey:@"AQTFontWHRatio"] floatValue];
-  //pixelWHRatio = 1.0; //[[[gnuTermAccess termInfo] objectForKey:@"AQTPixelWHRatio"] floatValue];
-  //vTicSize = AQUA_VTIC;
- term->v_char = (unsigned int) (fontSize * AQUA_SCALE_FACTOR);
-  term->h_char = (unsigned int) (fontWHRatio * fontSize * AQUA_SCALE_FACTOR);
+  term->xmax = AQUA_XMAX; 
+  term->ymax = AQUA_YMAX; 
+  term->v_char = (unsigned int) AQUA_VCHAR;
+  term->h_char = (unsigned int) AQUA_HCHAR;
   term->v_tic = (unsigned int) AQUA_VTIC;
-  term->h_tic = (unsigned int) AQUA_HTIC;  //
+  term->h_tic = (unsigned int) AQUA_HTIC;  
+  //
   // Set up the basic indexed colormap for gnuplot
   //
-    [adapter setColorRed:1.0 green:1.0 blue:1.0];
-//  cm[0].red = 1.0;
-//  cm[1].green = 1.0;
-//  cm[2].blue = 1.0;
-//  cm[3].red = 1.0;  cm[3].blue = 1.0;
-//  [gnuTermAccess setColor:[NSColor cyanColor] forIndex:4];
-//  [gnuTermAccess setColor:[NSColor colorWithCalibratedRed:0.627 green:0.322 blue:0.176 alpha:1.0] forIndex:5];   // Sienna
-//  [gnuTermAccess setColor:[NSColor colorWithCalibratedRed:1.0 green: 0.647 blue:0.0 alpha:1.0] forIndex:6];      // Orange
-//  [gnuTermAccess setColor:[NSColor colorWithCalibratedRed:1.0 green:0.498 blue:0.314 alpha:1.0] forIndex:7];     // Coral
+    [adapter setColorRed:1.0 green:0.0 blue:0.0]; // FIXME: Just setting fg color to red for now
 }
 
 TERM_PUBLIC void
@@ -235,7 +209,6 @@ AQUA_reset()
 TERM_PUBLIC void
 AQUA_text()
 {
-    //[gnuTermAccess flushBuffers];
     [adapter closePlot];
 }
 
@@ -248,7 +221,7 @@ AQUA_graphics()
         title = [NSString stringWithCString:AQUA_title];
         *AQUA_title = 0;
     }
-    [adapter openPlotIndex:currentWindow size:NSMakeSize(term->xmax, term->ymax) title:nil];
+    [adapter openPlotIndex:currentWindow size:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR) title:nil];
 }
 
 TERM_PUBLIC void
@@ -275,8 +248,7 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
   if (!strlen(str))
     return;
-  [adapter  addLabel:[NSString stringWithCString: str]     position:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR) angle:0.0 justification:0];
-  //[gnuTermAccess putText:str at:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR)];
+  [adapter  addLabel:[NSString stringWithCString: str] position:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR) angle:0.0 justification:0];
 }
 
 TERM_PUBLIC int 
@@ -333,7 +305,7 @@ AQUA_point(unsigned int x, unsigned int y, int number)
     [gnuTermAccess lineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR +.5, y/AQUA_SCALE_FACTOR)];
   }
 */
-//  do_point(x, y, number);
+  do_point(x, y, number);
 }
 
 TERM_PUBLIC void 
