@@ -52,6 +52,17 @@
 }
 
 #pragma mark === AQTConnectionProtocol ===
+-(BOOL)ping
+{
+   return YES;
+}
+
+- (void)getServerVersionMajor:(int *)major minor:(int *)minor rev:(int *)rev
+{
+   *major = 1;
+   *minor = 0;
+   *rev = 0;
+}
 
 -(id)addAQTClient:(id)client name:(NSString *)name pid:(int)procId
 {

@@ -421,7 +421,7 @@ _{@"NSUnderline" 0or1}
                                         pid:[[NSProcessInfo processInfo] processIdentifier]];
       NS_HANDLER
          if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-            [self _serverError];
+            [self _serverError:[localException name]];
          else
             [localException raise];
       NS_ENDHANDLER

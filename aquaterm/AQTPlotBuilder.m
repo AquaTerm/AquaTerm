@@ -191,8 +191,8 @@
    NS_DURING
       [_handler removeGraphicsInRect:aRect];
    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] && [owner respondsToSelector:@selector(_serverError)])
-         [owner _serverError]; 
+      if((nil != owner) && [owner respondsToSelector:@selector(_handlerError:)])
+         [owner _handlerError:[localException name]]; 
       else
          [localException raise];
    NS_ENDHANDLER
@@ -220,8 +220,8 @@
             }
          }
       NS_HANDLER
-         if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] && [owner respondsToSelector:@selector(_serverError)])
-            [owner _serverError]; 
+         if((nil != owner) && [owner respondsToSelector:@selector(_handlerError:)])
+            [owner _handlerError:[localException name]]; 
          else
             [localException raise];
       NS_ENDHANDLER
@@ -248,8 +248,8 @@
    NS_DURING
       [_handler setAcceptingEvents:flag];
    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] && [owner respondsToSelector:@selector(_serverError)])
-         [owner _serverError]; 
+      if((nil != owner) && [owner respondsToSelector:@selector(_handlerError:)])
+         [owner _handlerError:[localException name]]; 
       else
          [localException raise];
    NS_ENDHANDLER

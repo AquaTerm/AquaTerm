@@ -33,9 +33,12 @@
       {
          if ([_server conformsToProtocol:@protocol(AQTConnectionProtocol)])
          {
+            int a,b,c;
             // NSLog(@"Conforming!");
             [_server retain];
             [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
+            [_server getServerVersionMajor:&a minor:&b rev:&c];
+            NSLog(@"Server version %d.%d.%d", a, b, c);
             didConnect = YES;
          }
          else
@@ -46,7 +49,7 @@
       }
       NS_HANDLER
          if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-            [self _serverError];
+            [self _serverError:[localException name]];
          else
             [localException raise];
       NS_ENDHANDLER
@@ -71,32 +74,38 @@
    return (LSOpenCFURLRef((CFURLRef)appURL, NULL) == noErr);
 }
 
-- (void)_serverError
+- (void)_serverError:(NSString *)msg
 {
    if (_errorHandler)
    {
-      _errorHandler(@"Server unavailable --- passing on.");
+      _errorHandler(msg);
    }
    else
    {
-      NSLog(@"Server error");   
+      NSLog(@"Server error: %@", msg);   
 /*
       NSLog(@"Server error, no handler installed\nTrying to reconnect");
-      if([self _connectToServer])
-      {
-         NS_DURING
-            _selectedHandler = [_server addAQTClient:self name:_procName pid:_procId];
-            [_selectedHandler retain];
-            [_selectedHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
-         NS_HANDLER
-            if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-               [self _serverError];
-            else
-               [localException raise];
-         NS_ENDHANDLER
-      }
 */
    }
 }
 
+- (void)_handlerError:(NSString *)msg
+{
+   NS_DURING
+      // Test for server prescence
+      [_server ping];
+   NS_HANDLER
+      // Dang! Server is borken
+      [self _serverError:[localException name]];
+   NS_ENDHANDLER
+   if (_errorHandler)
+   {
+      _errorHandler(msg);
+   }
+   else
+   {
+      NSLog(@"Handler error: %@", msg);
+      [self closePlot];
+   }
+}
 @end
