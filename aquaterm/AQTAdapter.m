@@ -212,7 +212,7 @@ _{43:%{x,y}:%key Error } "*/
 /*" Return the number of color entries availabel in the currently active colormap. "*/
 - (int)colormapSize
 {
-   int size = 0;
+   int size = AQT_COLORMAP_SIZE; // Default size
    if (_selectedBuilder)
    {
       size = [_selectedBuilder colormapSize];

@@ -11,6 +11,9 @@
 #import "AQTImage.h"
 #import "AQTClientProtocol.h"
 
+// This is the default colormap size
+#define AQT_COLORMAP_SIZE 256
+
 // This is the maximum practically useable path length due to the way Quartz renders a path
 // FIXME: establish some "optimal" value
 #define MAX_POLYLINE_POINTS 64

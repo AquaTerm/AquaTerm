@@ -14,7 +14,6 @@
 #import "AQTImage.h"
 #import "AQTColorMap.h"
 
-#define AQT_COLORMAP_SIZE 256
 
 @implementation AQTPlotBuilder
 - (void)_aqtPlotBuilderSetDefaultValues
