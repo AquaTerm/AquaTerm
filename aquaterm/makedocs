@@ -5,6 +5,13 @@
 ##
 ## 2002-02-04 persquare@users.sf.net
 ##
+## check build action {build, clean, install}
+echo "Checking for build action..."
+if [ "$ACTION" = "clean" ]; then
+    echo "Cleaning docs"
+    rm -rf "$SYMROOT/Docs"
+    exit 0
+fi
 ## I like to keep stuff like autodoc in my $HOME/bin/ directory:
 PATH=$HOME/bin:$PATH
 echo "Checking for autodoc..."
@@ -15,16 +22,9 @@ else
     if [ -e "$AUTODOC" ]; then
         echo "$AUTODOC exists, but is not executable"
     else
-        echo "$AUTODOC doesn't exist your system"
+        echo "Couldn't find autodoc on your system"
     fi
     exit 1 
-fi
-## check build action {build, clean, install}
-echo "Checking for build action..."
-if [ "$ACTION" = "clean" ]; then
-    echo "Cleaning docs"
-    rm -rf "$SYMROOT/Docs"
-    exit 0
 fi
 echo "Creating docs..."
 if [ ! -d "$SYMROOT/Docs" ]; then
