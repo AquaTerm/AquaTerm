@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.20 2003/08/20 15:07:56 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.21 2003/09/01 12:39:24 persquare Exp $
  *
  */
 
@@ -236,7 +236,9 @@ AQUA_graphics()
         title = [NSString stringWithCString:AQUA_title];
         *AQUA_title = 0;
     }
-    [adapter openPlotIndex:currentWindow size:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR) title:nil];
+    [adapter openPlotIndex:currentWindow];// size:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR) title:nil];
+    [adapter setPlotSize:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR)];
+    [adapter setPlotTitle:nil];
 }
 
 TERM_PUBLIC void
@@ -259,25 +261,32 @@ AQUA_linetype(int linetype)
   [adapter takeColorFromColormapEntry:(linetype%CYCLIC_COLORS)+SPECIAL_COLORS];
 }
 
+static float textAngle = 0.0; 
+static int textJustify = 0;
+
 TERM_PUBLIC void
 AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
   if (!strlen(str))
     return;
-  [adapter  addLabel:[NSString stringWithCString: str] position:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR) angle:0.0 justification:0];
+  [adapter  addLabel:[NSString stringWithCString: str] 
+            position:NSMakePoint(x/AQUA_SCALE_FACTOR,y/AQUA_SCALE_FACTOR) 
+               angle:textAngle 
+       justification:textJustify];
 }
 
 TERM_PUBLIC int 
 AQUA_justify_text (enum JUSTIFY mode)
 {
-  // [gnuTermAccess  setJustification:mode];
+  textJustify = mode;
   return (TRUE);
 }
 
 TERM_PUBLIC int
 AQUA_text_angle (int angle)
 {
-  //[gnuTermAccess setTextAngle: angle];
+//NSLog(@"Angle %d", angle);
+  textAngle = (float)angle;
   return (TRUE);
 }
 
