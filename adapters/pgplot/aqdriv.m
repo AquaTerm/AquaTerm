@@ -82,6 +82,9 @@ static id adapter;        		    // Adapter object
 #define AQDRIV aqdriv
 #endif
 
+
+static int currentPlot = 0;
+
 // ----------------------------------------------------------------
 // --- Start of PGPLOT function aqdriv()
 // ----------------------------------------------------------------
@@ -179,7 +182,8 @@ break;
 
   case 8:
     LOG(@"IFUNC=8, Select plot");
-    [adapter openGraph:1];
+    currentPlot = (int)rbuf[0];
+    // [adapter openGraph:1];
 break;
 
 //--- IFUNC=9, Open workstation -----------------------------------------
@@ -216,6 +220,7 @@ break;
 
   case 11:
     LOG(@"IFUNC=11, Begin picture");
+    [adapter openGraph:currentPlot];
 break;
 
 //--- IFUNC=12, Draw line -----------------------------------------------
@@ -246,7 +251,7 @@ break;
 //--- IFUNC=15, Select color index --------------------------------------
 
   case 15:
-    LOG(@"IFUNC=15, Select color index");
+    LOG(@"IFUNC=15, Select color index %d", (int)rbuf[0]);
     [adapter setColorIndex:rbuf[0]];
 break;
 
@@ -302,7 +307,7 @@ break;
 //--- IFUNC=21, Set color representation. -------------------------------
 
   case 21:
-    NSLog(@"IFUNC=21, Set color representation for index %d", (int)rbuf[0]);
+    LOG(@"IFUNC=21, Set color representation for index %d", (int)rbuf[0]);
     [adapter setColormapEntry:(int)rbuf[0] red:rbuf[1] green:rbuf[2] blue:rbuf[3]];
 break;
 
@@ -506,7 +511,8 @@ break;
 //
 - (void)setColorIndex:(int)colorIndex;
 {
-    currentColor = colorIndex;   
+    //currentColor = colorIndex;  
+    currentColor = (colorIndex == 0)?-4:colorIndex-1;   
 }
 
 - (void)setLineWidth:(float)newLineWidth
@@ -521,7 +527,7 @@ break;
   // 
   // Select a "model" 
   //
-  [aqtConnection selectModel:n];
+  [aqtConnection openModel:n];
 }
 
 - (void)closeGraph
@@ -529,7 +535,7 @@ break;
   // 
   // Draw (render) the currently selected model
   //
-  [aqtConnection renderInViewShouldRelease:YES];
+  [aqtConnection closeModel];
 }
 
 - (void)flushBuffer
@@ -538,7 +544,7 @@ break;
   // Draw (render) the currently selected model
   // but leave it open for further drawing
   //
-  [aqtConnection renderInViewShouldRelease:NO];
+  [aqtConnection render];
 }
 
 - (void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint
@@ -630,15 +636,17 @@ break;
   [image release];  
 }
 //
-// FIXME: At present, we keep a local colormap. Because of the way AQT work the colors will only only
-// turn out right for images, not for text, lines and polygons. 
+// FIXME: For now, we keep a local colormap. AQT does _not_ restore colormap for subsequent plots
 // 
 -(void)setColormapEntry:(int)i red:(float)r green:(float)g blue:(float)b
 {
+  NSColor *tempColor = [NSColor colorWithCalibratedRed:r green:g blue:b alpha:1.0];
+  [aqtConnection setColor:tempColor forIndex:(i == 0)?-4:i-1];
   // Set r,g and b values of the i:th color in local colormap
   colorlist[i][0]=r;  
   colorlist[i][1]=g;  
-  colorlist[i][2]=b;  
+  colorlist[i][2]=b;
+    
 }
 -(NSColor *)colormapEntry:(int)i
 {
