@@ -1,13 +1,6 @@
-Grab gnuplot3.8k tarball
+The adapter aquaterm.trm is now distributed as part of gnuplot version 4
 
-Copy and rename the new gnuplot adapter to term/aquaterm.trm (NB. no upper case 'T')
-
-edit configure manually. Look for the line
-LIBS="$LIBS -framework Foundation -framework AppKit" and replace it by
-LIBS="$LIBS -laquaterm -framework Foundation"
-
-If you plan on running long sessions with gnuplot, you also want to apply the patch gnuplot_command_c.patch to gnuplot's command.c file.
-
+Follow the normal instructions for compiling gnuplot 4.x.x, which are (-;  
 ./configure
 make
 make install

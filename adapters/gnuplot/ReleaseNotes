@@ -1,4 +1,7 @@
 ---
+AquaTerm 1.0b1
+	This file is now part of gnuplot proper. Development will take place as part of aquaterm and improvements and bugfixes will merged into gnuplot sources.
+
 AquaTerm 1.0a2
     Process a lot more options. Currently supported options are:
     <n> title "theTitle" size <x> <y> fname "fontface" fsize <fontsize>
