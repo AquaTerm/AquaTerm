@@ -18,6 +18,8 @@
 					<integer>0</integer>
 					<key>Path</key>
 					<string></string>
+					<key>Path Type</key>
+					<integer>1</integer>
 				</dict>
 				<key>License</key>
 				<dict>
@@ -26,7 +28,9 @@
 						<key>Mode</key>
 						<integer>1</integer>
 						<key>Path</key>
-						<string>/Users/per/Documents/Source/aquaterm/English.lproj/Credits.rtf</string>
+						<string>../English.lproj/Credits.rtf</string>
+						<key>Path Type</key>
+						<integer>2</integer>
 					</dict>
 				</dict>
 				<key>ReadMe</key>
@@ -37,6 +41,8 @@
 						<integer>0</integer>
 						<key>Path</key>
 						<string></string>
+						<key>Path Type</key>
+						<integer>1</integer>
 					</dict>
 				</dict>
 				<key>Welcome</key>
@@ -47,6 +53,8 @@
 						<integer>0</integer>
 						<key>Path</key>
 						<string></string>
+						<key>Path Type</key>
+						<integer>1</integer>
 					</dict>
 				</dict>
 			</dict>
@@ -496,7 +504,9 @@
 					<key>IFInstallationScriptsPostflight</key>
 					<dict>
 						<key>Path</key>
-						<string>/Users/per/Documents/Source/aquaterm/installer/postflight</string>
+						<string>postflight</string>
+						<key>Path Type</key>
+						<integer>2</integer>
 						<key>Status</key>
 						<true/>
 					</dict>
@@ -517,7 +527,9 @@
 					<key>IFInstallationScriptsPreflight</key>
 					<dict>
 						<key>Path</key>
-						<string>/Users/per/Documents/Source/aquaterm/installer/preflight</string>
+						<string>preflight</string>
+						<key>Path Type</key>
+						<integer>2</integer>
 						<key>Status</key>
 						<true/>
 					</dict>
@@ -548,32 +560,34 @@
 						<key>IFPkgDescriptionDeleteWarning</key>
 						<string></string>
 						<key>IFPkgDescriptionDescription</key>
-						<string>This package will install AquaTerm 1.0.b2, including supporting library and header files.</string>
+						<string>This package will install AquaTerm 1.0.b3, including supporting library and header files.</string>
 						<key>IFPkgDescriptionTitle</key>
 						<string>AquaTerm</string>
 						<key>IFPkgDescriptionVersion</key>
-						<string>1.0.b2</string>
+						<string>1.0.b3</string>
 					</dict>
 				</dict>
 				<key>Display Information</key>
 				<dict>
 					<key>CFBundleGetInfoString</key>
-					<string>AquaTerm 1.0.b2 Copyrights © 2004 Aquaterm Project</string>
+					<string>AquaTerm 1.0.b3 Copyrights © 2004 Aquaterm Project</string>
 					<key>CFBundleIconFile</key>
 					<string></string>
+					<key>CFBundleIconFile Path Type</key>
+					<integer>1</integer>
 					<key>CFBundleIdentifier</key>
 					<string>net.sourceforge.aquaterm.installer</string>
 					<key>CFBundleName</key>
 					<string>AquaTerm</string>
 					<key>CFBundleShortVersionString</key>
-					<string>1.0.b2</string>
+					<string>1.0.b3</string>
 				</dict>
 				<key>Options</key>
 				<dict>
 					<key>IFPkgFlagAllowBackRev</key>
 					<true/>
 					<key>IFPkgFlagAuthorizationAction</key>
-					<integer>1</integer>
+					<integer>2</integer>
 					<key>IFPkgFlagFollowLinks</key>
 					<true/>
 					<key>IFPkgFlagInstallFat</key>
@@ -616,7 +630,9 @@
 		<key>10.1 Compatibility</key>
 		<true/>
 		<key>Build Path</key>
-		<string>/Users/per/Documents/Source/aquaterm/build/dmg_root</string>
+		<string>../build/dmg_root</string>
+		<key>Build Path Type</key>
+		<integer>2</integer>
 		<key>Comment</key>
 		<string></string>
 		<key>Remove .DS_Store</key>
