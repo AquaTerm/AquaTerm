@@ -18,21 +18,20 @@
   AQTModel	*model;		/*" Holds the model for the view "*/
   BOOL _isWindowLoaded;
   BOOL _acceptingEvents;
-//  id _plotKey;
   id <NSObject, AQTEventProtocol> _client;
   int _clientPID;
   NSString *_clientName;
-  NSRect dirtyRect;
   // interface additions
   IBOutlet NSBox *extendSavePanelView;
   IBOutlet NSPopUpButton *saveFormatPopUp;
+  // FIXME: the following should belong to the model
+  NSRect dirtyRect;
 }
 - (id)canvas;
-//- (void)setPlotKey:(id)key;
 - (void)setClient:(id)client;
 - (void)setClientInfoName:(NSString *)name pid:(int)pid;
 - (BOOL)clientValidAndResponding;
-- (BOOL)invalidateClient; //:(id)aClient;
+- (BOOL)invalidateClient; 
 - (BOOL)acceptingEvents;
 
 - (void)processEvent:(NSString *)theEvent;

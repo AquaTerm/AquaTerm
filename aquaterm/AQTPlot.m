@@ -20,6 +20,16 @@
 #define WINDOW_MIN_WIDTH 200.0
 #define WINDOW_MAX_WIDTH 1000.0
 
+/* Debugging extras */
+static inline void NOOP_(id x, ...) {;}
+
+#ifdef DEBUG
+#define LOG  NSLog
+#else
+#define LOG  NOOP_
+#endif	/* LOGGING */
+
+
 @implementation AQTPlot
 -(id)init
 {
@@ -123,7 +133,7 @@
       // limited by height
       tmpFrame = NSMakeRect(tileFrame.origin.x, tileFrame.origin.y, (tileFrame.size.height - TITLEBAR_HEIGHT)/canvasHWRatio, tileFrame.size.height);
    }
-   NSLog(@"%@ --> %@", NSStringFromRect(tileFrame), NSStringFromRect(tmpFrame));
+   // NSLog(@"%@ --> %@", NSStringFromRect(tileFrame), NSStringFromRect(tmpFrame));
    [[canvas window] setFrame:tmpFrame display:YES];
    [[canvas window] makeKeyAndOrderFront:self];      
 }   
@@ -173,7 +183,7 @@
 -(void)setModel:(AQTModel *)newModel
 {
    BOOL viewNeedResize = YES;
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
    [newModel retain];
    if (model)
    {
@@ -194,12 +204,13 @@
       [self _aqtSetupViewShouldResize:viewNeedResize];
       dirtyRect = AQTRectFromSize([model canvasSize]); // Invalidate all of canvas
    }
+   LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
 }
 
 -(void)appendModel:(AQTModel *)newModel
 {
    BOOL backgroundDidChange; // FIXME
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (!model)
    {
       [self setModel:newModel];
@@ -212,32 +223,37 @@
    [model setBounds:AQTUnionRect([model bounds], [newModel updateBounds])];
    [model addObjectsFromArray:[newModel modelObjects]];
    
-#ifdef DEBUG_BOUNDS
-   NSLog(@"oldBounds = %@", NSStringFromRect([model bounds]));
-   NSLog(@"addedBounds = %@", NSStringFromRect([newModel bounds]));
-#endif
+   LOG(@"oldBounds = %@", NSStringFromRect([model bounds]));
+   LOG(@"addedBounds = %@", NSStringFromRect([newModel bounds]));
    
    if (_isWindowLoaded)
    {
       [self _aqtSetupViewShouldResize:NO];
+#if 0
       dirtyRect = AQTUnionRect(dirtyRect, backgroundDidChange?AQTRectFromSize([model canvasSize]):[newModel bounds]);
-      
-#ifdef DEBUG_BOUNDS
-      NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
+#else      
+      dirtyRect = backgroundDidChange?AQTRectFromSize([model canvasSize]):AQTUnionRect(dirtyRect, [newModel bounds]);
 #endif
+      LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
    }
 }
 
 - (void)draw
 {
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    [canvas setNeedsDisplayInRect:[canvas convertRectToViewCoordinates:dirtyRect]];
    [[canvas window] makeKeyAndOrderFront:self];
+#if 1
+   dirtyRect = NSZeroRect;
+#endif
+   LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));   
 }
 
 /* This is a "housekeeping" method, to avoid buildup of hidden objects, does not imply redraw(?) */
 - (void)removeGraphicsInRect:(NSRect)targetRect
 {
    // FIXME: Where does this belong? Here, category or in model proper (not functional in client)
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    NSRect testRect;
    NSRect clipRect = AQTRectFromSize([model canvasSize]);
    NSRect newBounds = NSZeroRect;
@@ -272,6 +288,7 @@
    [model setBounds:newBounds];
    // NSLog(@"Removed %d objs, new bounds: %@", objectCount - [modelObjects count], [self description]);
    dirtyRect = AQTUnionRect(dirtyRect, targetRect);
+   LOG(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
 }
 
 -(void)setAcceptingEvents:(BOOL)flag
@@ -484,5 +501,6 @@
 - (IBAction)refreshView:(id)sender
 {
    [canvas setNeedsDisplay:YES];
+   dirtyRect = NSZeroRect;
 }
 @end
