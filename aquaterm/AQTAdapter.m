@@ -67,6 +67,11 @@ Event handling of user input is provided through an optional callback function.
          [self autorelease];
          self = nil;
       }
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                               selector:@selector(connectionDidDie:)
+                                                   name:NSConnectionDidDieNotification
+                                                 object:nil];
+         
    }
    return self;
 }
@@ -86,7 +91,8 @@ Event handling of user input is provided through an optional callback function.
 - (void)dealloc
 {
    [_clientManager logMessage:@"adapter dealloc, terminating connection." logLevel:3];
-   [_clientManager terminateConnection]; 
+   [[NSNotificationCenter defaultCenter] removeObserver:self];
+   [_clientManager terminateConnection];
    [super dealloc];
 }
 
@@ -109,9 +115,28 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    [_clientManager setEventHandler:fPtr];
 }
 
-- (void)terminate
+- (void)connectionDidDie:(id)x
 {
-   [_clientManager terminateConnection]; 
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // Store for cleanup _later_
+   //_aqtReserved1 = _clientManager; 
+   // Make sure we can't access any invalid objects:
+   _selectedBuilder = nil;
+   _clientManager = nil;
+}
+
+- (BOOL)_aqtRestoreConnection
+{
+   BOOL connected = YES;
+   // [_aqtReserved1 release];
+   _clientManager = [AQTClientManager sharedManager];
+   [_clientManager terminateConnection];
+   connected = [_clientManager connectToServer];
+   if (!connected)
+   {
+      _clientManager=nil;
+   }
+   return connected;
 }
 
 #pragma mark === Control operations ===
@@ -120,6 +145,12 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
 - (void)openPlotWithIndex:(int)refNum
 {
+   
+   if (_clientManager == nil)
+   {
+      BOOL isOK = [self _aqtRestoreConnection];
+      NSLog(@"isOK = %@", isOK?@"YES":@"NO");
+   }
    if ([self selectPlotWithIndex:refNum])
    {
       // already exists, just clear it

@@ -13,17 +13,17 @@
 @implementation AQTPlotController
 - (void)dealloc
 {
-   [[AQTClientManager sharedManager]
+    [[AQTClientManager sharedManager]
         logMessage:[NSString stringWithFormat:@"in --> %@ %s line %d",
            NSStringFromSelector(_cmd), __FILE__, __LINE__]
-          logLevel:3];   
+          logLevel:3];
    [self setHandler:nil];
    [super dealloc];
 }
 
 - (void)release
 {
-   [[AQTClientManager sharedManager]
+  [[AQTClientManager sharedManager]
         logMessage:[NSString stringWithFormat:@"in --> %@ %s line %d, rc=%d",
            NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]]
           logLevel:3];
@@ -46,7 +46,6 @@
    [[AQTClientManager sharedManager]
         logMessage:[NSString stringWithFormat:@"handlerIsProxy: %@", [_handler isProxy]?@"YES":@"NO -- be careful!"]
           logLevel:4];
-   //NSLog(@"handlerIsProxy: %@", [_handler isProxy]?@"YES":@"NO -- be careful!");
    return [_handler isProxy];
 }
 
@@ -68,7 +67,8 @@
          [self setShouldAppendPlot:YES];
       }
    NS_HANDLER
-         [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [self setHandler:nil];
    NS_ENDHANDLER
 }
 
@@ -77,7 +77,8 @@
    NS_DURING
       [_handler draw];
    NS_HANDLER
-      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [self setHandler:nil];
    NS_ENDHANDLER
 }
 
@@ -86,7 +87,8 @@
    NS_DURING
       [_handler removeGraphicsInRect:aRect];
    NS_HANDLER
-      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [self setHandler:nil];
    NS_ENDHANDLER
 }
 
@@ -95,7 +97,8 @@
    NS_DURING
       [_handler setAcceptingEvents:flag];
    NS_HANDLER
-      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      // [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+      [self setHandler:nil];
    NS_ENDHANDLER   
 }
 
