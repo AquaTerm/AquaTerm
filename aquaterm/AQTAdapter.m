@@ -287,6 +287,12 @@ error handling callback function for the client.
   [_selectedBuilder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
 }
 
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
+{
+   [_selectedBuilder addTransformedImageWithBitmap:bitmap size:bitmapSize clipRect:destBounds];
+}
+
+
 #pragma mark === Control operations ===
 /*" Creates a new builder instance, adds it to the list of builders and makes it the selected builder "*/
 - (void)openPlotIndex:(int)refNum 

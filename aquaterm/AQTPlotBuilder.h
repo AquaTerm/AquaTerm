@@ -16,11 +16,10 @@
   AQTModel *_model;	/*" The graph currently being built "*/
   int _modelRefNumber;	/*" Index into our handler's list of views "*/
   AQTColor _color;	/*" Currently selected color "*/
-  NSMutableDictionary* _labelAttributes;
- // NSString *_fontname;	/*" Currently selected font "*/
- // float _fontsize;	/*" Currently selected fontsize [pt]"*/
-
- float _linewidth;	/*" Currently selected linewidth [pt] "*/
+  // NSMutableDictionary* _labelAttributes;
+  NSString *_fontName;	/*" Currently selected font "*/
+  float _fontSize;	/*" Currently selected fontsize [pt]"*/
+  float _linewidth;	/*" Currently selected linewidth [pt] "*/
   int _capStyle; /*" Currently selected linecap style "*/
   NSPoint _path[256];	/*" A cache for coalescing connected line segments into a single path "*/
   int _pointCount;	/*" The current number of points in _path"*/
@@ -64,6 +63,7 @@
   /*" Image handling "*/
 - (void)setImageTransform:(AQTAffineTransformStruct)trans;
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
 
   /*" Control operations "*/
 - (void)eraseRect:(NSRect)aRect;

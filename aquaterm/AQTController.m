@@ -133,29 +133,30 @@ void customEventHandler(NSString *event)
    [adapter openPlotIndex:2];// size:NSMakeSize(400,300) title:@"Testing"];
    [adapter setPlotSize:NSMakeSize(400,300)];
    [adapter setPlotTitle:@"Testing"];
-   [adapter addLabel:@"Left" position:NSMakePoint(200,160) angle:0.0 justification:0];
-   [adapter addLabel:@"Center" position:NSMakePoint(200,150) angle:0.0 justification:1];
-   [adapter addLabel:@"Right" position:NSMakePoint(200,170) angle:0.0 justification:2];
-   [tmpStr addAttribute:@"AQTFancyAttribute" value:@"superscript" range:NSMakeRange(3,2)];
-   [tmpStr addAttribute:@"NSSuperscriptAttributeName" value:[NSNumber numberWithInt:1] range:NSMakeRange(7,2)];
-   [tmpStr addAttribute:@"NSSuperscriptAttributeName" value:[NSNumber numberWithInt:0] range:NSMakeRange(9,2)];
-   [tmpStr addAttribute:@"NSUnderlineStyleAttributeName" value:[NSNumber numberWithInt:1] range:NSMakeRange(11,3)];
+   [adapter addLabel:@"Left xxx" position:NSMakePoint(200,160) angle:0.0 justification:0];
+   [adapter addLabel:@"Center xxx" position:NSMakePoint(200,150) angle:0.0 justification:1];
+   [adapter addLabel:@"Right xxx" position:NSMakePoint(200,170) angle:0.0 justification:2];
+   //[tmpStr addAttribute:@"AQTFancyAttribute" value:@"superscript" range:NSMakeRange(3,2)];
+   [tmpStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(7,2)];
+   [tmpStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(9,2)];
+   [tmpStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(11,3)];
    [adapter addLabel:tmpStr position:NSMakePoint(100,100) angle:0.0 justification:0];
    [adapter setAcceptingEvents:YES];
 //   [adapter setAcceptingEvents:NO];
    [adapter closePlot];
 
    t = [NSAffineTransform transform];
-   [t translateXBy:10 yBy:10];
-   [t rotateByDegrees:30.0];
-   [t scaleBy:10];
+   [t translateXBy:100 yBy:100];
+   [t scaleBy:50];
+   [t rotateByDegrees:45.0];
+   [t translateXBy:-1 yBy:-1];
    ts = [t transformStruct];
    NSLog(@"ts (m11 m12 m21 m22 tx ty)= (%f %f %f %f %f %f)", ts.m11, ts.m12, ts.m21, ts.m22, ts.tX, ts.tY);
    [adapter openPlotIndex:3];
    [adapter setPlotSize:NSMakeSize(200,200)];
    [adapter setPlotTitle:@"Image (trs)"];
    [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
-   [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)];
+   [adapter addTransformedImageWithBitmap:bytes size:NSMakeSize(2,2) clipRect:NSMakeRect(50,50,100,100)];
    [adapter closePlot];
 
    t = [NSAffineTransform transform];
@@ -168,7 +169,7 @@ void customEventHandler(NSString *event)
    [adapter setPlotSize:NSMakeSize(200,200)];
    [adapter setPlotTitle:@"Image (tsr)"];
    [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
-   [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)];
+   [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)]; // discards transform
    [adapter setAcceptingEvents:YES];
    [adapter closePlot];
 

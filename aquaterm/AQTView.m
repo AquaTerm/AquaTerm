@@ -237,43 +237,59 @@
 @implementation AQTLabel (AQTLabelDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-  NSMutableAttributedString *tmpString = [[NSMutableAttributedString alloc] initWithAttributedString:string];
-  NSSize boundingBox;
-//    int i, l = [tmpString length];
-  float xScale = boundsRect.size.width/canvasSize.width; // get scale changes wrt max size
-  float yScale = boundsRect.size.height/canvasSize.height;
-//  float fontScale = sqrt(0.5*(xScale*xScale + yScale*yScale));
-  float fontsize = [[[string attributesAtIndex:0 effectiveRange:nil] objectForKey:@"AQTFontsizeKey"] floatValue];
-  NSFont *tmpFont = [NSFont fontWithName:[[string attributesAtIndex:0 effectiveRange:nil] objectForKey:@"AQTFontnameKey"]
-                                    size:fontsize];
-  //
-  // Scale the string FIXME: Speed up by using effective range!
-  //
-/*
- for (i=0;i<l;i++)
-  {
-    [tmpString addAttribute:NSFontAttributeName
-                      value:[NSFont fontWithName:[tmpFont fontName] size:MAX([tmpFont pointSize]*fontScale, AQT_MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
-  }
-  */
-  [tmpString addAttribute:NSFontAttributeName value:tmpFont range:NSMakeRange(0, [tmpString length])];
-  [tmpString addAttribute:NSForegroundColorAttributeName value:[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] range:NSMakeRange(0, [tmpString length])];
-  boundingBox = [tmpString size];
-  {
-  NSAffineTransform *transf = [NSAffineTransform transform];
-  NSGraphicsContext *context = [NSGraphicsContext currentContext];
-  //
-  // Position local coordinate system and apply justification
-  //
-  [transf translateXBy:position.x yBy:position.y];	// get translated origin
-  [transf rotateByDegrees:angle];
-  [transf translateXBy:-justification*boundingBox.width/2 yBy:-boundingBox.height/2];
-  [context saveGraphicsState];
-  [transf concat];
-  [tmpString drawAtPoint:NSMakePoint(0,0)];
-  [context restoreGraphicsState];
-  }
-  [tmpString release];
+   NSSize boundingBox;
+   if (![self _cache])
+   {
+      int i = 0;
+      NSRange fullRange, effRange;
+      
+      _cache = [[NSMutableAttributedString alloc] initWithAttributedString:string];
+      fullRange = NSMakeRange (0, [(NSAttributedString *)_cache length]);
+      [_cache addAttribute:NSFontAttributeName
+                     value:[NSFont fontWithName:fontName size:fontSize]
+                     range:fullRange];
+      [_cache addAttribute:NSForegroundColorAttributeName
+                     value:[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0]
+                     range:fullRange];
+      //
+      // Fix sub/superscript appearance
+      //
+      while(i < fullRange.length)
+      {
+         id attrValue = [_cache attribute:NSSuperscriptAttributeName
+                                  atIndex:i
+                    longestEffectiveRange:&effRange
+                                  inRange:fullRange];
+         if (attrValue)
+         {
+            float subcriptLevel = [attrValue floatValue]; 
+            [_cache addAttribute:NSFontAttributeName
+                           value:[NSFont fontWithName:fontName size:fontSize*0.75]
+                           range:effRange];
+            [_cache addAttribute:NSBaselineOffsetAttributeName
+                           value:[NSNumber numberWithFloat:-subcriptLevel*fontSize*0.1]
+                           range:effRange];
+                        
+         }
+         i += effRange.length;
+      }
+   }
+   boundingBox = [_cache size];
+   //NSLog([tmpString description]);
+   {
+      NSAffineTransform *transf = [NSAffineTransform transform];
+      NSGraphicsContext *context = [NSGraphicsContext currentContext];
+      //
+      // Position local coordinate system and apply justification
+      //
+      [transf translateXBy:position.x yBy:position.y];	
+      [transf rotateByDegrees:angle];
+      [transf translateXBy:-justification*boundingBox.width/2.0 yBy:-boundingBox.height/2.0];
+      [context saveGraphicsState];
+      [transf concat];
+      [(NSAttributedString *)_cache drawAtPoint:NSMakePoint(0.0, 0.0)];
+      [context restoreGraphicsState];
+   }
 }
 @end
 
@@ -321,66 +337,56 @@
 @implementation AQTImage (AQTImageDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-  if (![self _cache])
-  {
-    // Install an NSImage in _cache
-    const unsigned char *theBytes = [bitmap bytes]; 
-    NSImage *tmpImage = [[NSImage alloc] initWithSize:bitmapSize];
-    NSBitmapImageRep *tmpBitmap =
-      [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&theBytes
-                                              pixelsWide:bitmapSize.width
-                                              pixelsHigh:bitmapSize.height
-                                           bitsPerSample:8
-                                         samplesPerPixel:3
-                                                hasAlpha:NO
-                                                isPlanar:NO
-                                          colorSpaceName:NSDeviceRGBColorSpace
-                                             bytesPerRow:3*bitmapSize.width
-                                            bitsPerPixel:24];
-    [tmpImage addRepresentation:tmpBitmap];
-    [self _setCache:tmpImage];
-    [tmpImage release];
-    [tmpBitmap release];
-  }
-#if(1)
-  {
-    NSAffineTransform *transf = [NSAffineTransform transform];
-    NSGraphicsContext *context = [NSGraphicsContext currentContext];
-    NSAffineTransformStruct tmpStruct;
-    tmpStruct.m11 = transform.m11;
-    tmpStruct.m12 = transform.m12;
-    tmpStruct.m21 = transform.m21;
-    tmpStruct.m22 = transform.m22;
-    tmpStruct.tX = transform.tX;
-    tmpStruct.tY = transform.tY;
-    //
-    // Position local coordinate system and apply justification
-    //
-    [context saveGraphicsState];
-//    [NSBezierPath clipRect:_bounds];
-    [transf setTransformStruct:tmpStruct];
-//    [transf invert];
-    [transf concat];
-/*   [_cache drawInRect:_bounds
-             fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
-            operation:NSCompositeSourceOver
-             fraction:1.0];
-*/
-//    [_cache setFlipped:YES];
-   [_cache drawAtPoint:NSMakePoint(0,0)
-              fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
-             operation:NSCompositeSourceOver
-              fraction:1.0];
-    [context restoreGraphicsState];
-  }
-#else
-  [_cache drawInRect:_bounds
-            fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
-           operation:NSCompositeSourceOver
-            fraction:1.0];
-#endif
-  
-  
+   if (![self _cache])
+   {
+      // Install an NSImage in _cache
+      const unsigned char *theBytes = [bitmap bytes];
+      NSImage *tmpImage = [[NSImage alloc] initWithSize:bitmapSize];
+      NSBitmapImageRep *tmpBitmap =
+         [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&theBytes
+                                                 pixelsWide:bitmapSize.width
+                                                 pixelsHigh:bitmapSize.height
+                                              bitsPerSample:8
+                                            samplesPerPixel:3
+                                                   hasAlpha:NO
+                                                   isPlanar:NO
+                                             colorSpaceName:NSDeviceRGBColorSpace
+                                                bytesPerRow:3*bitmapSize.width
+                                               bitsPerPixel:24];
+      [tmpImage addRepresentation:tmpBitmap];
+      [self _setCache:tmpImage];
+      [tmpImage release];
+      [tmpBitmap release];
+   }
+   if (fitBounds == YES)
+   {
+      [_cache drawInRect:_bounds
+                fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
+               operation:NSCompositeSourceOver
+                fraction:1.0];
+   }
+   else
+   {
+      NSAffineTransform *transf = [NSAffineTransform transform];
+      NSGraphicsContext *context = [NSGraphicsContext currentContext];
+      NSAffineTransformStruct tmpStruct;
+      tmpStruct.m11 = transform.m11;
+      tmpStruct.m12 = transform.m12;
+      tmpStruct.m21 = transform.m21;
+      tmpStruct.m22 = transform.m22;
+      tmpStruct.tX = transform.tX;
+      tmpStruct.tY = transform.tY;
+
+      [context saveGraphicsState];
+      [NSBezierPath clipRect:_bounds];
+      [transf setTransformStruct:tmpStruct];
+      [transf concat];
+      [_cache drawAtPoint:NSMakePoint(0,0)
+                 fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
+                operation:NSCompositeSourceOver
+                 fraction:1.0];
+      [context restoreGraphicsState];
+   }
 }
 @end
 

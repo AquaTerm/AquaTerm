@@ -25,12 +25,12 @@
     [self setModel:nilModel];
     [nilModel release];
     _modelIsDirty = NO;
-    _labelAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Times-Roman", @"AQTFontnameKey", [NSNumber numberWithFloat:18.0], @"AQTFontsizeKey", nil];
+//    _labelAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Times-Roman", @"AQTFontnameKey", [NSNumber numberWithFloat:18.0], @"AQTFontsizeKey", nil];
     _color.red = 0.0;
     _color.green = 0.0;
     _color.blue = 0.0;
-//    _fontname = @"Times-Roman";
-//    _fontsize = 18.0;
+    _fontName = @"Times-Roman";
+    _fontSize = 14.0;
     _linewidth = .2;
     _transform.m11 = 1.0;
     _transform.m22 = 1.0;
@@ -105,31 +105,29 @@
 
 - (NSString *)fontname
 {
-  return [_labelAttributes objectForKey:@"AQTFontnameKey"];
+  return _fontName;
 }
 
 - (void)setFontname:(NSString *)newFontname
 {
-  [_labelAttributes setObject:newFontname forKey:@"AQTFontnameKey"];
-/*
- if (_fontname != newFontname)
+  //[_labelAttributes setObject:newFontname forKey:@"AQTFontnameKey"];
+ if (_fontName != newFontname)
   {
-    NSString *oldValue = _fontname;
-    _fontname = [newFontname retain];
+    NSString *oldValue = _fontName;
+    _fontName = [newFontname retain];
     [oldValue release];
   }
-*/
 }
 
 - (float)fontsize
 {
-  return [[_labelAttributes objectForKey:@"AQTFontsizeKey"] floatValue];
+   return _fontSize; //[[_labelAttributes objectForKey:@"AQTFontsizeKey"] floatValue];
 }
 
 - (void)setFontsize:(float)newFontsize
 {
-//  _fontsize = newFontsize;
-  [_labelAttributes setObject:[NSNumber numberWithFloat:newFontsize] forKey:@"AQTFontsizeKey"];
+  _fontSize = newFontsize;
+//  [_labelAttributes setObject:[NSNumber numberWithFloat:newFontsize] forKey:@"AQTFontsizeKey"];
 
 }
 
@@ -166,18 +164,17 @@
   AQTLabel *lb;
   if ([text isKindOfClass:[NSString class]])
   {
-    NSAttributedString *tmpStr = [[NSAttributedString  alloc] initWithString:text
-                                                                  attributes:_labelAttributes];
-    lb = [[AQTLabel alloc] initWithAttributedString:tmpStr
-                                           position:pos
-                                              angle:angle
-                                      justification:just];
+    lb = [[AQTLabel alloc] initWithString:text
+                               //attributes:_labelAttributes
+                                 position:pos
+                                    angle:angle
+                            justification:just];
   }
   else
   {
     if ([text isKindOfClass:[NSAttributedString class]])
     {
-      [text addAttributes:_labelAttributes range:NSMakeRange(0, [text length])];
+//      [text addAttributes:_labelAttributes range:NSMakeRange(0, [text length])];
       lb = [[AQTLabel alloc] initWithAttributedString:text
                                              position:pos
                                                 angle:angle
@@ -189,6 +186,8 @@
     }
   }
   [lb setColor:_color];
+  [lb setFontName:_fontName];
+  [lb setFontSize:_fontSize];
   [_model addObject:lb];
   //  NSLog([lb description]);
   [lb release];
@@ -295,9 +294,17 @@
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
   AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
-  [tmpImage setTransform:_transform];
   [_model addObject:tmpImage];
   [tmpImage release];
   _modelIsDirty = YES;
+}
+
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
+{
+   AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
+   [tmpImage setTransform:_transform];
+   [_model addObject:tmpImage];
+   [tmpImage release];
+   _modelIsDirty = YES;
 }
 @end

@@ -29,6 +29,7 @@
     // Identity matrix
     transform.m11 = 1.0;
     transform.m22 = 1.0;
+    fitBounds = YES;
   }
   return self;
   
@@ -68,6 +69,7 @@
 - (void)setTransform:(AQTAffineTransformStruct)newTransform
 {
   transform = newTransform;
+   fitBounds = NO;
 }
 
 @end
