@@ -15,7 +15,7 @@
   {
     indexedColormap = [[NSMutableArray alloc] initWithCapacity:256];	// 256 is a _hint_, not allocated!
 
-    // Expand colormap to 10 colors
+    // Expand colormap to 16 colors
     [self setColor:[NSColor redColor] forIndex:0];
     [self setColor:[NSColor blueColor] forIndex:1];
     [self setColor:[NSColor greenColor] forIndex:2];
@@ -24,9 +24,15 @@
     [self setColor:[NSColor brownColor] forIndex:5];
     [self setColor:[NSColor orangeColor] forIndex:6];
     [self setColor:[NSColor brownColor] forIndex:7];
-    [self setColor:[NSColor purpleColor] forIndex:8];
-    [self setColor:[NSColor blackColor] forIndex:9];
-    }
+    [self setColor:[NSColor redColor] forIndex:0];
+    [self setColor:[NSColor blueColor] forIndex:1];
+    [self setColor:[NSColor greenColor] forIndex:2];
+    [self setColor:[NSColor cyanColor] forIndex:3];
+    [self setColor:[NSColor magentaColor] forIndex:4];
+    [self setColor:[NSColor brownColor] forIndex:5];
+    [self setColor:[NSColor orangeColor] forIndex:6];
+    [self setColor:[NSColor brownColor] forIndex:7];
+  }
     return self;
 }
 
@@ -80,7 +86,15 @@
   }
   else
   {
-    return [indexedColormap objectAtIndex:index];
+    if (index < [indexedColormap count])
+    {
+      return [indexedColormap objectAtIndex:index];
+    }
+    else
+    {
+      // Yellow indicates a problem...
+      return [NSColor yellowColor];
+    }
   }
 }
 
