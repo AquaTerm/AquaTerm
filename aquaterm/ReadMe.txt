@@ -12,6 +12,18 @@ AquaTerm.app register with the system and responds to a (small) set of remote me
 The API is detailed in AQTAdapter.html which is generated from AQTAdapter.h using AutoDoc.
 Full documentation is available at http://aquaterm.sourceforge.net
 
+The following environment variables may be of interest:
+AquaTerm.app (Must be set in ~/.MacOSX/environment.plist See http://developer.apple.com/qa/qa2001/qa1067.html )
+------------
+AQUATERM_REPORT_TIMING	set this to anything to log drawing time
+
+Clients
+-------
+AQUATERM_LOGLEVEL	set this in the range 1-4 to have increasing levels of logging. 
+AQUATERM_PATH		set this to point to any non-standard location of AquaTerm.app e.g. /Users/you/source/build/AquaTerm.app
+GNUTERM			set this to "aqua" to make AquaTerm default output in Gnuplot
+PGPLOT_DEV		set this to "/AQT" to make AquaTerm default output in PGPLOT
+
 * AquaTerm changes
 ------------------
 AquaTerm 1.0a1
@@ -20,6 +32,7 @@ AquaTerm 1.0a1
   *** Not backwards compatible with old adapters *** (It could be fixed, but I don't have the time to do it...)
   Respects window size when updating (#650938)
   Make window front when updated (#651911)  
+  Added debug menu including "Refresh view", a test view and feedback options.
 
 AquaTerm 0.3.2
   Bugfix: Help is now working
