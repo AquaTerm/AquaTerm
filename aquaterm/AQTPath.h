@@ -22,7 +22,8 @@
    float linewidth;
    int lineCapStyle; 
 }
-- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount; 
+- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount;
+- (id)initWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 - (void)setLinewidth:(float)lw;
 - (void)setLineCapStyle:(int)capStyle;
 @end

@@ -210,6 +210,10 @@ for (i=0; i<5; i++)
 }
 [adapter takeColorFromColormapEntry:3];
 [adapter addPolygonWithPoints:points pointCount:5];
+[adapter takeColorFromColormapEntry:1];
+points[5] = points[0];
+[adapter addPolylineWithPoints:points pointCount:6];
+
 for (i=0; i<8; i++)
 {
   double radians=(double)i*pi/4.0, r=20.0;

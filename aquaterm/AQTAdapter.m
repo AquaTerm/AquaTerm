@@ -13,7 +13,6 @@
 #import "AQTGraphic.h"
 #import "AQTImage.h"
 #import "AQTPlotBuilder.h"
-#import "AQTColorMap.h"
 #import "AQTConnectionProtocol.h"
 
 @implementation AQTAdapter
@@ -195,6 +194,17 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    *b = tmpColor.blue;
 }
 
+/*" Return the number of color entries availabel in the currently active colormap. "*/
+- (int)colormapSize
+{
+   if (_selectedBuilder)
+   {
+      return [_selectedBuilder colormapSize];
+   }
+   [self _aqtNoSelectedBuilder];
+   return 0;
+}
+
 /*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
 - (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b
 {
@@ -214,49 +224,16 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    *b = tmpColor.blue;
 }
 
-/*" Return the name of the font currently in use. "*/
-- (NSString *)fontname
-{
-   if (_selectedBuilder)
-   {
-      return [_selectedBuilder fontname];
-   }
-   [self _aqtNoSelectedBuilder];
-   return @"DummyFont";
-}
-
 /*" Set the font to be used. Applies to all future operations. Default is Times-Roman."*/
 - (void)setFontname:(NSString *)newFontname
 {
    [_selectedBuilder setFontname:newFontname];
 }
 
-/*" Return the size of the font currently in use. "*/
-- (float)fontsize
-{
-   if (_selectedBuilder)
-   {
-      return [_selectedBuilder fontsize];
-   }
-   [self _aqtNoSelectedBuilder];
-   return 14.0;
-}
-
 /*" Set the font size in points. Applies to all future operations. Default is 14pt. "*/
 - (void)setFontsize:(float)newFontsize
 {
    [_selectedBuilder setFontsize:newFontsize];
-}
-
-/*" Return the current linewidth (in points)."*/
-- (float)linewidth
-{
-   if (_selectedBuilder)
-   {
-      return [_selectedBuilder linewidth];
-   }
-   [self _aqtNoSelectedBuilder];
-   return 1.0;
 }
 
 /*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth.  Default linewidth is 1pt."*/
@@ -309,10 +286,22 @@ _{@"NSUnderline" 0or1}
    [_selectedBuilder addPolylineWithPoints:points pointCount:pc];
 }
 
+/*" Add a sequence of line segments specified by a list of start-, end-, and joincoordinate(s) in x and y. Parameter pc is number of line segments + 1."*/
+- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
+{
+   [_selectedBuilder addPolylineWithXCoords:x yCoords:y pointCount:pc];
+}
+
 /*" Add a polygon specified by a list of corner points. Number of corners is passed in pc."*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
    [_selectedBuilder addPolygonWithPoints:points pointCount:pc];
+}
+
+/*" Add a polygon specified by a list of corner coordinates in x and y. Number of corners is passed in pc."*/
+- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc
+{
+   [_selectedBuilder addPolygonWithXCoords:x yCoords:y pointCount:pc];   
 }
 
 /*" Add a filled rectangle. Will attempt to remove any objects that will be covered by aRect."*/

@@ -11,7 +11,7 @@
 #import <Foundation/NSDistantObject.h>
 #import <Foundation/NSDictionary.h>
 
-#define AQT_COLORMAP_SIZE 256
+
 
 enum {
   AQTButtLineCapStyle = 0,
@@ -37,8 +37,8 @@ enum {
   /*" All instance variables are private. "*/
   NSDistantObject <AQTConnectionProtocol> *_server; /* The viewer app's (AquaTerm) default connection */
   NSMutableDictionary *_builders; /* The objects responsible for assembling a model object from client's calls. */
-  AQTPlotBuilder *_selectedBuilder; 	
-  BOOL _serverIsLocal;
+  AQTPlotBuilder *_selectedBuilder;
+  BOOL _serverIsLocal; // FIXME: use isProxy to determine.
   void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
   void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
   id _eventBuffer;
@@ -69,32 +69,34 @@ enum {
 
 /*" Plotting related commands "*/
 
+/*" Colormap (utility) "*/
+- (int)colormapSize;
+- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b;
+- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b;
+
   /*" Color handling "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b;
 - (void)takeColorFromColormapEntry:(int)index;
 - (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b;
 - (void)takeBackgroundColorFromColormapEntry:(int)index;
 - (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b;
-- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b;
-- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b;
 
   /*" Text handling "*/
-- (NSString *)fontname;
 - (void)setFontname:(NSString *)newFontname;
-- (float)fontsize;
 - (void)setFontsize:(float)newFontsize;
 - (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle align:(int)just;
 
   /*" Line handling "*/
-- (float)linewidth;
 - (void)setLinewidth:(float)newLinewidth;
 - (void)setLineCapStyle:(int)capStyle;
 - (void)moveToPoint:(NSPoint)point;  
 - (void)addLineToPoint:(NSPoint)point; 
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
+- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 
   /*" Rect and polygon handling"*/
-- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; 
+- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc;
+- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 - (void)addFilledRect:(NSRect)aRect;
 - (void)eraseRect:(NSRect)aRect;
 

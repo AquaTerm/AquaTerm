@@ -17,6 +17,7 @@ typedef AQTColor *AQTColorPtr;
    int size; 
 }
 -(id)initWithColormapSize:(int)size;
+-(int)size;
 -(void)setColor:(AQTColor)newColor forIndex:(int)index;
 -(AQTColor)colorForIndex:(int)index;
 @end

@@ -38,6 +38,11 @@
    [super dealloc];
 }
 
+-(int)size
+{
+   return size;
+}
+
 -(void)setColor:(AQTColor)newColor forIndex:(int)index
 {
    if (index >= 0 || index < size)

@@ -49,26 +49,29 @@
 - (void)takeColorFromColormapEntry:(int)index;
 - (void)takeBackgroundColorFromColormapEntry:(int)index;
 
+- (int)colormapSize;
 - (void)setColor:(AQTColor)newColor forColormapEntry:(int)entryIndex;
 - (AQTColor)colorForColormapEntry:(int)entryIndex;
 
   /*" Text handling "*/
-- (NSString *)fontname;
+//- (NSString *)fontname;
 - (void)setFontname:(NSString *)newFontname;
-- (float)fontsize;
+//- (float)fontsize;
 - (void)setFontsize:(float)newFontsize;
 - (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just;
 
   /*" Line handling "*/
-- (float)linewidth;
+//- (float)linewidth;
 - (void)setLinewidth:(float)newLinewidth;
 - (void)setLineCapStyle:(int)capStyle;
 - (void)moveToPoint:(NSPoint)point;  // AQTPath
 - (void)addLineToPoint:(NSPoint)point;  // AQTPath
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
+- (void)addPolylineWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 
   /*" Filled areas"*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; // AQTPatch
+- (void)addPolygonWithXCoords:(float *)x yCoords:(float *)y pointCount:(int)pc;
 - (void)addFilledRect:(NSRect)aRect;
 
   /*" Image handling "*/
