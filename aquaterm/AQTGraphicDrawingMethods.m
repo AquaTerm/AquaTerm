@@ -261,7 +261,7 @@
          [self _aqtPatchUpdateCache];
       }
       [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-      // [_cache stroke];	// FIXME: Needed unless we holes in the surface?
+      [_cache stroke];
       [_cache fill];
    }
 }
@@ -370,8 +370,6 @@
          }
          else
          {
-            // FIXME: Rebuild bounds (not verified!)
-            // [self setBounds:NSUnionRect([self bounds], testRect)];
             newBounds = NSUnionRect(newBounds, testRect);
          }
       }

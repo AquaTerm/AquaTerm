@@ -183,20 +183,14 @@
 
 - (void)eraseRect:(NSRect)aRect
 {
-#if 1
    NS_DURING
       [_handler removeGraphicsInRect:aRect];
    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-         // [self _serverError]; // FIXME: Grab from AQTAdapterPrivateMethods
-         NSLog(@"Server error");
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] && [owner respondsToSelector:@selector(_serverError)])
+         [owner _serverError]; 
       else
          [localException raise];
    NS_ENDHANDLER
-#else
-   [_model removeObjectsInRect:aRect];
-   _modelIsDirty = YES; // FIXME: This may not always be true.
-#endif
 }
 
 - (void)render
@@ -220,9 +214,8 @@
             }
          }
       NS_HANDLER
-         if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-            // [self _serverError]; // FIXME: Grab from AQTAdapterPrivateMethods
-            NSLog(@"Server error");
+         if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] && [owner respondsToSelector:@selector(_serverError)])
+            [owner _serverError]; 
          else
             [localException raise];
       NS_ENDHANDLER
@@ -237,7 +230,7 @@
    [newModel setColor:[_model color]];
    [_model release];
    _model = newModel;
-   [self _aqtPlotBuilderSetDefaultValues];
+   [self _aqtPlotBuilderSetDefaultValues]; // FIXME: colormap etc. too
    _modelIsDirty = YES;
    _shouldAppend = NO;
    [self render];
@@ -249,9 +242,8 @@
    NS_DURING
       [_handler setAcceptingEvents:flag];
    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-         // [self _serverError]; // FIXME: Grab from AQTAdapterPrivateMethods
-         NSLog(@"Server error");
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] && [owner respondsToSelector:@selector(_serverError)])
+         [owner _serverError]; 
       else
          [localException raise];
    NS_ENDHANDLER

@@ -6,9 +6,7 @@
 //  Copyright (c) 2003 AquaTerm. All rights reserved.
 //
 
-// FIXME: Use only C types, and improve method names.
 #import <ApplicationServices/ApplicationServices.h>
-
 
 #import "AQTAdapter.h"
 #import "AQTAdapterPrivateMethods.h"
@@ -457,7 +455,7 @@ _{@"NSUnderline" 0or1}
          NSLog(@"Discarding exception...");
       NS_ENDHANDLER
       [_builders removeObjectForKey:[self _aqtKeyForBuilder:_selectedBuilder]];
-      _selectedBuilder = nil; // FIXME: inserting a generic logging object here for debugging??
+      _selectedBuilder = nil; 
    }
 }
 
