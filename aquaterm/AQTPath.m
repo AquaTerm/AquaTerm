@@ -26,6 +26,7 @@
     }
     path = [[NSBezierPath bezierPath] retain];
     [path appendBezierPath:aPath];
+    [path setLineWidth:[aPath lineWidth]];
     mappedColor = gray;
     colorIndex = cIndex;
     hasIndexedColor = icFlag;
