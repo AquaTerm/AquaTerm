@@ -408,6 +408,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
           imageBounds = NSMakeRect(rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5]);
           NSLog(@"bitmapsize: %@\nimageBounds: %@", NSStringFromSize(bitmapSize), NSStringFromRect(imageBounds));
           NSLog(@"Matrix: %f, %f, %f, %f, %f, %f", rbuf[7], rbuf[8], rbuf[9], rbuf[10], rbuf[11], rbuf[12]); // FIXME
+          [adapter setImageTransformM11:rbuf[7] m12:rbuf[8] m21:rbuf[9] m22:rbuf[10] tX:rbuf[11] tY:rbuf[12]];
           pixCount = 0;
           maxPixCount = 3*bitmapSize.width*bitmapSize.height*sizeof(unsigned char);
           pixPtr = (unsigned char *)malloc(maxPixCount);
@@ -417,6 +418,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
           // End of data indicator
           LOG(@"End.");
           [adapter addImageWithBitmap:pixPtr size:bitmapSize bounds:imageBounds];
+          [adapter resetImageTransform];
           processingBitmap = NO;
           free(pixPtr);
           break;
