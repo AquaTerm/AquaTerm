@@ -15,59 +15,75 @@
     *** Since the app is a viewer we do three things with the object:
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
--(id)initWithPath:(NSBezierPath *)aPath filled:(BOOL)fill color:(NSColor *)aColor colorIndex:(int)cIndex indexedColor:(BOOL)icFlag
+-(id)initWithPoints:(NSPointArray)points pointCount:(int)pc filled:(BOOL)fill color:(NSColor *)aColor colorIndex:(int)cIndex indexedColor:(BOOL)icFlag
 {
-  if (self = [super init])
-  {
-    if (fill)
-    {
-      isFilled = YES;
-      [path closePath];
-    }
-    path = [[NSBezierPath bezierPath] retain];
-    [path appendBezierPath:aPath];
-    [path setLineWidth:[aPath lineWidth]];
-    colorIndex = cIndex;
-    hasIndexedColor = icFlag;
-    if (!hasIndexedColor)
-    {
-      [self setColor:aColor];
-    }
-  }
-  return self; 
+   int i;
+   if (self = [super init])
+   {
+      for (i = 0; i < pc; i++)
+      {
+         path[i] = points[i];
+      }
+      if (fill)
+      {
+         isFilled = YES;
+      }
+      colorIndex = cIndex;
+      hasIndexedColor = icFlag;
+      if (!hasIndexedColor)
+      {
+         [self setColor:aColor];
+      }
+   }
+   return self;
 }
 
-
--(id)initWithPolyline:(NSBezierPath *)aPath colorIndex:(int)cIndex
+-(id)init
 {
-  return [self initWithPath:aPath filled:NO color:nil colorIndex:cIndex indexedColor:YES];  
+   return [self initWithPoints:nil pointCount:0 filled:NO color:[NSColor blackColor] colorIndex:1 indexedColor:YES];
 }
-
--(id)initWithPolygon:(NSBezierPath *)aPath colorIndex:(int)cIndex
-{
-  return [self initWithPath:aPath filled:YES color:nil colorIndex:cIndex indexedColor:YES];
-}
-
--(id)initWithPolygon:(NSBezierPath *)aPath color:(NSColor *)aColor
-{
-  return [self initWithPath:aPath filled:YES color:aColor colorIndex:0 indexedColor:NO];
-}
-
--(id)initWithPolyline:(NSBezierPath *)aPath color:(NSColor *)aColor
-{
-  return [self initWithPath:aPath filled:NO color:aColor colorIndex:0 indexedColor:NO]; 
-}
-
 
 -(void)dealloc
 {
-    [path release];
     [super dealloc];
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+   int i;
+   [super encodeWithCoder:coder];
+   [coder encodeValueOfObjCType:@encode(BOOL) at:&hasIndexedColor];
+   [coder encodeValueOfObjCType:@encode(BOOL) at:&isFilled];
+   [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
+   for (i=0;i<pointCount;i++)
+   {
+      [coder encodeValueOfObjCType:@encode(NSPoint) at:&path[i]];      
+   }
+}
+
+-(id)initWithCoder:(NSCoder *)coder
+{
+   int i;
+   self = [super initWithCoder:coder];
+   [coder decodeValueOfObjCType:@encode(BOOL) at:&hasIndexedColor];
+   [coder decodeValueOfObjCType:@encode(BOOL) at:&isFilled];
+   [coder decodeValueOfObjCType:@encode(int) at:&pointCount];
+   for (i=0;i<pointCount;i++)
+   {
+      [coder decodeValueOfObjCType:@encode(NSPoint) at:&path[i]];
+   }
+   return self;
+}
+
+-(void)addPoint:(NSPoint)aPoint
+{
+   path[pointCount]=aPoint;
+   pointCount++;
 }
 
 -(NSRect)bounds
 {
-  NSRect tempBounds = [path bounds];
+   NSRect tempBounds = NSMakeRect(10, 10, 10, 10); //[path bounds];
   if (NSIsEmptyRect(tempBounds))
   {
     /* Bounds need to be non-empty */
@@ -80,7 +96,7 @@
 -(void)updateColors:(AQTColorMap *)colorMap
 {
    if (hasIndexedColor)
-   {	// Always brace in if-contructs!
+   {	
       [self setColor:[colorMap colorForIndex:colorIndex]];
    }
 }

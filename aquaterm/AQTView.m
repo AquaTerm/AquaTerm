@@ -140,22 +140,36 @@
 }
 @end
 
+
 @implementation AQTPath (AQTPathDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-  NSAffineTransform *localTransform = [NSAffineTransform transform];
-  float xScale = boundsRect.size.width/canvasSize.width;
-  float yScale = boundsRect.size.height/canvasSize.height;
-  //
-  // Get the transform due to view resizing
-  //
-  [localTransform scaleXBy:xScale yBy:yScale];
-  [color set];
-  if (isFilled)
-  {
-    [[localTransform transformBezierPath:path] fill];
-  }
-  [[localTransform transformBezierPath:path] stroke];	// FAQ: Needed unless we holes in the surface?
+   int index;
+   NSBezierPath *scratch = [NSBezierPath bezierPath];
+   NSAffineTransform *localTransform = [NSAffineTransform transform];
+   float xScale = boundsRect.size.width/canvasSize.width;
+   float yScale = boundsRect.size.height/canvasSize.height;
+   //
+   // Get the transform due to view resizing
+   //
+   if (pointCount == 0)
+      return;
+   //[scratch removeAllPoints];
+   [scratch appendBezierPathWithPoints:path count:pointCount];
+   [localTransform scaleXBy:xScale yBy:yScale];
+   [color set];
+/*
+ [scratch moveToPoint:path[0]];
+   for (index = 1; index < pointCount; index++)
+   {
+      [scratch lineToPoint:path[index]];
+   }
+ */
+   if (isFilled)
+   {
+      [[localTransform transformBezierPath:scratch] fill];
+   }
+   [[localTransform transformBezierPath:scratch] stroke];	// FAQ: Needed unless we holes in the surface?
 }
 @end
 

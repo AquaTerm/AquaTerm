@@ -10,19 +10,14 @@
 #import <AppKit/AppKit.h>
 #import "AQTGraphic.h"
 
-// Make this an NSPointArray instead and use NSData storage for encoding?
+#define MAX_PATH_POINTS 256
 
-@interface AQTPath : AQTGraphic /*" NSObject "*/
+@interface AQTPath : AQTGraphic 
 {
-    NSBezierPath *path;	/*" A collection of bezier paths sharing the same (style)properties "*/
-    BOOL hasIndexedColor; /*" TRUE => fill and stroke in _fillColor; FALSE => stroke in _strokeColor "*/
-    BOOL isFilled;
+   NSPoint path[MAX_PATH_POINTS];
+   int pointCount;
+   BOOL hasIndexedColor; /*" TRUE => fill and stroke in _fillColor; FALSE => stroke in _strokeColor "*/
+   BOOL isFilled;
 }
--(id)initWithPath:(NSBezierPath *)aPath filled:(BOOL)filled color:(NSColor *)color colorIndex:(int)cIndex indexedColor:(BOOL)icFlag;
-/*
- -(id)initWithPolyline:(NSBezierPath *)aPath colorIndex:(int)cIndex;
--(id)initWithPolygon:(NSBezierPath *)aPath colorIndex:(int)cIndex;
--(id)initWithPolyline:(NSBezierPath *)aPath color:(NSColor *)color;
--(id)initWithPolygon:(NSBezierPath *)aPath color:(NSColor *)color;
-*/
+-(id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount filled:(BOOL)fill color:(NSColor *)aColor colorIndex:(int)cIndex indexedColor:(BOOL)icFlag;
 @end
