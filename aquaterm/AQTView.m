@@ -173,8 +173,8 @@
    NSDate *startTime;
 #endif
 
-   [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone]; // FIXME: user prefs
-   [[NSGraphicsContext currentContext] setShouldAntialias:YES]; // FIXME: user prefs
+   [[NSGraphicsContext currentContext] setImageInterpolation:[[NSUserDefaults standardUserDefaults] integerForKey:@"ImageInterpolationLevel"]]; // NSImageInterpolationNone FIXME: user prefs
+   [[NSGraphicsContext currentContext] setShouldAntialias:[[NSUserDefaults standardUserDefaults] boolForKey:@"ShouldAntialiasDrawing"]]; // FIXME: user prefs
 #ifdef DEBUG_BOUNDS
    [[NSColor redColor] set];
    NSFrameRect(dirtyRect);
