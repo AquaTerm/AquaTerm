@@ -76,22 +76,6 @@
   return tempBounds;
 }
 
--(void)renderInRect:(NSRect)boundsRect
-{
-    NSAffineTransform *localTransform = [NSAffineTransform transform];
-    float xScale = boundsRect.size.width/canvasSize.width;
-    float yScale = boundsRect.size.height/canvasSize.height;
-    //
-    // Get the transform due to view resizing
-    //
-    [localTransform scaleXBy:xScale yBy:yScale];
-    [color set];
-    if (isFilled)
-    {
-      [[localTransform transformBezierPath:path] fill];
-    }
-    [[localTransform transformBezierPath:path] stroke];	// FAQ: Needed unless we holes in the surface? 
-}
 // override superclass' def of updateColors:
 -(void)updateColors:(AQTColorMap *)colorMap
 {

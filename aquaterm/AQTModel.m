@@ -82,21 +82,6 @@
   }
 }
 
-
-/**"
-*** Tell every object in the collection to draw itself.
-"**/
--(void)renderInRect:(NSRect)boundsRect
-{
-  AQTGraphic *graphic;
-  NSEnumerator *enumerator = [modelObjects objectEnumerator];
-
-  while ((graphic = [enumerator nextObject]))
-  {
-    [graphic renderInRect:boundsRect];
-  }
-}
-
 -(void)setColormap:(AQTColorMap *)newColorMap
 {
   [newColorMap retain];
@@ -145,6 +130,4 @@
 {
   timeTaken = timer;
 }
-
-
 @end

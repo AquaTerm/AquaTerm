@@ -49,22 +49,4 @@
 -(void)updateColors:(AQTColorMap *)colorMap
 {
 }
-
-
-
--(void)renderInRect:(NSRect)boundsRect
-{
-  // NSSize docSize = [root size]; //NSMakeSize(842,595); // FIXME!!! Should refer to document size instead
-  NSAffineTransform *localTransform = [NSAffineTransform transform];
-  NSRect scaledBounds = [self bounds];
-  float xScale = boundsRect.size.width/canvasSize.width;
-  float yScale = boundsRect.size.height/canvasSize.height;
-  //
-  // Get the transform due to view resizing
-  //
-  [localTransform scaleXBy:xScale yBy:yScale];
-  scaledBounds.size = [localTransform transformSize:scaledBounds.size];
-  scaledBounds.origin = [localTransform transformPoint:scaledBounds.origin]; 
-  [image drawInRect:scaledBounds fromRect:NSMakeRect(0,0,[image size].width,[image size].height) operation:NSCompositeSourceOver fraction:1.0];
-}
 @end

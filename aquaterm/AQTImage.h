@@ -6,7 +6,9 @@
 //  Copyright (c) 2001 AquaTerm. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
+
 #import "AQTGraphic.h"
 
 @interface AQTImage : AQTGraphic

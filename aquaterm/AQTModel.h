@@ -24,7 +24,6 @@
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;
--(void)renderInRect:(NSRect)boundsRect;
 -(void)setColormap:(AQTColorMap *)newColorMap;
 -(AQTColorMap *)colormap;
 -(void)setTitle:(NSString *)newTitle;

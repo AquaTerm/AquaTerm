@@ -54,42 +54,4 @@
   tempBounds.origin.y = position.y+tempJust.y;
   return tempBounds;
 }
-
-    /**"
-    *** This is where the action happens. 
-    *** Scale and draw the string with appropriate justification etc.
-    "**/
--(void)renderInRect:(NSRect)boundsRect
-{
-  NSMutableAttributedString *tmpString = [[NSMutableAttributedString alloc] initWithAttributedString:string];
-  NSAffineTransform *transf = [NSAffineTransform transform];
-  NSGraphicsContext *context = [NSGraphicsContext currentContext];
-  NSSize boundingBox;
-  int i, l = [tmpString length];
-  float xScale = boundsRect.size.width/canvasSize.width; // get scale changes wrt max size
-  float yScale = boundsRect.size.height/canvasSize.height;
-  float fontScale = sqrt(0.5*(xScale*xScale + yScale*yScale));  
-  //
-  // Scale the string FIXME: Speed up by using effective range!
-  //
-  for (i=0;i<l;i++)
-  {
-    NSFont *tmpFont = [[tmpString attributesAtIndex:i effectiveRange:nil] objectForKey:NSFontAttributeName];
-    [tmpString addAttribute:NSFontAttributeName 
-                      value:[NSFont fontWithName:[tmpFont fontName] size:max([tmpFont pointSize]*fontScale, MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
-  }
-  boundingBox = [tmpString size];
-  //
-  // Position local coordinate system and apply justification
-  //
-  [transf translateXBy:xScale*position.x yBy:yScale*position.y];	// get translated origin
-  [transf rotateByDegrees:angle];
-  [transf translateXBy:-justification*boundingBox.width/2 yBy:-boundingBox.height/2];
-  [context saveGraphicsState];
-  [transf concat];
-  [tmpString drawAtPoint:NSMakePoint(0,0)];
-  [context restoreGraphicsState];
-
-  [tmpString release];
-}
 @end

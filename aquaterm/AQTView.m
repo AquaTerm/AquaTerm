@@ -7,8 +7,21 @@
 //
 
 #import "AQTView.h"
+#import "AQTGraphic.h"
+#import "AQTLabel.h"
 #import "AQTModel.h"
+#import "AQTPath.h"
+#import "AQTImage.h"
 #import "AQTColorMap.h"
+
+#define MIN_FONTSIZE 9.0
+
+#define max(a, b) ((a)>(b)?(a):(b))
+
+@interface AQTGraphic (AQTGraphicDrawing)
+-(void)renderInRect:(NSRect)boundsRect;
+@end
+
 
 @implementation AQTView
 
@@ -63,3 +76,101 @@
 }
 
 @end
+
+@implementation AQTGraphic (AQTGraphicDrawing)
+-(void)renderInRect:(NSRect)boundsRect
+{
+  // Not purely abstract, draw a filled box to indicate trouble;-)
+  [[NSColor redColor] set];
+  [NSBezierPath fillRect:boundsRect];
+}
+@end
+
+/**"
+*** Tell every object in the collection to draw itself.
+"**/
+@implementation AQTModel (AQTModelDrawing)
+-(void)renderInRect:(NSRect)boundsRect
+{
+  AQTGraphic *graphic;
+  NSEnumerator *enumerator = [modelObjects objectEnumerator];
+
+  while ((graphic = [enumerator nextObject]))
+  {
+    [graphic renderInRect:boundsRect];
+  }
+}
+@end
+
+@implementation AQTLabel (AQTLabelDrawing)
+-(void)renderInRect:(NSRect)boundsRect
+{
+  NSMutableAttributedString *tmpString = [[NSMutableAttributedString alloc] initWithAttributedString:string];
+  NSAffineTransform *transf = [NSAffineTransform transform];
+  NSGraphicsContext *context = [NSGraphicsContext currentContext];
+  NSSize boundingBox;
+  int i, l = [tmpString length];
+  float xScale = boundsRect.size.width/canvasSize.width; // get scale changes wrt max size
+  float yScale = boundsRect.size.height/canvasSize.height;
+  float fontScale = sqrt(0.5*(xScale*xScale + yScale*yScale));
+  //
+  // Scale the string FIXME: Speed up by using effective range!
+  //
+  for (i=0;i<l;i++)
+  {
+    NSFont *tmpFont = [[tmpString attributesAtIndex:i effectiveRange:nil] objectForKey:NSFontAttributeName];
+    [tmpString addAttribute:NSFontAttributeName
+                      value:[NSFont fontWithName:[tmpFont fontName] size:max([tmpFont pointSize]*fontScale, MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
+  }
+  boundingBox = [tmpString size];
+  //
+  // Position local coordinate system and apply justification
+  //
+  [transf translateXBy:xScale*position.x yBy:yScale*position.y];	// get translated origin
+  [transf rotateByDegrees:angle];
+  [transf translateXBy:-justification*boundingBox.width/2 yBy:-boundingBox.height/2];
+  [context saveGraphicsState];
+  [transf concat];
+  [tmpString drawAtPoint:NSMakePoint(0,0)];
+  [context restoreGraphicsState];
+
+  [tmpString release];
+}
+@end
+
+@implementation AQTPath (AQTPathDrawing)
+-(void)renderInRect:(NSRect)boundsRect
+{
+  NSAffineTransform *localTransform = [NSAffineTransform transform];
+  float xScale = boundsRect.size.width/canvasSize.width;
+  float yScale = boundsRect.size.height/canvasSize.height;
+  //
+  // Get the transform due to view resizing
+  //
+  [localTransform scaleXBy:xScale yBy:yScale];
+  [color set];
+  if (isFilled)
+  {
+    [[localTransform transformBezierPath:path] fill];
+  }
+  [[localTransform transformBezierPath:path] stroke];	// FAQ: Needed unless we holes in the surface?
+}
+@end
+
+@implementation AQTImage (AQTImageDrawing)
+-(void)renderInRect:(NSRect)boundsRect
+{
+  NSAffineTransform *localTransform = [NSAffineTransform transform];
+  NSRect scaledBounds = [self bounds];
+  float xScale = boundsRect.size.width/canvasSize.width;
+  float yScale = boundsRect.size.height/canvasSize.height;
+  //
+  // Get the transform due to view resizing
+  //
+  [localTransform scaleXBy:xScale yBy:yScale];
+  scaledBounds.size = [localTransform transformSize:scaledBounds.size];
+  scaledBounds.origin = [localTransform transformPoint:scaledBounds.origin];
+  [image drawInRect:scaledBounds fromRect:NSMakeRect(0,0,[image size].width,[image size].height) operation:NSCompositeSourceOver fraction:1.0];
+}
+@end
+

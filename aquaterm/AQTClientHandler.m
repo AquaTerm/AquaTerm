@@ -10,6 +10,8 @@
 #import "AQTController.h"
 // Temporary for stub creation:
 #import "AQTModel.h"
+#import "AQTPath.h"
+#import "AQTLabel.h"
 #import "AQTColorMap.h"
 
 @implementation AQTClientHandler
@@ -45,9 +47,19 @@
   // Stub model
   AQTModel *stub = [[AQTModel alloc] initWithSize:NSMakeSize(300,200)];
   AQTColorMap *cm = [[AQTColorMap alloc] init];
-  [stub setColormap:cm];
-  [cm release];
+  AQTLabel *lb = [[AQTLabel alloc] initWithAttributedString:[[[NSAttributedString alloc]initWithString:@"Hello world!"] autorelease]
+                                                   position:NSMakePoint(150, 100)
+                                                      angle:45
+                                              justification:1];
+  AQTPath *pt = [[AQTPath alloc] initWithPolyline:[NSBezierPath bezierPathWithRect:NSMakeRect(10, 10, 280, 180)] colorIndex:2];
+  [stub addObject:lb];
+  [stub addObject:pt];
+//  [stub setColormap:cm];
+  [stub updateColors:cm];
   [owner setModel:stub forView:currentView];
+  [pt release];
+  [lb release];
+  [cm release];
   [stub release];
 }
 

@@ -6,7 +6,9 @@
 //  Copyright (c) 2001, 2002 Aquaterm. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+// Aiming at removing AppKit reliance from model code
+#import <AppKit/AppKit.h>
 
 @class AQTColorMap, AQTModel;
 
@@ -25,9 +27,6 @@
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;
-
-/*" drawing "*/
--(void)renderInRect:(NSRect)boundsRect;
 
 /*" color handling "*/
 -(NSColor *)color;

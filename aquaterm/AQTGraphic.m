@@ -52,16 +52,6 @@
 -(void)removeObject:(AQTGraphic *)graphic {;}
 -(void)removeObjectsInRect:(NSRect)targetRect {;}
 
-    /**" 
-    *** Needs to be overridden in all subclasses to do actual drawing 
-    "**/
--(void)renderInRect:(NSRect)boundsRect
-{
-    // Not purely abstract, draw a filled box to indicate trouble;-)
-    [[NSColor redColor] set];
-    [NSBezierPath fillRect:boundsRect];
-}
-
 -(void)setColor:(NSColor *)newColor
 {
   [newColor retain];

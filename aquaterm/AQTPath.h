@@ -20,5 +20,4 @@
 -(id)initWithPolygon:(NSBezierPath *)aPath colorIndex:(int)cIndex;
 -(id)initWithPolyline:(NSBezierPath *)aPath color:(NSColor *)color;
 -(id)initWithPolygon:(NSBezierPath *)aPath color:(NSColor *)color;
--(void)renderInRect:(NSRect)boundsRect;
 @end

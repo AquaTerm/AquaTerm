@@ -23,5 +23,4 @@
     int justification;		/*" Justification with respect to the position of the text "*/
 }
 -(id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify;
--(void)renderInRect:(NSRect)boundsRect;
 @end
