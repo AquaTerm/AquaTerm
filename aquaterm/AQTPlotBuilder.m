@@ -182,8 +182,10 @@
 
 - (void)clearAll
 {
+   // Honor size, title and background color
    AQTModel *newModel = [[AQTModel alloc] initWithSize:[_model size]];
    [newModel setTitle:[_model title]];
+   [newModel setColor:[_model color]];
    [_model release];
    _model = newModel;
    [self _aqtPlotBuilderSetDefaultValues];
