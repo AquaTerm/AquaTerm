@@ -98,7 +98,7 @@
    }
    else
    {
-     // do whatever is necessary for continuous color mode here
+     // continuous color mode
       [self setColor:[colorMap colorForFloat:mappedColor]];
    }
 }

@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class GPTWindowController;
+
 @interface AQTColorInspector : NSWindowController
 {
     IBOutlet NSColorWell *axisColor;		/*" color for x,y[,z] axes, tickmarks and labels "*/
@@ -27,13 +29,16 @@
     IBOutlet NSImageView *surfaceRampImage;	/*" shows the gradient to the user "*/
     IBOutlet NSColorWell *textColor;		/*" Not implemented, see axisColor "*/
     
-    id theController; /*" sets itself at init "*/
+    GPTWindowController *frontWindowController; 	/*" Keeps track of the windowController of the front window "*/
 
     @private
     NSImage *rampImage; 		/*" Preview of the continuos colormap ("coloraxis") "*/
     NSBitmapImageRep *bitmap;		/*" the raw bitmap that used in rampImage "*/
     unsigned char *planes[3]; 		/*" the R, G and B planes for the raw bitmap (each is 1x64 pixels) "*/
 }
+/*" Accessor methods "*/
+- (void)setFrontWindowController:(GPTWindowController *)newWindowController;
+- (GPTWindowController *)frontWindowController;
 /*" IBActions "*/
 - (IBAction)applyPressed:(id)sender;
 - (IBAction)didSetMinColor:(id)sender;

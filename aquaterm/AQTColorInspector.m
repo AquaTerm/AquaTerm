@@ -9,6 +9,7 @@
 #import "AQTColorInspector.h"
 #import "AQTColorMap.h"
 #import "AQTModel.h"
+#import "GPTController.h"
 #import "GPTWindowController.h"
 
 @implementation AQTColorInspector
@@ -18,12 +19,20 @@
 
 - (id)init
 {
-  if (self = [super initWithWindowNibName:@"ColorInspector"]) {
-
+  NSWindow *frontWindow = [[[NSApplication sharedApplication] delegate] frontWindow];
+  if (self = [super initWithWindowNibName:@"ColorInspector"])
+  {
+    // User could open inspector panel before opening a graph window
+    if(frontWindow)
+    {
+      [self setFrontWindowController:[frontWindow windowController]];
     // we should set the colors of each of the color wells by 
-    // a) reading from the front window if it exists or
-    // b) reading in the default colormap prefs
-
+      // reading the colormap from the front window 
+    }
+    else
+    {
+      // FIXME: should read default colormap since there is no graph window open
+    }
     // Set up the rampImage
     // This is somewhat primitive, but it does work! PP 
     planes[0] = (unsigned char*)malloc(1 * 64); // red 
@@ -61,7 +70,28 @@
                                              object:nil];
 
     // This is not possible to do in the init!
+  // FIXME: rather than just updating the ramp image, all colors should be updated
     [self updateRampImage];
+}
+
+-(GPTWindowController *)frontWindowController
+{
+  return frontWindowController;
+}
+
+- (void)setFrontWindowController:(GPTWindowController *)newWindowController
+{
+  // First check that it is an actual update
+  if (newWindowController != frontWindowController)
+  {
+    frontWindowController = newWindowController;
+    if (frontWindowController)
+    {
+      // FIXME: stubbing this for now (2002-02-04 PP)
+      // Should read the colormap from the new model and
+      // update inspector window accordingly
+    }
+  }
 }
 
 - (IBAction)didSetMinColor:(id)sender
@@ -102,7 +132,6 @@
 {
     AQTColorMap *tempColormap;
     NSDictionary *colorDICT;
-    AQTModel * inspectedModel = [(GPTWindowController *)[[NSApplication sharedApplication] delegate] model];
     
     // create a temporary colormap from the panel
     colorDICT = [NSDictionary dictionaryWithObjects: [NSArray arrayWithObjects:
@@ -139,15 +168,18 @@
     tempColormap = [[AQTColorMap alloc] initWithColorDict:colorDICT
                                                  rampFrom:[minColor color]
                                                        to:[maxColor color]];
-    [inspectedModel updateColors:tempColormap];
+    [[frontWindowController model] updateColors:tempColormap];
+    [[frontWindowController viewOutlet] setNeedsDisplay:YES];
     [tempColormap release];
 }
 
 -(void)mainWindowChanged:(NSNotification *)notification
 {	    
-  NSLog(@"mainWindowChanged");
-  // Should read the colormap from the new model and
-  // update inspector window accordingly
+  if([[[notification object] windowController] isKindOfClass:[GPTWindowController class]])
+  {
+    // Store a ref to the windowController rather than the model since we need access to the view as well. PP
+    [self setFrontWindowController:[[notification object] windowController]];
+  }
 }
 @end
 
