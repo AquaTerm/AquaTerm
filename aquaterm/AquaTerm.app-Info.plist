@@ -10,6 +10,8 @@
 	<string>AquaTerm v1.0.b1</string>
 	<key>CFBundleIconFile</key>
 	<string>AquaTerm.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>net.sourceforge.aquaterm</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
