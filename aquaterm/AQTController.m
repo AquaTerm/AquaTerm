@@ -101,8 +101,8 @@
 
 -(IBAction)test:(id)sender
 {
-/*
- AQTAdapter *adapter = [clientList objectAtIndex:0];
+
+   AQTAdapter *adapter = [[AQTAdapter alloc] initWithServer:self];
    NSPoint polygon[5];
    char bytes[12]={
       255, 0, 0,
@@ -117,11 +117,14 @@
    {
       NSLog(@"Failed to init adapter");
    }
-   [adapter openPlotIndex:2 size:NSMakeSize(400,300) title:@"Testing"];
+   [adapter openPlotIndex:2];// size:NSMakeSize(400,300) title:@"Testing"];
+   [adapter setPlotSize:NSMakeSize(400,300)];
+   [adapter setPlotTitle:@"Testing"];
    [adapter addLabel:@"Left" position:NSMakePoint(200,160) angle:0.0 justification:0];
    [adapter addLabel:@"Center" position:NSMakePoint(200,150) angle:0.0 justification:1];
    [adapter addLabel:@"Right" position:NSMakePoint(200,170) angle:0.0 justification:2];
-   for(i=0; i<1000; i++)
+/*
+ for(i=0; i<1000; i++)
    {
       [adapter setColorRed:drand48() green:drand48() blue:drand48()];
       x = random() % 360 + 20;
@@ -137,6 +140,7 @@
    [adapter addLineAtPoint:NSMakePoint(199.5, 0)];
    [adapter appendLineToPoint:NSMakePoint(199.5, 299)];
    [adapter addLineAtPoint:NSMakePoint(0, 0)]; // Force end of line
+ 
    [adapter closePlot];
 
    [adapter openPlotIndex:3 size:NSMakeSize(200,200) title:@"Image"];
@@ -157,7 +161,7 @@
    polygon[3]=NSMakePoint(xf+10., 20.);
    polygon[4]=NSMakePoint(xf+10., 10.);
    [adapter addPolygonWithPoints:polygon pointCount:5];
-   [adapter closePlot];
  */
+   [adapter closePlot];
 }
 @end

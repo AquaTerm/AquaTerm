@@ -290,7 +290,7 @@ error handling callback function for the client.
   if (newHandler)
   {
     [_handlers setObject:newHandler forKey:[NSString stringWithFormat:@"%d", refNum]];
-    [newHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
+     //    [newHandler setProtocolForProxy:@protocol(AQTClientProtocol)]; // FIXME: test if local client
     _selectedHandler = newHandler;
 
     newBuilder = [[AQTPlotBuilder alloc] init];
