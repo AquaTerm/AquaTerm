@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
@@ -14,6 +14,7 @@
 			isa = PBXGroup;
 			name = Protocols;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //080
 //081
@@ -33,12 +34,16 @@
 			isa = PBXGroup;
 			name = "Linked Frameworks";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		1058C7A1FEA54F0111CA2CBB = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Cocoa.framework;
 			path = /System/Library/Frameworks/Cocoa.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		1058C7A2FEA54F0111CA2CBB = {
 			children = (
@@ -50,6 +55,7 @@
 			isa = PBXGroup;
 			name = "Other Frameworks";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		1058C7A3FEA54F0111CA2CBB = {
 			fileRef = 1058C7A1FEA54F0111CA2CBB;
@@ -68,9 +74,12 @@
 //173
 //174
 		17587328FF379C6511CA2CBB = {
+			explicitFileType = wrapper.application;
+			fallbackIsa = PBXFileReference;
 			isa = PBXApplicationReference;
 			path = AquaTerm.app;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 //170
 //171
@@ -86,10 +95,13 @@
 			children = (
 				17587328FF379C6511CA2CBB,
 				CBF30BC204D54A2E00EBD329,
+				CBC4B40F05E4C40D001BE8D7,
+				CBC4B44B05E4C784001BE8D7,
 			);
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //190
 //191
@@ -102,6 +114,8 @@
 //293
 //294
 		29B97313FDCFA39411CA2CEA = {
+			buildSettings = {
+			};
 			buildStyles = (
 				4A9504CCFFE6A4B311CA0CBA,
 				4A9504CDFFE6A4B311CA0CBA,
@@ -115,6 +129,9 @@
 				29B97326FDCFA39411CA2CEA,
 				F5DB1B640219BFD2014110D6,
 				CBF30BC104D54A2E00EBD329,
+				CBC4B3EC05E4C40D001BE8D7,
+				CBC4B42705E4C784001BE8D7,
+				CBAA608105E7AFA7009B33CD,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -132,12 +149,15 @@
 				F57C16A102506DE3010D3DE4,
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
+				CBAA608305E7AFF0009B33CD,
 				F55D7FF10219BEF4014110D6,
+				CBC4B44A05E4C784001BE8D7,
 			);
 			isa = PBXGroup;
 			name = AquaTerm;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA = {
 			children = (
@@ -147,12 +167,15 @@
 			name = "Other Sources";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97316FDCFA39411CA2CEA = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = main.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA = {
 			children = (
@@ -169,6 +192,7 @@
 			name = Resources;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97318FDCFA39411CA2CEA = {
 			children = (
@@ -178,12 +202,15 @@
 			name = MainMenu1.nib;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97319FDCFA39411CA2CEA = {
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = MainMenu1.nib;
 			path = English.lproj/MainMenu1.nib;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97323FDCFA39411CA2CEA = {
 			children = (
@@ -194,18 +221,25 @@
 			name = Frameworks;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97324FDCFA39411CA2CEA = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = AppKit.framework;
 			path = /System/Library/Frameworks/AppKit.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		29B97325FDCFA39411CA2CEA = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Foundation.framework;
 			path = /System/Library/Frameworks/Foundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		29B97326FDCFA39411CA2CEA = {
 			buildPhases = (
@@ -260,7 +294,7 @@
 	<key>CFBundleVersion</key>
 	<string>1.0.a1</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>©2001-2003, The AquaTerm Project  
+	<string>©2001-2004, The AquaTerm Project  
 http://aquaterm.sourceforge.net</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu1</string>
@@ -349,7 +383,12 @@ http://aquaterm.sourceforge.net</string>
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
@@ -359,6 +398,8 @@ http://aquaterm.sourceforge.net</string>
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -375,9 +416,11 @@ http://aquaterm.sourceforge.net</string>
 //CB4
 		CB05377C04DEA3A300EBD329 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.tiff;
 			name = Cross.tiff;
 			path = English.lproj/Cross.tiff;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		CB05377D04DEA3A300EBD329 = {
 			fileRef = CB05377C04DEA3A300EBD329;
@@ -400,18 +443,23 @@ http://aquaterm.sourceforge.net</string>
 			name = ClientController;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB2DDBA7056D103C00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTPlotController.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB2DDBA8056D103C00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTPlotController.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB2DDBA9056D103C00D208BA = {
 			fileRef = CB2DDBA7056D103C00D208BA;
@@ -428,8 +476,10 @@ http://aquaterm.sourceforge.net</string>
 		CB2DDBAB056D10FB00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTEventProtocol.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB2DDBAC056D10FB00D208BA = {
 			fileRef = CB2DDBAB056D10FB00D208BA;
@@ -458,14 +508,18 @@ http://aquaterm.sourceforge.net</string>
 		CB5B187104A9A49E00EBD329 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTController.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB5B187204A9A49E00EBD329 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTController.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB5B187304A9A49E00EBD329 = {
 			fileRef = CB5B187104A9A49E00EBD329;
@@ -482,14 +536,18 @@ http://aquaterm.sourceforge.net</string>
 		CB5B1BEE04A9C2E900EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTClientProtocol.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB5B1BEF04A9C2E900EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTConnectionProtocol.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB5B1BF004A9C2E900EBD329 = {
 			fileRef = CB5B1BEE04A9C2E900EBD329;
@@ -506,26 +564,34 @@ http://aquaterm.sourceforge.net</string>
 		CB6785CE05866FCE00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = aquaterm.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB6785D205867B7300D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = aquaterm.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB71321105444AEC00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTGraphicDrawingMethods.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB71321205444AEC00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTGraphicDrawingMethods.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB71321305444AEC00D208BA = {
 			fileRef = CB71321105444AEC00D208BA;
@@ -542,8 +608,10 @@ http://aquaterm.sourceforge.net</string>
 		CB77583A056B83E300D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTConstants.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB77583C056B83E300D208BA = {
 			fileRef = CB77583A056B83E300D208BA;
@@ -572,6 +640,7 @@ http://aquaterm.sourceforge.net</string>
 			name = "C API";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CB9E42E2058685DA00D208BA = {
 			fileRef = CB6785D205867B7300D208BA;
@@ -585,6 +654,34 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
+		CBAA608105E7AFA7009B33CD = {
+			buildArgumentsString = "-f distroMakefile $(ACTION)";
+			buildPhases = (
+			);
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Distro;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			isa = PBXLegacyTarget;
+			name = Distro;
+			passBuildSettingsInEnvironment = 1;
+			productName = Distro;
+		};
+		CBAA608305E7AFF0009B33CD = {
+			explicitFileType = sourcecode.make;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = distroMakefile;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		CBB06FE305740E0E00D208BA = {
 			children = (
 				CB77583A056B83E300D208BA,
@@ -595,18 +692,23 @@ http://aquaterm.sourceforge.net</string>
 			name = "Functions and constants";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBB06FE805740EB900D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTFunctions.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBB06FE905740EB900D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTFunctions.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBB06FEA05740EB900D208BA = {
 			fileRef = CBB06FE805740EB900D208BA;
@@ -623,14 +725,18 @@ http://aquaterm.sourceforge.net</string>
 		CBB8466E056C0A4B00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTClientManager.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBB8466F056C0A4B00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTClientManager.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBB84670056C0A4B00D208BA = {
 			fileRef = CBB8466E056C0A4B00D208BA;
@@ -644,17 +750,590 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
+		CBC4B3BC05E4BDB5001BE8D7 = {
+			containerPortal = 29B97313FDCFA39411CA2CEA;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = CBF30BC104D54A2E00EBD329;
+			remoteInfo = libaqt;
+		};
+		CBC4B3EC05E4C40D001BE8D7 = {
+			buildPhases = (
+				CBC4B3ED05E4C40D001BE8D7,
+				CBC4B3FC05E4C40D001BE8D7,
+				CBC4B40905E4C40D001BE8D7,
+				CBC4B40C05E4C40D001BE8D7,
+				CBC4B40D05E4C40D001BE8D7,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DEPLOYMENT_LOCATION = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_STYLE = DYNAMIC;
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = libaquaterm.1.0.0;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXNativeTarget;
+			name = "libaqt (Upgraded)";
+			productInstallPath = /usr/local/lib;
+			productName = libaqt;
+			productReference = CBC4B40F05E4C40D001BE8D7;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		CBC4B3ED05E4C40D001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBC4B3EE05E4C40D001BE8D7,
+				CBC4B3EF05E4C40D001BE8D7,
+				CBC4B3F005E4C40D001BE8D7,
+				CBC4B3F105E4C40D001BE8D7,
+				CBC4B3F205E4C40D001BE8D7,
+				CBC4B3F305E4C40D001BE8D7,
+				CBC4B3F405E4C40D001BE8D7,
+				CBC4B3F505E4C40D001BE8D7,
+				CBC4B3F605E4C40D001BE8D7,
+				CBC4B3F705E4C40D001BE8D7,
+				CBC4B3F805E4C40D001BE8D7,
+				CBC4B3F905E4C40D001BE8D7,
+				CBC4B3FA05E4C40D001BE8D7,
+				CBC4B3FB05E4C40D001BE8D7,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B3EE05E4C40D001BE8D7 = {
+			fileRef = CBF3082D04D51B9300EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3EF05E4C40D001BE8D7 = {
+			fileRef = F55D241701C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F005E4C40D001BE8D7 = {
+			fileRef = F55D241901C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F105E4C40D001BE8D7 = {
+			fileRef = F55D241B01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F205E4C40D001BE8D7 = {
+			fileRef = F5653B8001C4B8F201A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F305E4C40D001BE8D7 = {
+			fileRef = F59F5FC9021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F405E4C40D001BE8D7 = {
+			fileRef = FEDD21D204EE7C22008D3E17;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F505E4C40D001BE8D7 = {
+			fileRef = F50F0B540205D23401AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F605E4C40D001BE8D7 = {
+			fileRef = CBB8466E056C0A4B00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F705E4C40D001BE8D7 = {
+			fileRef = CB2DDBA7056D103C00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F805E4C40D001BE8D7 = {
+			fileRef = CB2DDBAB056D10FB00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3F905E4C40D001BE8D7 = {
+			fileRef = CB5B1BEE04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3FA05E4C40D001BE8D7 = {
+			fileRef = CB5B1BEF04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3FB05E4C40D001BE8D7 = {
+			fileRef = CB6785CE05866FCE00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3FC05E4C40D001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBC4B3FD05E4C40D001BE8D7,
+				CBC4B3FE05E4C40D001BE8D7,
+				CBC4B3FF05E4C40D001BE8D7,
+				CBC4B40005E4C40D001BE8D7,
+				CBC4B40105E4C40D001BE8D7,
+				CBC4B40205E4C40D001BE8D7,
+				CBC4B40305E4C40D001BE8D7,
+				CBC4B40405E4C40D001BE8D7,
+				CBC4B40505E4C40D001BE8D7,
+				CBC4B40605E4C40D001BE8D7,
+				CBC4B40705E4C40D001BE8D7,
+				CBC4B40805E4C40D001BE8D7,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B3FD05E4C40D001BE8D7 = {
+			fileRef = CBF3082E04D51B9400EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3FE05E4C40D001BE8D7 = {
+			fileRef = F55D241801C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B3FF05E4C40D001BE8D7 = {
+			fileRef = F55D241A01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40005E4C40D001BE8D7 = {
+			fileRef = F55D241C01C0F0F501A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40105E4C40D001BE8D7 = {
+			fileRef = F5653B8101C4B8F201A80104;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40205E4C40D001BE8D7 = {
+			fileRef = F59F5FCA021011D301A18598;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40305E4C40D001BE8D7 = {
+			fileRef = FEDD21D304EE7C22008D3E17;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40405E4C40D001BE8D7 = {
+			fileRef = F50F0B550205D23401AA2E68;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40505E4C40D001BE8D7 = {
+			fileRef = CB77583A056B83E300D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40605E4C40D001BE8D7 = {
+			fileRef = CBB8466F056C0A4B00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40705E4C40D001BE8D7 = {
+			fileRef = CB2DDBA8056D103C00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40805E4C40D001BE8D7 = {
+			fileRef = CB6785D205867B7300D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40905E4C40D001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBC4B40A05E4C40D001BE8D7,
+				CBC4B40B05E4C40D001BE8D7,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B40A05E4C40D001BE8D7 = {
+			fileRef = CBD51E0004EB84FA00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40B05E4C40D001BE8D7 = {
+			fileRef = 29B97325FDCFA39411CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B40C05E4C40D001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B40D05E4C40D001BE8D7 = {
+			buildActionMask = 8;
+			files = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "#cp $SRCROOT/AQTAdapter.h $HOME/include/aquaterm/.\n#cp $SRCROOT/aquaterm.h $HOME/include/aquaterm/.\n#cp $SRCROOT/build/libaquaterm.1.0.0.dylib $HOME/lib/.  \n#ln -s $HOME/lib/libaquaterm.1.0.0.dylib $HOME/lib libaquaterm.dylib ";
+		};
+		CBC4B40F05E4C40D001BE8D7 = {
+			explicitFileType = "compiled.mach-o.dylib";
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = libaquaterm.1.0.0.dylib;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CBC4B42705E4C784001BE8D7 = {
+			buildPhases = (
+				CBC4B42905E4C784001BE8D7,
+				CBC4B43205E4C784001BE8D7,
+				CBC4B43B05E4C784001BE8D7,
+				CBC4B44505E4C784001BE8D7,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREPROCESSOR_DEFINITIONS = "AQT_APP TIMING";
+				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
+				INSTALL_PATH = "$(USER_APPS_DIR)";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-framework Foundation -framework AppKit";
+				PRODUCT_NAME = AquaTerm;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+				CBC4B45605E4F9E0001BE8D7,
+			);
+			isa = PBXNativeTarget;
+			name = "AquaTerm (Upgraded)";
+			productInstallPath = /Applications;
+			productName = AquaTerm;
+			productReference = CBC4B44B05E4C784001BE8D7;
+			productType = "com.apple.product-type.application";
+		};
+		CBC4B42905E4C784001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBC4B42A05E4C784001BE8D7,
+				CBC4B42B05E4C784001BE8D7,
+				CBC4B42C05E4C784001BE8D7,
+				CBC4B42D05E4C784001BE8D7,
+				CBC4B42E05E4C784001BE8D7,
+				CBC4B42F05E4C784001BE8D7,
+				CBC4B43005E4C784001BE8D7,
+				CBC4B43105E4C784001BE8D7,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B42A05E4C784001BE8D7 = {
+			fileRef = F5E3AFA9026D80D2012F88DF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B42B05E4C784001BE8D7 = {
+			fileRef = CB5B187104A9A49E00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B42C05E4C784001BE8D7 = {
+			fileRef = CB5B1BEE04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B42D05E4C784001BE8D7 = {
+			fileRef = CB5B1BEF04A9C2E900EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B42E05E4C784001BE8D7 = {
+			fileRef = CBF3083904D51CF100EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B42F05E4C784001BE8D7 = {
+			fileRef = CB71321105444AEC00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43005E4C784001BE8D7 = {
+			fileRef = CB2DDBAB056D10FB00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43105E4C784001BE8D7 = {
+			fileRef = CBB06FE805740EB900D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43205E4C784001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBC4B43305E4C784001BE8D7,
+				CBC4B43405E4C784001BE8D7,
+				CBC4B43505E4C784001BE8D7,
+				CBC4B43605E4C784001BE8D7,
+				CBC4B43705E4C784001BE8D7,
+				CBC4B43805E4C784001BE8D7,
+				CBC4B43905E4C784001BE8D7,
+				CBC4B43A05E4C784001BE8D7,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B43305E4C784001BE8D7 = {
+			fileRef = 29B97318FDCFA39411CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43405E4C784001BE8D7 = {
+			fileRef = F5FEAC2701A7219B0143D50D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43505E4C784001BE8D7 = {
+			fileRef = F51551CC01FE762E01000102;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43605E4C784001BE8D7 = {
+			fileRef = F54B0FE401FF3656014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43705E4C784001BE8D7 = {
+			fileRef = F54B0FE601FF5CDC014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43805E4C784001BE8D7 = {
+			fileRef = F5E70370026D8645012F88DF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43905E4C784001BE8D7 = {
+			fileRef = F55BA2E303589FD301D20925;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43A05E4C784001BE8D7 = {
+			fileRef = CB05377C04DEA3A300EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43B05E4C784001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBC4B43C05E4C784001BE8D7,
+				CBC4B43D05E4C784001BE8D7,
+				CBC4B43E05E4C784001BE8D7,
+				CBC4B43F05E4C784001BE8D7,
+				CBC4B44005E4C784001BE8D7,
+				CBC4B44105E4C784001BE8D7,
+				CBC4B44205E4C784001BE8D7,
+				CBC4B44305E4C784001BE8D7,
+				CBC4B44405E4C784001BE8D7,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B43C05E4C784001BE8D7 = {
+			fileRef = 29B97316FDCFA39411CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		CBC4B43D05E4C784001BE8D7 = {
+			fileRef = F5E3AFAA026D80D2012F88DF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43E05E4C784001BE8D7 = {
+			fileRef = CB5B187204A9A49E00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B43F05E4C784001BE8D7 = {
+			fileRef = CBF3083A04D51CF100EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44005E4C784001BE8D7 = {
+			fileRef = CB71321205444AEC00D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44105E4C784001BE8D7 = {
+			fileRef = FE8252ACC5B321F400CFA73B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44205E4C784001BE8D7 = {
+			fileRef = FEBB59CE055CF10B00EEC8EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44305E4C784001BE8D7 = {
+			fileRef = FEBB59D0055CF40600EEC8EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44405E4C784001BE8D7 = {
+			fileRef = CBB06FE905740EB900D208BA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44505E4C784001BE8D7 = {
+			buildActionMask = 2147483647;
+			files = (
+				CBC4B44605E4C784001BE8D7,
+				CBC4B44705E4C784001BE8D7,
+				CBC4B44805E4C784001BE8D7,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC4B44605E4C784001BE8D7 = {
+			fileRef = 1058C7A1FEA54F0111CA2CBB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44705E4C784001BE8D7 = {
+			fileRef = FE82528EC5B321F400CFA73B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44805E4C784001BE8D7 = {
+			fileRef = CBF30BC204D54A2E00EBD329;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CBC4B44A05E4C784001BE8D7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			path = "AquaTerm.app-Info.plist";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CBC4B44B05E4C784001BE8D7 = {
+			explicitFileType = wrapper.application;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = AquaTerm.app;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CBC4B45505E4F9E0001BE8D7 = {
+			containerPortal = 29B97313FDCFA39411CA2CEA;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = CBC4B3EC05E4C40D001BE8D7;
+			remoteInfo = "libaqt (Upgraded)";
+		};
+		CBC4B45605E4F9E0001BE8D7 = {
+			isa = PBXTargetDependency;
+			target = CBC4B3EC05E4C40D001BE8D7;
+			targetProxy = CBC4B45505E4F9E0001BE8D7;
+		};
 		CBD51DED04EB839F00EBD329 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = CoreFoundation.framework;
 			path = /System/Library/Frameworks/CoreFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		CBD51E0004EB84FA00EBD329 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = ApplicationServices.framework;
 			path = /System/Library/Frameworks/ApplicationServices.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		CBD51E0104EB84FA00EBD329 = {
 			fileRef = CBD51E0004EB84FA00EBD329;
@@ -685,30 +1364,39 @@ http://aquaterm.sourceforge.net</string>
 		CBE5EB120549E11200D208BA = {
 			isa = PBXTargetDependency;
 			target = CBF30BC104D54A2E00EBD329;
+			targetProxy = CBC4B3BC05E4BDB5001BE8D7;
 		};
 		CBF3082D04D51B9300EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTAdapter.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBF3082E04D51B9400EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTAdapter.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBF3083904D51CF100EBD329 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTPlot.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBF3083A04D51CF100EBD329 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTPlot.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		CBF3084104D5209800EBD329 = {
 			fileRef = CBF3083904D51CF100EBD329;
@@ -790,6 +1478,7 @@ http://aquaterm.sourceforge.net</string>
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = "";
+				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
@@ -806,13 +1495,17 @@ http://aquaterm.sourceforge.net</string>
 			);
 			isa = PBXLibraryTarget;
 			name = libaqt;
+			productInstallPath = /usr/local/lib;
 			productName = libaqt;
 			productReference = CBF30BC204D54A2E00EBD329;
 		};
 		CBF30BC204D54A2E00EBD329 = {
+			explicitFileType = "compiled.mach-o.dylib";
+			fallbackIsa = PBXFileReference;
 			isa = PBXLibraryReference;
 			path = libaquaterm.1.0.0.dylib;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		CBF30BC304D54A3800EBD329 = {
 			fileRef = CBF3082E04D51B9400EBD329;
@@ -890,14 +1583,10 @@ http://aquaterm.sourceforge.net</string>
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp $SRCROOT/AQTAdapter.h $HOME/include/aquaterm/.; cp $SRCROOT/aquaterm.h $HOME/include/aquaterm/.; cp $SRCROOT/build/libaquaterm.1.0.0.dylib $HOME/lib/.; ##ln -s $HOME/lib/libaquaterm.1.0.0.dylib $HOME/lib/libaquaterm.dylib ";
+			shellScript = "## cp $SRCROOT/AQTAdapter.h $HOME/include/aquaterm/.;\n## cp $SRCROOT/aquaterm.h $HOME/include/aquaterm/.; \n## cp $SRCROOT/build/libaquaterm.1.0.0.dylib $HOME/lib/.; \n## ln -s $HOME/lib/libaquaterm.1.0.0.dylib $HOME/lib libaquaterm.dylib ";
 		};
 		CBF30BD804D5527700EBD329 = {
 			children = (
@@ -913,6 +1602,7 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXGroup;
 			name = oldsource;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //CB0
 //CB1
@@ -927,32 +1617,42 @@ http://aquaterm.sourceforge.net</string>
 		F50F0B500205D1AF01AA2E68 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTColorInspector.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F50F0B510205D1AF01AA2E68 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTColorInspector.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F50F0B540205D23401AA2E68 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTColorMap.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F50F0B550205D23401AA2E68 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTColorMap.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F51551CC01FE762E01000102 = {
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = ColorInspector.nib;
 			path = English.lproj/ColorInspector.nib;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F51551CD01FE762E01000102 = {
 			fileRef = F51551CC01FE762E01000102;
@@ -963,9 +1663,11 @@ http://aquaterm.sourceforge.net</string>
 		F54B0FE401FF3656014110A7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = help.html;
 			path = English.lproj/help.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54B0FE501FF3656014110A7 = {
 			fileRef = F54B0FE401FF3656014110A7;
@@ -975,9 +1677,11 @@ http://aquaterm.sourceforge.net</string>
 		};
 		F54B0FE601FF5CDC014110A7 = {
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = ExtendSavePanel.nib;
 			path = English.lproj/ExtendSavePanel.nib;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55BA2E303589FD301D20925 = {
 			children = (
@@ -987,12 +1691,15 @@ http://aquaterm.sourceforge.net</string>
 			name = AquaTerm.icns;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55BA2E403589FD301D20925 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
 			name = English;
 			path = English.lproj/AquaTerm.icns;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55BA2E503589FD301D20925 = {
 			fileRef = F55BA2E303589FD301D20925;
@@ -1003,71 +1710,94 @@ http://aquaterm.sourceforge.net</string>
 		F55D241701C0F0F501A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTGraphic.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55D241801C0F0F501A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTGraphic.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55D241901C0F0F501A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTLabel.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55D241A01C0F0F501A80104 = {
 			fileEncoding = 30;
 			indentWidth = 2;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTLabel.m;
 			refType = 4;
+			sourceTree = "<group>";
 			tabWidth = 4;
 			usesTabs = 0;
 		};
 		F55D241B01C0F0F501A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTModel.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55D241C01C0F0F501A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTModel.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F55D7FF10219BEF4014110D6 = {
+			fallbackIsa = PBXFileReference;
 			fileEncoding = 30;
 			isa = PBXExecutableFileReference;
+			lastKnownFileType = text.script.sh;
 			path = makedocs;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5653B8001C4B8F201A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTPath.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5653B8101C4B8F201A80104 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTPath.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57A4136022288E5014110D6 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTBuilder.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57A4137022288E5014110D6 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTBuilder.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
@@ -1077,30 +1807,39 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXGroup;
 			name = Dist;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57C16A202506DE3010D3DE4 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = ReadMe.txt;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F57C16A302506DE3010D3DE4 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = ToDo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59F5FC9021011D301A18598 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTImage.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59F5FCA021011D301A18598 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTImage.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5AB08990175CCF101EB16F3 = {
 			children = (
@@ -1113,6 +1852,7 @@ http://aquaterm.sourceforge.net</string>
 			name = View;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5AB089A0175CCF101EB16F3 = {
 			children = (
@@ -1128,6 +1868,7 @@ http://aquaterm.sourceforge.net</string>
 			name = AppController;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5AB089B0175CCF101EB16F3 = {
 			children = (
@@ -1148,6 +1889,7 @@ http://aquaterm.sourceforge.net</string>
 			name = Model;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5B46F320209827F01A80104 = {
 			fileRef = F54B0FE601FF5CDC014110A7;
@@ -1158,8 +1900,10 @@ http://aquaterm.sourceforge.net</string>
 		F5B4A77E0222A7D9014110D6 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = AQTProtocol.mdoc;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5C4C2DC0199DF380143D54F = {
 			fileRef = 29B97318FDCFA39411CA2CEA;
@@ -1186,21 +1930,22 @@ http://aquaterm.sourceforge.net</string>
 			name = Docs;
 			passBuildSettingsInEnvironment = 1;
 			productName = Untitled;
-			settingsToExpand = 6;
-			settingsToPassInEnvironment = 287;
-			settingsToPassOnCommandLine = 280;
 		};
 		F5E3AFA9026D80D2012F88DF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTView.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3AFAA026D80D2012F88DF = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTView.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E3AFAB026D80D2012F88DF = {
 			fileRef = F5E3AFA9026D80D2012F88DF;
@@ -1222,12 +1967,15 @@ http://aquaterm.sourceforge.net</string>
 			name = AQTWindow.nib;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E70371026D8645012F88DF = {
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/AQTWindow.nib;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E70372026D8645012F88DF = {
 			fileRef = F5E70370026D8645012F88DF;
@@ -1238,20 +1986,26 @@ http://aquaterm.sourceforge.net</string>
 		F5E99A51036446DA01EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTBaseMethods.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5E99A52036446DA01EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTExtendedMethods.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FEAC1401A6B3CE0143D50D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTProtocol.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FEAC2701A7219B0143D50D = {
 			children = (
@@ -1261,12 +2015,15 @@ http://aquaterm.sourceforge.net</string>
 			name = Credits.rtf;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FEAC2801A7219B0143D50D = {
 			isa = PBXFileReference;
+			lastKnownFileType = text.rtf;
 			name = English;
 			path = English.lproj/Credits.rtf;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FEAC2901A7219B0143D50D = {
 			fileRef = F5FEAC2701A7219B0143D50D;
@@ -1285,10 +2042,13 @@ http://aquaterm.sourceforge.net</string>
 //FE3
 //FE4
 		FE82528EC5B321F400CFA73B = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Message.framework;
 			path = /System/Library/Frameworks/Message.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		FE82528FC5B321F400CFA73B = {
 			fileRef = FE82528EC5B321F400CFA73B;
@@ -1299,8 +2059,10 @@ http://aquaterm.sourceforge.net</string>
 		FE8252ACC5B321F400CFA73B = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = Demo.m;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		FE8252ADC5B321F400CFA73B = {
 			fileRef = FE8252ACC5B321F400CFA73B;
@@ -1311,8 +2073,10 @@ http://aquaterm.sourceforge.net</string>
 		FEBB59CE055CF10B00EEC8EA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = Bugs.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		FEBB59CF055CF10B00EEC8EA = {
 			fileRef = FEBB59CE055CF10B00EEC8EA;
@@ -1323,8 +2087,10 @@ http://aquaterm.sourceforge.net</string>
 		FEBB59D0055CF40600EEC8EA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = Timing.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		FEBB59D1055CF40600EEC8EA = {
 			fileRef = FEBB59D0055CF40600EEC8EA;
@@ -1335,14 +2101,18 @@ http://aquaterm.sourceforge.net</string>
 		FEDD21D204EE7C22008D3E17 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AQTPlotBuilder.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		FEDD21D304EE7C22008D3E17 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AQTPlotBuilder.m;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		FEDD21D404EE7C22008D3E17 = {
 			fileRef = FEDD21D204EE7C22008D3E17;
