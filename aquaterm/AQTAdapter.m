@@ -381,6 +381,7 @@ Default is RoundLineCapStyle. "*/
 /*" Add a filled rectangle. Will attempt to remove any objects that will be covered by aRect."*/
 - (void)addFilledRect:(NSRect)aRect
 {
+   // FIXME: this may be very inefficent, maybe store a AQTClearRect object in the model instead?
    // If the filled rect covers a substantial area, it is worthwile to clear it first.
    if (NSWidth(aRect)*NSHeight(aRect) > 100.0)
    {
@@ -429,6 +430,14 @@ Default is RoundLineCapStyle. "*/
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
 {
    [_selectedBuilder addTransformedImageWithBitmap:bitmap size:bitmapSize clipRect:destBounds];
+}
+
+/*******************************************
+* Private methods                         *
+*******************************************/
+- (void)timingTestWithTag:(unsigned int)tag
+{
+   [_clientManager timingTestWithTag:tag];
 }
 @end
 

@@ -35,4 +35,7 @@
 - (void)processEvent:(NSString *)theEvent;
 
 - (IBAction)refreshView:(id)sender;
+
+// testing methods
+- (void)timingTestWithTag:(unsigned int)tag;
 @end

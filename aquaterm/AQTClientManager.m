@@ -405,4 +405,29 @@
    }
    [_eventBuffer setObject:event forKey:key];
 }
+
+#pragma mark ==== Testing methods ====
+- (void)timingTestWithTag:(unsigned int)tag
+{
+   AQTPlotBuilder *pb;
+   
+   if (errorState == YES || _activePlotKey == nil) return;
+   
+   pb = [_builders objectForKey:_activePlotKey];
+   if ([pb modelIsDirty]) {
+      id <NSObject, AQTClientProtocol> thePlot = [_plots objectForKey:_activePlotKey];
+      NS_DURING
+         if ([thePlot isProxy]) {
+            [thePlot appendModel:[pb model]];
+            [pb removeAllParts];
+         } else {
+            [thePlot setModel:[pb model]];
+         }
+         [thePlot timingTestWithTag:tag];
+      NS_HANDLER
+         // [localException raise];
+         [self _aqtHandlerError:[localException name]];
+      NS_ENDHANDLER
+   }
+}
 @end

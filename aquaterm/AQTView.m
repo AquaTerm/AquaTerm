@@ -17,14 +17,7 @@
    NSImage *curImg = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Cross" ofType:@"tiff"]];
    crosshairCursor = [[NSCursor alloc] initWithImage:curImg hotSpot:NSMakePoint(7,7)];
    [curImg release];
-   [self setIsProcessingEvents:NO];
-#ifdef TIMING
-   if (getenv("AQUATERM_REPORT_TIMING") != (char *)NULL)
-   {
-      _enableTiming = YES;
-   }
-#endif
-   
+   [self setIsProcessingEvents:NO];   
 }
 
 -(void)dealloc
@@ -167,12 +160,6 @@
    NSRect dirtyCanvasRect;
    NSAffineTransform *transform = [NSAffineTransform transform];
 
-#ifdef TIMING
-   static float totalTime = 0.0;
-   float thisTime;
-   NSDate *startTime;
-#endif
-
    [[NSGraphicsContext currentContext] setImageInterpolation:[[NSUserDefaults standardUserDefaults] integerForKey:@"ImageInterpolationLevel"]]; // NSImageInterpolationNone FIXME: user prefs
    [[NSGraphicsContext currentContext] setShouldAntialias:[[NSUserDefaults standardUserDefaults] boolForKey:@"ShouldAntialiasDrawing"]]; // FIXME: user prefs
 #ifdef DEBUG_BOUNDS
@@ -195,21 +182,8 @@
    [transform invert];
    dirtyCanvasRect.origin = [transform transformPoint:dirtyRect.origin];
    dirtyCanvasRect.size = [transform transformSize:dirtyRect.size];
-#ifdef TIMING
-   if (_enableTiming)
-   {
-      startTime = [NSDate date];
-   }
-   [model renderInRect:dirtyCanvasRect]; 
-   if (_enableTiming)
-   {
-      thisTime = -[startTime timeIntervalSinceNow];
-      totalTime += thisTime;
-      NSLog(@"Render time: %f for %d objects. Total: %f", thisTime, [[model modelObjects] count], totalTime);
-   }
-#else
+
    [model renderInRect:dirtyCanvasRect]; // expects aRect in canvas coords, _not_ view coords
-#endif
    
 #ifdef DEBUG_BOUNDS
    NSLog(@"dirtyRect: %@", NSStringFromRect(dirtyRect));

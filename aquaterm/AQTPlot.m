@@ -435,4 +435,25 @@ static inline void NOOP_(id x, ...) {;}
    [canvas setNeedsDisplay:YES];
    [model clearDirtyRect];
 }
+
+#pragma mark ==== Testing methods ====
+- (void)timingTestWithTag:(unsigned int)tag
+{
+   static float totalTime = 0.0;
+   float thisTime;
+   NSDate *startTime;
+   NSRect viewRect = NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height);
+   AQTView *testView = [self canvas];
+   [testView setModel:model];
+   if ([testView lockFocusIfCanDraw]) {
+      startTime = [NSDate date];   
+      [testView drawRect:viewRect];
+      thisTime = -[startTime timeIntervalSinceNow];
+      totalTime += thisTime;
+      NSLog(@"tag:%d time: %f for %d objects.", tag, thisTime, [[model modelObjects] count]);
+      [testView unlockFocus];
+   } else {
+      NSLog(@"Can't draw for tag:%d", tag);
+   }
+}
 @end

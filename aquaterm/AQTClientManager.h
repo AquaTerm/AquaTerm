@@ -43,5 +43,8 @@
 - (void)clearPlotRect:(NSRect)aRect;
 
 - (void)setAcceptingEvents:(BOOL)flag; 
-- (NSString *)lastEvent; 
+- (NSString *)lastEvent;
+
+/* testing methods */
+- (void)timingTestWithTag:(unsigned int)tag;
 @end

@@ -7,4 +7,7 @@
 - (void)removeGraphicsInRect:(NSRect)aRect; // FIXME: Replace by an AQTErase object?
 - (void)setAcceptingEvents:(BOOL)flag;
 - (void)close;
+// Testing methods 
+// FIXME: move into separate protocol?
+- (void)timingTestWithTag:(unsigned int)tag;
 @end
