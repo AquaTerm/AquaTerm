@@ -11,11 +11,14 @@
 
 @interface AQTController : NSObject <AQTConnectionProtocol>
 {
-//  NSMutableArray	*handlerList;		/*" Array of client handlers "*/
+  NSMutableArray	*handlerList;		/*" Array of client handlers "*/
   NSPopUpButton		*saveFormatPopup;
   NSBox			*extendSavePanelView;
   NSConnection		*doConnection;
 }
+
+- (void)removePlot:(id)aPlot;
+
 -(IBAction)showHelp:(id)sender;
 -(IBAction)test:(id)sender;
 @end

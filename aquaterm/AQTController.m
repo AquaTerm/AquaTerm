@@ -22,7 +22,7 @@
 {
   if (self =  [super init])
   {
-    //handlerList = [[NSMutableArray alloc] initWithCapacity:256];
+    handlerList = [[NSMutableArray alloc] initWithCapacity:256];
   }
   return self;
 }
@@ -59,25 +59,34 @@
    newPlot = [[AQTPlot alloc] init];
    [newPlot setClient:client];
    [newPlot setClientInfoName:name pid:procId];
-//   [handlerList addObject:newPlot];
-//   [newPlot release];
+   [handlerList addObject:newPlot];
+   [newPlot release];
 
    return newPlot;
 }
 
 -(BOOL)removeAQTClient:(id)client
 {
-   NSArray *allWin = [NSApp windows];
+  [handlerList makeObjectsPerformSelector:@selector(invalidateClient:) withObject:client];
+  return YES;
+/*
+ NSArray *allWin = [NSApp windows];
    NSEnumerator *enumerator = [allWin objectEnumerator];
    BOOL didRemove = NO;
    id win;
-   //[handlerList makeObjectsPerformSelector:@selector(invalidateClient:) withObject:client];
-   while ((win = [enumerator nextObject]))
+ while ((win = [enumerator nextObject]))
    {
       didRemove = (didRemove || [[win delegate] invalidateClient:client]);
    }
    return didRemove;
+*/
 }
+
+- (void)removePlot:(id)aPlot
+{
+  [handlerList removeObject:aPlot];
+}
+
 
 #pragma mark === Actions ===
 

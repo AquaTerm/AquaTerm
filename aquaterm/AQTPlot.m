@@ -19,7 +19,7 @@
   if (self = [super init])
   {
     [self setModel:aModel];
-     [self setClientInfoName:@"No connection" pid:-1];
+    [self setClientInfoName:@"No connection" pid:-1];
     [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
   }
   return self;
@@ -36,7 +36,14 @@
   NSSize tmpSize = [model canvasSize];
   [viewOutlet setModel:model];
   [viewOutlet setFrameOrigin:NSMakePoint(0.0, 0.0)];
-  [[viewOutlet window] setTitle:[model title]];
+  if (_clientPID != -1)
+  {
+    [[viewOutlet window] setTitle:[NSString stringWithFormat:@"%@ (%d) %@", _clientName, _clientPID, [model title]]];
+  }
+  else
+  {
+    [[viewOutlet window] setTitle:[model title]];
+  }
   [[viewOutlet window] setContentSize:tmpSize];
   [[viewOutlet window] setAspectRatio:tmpSize];
   [[viewOutlet window] setMaxSize:NSMakeSize(tmpSize.width*2, tmpSize.height*2)];
@@ -50,7 +57,7 @@
   {
     [self _aqtSetupView];
   }
-  _isWindowLoaded = TRUE;
+  _isWindowLoaded = YES;
 }
 
 -(void)dealloc
@@ -152,9 +159,11 @@
 #pragma mark === Delegate methods ===
 - (void)windowWillClose:(NSNotification *)notification
 {
-   // FIXME: What to do when a valid client still exists?
-   // [self invalidateClient:_client];
-   [self autorelease];
+  // FIXME: What to do when a valid client still exists?
+  // Quite OK since client still retains AQTPlot instance, will however release it when finished =>
+  // => orphaned window
+
+  [[NSApp delegate] removePlot:self];
 }
 
 
