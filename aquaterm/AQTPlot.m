@@ -12,6 +12,7 @@
 #import "AQTView.h"
 #import "AQTGraphicDrawingMethods.h"
 #import "AQTFunctions.h"
+#import "AQTPrefController.h"
 
 #import "AQTEventProtocol.h"
 
@@ -40,18 +41,20 @@
    maxSize = NSMakeSize(2.0*contentSize.width, 2.0*contentSize.height + TITLEBAR_HEIGHT);
    minSize = NSMakeSize(0.5*contentSize.width, 0.5*contentSize.height + TITLEBAR_HEIGHT);
    ratio = windowSize;
-  
+   
    [canvas setModel:model];
    [canvas setFrameOrigin:NSMakePoint(0.0, 0.0)];
    if (_clientPID != -1)
    {
-      [[canvas window] setTitle:[NSString stringWithFormat:@"%@ (%d) %@", _clientName, _clientPID, [model title]]];
+      NSString *nameString = [preferences integerForKey:@"ShowProcessName"]?[NSString stringWithFormat:@"%@ ", _clientName]:@"";
+      NSString *pidString = [preferences integerForKey:@"ShowProcessId"]?[NSString stringWithFormat:@"(%d) ", _clientPID]:@"";
+      [[canvas window] setTitle:[NSString stringWithFormat:@"%@%@%@", nameString, pidString, [model title]]];
    }
    else
    {
       [[canvas window] setTitle:[model title]];
    }
-
+   
    if (shouldResize)
    {
       NSRect contentFrame = NSZeroRect;
@@ -108,12 +111,12 @@
 
 /*
  -(void)setPlotKey:(id)key
-{
-   [key retain];
-   [_plotKey release];
-   _plotKey = key;
-}
-*/
+ {
+    [key retain];
+    [_plotKey release];
+    _plotKey = key;
+ }
+ */
 - (BOOL)clientValidAndResponding
 {
    BOOL validAndResponding = NO;
@@ -153,7 +156,7 @@
    [model release];		// let go of any temporary model not used (unlikely)
    model = newModel;		// Make it point to new model
    [model updateBounds];
-
+   
    if (_isWindowLoaded)
    {
       [self _aqtSetupViewShouldResize:viewNeedResize];
@@ -186,7 +189,7 @@
    {
       [self _aqtSetupViewShouldResize:NO];
       dirtyRect = AQTUnionRect(dirtyRect, backgroundDidChange?AQTRectFromSize([model canvasSize]):[newModel bounds]);
-
+      
 #ifdef DEBUG_BOUNDS
       NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
 #endif
@@ -209,11 +212,11 @@
    int i;
    int  objectCount = [model count];
    NSArray *modelObjects = [model modelObjects];
-
+   
    // check for nothing to remove or disjoint modelBounds <--> targetRect
    if (objectCount == 0 || AQTIntersectsRect(targetRect, [model bounds]) == NO)
       return;
-
+   
    // Apply clipRect (=canvasRect) to graphic bounds before comparing.
    if (AQTContainsRect(targetRect, NSIntersectionRect([model bounds], clipRect)))
    {
@@ -256,16 +259,16 @@
 -(BOOL)invalidateClient //:(id)aClient
 {
    // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
-//   if (_client == aClient)
-//   {
-      // NSLog(@"invalidating %d", _client);
-      [self setAcceptingEvents:NO];
-      [self setClient:nil];
-      [self setClientInfoName:@"No connection" pid:-1];
-      [[canvas window] setTitle:[model title]];
-      return YES;
-//   }
-//   return NO;
+   //   if (_client == aClient)
+   //   {
+   // NSLog(@"invalidating %d", _client);
+   [self setAcceptingEvents:NO];
+   [self setClient:nil];
+   [self setClientInfoName:@"No connection" pid:-1];
+   [[canvas window] setTitle:[model title]];
+   return YES;
+   //   }
+   //   return NO;
 }
 
 -(void)setClient:(id)client
@@ -326,7 +329,7 @@
    // FIXME: Check for presence of client, it may have been release w/o invalidating itself
    // and this class will leak until app quits.
    // QUE?! If client goes away, retain count is automagically decreased???
-
+   
    // NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
    if (_client)
    {
@@ -335,8 +338,8 @@
          // NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
       NS_HANDLER
          [self invalidateClient];//:_client];
-         // FIXME: Tell controller to check all connections?
-      NS_ENDHANDLER   
+                                 // FIXME: Tell controller to check all connections?
+         NS_ENDHANDLER   
    } 
    if (_client)
    {
@@ -366,11 +369,11 @@
 {
    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
    AQTView *printView;
-
+   
    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
    [printView setModel:model];
+   
    [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];
-
    [pasteboard setData:[printView dataWithPDFInsideRect:[printView bounds]] forType:NSPDFPboardType];
    [pasteboard setData:[printView dataWithEPSInsideRect:[printView bounds]] forType:NSPostScriptPboardType];
    [printView release];
@@ -386,7 +389,7 @@
    NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; 
    NSSize paperSize = [printInfo paperSize];
    NSPrintOperation *printOp;
-
+   
    paperSize.width -= ([printInfo leftMargin] + [printInfo rightMargin]);
    paperSize.height -= ([printInfo topMargin] + [printInfo bottomMargin]);
    if ([printInfo orientation] == NSPortraitOrientation)
@@ -397,10 +400,10 @@
    {
       paperSize.width = ([model canvasSize].width * paperSize.height) / [model canvasSize].height;
    }
-
+   
    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
    [printView setModel:model];
-
+   
    printOp = [NSPrintOperation printOperationWithView:printView];
    (void)[printOp runOperationModalForWindow:[canvas window]
                                     delegate:self
@@ -412,13 +415,15 @@
 - (IBAction)saveDocumentAs:(id)sender
 {
    NSSavePanel *savePanel = [NSSavePanel savePanel];
-    if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])
-    {
-       NSLog(@"Failed to load ExtendSavePanel.nib");
-       return;
-    }
-    [savePanel setAccessoryView:extendSavePanelView];
-   [savePanel beginSheetForDirectory:NSHomeDirectory()
+   
+   if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])
+   {
+      NSLog(@"Failed to load ExtendSavePanel.nib");
+      return;
+   }
+   [saveFormatPopUp selectItemWithTitle:[preferences objectForKey:@"CurrentSaveFormat"]];
+   [savePanel setAccessoryView:extendSavePanelView];
+   [savePanel beginSheetForDirectory:[preferences objectForKey:@"CurrentSaveFolder"] 
                                 file:[model title]
                       modalForWindow:[canvas window]
                        modalDelegate:self
@@ -432,22 +437,19 @@
    NSData *data;
    NSString *filename;
    AQTView *printView;
-   if (NSFileHandlingPanelOKButton == returnCode)
-   {
+   if (NSFileHandlingPanelOKButton == returnCode) {
       printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
       [printView setModel:model];
       filename = [[theSheet filename] stringByDeletingPathExtension];
-       if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
-       {
-          data = [printView dataWithPDFInsideRect: [printView bounds]];
-          [data writeToFile: [filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
-       }
-       else
-       {
-          data = [printView dataWithEPSInsideRect: [printView bounds]];
-          [data writeToFile: [filename stringByAppendingPathExtension:@"eps"] atomically: NO];
-       }
-
+      if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"]) {
+         data = [printView dataWithPDFInsideRect: [printView bounds]];
+         [data writeToFile:[filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
+      } else {
+         data = [printView dataWithEPSInsideRect: [printView bounds]];
+         [data writeToFile:[filename stringByAppendingPathExtension:@"eps"] atomically: NO];
+      }
+      [preferences setObject:[filename stringByDeletingLastPathComponent] forKey:@"CurrentSaveFolder"];
+      [preferences setObject:[formatPopUp titleOfSelectedItem] forKey:@"CurrentSaveFormat"];
       [printView release];
    }
 }
