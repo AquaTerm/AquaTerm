@@ -79,24 +79,49 @@
   [self setBounds:NSUnionRect([self bounds], [graphic bounds])];
 }
 
--(void)removeObject:(AQTGraphic *)graphic
-{
-  [modelObjects removeObject:graphic];
-}
-
 -(void)removeObjectsInRect:(NSRect)targetRect
 {
-  AQTGraphic *graphic;
-  NSEnumerator *enumerator = [modelObjects objectEnumerator];
+  // FIXME: It is possible to recursively nest models in models,
+  // but this method doesn't work in that case
 
-  while ((graphic = [enumerator nextObject]))
+  AQTGraphic *graphic;
+  NSRect testRect;
+  int i;
+  int  objectCount = [modelObjects count];
+
+  NSDate *startTime=  [NSDate date];
+
+  targetRect = NSInsetRect(targetRect, -0.5, -0.5); // Try to be smart...
+
+  if(objectCount == 0)
+    return;
+
+  if (NSContainsRect(targetRect, [self bounds]))
   {
-    [graphic removeObjectsInRect:targetRect];	// recursively remove objects
-    if (NSContainsRect(targetRect, [graphic bounds]))
+    [modelObjects removeAllObjects];
+    [self setBounds:NSZeroRect];
+  }
+  else
+  {
+    for (i = objectCount - 1; i >= 0; i--)
     {
-      [self removeObject:graphic];
+      testRect = [[modelObjects objectAtIndex:i] bounds];
+      if (testRect.size.height == 0.0 || testRect.size.width == 0.0)
+      {
+        testRect = NSInsetRect(testRect, -0.1, -0.1); // FIXME: Try to be smarter...
+      }
+      if (NSContainsRect(targetRect, testRect))
+      {
+        [modelObjects removeObjectAtIndex:i];
+      }
+      else
+      {
+        // FIXME: Rebuild bounds (not verified!)
+        [self setBounds:NSUnionRect([self bounds], testRect)];
+      }
     }
   }
+  NSLog(@"Time taken: %f", -[startTime timeIntervalSinceNow]);
 }
 
 -(void)setTitle:(NSString *)newTitle

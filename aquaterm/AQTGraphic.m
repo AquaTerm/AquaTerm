@@ -35,6 +35,10 @@
    [_cache release];
    [super dealloc];
 }
+-(NSString *)description
+{
+  return NSStringFromRect(_bounds);
+}
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
@@ -76,9 +80,6 @@
 //
 -(NSRect)bounds {return  _bounds;}
 -(void)setBounds:(NSRect)bounds {_bounds = bounds;}
--(void)addObject:(AQTGraphic *)graphic {;}
--(void)removeObject:(AQTGraphic *)graphic {;}
--(void)removeObjectsInRect:(NSRect)targetRect {;}
 
 -(void)setColor:(AQTColor)newColor
 {

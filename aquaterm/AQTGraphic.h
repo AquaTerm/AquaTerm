@@ -31,9 +31,6 @@ typedef struct _AQTColor {
 -(void)setCanvasSize:(NSSize)cs;
 -(NSRect)bounds;
 -(void)setBounds:(NSRect)bounds;
--(void)addObject:(AQTGraphic *)graphic;
--(void)removeObject:(AQTGraphic *)graphic;
--(void)removeObjectsInRect:(NSRect)targetRect;
 
 /*" color handling "*/
 -(AQTColor)color;

@@ -17,7 +17,6 @@
 -(id)initWithSize:(NSSize)canvasSize;
 -(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
--(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;
 -(void)setTitle:(NSString *)newTitle;
 -(NSString *)title;
