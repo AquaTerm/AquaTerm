@@ -235,17 +235,9 @@ static float _aqtMinimumLinewidth;
       } else {
          NSAffineTransform *transf = [NSAffineTransform transform];
          NSGraphicsContext *context = [NSGraphicsContext currentContext];
-         NSAffineTransformStruct tmpStruct;
-         tmpStruct.m11 = transform.m11;
-         tmpStruct.m12 = transform.m12;
-         tmpStruct.m21 = transform.m21;
-         tmpStruct.m22 = transform.m22;
-         tmpStruct.tX = transform.tX;
-         tmpStruct.tY = transform.tY;
-         
          [context saveGraphicsState];
          [NSBezierPath clipRect:_bounds];
-         [transf setTransformStruct:tmpStruct];
+         [transf setTransformStruct:CAST_STRUCT_TO(NSAffineTransformStruct)transform];
          [transf concat];
          [_cache drawAtPoint:NSMakePoint(0,0)
                     fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)

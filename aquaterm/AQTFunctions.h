@@ -11,6 +11,10 @@
 
 #define COMP_EPS 0.001
 
+// A macro to cast structs that have the same fields 
+// Handy, dangerous and untested...
+#define CAST_STRUCT_TO(struct_t) *(struct_t *)&
+
 // FIXME: test these...
 #define GEQ(a,b) ((a) > (b)-COMP_EPS)
 #define LEQ(a,b) ((a) < (b)+COMP_EPS)
