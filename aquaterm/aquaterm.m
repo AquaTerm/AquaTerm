@@ -11,14 +11,12 @@
 #import "AQTAdapter.h"
 
 static void (*_aqtEventHandlerPtr)(int, const char *);
-//static void (*_aqtErrorHandlerPtr)(const char *);
 static NSAutoreleasePool *_pool;
 static AQTAdapter *_adapter;
 static BOOL _mayCleanPool = YES;
 
 void _aqtCleanPool(void)
 {
-   // wait in NSConnectionReplyMode ?
    // NSLog(@"#arpool=%d", [NSAutoreleasePool autoreleasedObjectCount]);
    if (_mayCleanPool)
    {
@@ -53,20 +51,6 @@ void aqtTerminate(void)
    [_pool release];
    _pool = nil;
 }
-
-/*
- void _aqtErrorTranslator(NSString *errMsg)
-{
-   NSLog(@"_aqtErrorTranslator --- %@", errMsg);
-   _aqtErrorHandlerPtr([errMsg UTF8String]);
-}
-
-void aqtSetErrorHandler(void (*func)(const char *msg))
-{
-   _aqtErrorHandlerPtr = func;
-   [_clientManager setErrorHandler:_aqtErrorTranslator];
-}
-*/
 
 void _aqtEventTranslator(int index, NSString *event)
 {
@@ -136,16 +120,6 @@ int aqtGetLastEvent(char *buffer) // FIXME: retval?
 int aqtWaitNextEvent(char *buffer) // FIXME: retval?
 {
    NSString *event  = [_adapter waitNextEvent];
-/*
- BOOL isRunning;
-   [_clientManager setAcceptingEvents:YES]; 
-   do {
-      isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10.0]];
-      event = [_clientManager lastEvent];
-      isRunning = [event isEqualToString:@"0"]?YES:NO;
-   } while (isRunning);
-   [_clientManager setAcceptingEvents:NO];
-*/
    
    strncpy(buffer, [event UTF8String], MIN(AQT_EVENTBUF_SIZE - 1, [event length]));
    buffer[MIN(AQT_EVENTBUF_SIZE - 1, [event length])] = '\0';
@@ -154,7 +128,7 @@ int aqtWaitNextEvent(char *buffer) // FIXME: retval?
 
 void aqtEventProcessingMode()
 {
-   // FIXME: Add this to adapter
+   // FIXME: Add this to adapter?
    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
    _aqtCleanPool();
 }
