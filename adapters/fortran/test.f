@@ -1,10 +1,11 @@
-C   Testing all functions in c2aqt.h
+C   Testing all functions in f2aqt.h
 C
       INTEGER i
-      REAL x, y, x_max, y_max, pi
+      CHARACTER*64 string
+      REAL x, y, xpos, ypos, w, h, x_max, y_max, pi
       DIMENSION x(16)
       DIMENSION y(16)
-      PARAMETER (pi = 4.0*atan(1.0))
+      PARAMETER (pi = 3.14152692)
 C     
 C     
 C     Initialize AquaTerm adapter
@@ -22,8 +23,8 @@ C     Blue
 C
 C     Open a new graph for drawing into
       CALL aqt_open(1)
-C     Set the title (Default is "Figure n")
-      CALL aqt_title("Test of f2aqt")
+C     Set the title (Default is 'Figure n')
+      CALL aqt_title('Test of f2aqt')
 C     Set text justification: 0 = left, 1 = center, 2 = right
       CALL aqt_textjust(0)
       DO 10 i = 0, 3
@@ -32,11 +33,12 @@ C     Select the pen color (default is 0)
 C     Set the linewidth (default is 1.0)
          CALL aqt_linewidth((i+1.0)*0.5)
 C     Add a line using current attributes
-         CALL aqt_line(100.0, i*50.0+100, 400.0, i*50.0+100.0)
+C     NB. The .5 makes the line look better wrt anti-aliasing...
+         CALL aqt_line(100.5, i*50.0+100.5, 400.5, i*50.0+100.5)
 C     Select font and size (default is Times-Roman 16pt)
-         CALL aqt_font("Times-Roman", 10.0+i*10.0)
+         CALL aqt_font('Times-Italic', 10.0+i*10.0)
 C     Add the text with the current attributes
-         CALL aqt_text(400.0, i*50.0+100.0, "Hello World!")
+         CALL aqt_text(400.0, i*50.0+100.0, 'Hello World!')
  10   END DO
 C     Close current graph => render it in window
       CALL aqt_close()
@@ -45,8 +47,8 @@ C     Open a new graph for drawing into
       CALL aqt_open(2)
 C     Get the size of the canvas
       CALL aqt_get_size(x_max, y_max)
-C     Set the title (Default is "Figure n")
-      CALL aqt_title("More tests of f2aqt")
+C     Set the title (Default is 'Figure n')
+      CALL aqt_title('More tests of f2aqt')
 C     Set the linewidth (default is 1.0)
       CALL aqt_linewidth(1.0)
 C     Draw a circle
@@ -72,6 +74,17 @@ C     Create another polygon (a polyline really...)
 C     Draw the polygon (no fill)
       CALL aqt_use_color(1)
       CALL aqt_polygon(x, y, 16, 0)
+C     Flush pending lines, otherwise they may obscure the images (comment out to see!)
+      CALL aqt_flush()
+      xpos = 100.0
+      ypos = 200.0  
+      w = 300.0
+      h = 400.0 
+C     Nil-terminate strings since they are padded with ' ' characters:      
+      string = '/Library/User Pictures/Animals/Orangutan.tif\0'
+      CALL aqt_image(string, xpos, ypos, w, h)
+C     Constant strings don't _need_ nil-termination, but seem to have a max length of 32
+      CALL aqt_image('~/Pictures/m31.jpg', 10.0, 10.0, 101.0, 102.0)
 C     Close current graph => render it in window
       CALL aqt_close()
       END

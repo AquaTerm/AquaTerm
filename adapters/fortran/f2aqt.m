@@ -311,6 +311,12 @@ void aqt_close__(void)
   [adapter closeGraph];
 }
 
+void aqt_flush__(void)
+{
+  [adapter flushBuffers];
+}
+
+
 void aqt_render__(void)
 {
   [adapter render];
@@ -318,7 +324,7 @@ void aqt_render__(void)
 
 void aqt_title__(char *title, unsigned len)
 {
-  [adapter setTitle:[NSString stringWithCString:title length:len]];
+  [adapter setTitle:[NSString stringWithCString:title length:MIN(strlen(title), len)]];
 }
 
 void aqt_use_color__(int *col)
@@ -380,7 +386,7 @@ void aqt_circle__(float *x, float *y, float *radius, bool *isFilled)
 
 void aqt_font__(char *fontname, float *size, unsigned len)
 {
-  [adapter setFontWithName:[NSString stringWithCString:fontname length:len] size:*size];
+  [adapter setFontWithName:[NSString stringWithCString:fontname length:MIN(strlen(fontname), len)] size:*size];
 }
 
 void aqt_textorient__(int *orient)
@@ -395,12 +401,14 @@ void aqt_textjust__(int *just)
 
 void aqt_text__(float *x, float *y, char *str, unsigned len)
 {
-  [adapter putText:[NSString stringWithCString:str  length:len] at:NSMakePoint(*x, *y)];
+  [adapter putText:[NSString stringWithCString:str  length:MIN(strlen(str), len)] at:NSMakePoint(*x, *y)];
 }
 
-void aqt_imagefromfile__(char *filename, float *x, float *y, float *w, float *h, unsigned len)
+void aqt_image__(char *filename, float *x, float *y, float *w, float *h, unsigned len)
 {
-  [adapter addImageFromFile:[NSString stringWithCString:filename length:len] bounds:NSMakeRect(*x, *y, *w, *h)];
+  NSString *path = [NSString stringWithCString:filename length:MIN(strlen(filename), len)]; 
+  // NSLog(@"%@\n%f\n%f\n%f\n%f\n", path, *x, *y, *w, *h);    
+  [adapter addImageFromFile:[path stringByStandardizingPath] bounds:NSMakeRect(*x, *y, *w, *h)];
 }
 
 void aqt_get_size__(float *x_max, float *y_max)
