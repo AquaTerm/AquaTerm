@@ -54,10 +54,24 @@ Event handling of user input is provided through an optional callback function.
 !{gcc main.m -o aqtex -I/Users/per/include -L/Users/per/lib -laqt -framework Foundation}
 "*/
 
--(void)_aqtNoSelectedBuilder
+- (void)_aqtNoSelectedBuilder
 {
    NSLog(@"Error: no valid plot selected.");
 }
+
+- (NSNumber *)_aqtKeyForBuilder:(AQTPlotBuilder *)aBuilder
+{
+   if (aBuilder != nil)
+   {
+      NSArray *keys = [_builders allKeysForObject:aBuilder];
+      if ([keys count] > 0)
+      {
+         return [keys objectAtIndex:0];
+      }
+   }
+   return nil;
+}
+
 
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
 -(id)initWithServer:(id)localServer
@@ -65,7 +79,7 @@ Event handling of user input is provided through an optional callback function.
    if(self = [super init])
    {
       _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
-      [self setLastEvent:@"0"];
+      _eventBuffer = [[NSMutableDictionary alloc] initWithCapacity:256];
       if(localServer)
       {
          _server = localServer;
@@ -107,7 +121,7 @@ Event handling of user input is provided through an optional callback function.
          NSLog(@"Discarding exception...");
       NS_ENDHANDLER
       [_builders release];
-      [_lastEvent release];
+      [_eventBuffer release];
       if(_serverIsLocal == NO)
       {
          [_server release];
@@ -118,6 +132,8 @@ Event handling of user input is provided through an optional callback function.
 /*" Inform AquaTerm whether or events should be passed from the currently selected plot. Deactivates event passing from any plot previously set to pass events. "*/
 - (void)setAcceptingEvents:(BOOL)flag
 {
+   // Flush event buffer for the selected view
+   [_eventBuffer setObject:@"0" forKey:[self _aqtKeyForBuilder:_selectedBuilder]];
    [_selectedBuilder setAcceptingEvents:flag];
 }
 
@@ -349,33 +365,25 @@ _{@"NSUnderline" 0or1}
 
 
 #pragma mark === Control operations ===
--(void)setLastEvent:(NSString *)newEvent // FIXME: Make this a private method
-{
-   [newEvent retain];
-   [_lastEvent autorelease];
-   _lastEvent = newEvent;
-}
-
 - (void)processEvent:(NSString *)event sender:(id)sender // FIXME: Make private
 {
+
+   NSNumber *key = [self _aqtKeyForBuilder:sender];
    if (_eventHandler != nil)
    {
-      NSArray *keys = [_builders allKeysForObject:sender];
-      if ([keys count] > 0)
-      {
-         _eventHandler([[keys objectAtIndex:0] intValue], event);
-      }
+      _eventHandler([key intValue], event);
    }
-   [self setLastEvent:event];
+   [_eventBuffer setObject:event forKey:key];
 }
 
 /*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
 - (NSString *)lastEvent
 {
-   // FIXME: Clean up this event mess!!!
-   NSString *tmpEvent = [[_lastEvent copy] autorelease];
-   [self setLastEvent:@"0"];
-   return tmpEvent;
+   NSString *event;
+   NSNumber *key = [self _aqtKeyForBuilder:_selectedBuilder];
+   event = [[[_eventBuffer objectForKey:key] copy] autorelease];
+   [_eventBuffer setObject:@"0" forKey:key];
+   return event;
 }
 
 /* Creates a new builder instance, adds it to the list of builders and makes it the selected builder. If the referenced builder exists, it is selected and cleared. */
@@ -438,12 +446,8 @@ _{@"NSUnderline" 0or1}
 /*" Closes the current plot but leaves viewer window on screen. Disables event handling. "*/
 - (void)closePlot
 {
-#if(0)
-   [self renderPlot]; // Debugging
-#else
    if (_selectedBuilder)
    {
-      NSArray *keys = [_builders allKeysForObject:_selectedBuilder];
       NS_DURING
          if ([_server removeAQTClient:_selectedBuilder] == NO)
          {
@@ -452,13 +456,9 @@ _{@"NSUnderline" 0or1}
       NS_HANDLER
          NSLog(@"Discarding exception...");
       NS_ENDHANDLER
-      if ([keys count]>0)
-      {
-         [_builders removeObjectForKey:[keys objectAtIndex:0]];
-      }
+      [_builders removeObjectForKey:[self _aqtKeyForBuilder:_selectedBuilder]];
       _selectedBuilder = nil; // FIXME: inserting a generic logging object here for debugging??
    }
-#endif
 }
 
 /*" Set the limits of the plot area. Must be set %before any drawing command following an #openPlotWithIndex: or #clearPlot command or behaviour is undefined.  "*/

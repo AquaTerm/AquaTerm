@@ -37,7 +37,7 @@ enum {
   BOOL _serverIsLocal;
   void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
   void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
-  NSString *_lastEvent;
+  id _eventBuffer;
   id _aqtReserved1;
   id _aqtReserved2;
 }
