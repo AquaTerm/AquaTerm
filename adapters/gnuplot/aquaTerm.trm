@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.13 2002/08/04 14:37:20 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.14 2002/09/02 11:45:04 persquare Exp $
  *
  */
 
@@ -64,6 +64,7 @@ TERM_PUBLIC int AQUA_text_angle __PROTO((int));
 TERM_PUBLIC int AQUA_justify_text __PROTO((enum JUSTIFY));
 TERM_PUBLIC int AQUA_set_font __PROTO((const char *font));  /* "font,size" */
 TERM_PUBLIC void AQUA_set_pointsize __PROTO((double size)); /* notification of set pointsize */
+TERM_PUBLIC void AQUA_point __PROTO((unsigned int, unsigned int, int));
 TERM_PUBLIC int flags; /* various flags */
 TERM_PUBLIC void AQUA_suspend __PROTO((void)); /* after one plot of multiplot */
 TERM_PUBLIC void AQUA_resume __PROTO((void));  /* before subsequent plot of multiplot */
@@ -782,6 +783,14 @@ AQUA_set_pointsize(double size) /* notification of set pointsize */
 }
 
 TERM_PUBLIC void 
+AQUA_point(unsigned int x, unsigned int y, int number)
+{
+  [gnuTermAccess moveToPoint:NSMakePoint(x, y)];
+  [gnuTermAccess lineToPoint:NSMakePoint(x+1, y+1)];  
+  do_point(x, y, number);
+}
+
+TERM_PUBLIC void 
 AQUA_suspend(void)  /* after one plot of multiplot */
 {
   [gnuTermAccess flushBuffers];
@@ -809,6 +818,7 @@ TERM_PUBLIC void
 AQUA_pointsize(double pointsize)
 {
   LOG(@"AQUA_pointsize(%f)", pointsize);
+  term_pointsize = pointsize;
 }
 
 #ifdef PM3D
@@ -851,7 +861,7 @@ TERM_TABLE_START(aqua_driver)
   AQUA_linetype, AQUA_put_text, 
   /* optionals */
   AQUA_text_angle,
-  AQUA_justify_text, do_point, do_arrow, AQUA_set_font,
+  AQUA_justify_text, AQUA_point, do_arrow, AQUA_set_font,
   AQUA_pointsize, TERM_CAN_MULTIPLOT,
   AQUA_suspend, AQUA_resume,
   AQUA_boxfill, AQUA_linewidth
