@@ -18,7 +18,7 @@
    float linewidth;
    int lineCapStyle; 
 }
-- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount color:(AQTColor)aColor;
+- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount; // color:(AQTColor)aColor;
 - (void)setLinewidth:(float)lw;
 - (void)setLineCapStyle:(int)capStyle;
 @end

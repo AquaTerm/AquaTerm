@@ -255,6 +255,7 @@
   }
   */
   [tmpString addAttribute:NSFontAttributeName value:tmpFont range:NSMakeRange(0, [tmpString length])];
+  [tmpString addAttribute:NSForegroundColorAttributeName value:[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] range:NSMakeRange(0, [tmpString length])];
   boundingBox = [tmpString size];
   {
   NSAffineTransform *transf = [NSAffineTransform transform];

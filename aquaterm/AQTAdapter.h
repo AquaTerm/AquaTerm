@@ -87,5 +87,6 @@ enum {
 - (void)eraseRect:(NSRect)aRect;
 
   /*" Image handling "*/
+//- (void)setTransform:
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage
 @end

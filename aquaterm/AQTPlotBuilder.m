@@ -186,8 +186,9 @@
       NSLog(@"Error, not a string.");
     }
   }
+  [lb setColor:_color];
   [_model addObject:lb];
-  NSLog([lb description]);
+  //  NSLog([lb description]);
   [lb release];
   _modelIsDirty = YES;
 }
@@ -247,7 +248,8 @@
   AQTPath *tmpPath;
   if (pc > MAX_PATH_POINTS)
     NSLog(@"Path too long (%d)", pc);	// FIXME: take action here!
-  tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount color:_color];
+  tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount]; // color:_color];
+    [tmpPath setColor:_color];
   [tmpPath setLinewidth:_linewidth];
   [tmpPath setLineCapStyle:_capStyle];
   [_model addObject:tmpPath];
@@ -262,7 +264,8 @@
   AQTPatch *tmpPatch;
   if (pc > MAX_PATH_POINTS)
     NSLog(@"Path too long (%d)", pc);	// FIXME: take action here!
-  tmpPatch = [[AQTPatch alloc] initWithPoints:points pointCount:pc color:_color];
+  tmpPatch = [[AQTPatch alloc] initWithPoints:points pointCount:pc];// color:_color];
+  [tmpPatch setColor:_color];
   [_model addObject:tmpPatch];
   [tmpPatch release];
   _modelIsDirty = YES;

@@ -12,7 +12,7 @@
 @implementation AQTPatch
 -(id)initWithPoints:(NSPointArray)points pointCount:(int)pc color:(AQTColor)aColor
 {
-  if (self = [super initWithPoints:points pointCount:pc color:aColor])
+  if (self = [super initWithPoints:points pointCount:pc]) // color:aColor])
   {
     [self setLinewidth:0.0];
   }

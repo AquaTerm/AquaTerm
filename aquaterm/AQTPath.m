@@ -49,7 +49,7 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
 *** Since the app is a viewer we do three things with the object:
 *** create (once), draw (any number of times) and (eventually) dispose of it.
 "**/
--(id)initWithPoints:(NSPointArray)points pointCount:(int)pc color:(AQTColor)aColor
+-(id)initWithPoints:(NSPointArray)points pointCount:(int)pc;// color:(AQTColor)aColor
 {
   int i;
   int safeCount = MIN(pc, MAX_PATH_POINTS);
@@ -62,18 +62,20 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
     }
     pointCount = safeCount;
     [self setLinewidth:.2];
-    [self setColor:aColor];
+//    [self setColor:aColor];
   }
   return self;
 }
 
 -(id)init
 {
-  AQTColor tCol;
+/*
+ AQTColor tCol;
   tCol.red = 1.0;
   tCol.green = 0.0;
   tCol.blue = 1.0;
-  return [self initWithPoints:nil pointCount:0 color:tCol];
+*/
+  return [self initWithPoints:nil pointCount:0];// color:tCol];
 }
 
 -(void)dealloc
@@ -83,28 +85,34 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-  int i;
+  //int i;
   [super encodeWithCoder:coder];
   [coder encodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder encodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
-  for (i=0;i<pointCount;i++)
+  [coder encodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path]; 
+/*  for (i=0;i<pointCount;i++)
   {
     [coder encodeValueOfObjCType:@encode(NSPoint) at:&path[i]];
   }
+  */
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
-  int i;
+  //int i;
   self = [super initWithCoder:coder];
   [coder decodeValueOfObjCType:@encode(int) at:&lineCapStyle];
   [coder decodeValueOfObjCType:@encode(float) at:&linewidth];
   [coder decodeValueOfObjCType:@encode(int) at:&pointCount];
-  for (i=0;i<pointCount;i++)
+  [coder decodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path]; 
+
+/*
+ for (i=0;i<pointCount;i++)
   {
     [coder decodeValueOfObjCType:@encode(NSPoint) at:&path[i]];
   }
+*/
   return self;
 }
 
