@@ -82,6 +82,7 @@
 - (oneway void) addString:(bycopy NSString *)text 
                      atPoint:(bycopy NSPoint)point 
                      withJustification:(bycopy int)justification 
+                    atAngle:(bycopy float)angle
                      withIndexedColor:(bycopy int)colorIndex
 {
     NSDictionary *attrs = [NSDictionary dictionaryWithObject:currentFont forKey:NSFontAttributeName];
@@ -91,6 +92,7 @@
     GPTLabel *theLabel=[[GPTLabel alloc] initWithLinestyle:colorIndex 
                                             origin:point 
                                             justification:justification 
+                                            angle:angle
                                             string:text 
                                             attributes:attrs];
     

@@ -23,7 +23,8 @@
     NSDictionary *_attributes;	/*" The attributes associated with the text (font, size etc.) "*/
     NSPoint _origin;		/*" The position of the text "*/
     int _justify;		/*" Justification with respect to the position of the text "*/
+    float _angle;		
 }
--(id)initWithLinestyle:(int)linestyle origin:(NSPoint)aPoint justification:(int)justify string:(NSString *)string attributes:(NSDictionary *)attrs;
+-(id)initWithLinestyle:(int)linestyle origin:(NSPoint)aPoint justification:(int)justify angle:(float)angle string:(NSString *)string attributes:(NSDictionary *)attrs;
 -(void)renderInRect:(NSRect)boundsRect;
 @end

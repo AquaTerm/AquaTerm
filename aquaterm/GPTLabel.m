@@ -19,7 +19,7 @@
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
 
--(id)initWithLinestyle:(int)linestyle origin:(NSPoint)aPoint justification:(int)justify string:(NSString *)string attributes:(NSDictionary *)attrs;
+-(id)initWithLinestyle:(int)linestyle origin:(NSPoint)aPoint justification:(int)justify angle:(float)angle string:(NSString *)string attributes:(NSDictionary *)attrs;
 {
     self=[super init];
     if (self)
@@ -31,6 +31,7 @@
         _origin.x=aPoint.x;
         _origin.y=aPoint.y;
         _justify = justify;
+        _angle = angle;
     }
     return self; 
 }
@@ -63,6 +64,7 @@
     "**/
 -(void)renderInRect:(NSRect)boundsRect
 {
+    NSAffineTransform *transf = [NSAffineTransform transform];
     float xScale, yScale, fontScale;
     NSSize boundingBox;
     NSSize docSize = NSMakeSize(842,595); // FIXME!!! Magic numbers representing an iso_a4 at 72dpi (max size)
@@ -87,25 +89,35 @@
     [scaledAttributes setObject:[NSFont fontWithName:[theFont fontName] size:max(([theFont pointSize] * fontScale ), 9.0)] forKey:NSFontAttributeName];
     [scaledAttributes setObject:_strokeColor forKey:NSForegroundColorAttributeName]; 
     boundingBox = [_gptString sizeWithAttributes:scaledAttributes];
+
+    [transf translateXBy:point.x yBy:point.y ];
+    [transf rotateByDegrees:_angle];
+    [transf concat];
     //
     // Apply justification
     //
     switch (_justify)
     {
         case justifyLeft: 
-            point = NSMakePoint(point.x, point.y-boundingBox.height/2);
+            point = NSMakePoint(0, -boundingBox.height/2);
             break;
         case justifyRight:
-            point = NSMakePoint(point.x-boundingBox.width, point.y-boundingBox.height/2);
+            point = NSMakePoint(-boundingBox.width, -boundingBox.height/2);
             break;
         case justifyCenter: // Fallthrough
         default:
-            point = NSMakePoint(point.x-boundingBox.width/2, point.y-boundingBox.height/2);
+            point = NSMakePoint(-boundingBox.width/2, -boundingBox.height/2);
             break;        
     }
     //
     // Draw (finally!)
     //
     [_gptString drawAtPoint:point withAttributes:scaledAttributes];
+    // 
+    // Restore orientation
+    // 
+    [transf invert];
+    [transf concat];
+
 }
 @end

@@ -18,7 +18,7 @@
 			PBXWorkspaceConfiguration = {
 				ContentSize = "{1024, 641}";
 				LeftSlideOut = {
-					ActiveTab = 3;
+					ActiveTab = 0;
 					Frame = "{{0, 23}, {1024, 618}}";
 					Split0 = {
 						ActiveTab = 1;
@@ -29,23 +29,24 @@
 						SplitCount = 1;
 						Tab0 = {
 							Debugger = {
+								ActiveTab = 1;
 								Frame = "{{0, 0}, {799, 208}}";
 								Split0 = {
-									Frame = "{{0, 25}, {799, 183}}";
+									Frame = "{{0, 75}, {799, 133}}";
 									Split0 = {
-										Frame = "{{0, 0}, {392, 183}}";
+										Frame = "{{0, 0}, {392, 133}}";
 									};
 									Split1 = {
-										Frame = "{{401, 0}, {398, 183}}";
+										Frame = "{{401, 0}, {398, 133}}";
 									};
 									SplitCount = 2;
 								};
 								SplitCount = 1;
 								Tab0 = {
-									Frame = "{{0, 0}, {100, 50}}";
+									Frame = "{{0, 0}, {799, 50}}";
 								};
 								Tab1 = {
-									Frame = "{{0, 0}, {100, 50}}";
+									Frame = "{{0, 0}, {799, 50}}";
 								};
 								TabCount = 2;
 							};
@@ -60,8 +61,8 @@
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {801, 137}}";
-							BuildTranscriptFrame = "{{0, 146}, {801, 48}}";
+							BuildMessageFrame = "{{0, 0}, {801, 26}}";
+							BuildTranscriptFrame = "{{0, 35}, {801, 159}}";
 							Frame = "{{0, 0}, {799, 192}}";
 						};
 						Tab3 = {
@@ -151,7 +152,7 @@
 	F5AB08970175C42501EB16F3 = {
 		fileReference = F5AB08770175BC8B01EB16F3;
 		isa = PBXFileBreakpoint;
-		lineNumber = 100;
+		lineNumber = 99;
 		state = 2;
 	};
 	F5AB08980175C63D01EB16F3 = {

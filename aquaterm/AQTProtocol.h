@@ -24,9 +24,10 @@
 // colors 0 and upwards are taken modulo N (i.e cyclic)
 //
 - (oneway void) addString:(bycopy NSString *)text 
-                     atPoint:(bycopy NSPoint)point 
-                     withJustification:(bycopy int)justification 
-                     withIndexedColor:(bycopy int)colorIndex;
+                  atPoint:(bycopy NSPoint)point 
+        withJustification:(bycopy int)justification 
+                  atAngle:(bycopy float)angle		
+         withIndexedColor:(bycopy int)colorIndex;
 //
 // Set the font for the subsequent strings added to the model
 // (mimics fontWithName: size: method in NSFont)
