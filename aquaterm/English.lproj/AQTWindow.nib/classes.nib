@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {CLASS = AQTView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = GPTWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {viewOutlet = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
