@@ -10,23 +10,22 @@
 #import <AppKit/AppKit.h>
 #import "AQTClientProtocol.h"
 
-@class AQTModel, AQTView, AQTPlotBuilder;
+@class AQTModel, AQTView, AQTPlotController;
 @interface AQTPlot : NSObject <AQTClientProtocol>
 {
   IBOutlet AQTView *canvas;	/*" Points to the rendering view "*/
   AQTModel	*model;		/*" Holds the model for the view "*/
   BOOL _isWindowLoaded;
   BOOL _acceptingEvents;
-  AQTPlotBuilder *_client;
+  AQTPlotController *_client;
   int _clientPID;
   NSString *_clientName;
+  NSRect dirtyRect;
   // interface additions
   IBOutlet NSBox *extendSavePanelView;
   IBOutlet NSPopUpButton *saveFormatPopUp;
 }
 -(id)canvas;
--(void)setPlot:(AQTModel *)newModel;
--(void)appendPlot:(AQTModel *)newModel;
 -(void)setClient:(id)client;
 -(void)setClientInfoName:(NSString *)name pid:(int)pid;
 -(BOOL)invalidateClient:(id)aClient;

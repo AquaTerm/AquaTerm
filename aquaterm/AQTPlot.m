@@ -10,9 +10,9 @@
 #import "AQTGraphic.h"
 #import "AQTModel.h"
 #import "AQTView.h"
-//#import "AQTAdapter.h"
-#import "AQTPlotBuilder.h"
+#import "AQTPlotController.h"
 #import "AQTGraphicDrawingMethods.h"
+#import "AQTFunctions.h"
 
 #define TITLEBAR_HEIGHT 22.0
 
@@ -94,7 +94,8 @@
    return model;
 }
 
--(void)setPlot:(AQTModel *)newModel
+#pragma mark === AQTClientProtocol methods ===
+-(void)setModel:(AQTModel *)newModel
 {
    BOOL viewNeedResize = YES;
    
@@ -116,27 +117,25 @@
    if (_isWindowLoaded)
    {
       [self _aqtSetupViewShouldResize:viewNeedResize];
-      [canvas setNeedsDisplay:YES];
-      [[canvas window] makeKeyAndOrderFront:self];
+      dirtyRect = AQTRectFromSize([model canvasSize]); // Invalidate all of canvas
    }
 }
 
-BOOL _aqtEqualColors(AQTColor col1, AQTColor col2)
+-(void)appendModel:(AQTModel *)newModel
 {
-   return (col1.red == col2.red && col1.green == col2.green && col1.blue == col2.blue);
-}
-
--(void)appendPlot:(AQTModel *)newModel
-{
-   BOOL backgroundDidChange;
+   BOOL backgroundDidChange; // FIXME
    if (!model)
    {
       NSLog(@"*** Error: No model ***");
-      [self setPlot:newModel];
+      [self setModel:newModel];
       return;
    }
-   backgroundDidChange = !_aqtEqualColors([model color], [newModel color]);
-   [model appendModel:newModel];
+   backgroundDidChange = !AQTEqualColors([model color], [newModel color]);
+   //[model appendModel:newModel]; // expanded here:
+   [model setTitle:[newModel title]];
+   [model setColor:[newModel color]];
+   [model setBounds:AQTUnionRect([model bounds], [newModel updateBounds])];
+   [model addObjectsFromArray:[newModel modelObjects]];
    
 #ifdef DEBUG_BOUNDS
    NSLog(@"oldBounds = %@", NSStringFromRect([model bounds]));
@@ -145,18 +144,8 @@ BOOL _aqtEqualColors(AQTColor col1, AQTColor col2)
    
    if (_isWindowLoaded)
    {
-      NSRect newBounds = [newModel bounds];
-      NSRect dirtyRect = [canvas convertRectToViewCoordinates:newBounds];
       [self _aqtSetupViewShouldResize:NO];
-      if (backgroundDidChange)
-      {
-         [canvas setNeedsDisplay:YES];
-      }
-      else
-      {
-         [canvas setNeedsDisplayInRect:dirtyRect];
-      }
-      [[canvas window] makeKeyAndOrderFront:self];
+      dirtyRect = backgroundDidChange?AQTRectFromSize([model canvasSize]):[newModel bounds];
 
 #ifdef DEBUG_BOUNDS
       NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
@@ -164,16 +153,71 @@ BOOL _aqtEqualColors(AQTColor col1, AQTColor col2)
    }
 }
 
-/* This is a "housekeeping" method, to avoid buildup of hidden objects, does not imply redraw(?) */
-- (void)removeGraphicsInRect:(NSRect)aRect
+- (void)draw
 {
-   [model removeObjectsInRect:aRect]; // updates bounds automatically.
+   [canvas setNeedsDisplayInRect:[canvas convertRectToViewCoordinates:dirtyRect]];
+   [[canvas window] makeKeyAndOrderFront:self];
+}
+
+/* This is a "housekeeping" method, to avoid buildup of hidden objects, does not imply redraw(?) */
+- (void)removeGraphicsInRect:(NSRect)targetRect
+{
+   // FIXME: Where does this belong? Here, category or in model proper (not functional in client)
+   // [model removeObjectsInRect:aRect]; // updates bounds automatically.
+   NSRect testRect;
+   NSRect newBounds = NSZeroRect;
+   int i;
+   int  objectCount = [model count];
+   NSArray *modelObjects = [model modelObjects];
+
+   // check for nothing to remove or disjoint modelBounds <--> targetRect
+   if (objectCount == 0 || AQTIntersectsRect(targetRect, [model bounds]) == NO)
+      return;
+
+   if (AQTContainsRect(targetRect, [model bounds]))
+   {
+      [model removeAllObjects];
+   }
+   else
+   {
+      for (i = objectCount - 1; i >= 0; i--)
+      {
+         testRect = [[modelObjects objectAtIndex:i] bounds];
+         if (AQTContainsRect(targetRect, testRect))
+         {
+            [model removeObjectAtIndex:i];
+         }
+         else
+         {
+            newBounds = AQTUnionRect(newBounds, testRect);
+         }
+      }
+   }
+   [model setBounds:newBounds];
+   // NSLog(@"Removed %d objs, new bounds: %@", objectCount - [modelObjects count], [self description]);
+}
+
+-(void)setAcceptingEvents:(BOOL)flag
+{
+   _acceptingEvents = flag; // && (_client != nil);
+   if (_isWindowLoaded)
+   {
+      [canvas setIsProcessingEvents:_acceptingEvents];
+   }
+}
+
+-(void)close
+{
+   NSLog(@"close");
 }
 
 -(BOOL)invalidateClient:(id)aClient
 {
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
+
    if (_client == aClient)
    {
+      NSLog(@"invalidating %@", [_client description]);
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];
@@ -193,20 +237,10 @@ BOOL _aqtEqualColors(AQTColor col1, AQTColor col2)
 -(void)setClientInfoName:(NSString *)name pid:(int)pid
 {
    [name retain];
-   [_clientName release];		// let go of any temporary model not used (unlikely)
-   _clientName = name;		// Make it point to new model
+   [_clientName release];
+   _clientName = name;	
    _clientPID = pid;
 }
-
--(void)setAcceptingEvents:(BOOL)flag
-{
-   _acceptingEvents = flag; // && (_client != nil);
-   if (_isWindowLoaded)
-   {
-      [canvas setIsProcessingEvents:_acceptingEvents];
-   }
-}
-
 
 -(void)processEvent:(NSString *)event
 {
@@ -240,14 +274,10 @@ BOOL _aqtEqualColors(AQTColor col1, AQTColor col2)
    return proposedFrameSize;
 }
 
-/*
-- (void)windowDidResize:(NSNotification *)notification
-{
-   NSLog(@"window did resize, viewSize = %@", NSStringFromSize([canvas frame].size));
-}
-*/
 - (BOOL)windowShouldClose:(id)sender
 {
+   // FIXME: check for presence of client, it may have been release w/o invalidating itself
+   // and this class will leak until app quits.
    BOOL shouldClose = YES; 
    if (_client)
    {
@@ -259,13 +289,9 @@ BOOL _aqtEqualColors(AQTColor col1, AQTColor col2)
 
 - (void)windowWillClose:(NSNotification *)notification
 {
+   // FIXME: check for presence of client, it may have been release w/o invalidating itself
+   // and this class will leak until app quits.
    [[NSApp delegate] removePlot:self];
-}
-
-
--(void)close
-{
-   NSLog(@"close");
 }
 
 #pragma mark === Menu actions ===
