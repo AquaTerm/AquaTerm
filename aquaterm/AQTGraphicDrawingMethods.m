@@ -10,9 +10,8 @@
 
 #import "AQTLabel.h"
 #import "AQTPath.h"
-//#import "AQTPatch.h"
 #import "AQTImage.h"
-
+#import "AQTFunctions.h"
 
 //
 // Using an undocumented method in NSFont.
@@ -67,12 +66,16 @@
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
    while ((graphic = [enumerator nextObject]))
    {
-      NSRect graphRect = [graphic updateBounds];
-      if (NSWidth(graphRect) < 0.0001 || NSHeight(graphRect) < 0.0001)
-      {
-         NSLog(@"**** Zero/neg W/H! : %@", [graphic description]);
-      }
-      tmpRect = NSUnionRect(tmpRect, graphRect);
+/*       NSRect graphRect = [graphic updateBounds];
+
+ if (NSIsEmptyRect(graphRect))
+       {
+          NSLog(@"**** rect = %@ : %@", NSStringFromRect(graphRect), [graphic description]);
+       }
+
+      tmpRect = AQTUnionRect(tmpRect, graphRect);
+*/
+      tmpRect = AQTUnionRect(tmpRect, [graphic updateBounds]);
    }
    [self setBounds:tmpRect];
    return tmpRect;
@@ -90,6 +93,10 @@
    while ((graphic = [enumerator nextObject]))
    {
       [graphic renderInRect:dirtyRect];
+#ifdef DEBUG_BOUNDS
+      [[NSColor orangeColor] set];
+      NSFrameRect(NSInsetRect([graphic bounds], -1, -1));
+#endif
    }
 }
 @end
@@ -334,15 +341,13 @@
 
 -(void)renderInRect:(NSRect)boundsRect
 {
-   if (NSIntersectsRect(boundsRect, [self bounds]))
+   if (AQTIntersectsRect(boundsRect, [self bounds]))
    {
       [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
       [_cache  fill];
    }
 }
 @end
-
-
 
 @implementation AQTPath (AQTPathDrawing)
 -(void)_aqtPathUpdateCache
@@ -366,14 +371,14 @@
    {
       [self _aqtPathUpdateCache];
    }   
-   tmpBounds = NSInsetRect([[self _cache] bounds], -.001, -.001);
+   tmpBounds = [[self _cache] bounds];
    [self  setBounds:tmpBounds];
    return tmpBounds;
 }
    
 -(void)renderInRect:(NSRect)boundsRect
 {
-   if (NSIntersectsRect(boundsRect, [self bounds]))
+   if (AQTIntersectsRect(boundsRect, [self bounds]))
    {
       [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
       [_cache stroke];
@@ -385,147 +390,62 @@
 }
 @end
 
-/*
-@implementation AQTPatch (AQTPatchDrawing)
--(void)_aqtPatchUpdateCache
-{
-   NSBezierPath *scratch = [NSBezierPath bezierPath];
-   [scratch appendBezierPathWithPoints:path count:pointCount];
-   [scratch setLineWidth:linewidth];
-   [scratch closePath];
-   [self _setCache:scratch];   
-}
-
--(NSRect)updateBounds
-{
-   NSRect tmpBounds;
-   if (![self _cache])
-   {
-      [self _aqtPatchUpdateCache];
-   }
-
-   tmpBounds = NSInsetRect([[self _cache] bounds], -.001, -.001);
-   [self  setBounds:tmpBounds];
-   return tmpBounds;
-}
-
--(void)renderInRect:(NSRect)boundsRect
-{
-   if (NSIntersectsRect(boundsRect, [self bounds]))
-   {
-      [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-      [_cache stroke];
-      [_cache fill];
-   }
-}
-@end
-*/
-
 @implementation AQTImage (AQTImageDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-   if (![self _cache])
+   if (AQTIntersectsRect(boundsRect, [self bounds]))
    {
-      // Install an NSImage in _cache
-      const unsigned char *theBytes = [bitmap bytes];
-      NSImage *tmpImage = [[NSImage alloc] initWithSize:bitmapSize];
-      NSBitmapImageRep *tmpBitmap =
-         [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&theBytes
-                                                 pixelsWide:bitmapSize.width
-                                                 pixelsHigh:bitmapSize.height
-                                              bitsPerSample:8
-                                            samplesPerPixel:3
-                                                   hasAlpha:NO
-                                                   isPlanar:NO
-                                             colorSpaceName:NSDeviceRGBColorSpace
-                                                bytesPerRow:3*bitmapSize.width
-                                               bitsPerPixel:24];
-      [tmpImage addRepresentation:tmpBitmap];
-      [self _setCache:tmpImage];
-      [tmpImage release];
-      [tmpBitmap release];
-   }
-   if (fitBounds == YES)
-   {
-      [_cache drawInRect:_bounds
-                fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
-               operation:NSCompositeSourceOver
-                fraction:1.0];
-   }
-   else
-   {
-      NSAffineTransform *transf = [NSAffineTransform transform];
-      NSGraphicsContext *context = [NSGraphicsContext currentContext];
-      NSAffineTransformStruct tmpStruct;
-      tmpStruct.m11 = transform.m11;
-      tmpStruct.m12 = transform.m12;
-      tmpStruct.m21 = transform.m21;
-      tmpStruct.m22 = transform.m22;
-      tmpStruct.tX = transform.tX;
-      tmpStruct.tY = transform.tY;
-
-      [context saveGraphicsState];
-      [NSBezierPath clipRect:_bounds];
-      [transf setTransformStruct:tmpStruct];
-      [transf concat];
-      [_cache drawAtPoint:NSMakePoint(0,0)
-                 fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
-                operation:NSCompositeSourceOver
-                 fraction:1.0];
-      [context restoreGraphicsState];
-   }
-}
-@end
-
-@implementation AQTModel (AQTModelExtensions)
--(void)appendModel:(AQTModel *)aModel
-{
-   [self setTitle:[aModel title]];
-   [self setColor:[aModel color]];
-   [self setBounds:NSUnionRect([self bounds], [aModel updateBounds])];
-   [modelObjects addObjectsFromArray:[aModel modelObjects]];
-}
-
--(void)removeObjectsInRect:(NSRect)targetRect
-{
-   // FIXME: It is possible to recursively nest models in models,
-   // but this method doesn't work in that case
-
-   NSRect testRect;
-   NSRect newBounds = NSZeroRect;
-   int i;
-   int  objectCount = [modelObjects count];
-
-   targetRect = NSInsetRect(targetRect, -0.5, -0.5); // Try to be smart...
-
-   if(objectCount == 0)
-      return;
-
-   if (NSContainsRect(targetRect, [self bounds]))
-   {
-      [modelObjects removeAllObjects];
-      [self setBounds:newBounds];
-   }
-   else
-   {
-      for (i = objectCount - 1; i >= 0; i--)
+      if (![self _cache])
       {
-         testRect = [[modelObjects objectAtIndex:i] bounds];
-         if (testRect.size.height == 0.0 || testRect.size.width == 0.0)
-         {
-            testRect = NSInsetRect(testRect, -0.1, -0.1); // FIXME: Try to be smarter...
-         }
-         if (NSContainsRect(targetRect, testRect))
-         {
-            [modelObjects removeObjectAtIndex:i];
-         }
-         else
-         {
-            newBounds = NSUnionRect(newBounds, testRect);
-         }
+         // Install an NSImage in _cache
+         const unsigned char *theBytes = [bitmap bytes];
+         NSImage *tmpImage = [[NSImage alloc] initWithSize:bitmapSize];
+         NSBitmapImageRep *tmpBitmap =
+            [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&theBytes
+                                                    pixelsWide:bitmapSize.width
+                                                    pixelsHigh:bitmapSize.height
+                                                 bitsPerSample:8
+                                               samplesPerPixel:3
+                                                      hasAlpha:NO
+                                                      isPlanar:NO
+                                                colorSpaceName:NSDeviceRGBColorSpace
+                                                   bytesPerRow:3*bitmapSize.width
+                                                  bitsPerPixel:24];
+         [tmpImage addRepresentation:tmpBitmap];
+         [self _setCache:tmpImage];
+         [tmpImage release];
+         [tmpBitmap release];
+      }
+      if (fitBounds == YES)
+      {
+         [_cache drawInRect:_bounds
+                   fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
+                  operation:NSCompositeSourceOver
+                   fraction:1.0];
+      }
+      else
+      {
+         NSAffineTransform *transf = [NSAffineTransform transform];
+         NSGraphicsContext *context = [NSGraphicsContext currentContext];
+         NSAffineTransformStruct tmpStruct;
+         tmpStruct.m11 = transform.m11;
+         tmpStruct.m12 = transform.m12;
+         tmpStruct.m21 = transform.m21;
+         tmpStruct.m22 = transform.m22;
+         tmpStruct.tX = transform.tX;
+         tmpStruct.tY = transform.tY;
+
+         [context saveGraphicsState];
+         [NSBezierPath clipRect:_bounds];
+         [transf setTransformStruct:tmpStruct];
+         [transf concat];
+         [_cache drawAtPoint:NSMakePoint(0,0)
+                    fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
+                   operation:NSCompositeSourceOver
+                    fraction:1.0];
+         [context restoreGraphicsState];
       }
    }
-   [self setBounds:newBounds];
 }
 @end
 
