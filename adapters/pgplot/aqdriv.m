@@ -34,6 +34,8 @@ static id adapter;        		    // Adapter object
   int currentColor;
   float lineWidth;
   // --- storage objects
+  NSBezierPath *polylineBuffer;
+  NSBezierPath *polygonBuffer;
   NSBezierPath *polygon;
   NSBitmapImageRep *image;
   NSRect imageBounds;
@@ -48,7 +50,9 @@ static id adapter;        		    // Adapter object
 //
 - (void)openGraph:(int)n;
 - (void)closeGraph;
-- (void)flushBuffer;
+- (void)render;
+- (void)flushPolylineBuffer;
+- (void)flushPolygonBuffer;
 - (void)setColorIndex:(int)colorIndex;
 - (void)setLineWidth:(float)newLineWidth;
 - (void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint;
@@ -183,7 +187,6 @@ break;
   case 8:
     LOG(@"IFUNC=8, Select plot");
     currentPlot = (int)rbuf[0];
-    // [adapter openGraph:1];
 break;
 
 //--- IFUNC=9, Open workstation -----------------------------------------
@@ -242,8 +245,7 @@ break;
     LOG(@"IFUNC=14, End picture");
     if (rbuf[0] != 0.0)
     {
-        // An extra closeGraph clears screen
-        // [adapter closeGraph];
+        // clear screen
     }   
     [adapter closeGraph];
 break;
@@ -259,7 +261,7 @@ break;
 
   case 16:
     LOG(@"IFUNC=16, Flush buffer");
-    [adapter flushBuffer];
+    [adapter render];
 break;
 
 //--- IFUNC=17, Read cursor. --------------------------------------------
@@ -437,6 +439,9 @@ break;
     {
       // Init instance variables
       polygon = [[NSBezierPath bezierPath] retain];
+      polylineBuffer = [[NSBezierPath bezierPath] retain];
+      polygonBuffer = [[NSBezierPath bezierPath] retain];
+
       for (i=0;i<256;i++)
       {
         colorlist[i][0]=((float)i)/255.0;
@@ -458,6 +463,8 @@ break;
 {
   [aqtConnection release];
   [polygon release];
+  [polylineBuffer release];
+  [polygonBuffer release];
   [super dealloc];
 }
 
@@ -511,15 +518,23 @@ break;
 //
 - (void)setColorIndex:(int)colorIndex;
 {
-    //currentColor = colorIndex;  
-    currentColor = (colorIndex == 0)?-4:colorIndex-1;   
+  //
+  // This requires flushing of any buffers
+  //
+  [self flushPolygonBuffer];
+  [self flushPolylineBuffer];
+  currentColor = (colorIndex == 0)?-4:colorIndex-1;
 }
 
 - (void)setLineWidth:(float)newLineWidth
 {
-    newLineWidth = newLineWidth*0.005*72;
-    // Limit thinnest line
-    lineWidth=newLineWidth<.5?.5:newLineWidth;
+  //
+  // This requires flushing of the polyline buffer
+  //
+  [self flushPolylineBuffer];
+  newLineWidth = newLineWidth*0.005*72;
+  // Limit thinnest line
+  lineWidth=newLineWidth<.5?.5:newLineWidth;
 }
 
 - (void)openGraph:(int)n
@@ -534,33 +549,58 @@ break;
 {
   // 
   // Draw (render) the currently selected model
+  // This requires flushing of any buffers 
   //
+  [self flushPolygonBuffer];
+  [self flushPolylineBuffer];
   [aqtConnection closeModel];
 }
 
-- (void)flushBuffer
+- (void)render
 {
   // 
   // Draw (render) the currently selected model
   // but leave it open for further drawing
+  // This requires flushing of any buffers 
   //
+  [self flushPolygonBuffer];
+  [self flushPolylineBuffer];
   [aqtConnection render];
+}
+
+- (void)flushPolylineBuffer
+{
+  if (![polylineBuffer isEmpty])
+  {
+      [polylineBuffer setLineWidth:lineWidth];
+      [aqtConnection addPolyline:polylineBuffer withIndexedColor:currentColor];
+      [polylineBuffer removeAllPoints];
+    }
+}
+
+- (void)flushPolygonBuffer
+{
+  if (![polygonBuffer isEmpty])
+  {
+  [aqtConnection addPolygon:polygonBuffer withIndexedColor:currentColor];
+  [polygonBuffer removeAllPoints];
+}
 }
 
 - (void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint
 {
-  NSBezierPath *thePath = [NSBezierPath bezierPath];
+  // NSBezierPath *thePath = [NSBezierPath bezierPath];
   // 
   // AquaTerm works with bezier paths of arbitrary complexity, 
   // but the client only knows how to draw straight lines. 
   //
-  [thePath moveToPoint:startpoint];  
-  [thePath lineToPoint:endpoint];
+  [polylineBuffer moveToPoint:startpoint];  
+  [polylineBuffer lineToPoint:endpoint];
   //
   // set linewidth and send the polyline to AquaTerm
   //
-  [thePath setLineWidth:lineWidth];
-  [aqtConnection addPolyline:thePath withIndexedColor:currentColor];
+  // [thePath setLineWidth:lineWidth];
+  // [aqtConnection addPolyline:thePath withIndexedColor:currentColor];
 }
 
 - (void) fillRect:(NSRect)aRect
@@ -570,7 +610,8 @@ break;
   // close up the path and send the polygon to AquaTerm
   //
   [thePath closePath]; 
-  [aqtConnection addPolygon:thePath withIndexedColor:currentColor];
+  // [aqtConnection addPolygon:thePath withIndexedColor:currentColor];
+  [polygonBuffer appendBezierPath:thePath]; 
 }
 //
 // --- PGPLOT uses a sequence of calls to build a polygon
@@ -595,7 +636,8 @@ break;
 - (void)fillPolygon
 {
   [polygon closePath];
-  [aqtConnection addPolygon:polygon withIndexedColor:currentColor];  
+  // [aqtConnection addPolygon:polygon withIndexedColor:currentColor]; 
+  [polygonBuffer appendBezierPath:polygon]; 
 }
 // 
 // --- PGPLOT uses a sequence of calls to build an image
@@ -632,11 +674,12 @@ break;
 
 - (void)closeImage
 {
-  [aqtConnection addImage:[NSBitmapImageRep representationOfImageRepsInArray:[NSArray arrayWithObject:image] usingType:NSTIFFFileType properties:nil] bounds:imageBounds];
+  [aqtConnection addBitmap:[image TIFFRepresentation] size:NSMakeSize([image pixelsWide],[image pixelsHigh]) bounds:imageBounds];
   [image release];  
 }
 //
 // FIXME: For now, we keep a local colormap. AQT does _not_ restore colormap for subsequent plots
+// FIXME: this too would benefit from being buffered
 // 
 -(void)setColormapEntry:(int)i red:(float)r green:(float)g blue:(float)b
 {
