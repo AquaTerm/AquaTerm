@@ -1,0 +1,6 @@
+With PyObjC <http://pyobjc.sourceforge.net> you can use AquaTerm directly from Python.
+
+Run the demo file with:
+python demo.py
+
+See documentation for AQTAdapter and PyObjC to find out the syntax.
