@@ -21,7 +21,6 @@
    {
       [self setClientInfoName:@"No connection" pid:-1];
       [self setAcceptingEvents:NO];
-      [self setLastEvent:@"0"];
       [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
    }
    return self;
@@ -79,7 +78,6 @@
 {
    [model release];
    [_clientName release];
-   [lastEvent release];
    [super dealloc];
 }
 
@@ -153,21 +151,12 @@
    {
       [canvas setIsProcessingEvents:_acceptingEvents];
    }
-   [self setLastEvent:@"0"];
 }
 
-- (NSString *)lastEvent
-{
-   return lastEvent;
-}
 
--(void)setLastEvent:(NSString *)event
+-(void)processEvent:(NSString *)event
 {
-   [event retain];
-   [lastEvent autorelease];
-   lastEvent = event;
-   // Also inform client
-   if(_acceptingEvents)
+   if(_acceptingEvents) // FIXME: redundant!?
    {
       NS_DURING
          [_client processEvent:event];
@@ -180,7 +169,6 @@
       NS_ENDHANDLER
    }
 }
-
 #pragma mark === Delegate methods ===
 - (BOOL)windowShouldClose:(id)sender
 {

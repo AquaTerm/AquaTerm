@@ -19,7 +19,6 @@
 @interface AQTPlotBuilder : NSObject
 {
   AQTModel *_model;	/*" The graph currently being built "*/
-//  int _modelRefNumber;	/*" Index into our handler's list of views "*/
   AQTColor _color;	/*" Currently selected color "*/
   NSString *_fontName;	/*" Currently selected font "*/
   float _fontSize;	/*" Currently selected fontsize [pt]"*/
@@ -29,7 +28,6 @@
   int _pointCount;	/*" The current number of points in _path"*/
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
   AQTAffineTransformStruct _transform;
-//  BOOL _acceptingEvents;
   NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
   id owner;
   AQTColorMap *_colormap;
@@ -85,5 +83,4 @@
    /*" Interactions with user "*/
 - (void)setAcceptingEvents:(BOOL)flag;
 - (void)processEvent:(NSString *)event;
-- (NSString *)lastEvent;
 @end

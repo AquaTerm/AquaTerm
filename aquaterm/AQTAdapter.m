@@ -65,6 +65,7 @@ Event handling of user input is provided through an optional callback function.
    if(self = [super init])
    {
       _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
+      [self setLastEvent:@"0"];
       if(localServer)
       {
          _server = localServer;
@@ -106,6 +107,7 @@ Event handling of user input is provided through an optional callback function.
          NSLog(@"Discarding exception...");
       NS_ENDHANDLER
       [_builders release];
+      [_lastEvent release];
       if(_serverIsLocal == NO)
       {
          [_server release];
@@ -347,7 +349,14 @@ _{@"NSUnderline" 0or1}
 
 
 #pragma mark === Control operations ===
-- (void)processEvent:(NSString *)event sender:(id)sender
+-(void)setLastEvent:(NSString *)newEvent // FIXME: Make this a private method
+{
+   [newEvent retain];
+   [_lastEvent autorelease];
+   _lastEvent = newEvent;
+}
+
+- (void)processEvent:(NSString *)event sender:(id)sender // FIXME: Make private
 {
    if (_eventHandler != nil)
    {
@@ -357,23 +366,16 @@ _{@"NSUnderline" 0or1}
          _eventHandler([[keys objectAtIndex:0] intValue], event);
       }
    }
-/*
- else
-   {
-      NSLog(@"No event handler installed.");
-   }
-*/
+   [self setLastEvent:event];
 }
 
 /*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
 - (NSString *)lastEvent
 {
-   if (_selectedBuilder)
-   {
-      return [_selectedBuilder lastEvent];
-   }
-   [self _aqtNoSelectedBuilder];
-   return @"DummyEvent";
+   // FIXME: Clean up this event mess!!!
+   NSString *tmpEvent = [[_lastEvent copy] autorelease];
+   [self setLastEvent:@"0"];
+   return tmpEvent;
 }
 
 /* Creates a new builder instance, adds it to the list of builders and makes it the selected builder. If the referenced builder exists, it is selected and cleared. */

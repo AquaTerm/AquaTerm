@@ -20,7 +20,6 @@
   AQTPlotBuilder *_client;
   int _clientPID;
   NSString *_clientName;
-  NSString *lastEvent;
   // interface additions
   IBOutlet NSBox *extendSavePanelView;
   IBOutlet NSPopUpButton *saveFormatPopUp;
@@ -31,6 +30,6 @@
 -(void)setClientInfoName:(NSString *)name pid:(int)pid;
 -(BOOL)invalidateClient:(id)aClient;
 
-- (void)setLastEvent:(NSString *)theEvent;
+- (void)processEvent:(NSString *)theEvent;
 
 @end

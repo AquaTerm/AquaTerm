@@ -98,7 +98,7 @@
    {
    point = [self convertPoint:point fromView:nil];
    point = [self _aqtConvertToCanvasCoordinates:point];
-   [[[self window] delegate] setLastEvent:[NSString stringWithFormat:@"1:%@:%d", NSStringFromPoint(point), button]];
+   [[[self window] delegate] processEvent:[NSString stringWithFormat:@"1:%@:%d", NSStringFromPoint(point), button]];
    }
 }
 
@@ -137,7 +137,7 @@
             pos.y = NSHeight(viewBounds);
       }
       eventString = [NSString stringWithFormat:@"2:%@:%c", NSStringFromPoint([self _aqtConvertToCanvasCoordinates:pos]), aKey];
-      [[[self window] delegate] setLastEvent:eventString];
+      [[[self window] delegate] processEvent:eventString];
    }
 }
 

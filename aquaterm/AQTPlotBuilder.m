@@ -233,24 +233,8 @@
 
 - (void)processEvent:(NSString *)event
 {
-   // FIXME: insert info on self
    [owner processEvent:event sender:self]; // FIXME: Needs autoreleasing here???
 }
-
-- (NSString *)lastEvent
-{
-   NS_DURING
-      return [_handler lastEvent]; // FIXME: ???
-   NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-         // [self _serverError]; // FIXME: Grab from AQTAdapterPrivateMethods
-         NSLog(@"Server error");
-      else
-         [localException raise];
-   NS_ENDHANDLER
-   return @"0";
-}
-
 
 //
 // AQTLabel

@@ -37,6 +37,7 @@ enum {
   BOOL _serverIsLocal;
   void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
   void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
+  NSString *_lastEvent;
   id _aqtReserved1;
   id _aqtReserved2;
 }
@@ -60,7 +61,6 @@ enum {
   /*" Event handling "*/
 - (void)setAcceptingEvents:(BOOL)flag;
 - (NSString *)lastEvent;
-
 
 /*" Plotting related commands "*/
 
