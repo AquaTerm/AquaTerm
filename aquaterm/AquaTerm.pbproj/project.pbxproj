@@ -159,6 +159,7 @@
 				F5E70370026D8645012F88DF,
 				F55BA2E303589FD301D20925,
 				CB05377C04DEA3A300EBD329,
+				CB9B70CB065A0AD100563010,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -492,6 +493,58 @@
 			isa = PBXTargetDependency;
 			target = CBC4B42705E4C784001BE8D7;
 			targetProxy = CB7C70A105EA276200D4CD15;
+		};
+		CB9B70CB065A0AD100563010 = {
+			children = (
+				CB9B70CC065A0AD100563010,
+			);
+			isa = PBXVariantGroup;
+			name = Preferences.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB9B70CC065A0AD100563010 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/Preferences.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB9B70CD065A0AD100563010 = {
+			fileRef = CB9B70CB065A0AD100563010;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB9B70D1065A0B9C00563010 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AQTPrefController.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB9B70D2065A0B9C00563010 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AQTPrefController.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB9B70D3065A0B9C00563010 = {
+			fileRef = CB9B70D1065A0B9C00563010;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB9B70D4065A0B9C00563010 = {
+			fileRef = CB9B70D2065A0B9C00563010;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		CB9E42E00586855A00D208BA = {
 			children = (
@@ -884,6 +937,7 @@
 				CBC4B42F05E4C784001BE8D7,
 				CBC4B43005E4C784001BE8D7,
 				CBC4B43105E4C784001BE8D7,
+				CB9B70D3065A0B9C00563010,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -950,6 +1004,7 @@
 				CB7217FC06072ABA008DCEAD,
 				CB72184906072CF6008DCEAD,
 				CB7218CD06073BFF008DCEAD,
+				CB9B70CD065A0AD100563010,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1014,6 +1069,7 @@
 				CBC4B44205E4C784001BE8D7,
 				CBC4B44305E4C784001BE8D7,
 				CBC4B44405E4C784001BE8D7,
+				CB9B70D4065A0B9C00563010,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1408,6 +1464,8 @@
 				FEBB59CE055CF10B00EEC8EA,
 				FEBB59D0055CF40600EEC8EA,
 				FE8252ACC5B321F400CFA73B,
+				CB9B70D1065A0B9C00563010,
+				CB9B70D2065A0B9C00563010,
 			);
 			isa = PBXGroup;
 			name = AppController;
