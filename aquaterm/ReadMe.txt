@@ -1,8 +1,11 @@
 AquaTerm 0.3.0
 
+***** IMPORTANT *****
 This is an early release for testing purposes. Please provide feedback and feature requests!
+If you previously added AquaTerm support to gnuplot you will have to update the gnuplot driver
+*********************
 
-How to use AquaTerm:
+* How to use AquaTerm:
 AquaTerm is a graphics terminal that can be used to easily add aqua graphics to (primarily scientific) legacy applications written in C, FORTRAN or any other language that can send remote messages.
 
 AquaTerm register with the system and responds to a (small) set of remote messages, listed and explained in AQTProtocol.h. 
@@ -10,6 +13,24 @@ AquaTerm register with the system and responds to a (small) set of remote messag
 * Documentation
 
 All documentation is available at http://aquaterm.sourceforge.net
+
+* Major changes
+
+Save as EPS/PDF
+Copy PDF & EPS to clipboard
+Support for setting window title
+Help menu links to homepage
+
+* Adapter changes
+
+Gnuplot
+  New syntax: set term aqua [<n> [title "windowtitle"]]
+
+PGPLOT
+  Initial support for PGPLOT
+
+C/FORTRAN
+  Updated drivers for C and FORTRAN
 
 * How to get the source for AquaTerm:
 
