@@ -79,13 +79,13 @@ Event handling of user input is provided through an optional callback function.
 
 - (void)release
 {
-   // FIXME: May never be called
-   NSLog(@"rc = %d", [self retainCount]);
+   [_clientManager logMessage:[NSString stringWithFormat:@"adapter rc = %d", [self retainCount]] logLevel:3];
    [super release];
 }
+
 - (void)dealloc
 {
-   // FIXME: May never be called
+   [_clientManager logMessage:@"adapter dealloc, terminating connection." logLevel:3];
    [_clientManager terminateConnection]; 
    [super dealloc];
 }
