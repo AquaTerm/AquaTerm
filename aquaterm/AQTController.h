@@ -23,8 +23,6 @@
 - (void)removePlot:(id)aPlot;
 - (void)setWindowPos:(NSWindow *)plotWindow;
 
-
-
 -(IBAction)showHelp:(id)sender;
 -(IBAction)debug:(id)sender;
 -(IBAction)mailBug:(id)sender;

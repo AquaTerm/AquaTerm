@@ -77,10 +77,15 @@ extern void aqtLineDrawingTest(id sender);
    cascadingPoint = [plotWindow cascadeTopLeftFromPoint:cascadingPoint];
 }
 
-#pragma mark === AQTConnectionProtocol ===
--(BOOL)ping
+- (void)applicationWillTerminate:(NSNotification *)notification
 {
-   return YES;
+   // FIXME: inform clients
+}
+
+#pragma mark === AQTConnectionProtocol ===
+-(void)ping
+{
+   return;
 }
 
 - (void)getServerVersionMajor:(int *)major minor:(int *)minor rev:(int *)rev
