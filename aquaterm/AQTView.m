@@ -186,6 +186,7 @@
    // and ii) transform dirty rect to canvas coords.
 
    // (i) view transform
+   [transform translateXBy:0.5 yBy:0.5]; // FIXME: should this go before scale or after?
    [transform scaleXBy:viewBounds.size.width/canvasSize.width
                yBy:viewBounds.size.height/canvasSize.height];
    [transform concat];
