@@ -10,7 +10,7 @@
 #import "AQTColorMap.h"
 #import "AQTModel.h"
 #import "AQTView.h"
-#import "GPTController.h"
+#import "AQTController.h"
 #import "GPTWindowController.h"
 
 @implementation AQTColorInspector
