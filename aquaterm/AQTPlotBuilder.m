@@ -89,6 +89,7 @@
 
 - (void)dealloc
 {
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    [_model release];
    [_colormap release];
    [super dealloc];
