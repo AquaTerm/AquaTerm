@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by Per Persson on Sat Jul 12 2003.
-//  Copyright (c) 2003 AquaTerm. All rights reserved.
+//  Copyright (c) 2003-2004 AquaTerm.
 //
 
 #import <Foundation/NSString.h>
