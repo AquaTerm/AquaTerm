@@ -67,9 +67,9 @@
 									<key>GID</key>
 									<integer>80</integer>
 									<key>Path</key>
-									<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/AquaTerm.app</string>
+									<string>../build/pkg_root/AquaTerm.app</string>
 									<key>Path Type</key>
-									<integer>1</integer>
+									<integer>2</integer>
 									<key>Privileges</key>
 									<integer>493</integer>
 									<key>Type</key>
@@ -85,7 +85,7 @@
 									<key>Path</key>
 									<string>Utilities</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -99,7 +99,7 @@
 							<key>Path</key>
 							<string>Applications</string>
 							<key>Path Type</key>
-							<integer>0</integer>
+							<integer>1</integer>
 							<key>Privileges</key>
 							<integer>509</integer>
 							<key>Type</key>
@@ -118,7 +118,7 @@
 									<key>Path</key>
 									<string>Application Support</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -134,7 +134,7 @@
 									<key>Path</key>
 									<string>Documentation</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -150,7 +150,7 @@
 									<key>Path</key>
 									<string>Filesystems</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -166,7 +166,7 @@
 									<key>Path</key>
 									<string>Frameworks</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -182,7 +182,7 @@
 									<key>Path</key>
 									<string>Internet Plug-ins</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -198,7 +198,7 @@
 									<key>Path</key>
 									<string>PreferencePanes</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -214,7 +214,7 @@
 									<key>Path</key>
 									<string>Printers</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -230,7 +230,7 @@
 									<key>Path</key>
 									<string>Screen Savers</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -246,7 +246,7 @@
 									<key>Path</key>
 									<string>Scripts</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>509</integer>
 									<key>Type</key>
@@ -260,7 +260,7 @@
 							<key>Path</key>
 							<string>Library</string>
 							<key>Path Type</key>
-							<integer>0</integer>
+							<integer>1</integer>
 							<key>Privileges</key>
 							<integer>509</integer>
 							<key>Type</key>
@@ -282,7 +282,7 @@
 											<key>Path</key>
 											<string>Extensions</string>
 											<key>Path Type</key>
-											<integer>0</integer>
+											<integer>1</integer>
 											<key>Privileges</key>
 											<integer>493</integer>
 											<key>Type</key>
@@ -296,7 +296,7 @@
 									<key>Path</key>
 									<string>Library</string>
 									<key>Path Type</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>Privileges</key>
 									<integer>493</integer>
 									<key>Type</key>
@@ -310,7 +310,7 @@
 							<key>Path</key>
 							<string>System</string>
 							<key>Path Type</key>
-							<integer>0</integer>
+							<integer>1</integer>
 							<key>Privileges</key>
 							<integer>493</integer>
 							<key>Type</key>
@@ -336,9 +336,9 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>Path</key>
-															<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/include/AQTAdapter.h</string>
+															<string>../build/pkg_root/include/AQTAdapter.h</string>
 															<key>Path Type</key>
-															<integer>1</integer>
+															<integer>2</integer>
 															<key>Privileges</key>
 															<integer>420</integer>
 															<key>Type</key>
@@ -352,9 +352,9 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>Path</key>
-															<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/include/aquaterm.h</string>
+															<string>../build/pkg_root/include/aquaterm.h</string>
 															<key>Path Type</key>
-															<integer>1</integer>
+															<integer>2</integer>
 															<key>Privileges</key>
 															<integer>420</integer>
 															<key>Type</key>
@@ -403,9 +403,9 @@
 													<key>GID</key>
 													<integer>0</integer>
 													<key>Path</key>
-													<string>/Users/per/Documents/Source/aquaterm/build/pkg_root/lib/libaquaterm.1.0.0.dylib</string>
+													<string>../build/pkg_root/lib/libaquaterm.1.0.0.dylib</string>
 													<key>Path Type</key>
-													<integer>1</integer>
+													<integer>2</integer>
 													<key>Privileges</key>
 													<integer>493</integer>
 													<key>Type</key>
@@ -467,7 +467,7 @@
 					<key>Path</key>
 					<string>/</string>
 					<key>Path Type</key>
-					<integer>0</integer>
+					<integer>1</integer>
 					<key>Privileges</key>
 					<integer>1021</integer>
 					<key>Type</key>
@@ -548,17 +548,17 @@
 						<key>IFPkgDescriptionDeleteWarning</key>
 						<string></string>
 						<key>IFPkgDescriptionDescription</key>
-						<string>This package will install AquaTerm 1.0.b1, including supporting library and header files.</string>
+						<string>This package will install AquaTerm 1.0.b2, including supporting library and header files.</string>
 						<key>IFPkgDescriptionTitle</key>
 						<string>AquaTerm</string>
 						<key>IFPkgDescriptionVersion</key>
-						<string>1.0.b1</string>
+						<string>1.0.b2</string>
 					</dict>
 				</dict>
 				<key>Display Information</key>
 				<dict>
 					<key>CFBundleGetInfoString</key>
-					<string>AquaTerm 1.0.b1 Copyrights © 2004 Aquaterm Project</string>
+					<string>AquaTerm 1.0.b2 Copyrights © 2004 Aquaterm Project</string>
 					<key>CFBundleIconFile</key>
 					<string></string>
 					<key>CFBundleIdentifier</key>
@@ -566,7 +566,7 @@
 					<key>CFBundleName</key>
 					<string>AquaTerm</string>
 					<key>CFBundleShortVersionString</key>
-					<string>1.0.b1</string>
+					<string>1.0.b2</string>
 				</dict>
 				<key>Options</key>
 				<dict>
@@ -616,7 +616,7 @@
 		<key>10.1 Compatibility</key>
 		<true/>
 		<key>Build Path</key>
-		<string>/Users/per/Documents/Source/aquaterm/installer/build</string>
+		<string>/Users/per/Documents/Source/aquaterm/build/dmg_root</string>
 		<key>Comment</key>
 		<string></string>
 		<key>Remove .DS_Store</key>
