@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = GPTView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            CLASS = GPTWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {viewOutlet = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,316 @@
+{\rtf0\ansi{\fonttbl\f0\fnil Times-Roman;\f1\ftech Symbol;\f2\fswiss Helvetica;\f3\fmodern Courier;\f4\fmodern Ohlfs;}
+\paperw16220
+\paperh11300
+\margl120
+\margr0
+{\colortbl;\red89\green0\blue0;\red0\green0\blue66;\red16\green25\blue46;\red0\green0\blue0;\red63\green0\blue0;\red16\green25\blue69;}
+\f0\b0\i0\ulnone\ql\fs24\fi0\li0\gray0\fc0\cf0\up0\dn0 Version 1.1 Copyright 
+\f1 ã
+\f0 2001.  All Rights Reserved.  
+\i 
+\i0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+\
+\
+\
+
+\pard\tx4880\fi-2780\li4880\fc0\cf0 \
+
+\pard\f2\b\fs56\li2100\gray104\fc1\cf1 gptProtocol
+\gray28\fc2\cf2 \
+
+\pard\tx4880\f0\b0\fs16\fi-2780\li4880\fc0\cf0 \
+\
+\
+
+\fs28 
+\fc4\cf4 
+\fi0\fc0\cf0 \
+
+\f2\b\fi-2780\gray96\fc3\cf3 Declared In
+\gray0\fc0\cf0 :
+\f0\b0 	gptProtocol.h\
+
+\pard\f2\b\fs16\li1360\fc0\cf0 \
+\
+\
+\
+
+\fs36\gray28\fc2\cf2 Protocol Description\
+
+\fs16\gray0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\f0\b0\fs28\li2100\fc0\cf0 This protocol defines the DO connection messages availabe.\
+
+\pard\tx4880\fi-2780\li4880\fc4\cf4 
+\pard\tx6140\tx9660\tx10180\fi-4040\li6140\fc4\cf4 
+\fc0\cf0 
+\fc4\cf4 
+\f2\b\fs16\fc0\cf0 \
+
+\pard\li1360\fc0\cf0 \
+\
+\
+
+\fs36\gray28\fc2\cf2 Method Types\
+
+\pard\tx6140\tx9660\tx10180\f0\b0\fs16\fi-4040\li6140\fc4\cf4 \
+
+\pard\tx6120\fs28\fi-3840\li5940\fc4\cf4 	
+\gray74\fc5\cf5 - gptRenderRelease:
+\gray0\fc4\cf4 \
+
+\pard\tx6120\tx9000\fi-3840\li5940\fc4\cf4 	
+\gray74\fc5\cf5 - gptPutString:AtPoint:WithJustification:WithLinetype:
+\gray0\fc4\cf4 \
+
+\pard\tx6120\tx9000\fi-3840\li5940\fc4\cf4 	
+\gray74\fc5\cf5 - gptSetFont:
+\gray0\fc4\cf4 \
+
+\pard\tx6120\tx9000\fi-3840\li5940\fc4\cf4 	
+\gray74\fc5\cf5 - gptSetPath:WithLinetype:FillColor:PathIsFilled:
+\gray0\fc4\cf4 \
+
+\pard\tx6120\tx9000\fi-3840\li5940\fc4\cf4 	
+\gray74\fc5\cf5 - gptCurrentWindow:
+\gray0\fc4\cf4 \
+
+\pard\tx6120\tx9000\fi-3840\li5940\fc4\cf4 	
+\gray74\fc5\cf5 - gptPointsize:
+\gray0\fc4\cf4 \
+
+\pard\tx6120\tx9000\fi-3840\li5940\fc4\cf4 	
+\gray74\fc5\cf5 - gptDidSetPointsize:
+\gray0\fc4\cf4 \
+
+\pard\tx6120\tx9000\fi-3840\li5940\fc4\cf4 
+\pard\tx7140\fi-380\li2480\fc4\cf4  
+\pard\li1360\fc4\cf4 \
+
+\f2\b\fs16\fc0\cf0 \
+\
+
+\fs36\gray28\fc2\cf2 Instance Methods\
+
+\fs16\gray0\fc0\cf0 \
+
+\pard\tx6140\tx9660\tx10180\f0\b0\fs28\fi-4040\li6140\fc0\cf0 
+\f2\b\fc4\cf4 gptCurrentWindow:
+\pard\fi-380\li2480\fc0\cf0 \
+
+\f1\b0\fi-760\li3240 -
+\f0  
+\gray104\fc6\cf6 (oneway void)
+\gray0\fc0\cf0 
+\fc4\cf4 
+\fc0\cf0 
+\b\gray74\fc5\cf5 gptCurrentWindow
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (int)
+\i\gray0\fc4\cf4 currentWindow
+\i0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+
+\fs28 To be documented, see aquaTerm.trm\
+
+\pard\tx7140\f2\b\fs16\fi-380\li2480\fc0\cf0 \
+\
+\
+\
+
+\f0\b0\fs28\fc4\cf4 
+\f2\b\fc4\cf4 gptDidSetPointsize:
+\pard\fi-380\li2480\fc0\cf0 \
+
+\f1\b0\fi-760\li3240 -
+\f0  
+\gray104\fc6\cf6 (oneway void)
+\gray0\fc0\cf0 
+\fc4\cf4 
+\fc0\cf0 
+\b\gray74\fc5\cf5 gptDidSetPointsize
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (double)
+\i\gray0\fc4\cf4 size
+\i0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+
+\fs28 Empty method.\
+
+\pard\tx7140\f2\b\fs16\fi-380\li2480\fc0\cf0 \
+\
+\
+\
+
+\f0\b0\fs28\fc4\cf4 
+\f2\b\fc4\cf4 gptPointsize:
+\pard\fi-380\li2480\fc0\cf0 \
+
+\f1\b0\fi-760\li3240 -
+\f0  
+\gray104\fc6\cf6 (oneway void)
+\gray0\fc0\cf0 
+\fc4\cf4 
+\fc0\cf0 
+\b\gray74\fc5\cf5 gptPointsize
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (double)
+\i\gray0\fc4\cf4 pointsize
+\i0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+
+\fs28 Empty method.\
+
+\pard\tx7140\f2\b\fs16\fi-380\li2480\fc0\cf0 \
+\
+\
+\
+
+\f0\b0\fs28\fc4\cf4 
+\f2\b\fc4\cf4 gptPutString:AtPoint:WithJustification:WithLinetype:
+\pard\fi-380\li2480\fc0\cf0 \
+
+\f1\b0\fi-760\li3240 -
+\f0  
+\gray104\fc6\cf6 (oneway void)
+\gray0\fc0\cf0 
+\fc4\cf4 
+\fc0\cf0 
+\b\gray74\fc5\cf5 gptPutString
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy NSString *)
+\i\gray0\fc4\cf4 textString
+\i0\fc0\cf0 
+\fc0\cf0  
+\b\gray74\fc5\cf5 AtPoint
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy NSPoint)
+\i\gray0\fc4\cf4 coord
+\i0\fc0\cf0 
+\fc0\cf0  
+\b\gray74\fc5\cf5 WithJustification
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy int)
+\i\gray0\fc4\cf4 mode
+\i0\fc0\cf0 
+\fc0\cf0  
+\b\gray74\fc5\cf5 WithLinetype
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy int)
+\i\gray0\fc4\cf4 linetype
+\i0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+
+\fs28 To be documented, see aquaTerm.trm\
+
+\pard\tx7140\f2\b\fs16\fi-380\li2480\fc0\cf0 \
+\
+\
+\
+
+\f0\b0\fs28\fc4\cf4 
+\f2\b\fc4\cf4 gptRenderRelease:
+\pard\fi-380\li2480\fc0\cf0 \
+
+\f1\b0\fi-760\li3240 -
+\f0  
+\gray104\fc6\cf6 (oneway void)
+\gray0\fc0\cf0 
+\fc4\cf4 
+\fc0\cf0 
+\b\gray74\fc5\cf5 gptRenderRelease
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (BOOL)
+\i\gray0\fc4\cf4 yesOrNo
+\i0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+
+\fs28 Sent when a graph should be rendered. If the graph is part of a multiplot the \i yesOrNo\i0  flag is set to NO to indicate that graph model should not be released.\
+
+\pard\tx7140\f2\b\fs16\fi-380\li2480\fc0\cf0 \
+\
+\
+\
+
+\f0\b0\fs28\fc4\cf4 
+\f2\b\fc4\cf4 gptSetFont:
+\pard\fi-380\li2480\fc0\cf0 \
+
+\f1\b0\fi-760\li3240 -
+\f0  
+\gray104\fc6\cf6 (oneway void)
+\gray0\fc0\cf0 
+\fc4\cf4 
+\fc0\cf0 
+\b\gray74\fc5\cf5 gptSetFont
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy NSString *)
+\i\gray0\fc4\cf4 font
+\i0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+
+\fs28 To be documented, see aquaTerm.trm\
+
+\pard\tx7140\f2\b\fs16\fi-380\li2480\fc0\cf0 \
+\
+\
+\
+
+\f0\b0\fs28\fc4\cf4 
+\f2\b\fc4\cf4 gptSetPath:WithLinetype:FillColor:PathIsFilled:
+\pard\fi-380\li2480\fc0\cf0 \
+
+\f1\b0\fi-760\li3240 -
+\f0  
+\gray104\fc6\cf6 (oneway void)
+\gray0\fc0\cf0 
+\fc4\cf4 
+\fc0\cf0 
+\b\gray74\fc5\cf5 gptSetPath
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy NSBezierPath *)
+\i\gray0\fc4\cf4 aPath
+\i0\fc0\cf0 
+\fc0\cf0  
+\b\gray74\fc5\cf5 WithLinetype
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy int)
+\i\gray0\fc4\cf4 linetype
+\i0\fc0\cf0 
+\fc0\cf0  
+\b\gray74\fc5\cf5 FillColor
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy double)
+\i\gray0\fc4\cf4 gray
+\i0\fc0\cf0 
+\fc0\cf0  
+\b\gray74\fc5\cf5 PathIsFilled
+\gray0\fc4\cf4 :
+\b0\gray104\fc6\cf6 (bycopy BOOL)
+\i\gray0\fc4\cf4 isFilled
+\i0\fc0\cf0 \
+
+\pard\tx2480\tx2860\tx3240\fs16\li2100\fc0\cf0 \
+
+\fs28 To be documented, see aquaTerm.trm\
+
+\pard\tx7140\f2\b\fs16\fi-380\li2480\fc0\cf0 \
+\
+\
+\
+
+\f0\b0\fs28\fc4\cf4 \
+
+\gray104 \
+
+\f2\b\fs16\fc0\cf0 \
+
+}

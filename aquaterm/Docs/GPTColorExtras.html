@@ -1,0 +1,93 @@
+<HTML><HEAD><TITLE></TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+
+<BR><BR><FONT COLOR="#000066"><H1><A NAME="//apple_ref/occ/cl/NSColor (GPTColorExtras)">NSColor (GPTColorExtras)</A></H1></FONT><BR>
+
+
+
+
+
+
+
+	<blockquote><DL><DT><B>Declared In:</B></DT>
+	<DD>GPTColorExtras.h</DD>
+	</DL></blockquote>
+
+<BR><BR>
+
+
+<H2>Category Description</H2>
+A category to provide some useful color mappings.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Method Types</H2>
+	<blockquote>
+	
+		
+		<DL><DT></DT>
+		
+			<DD> <A HREF="#+ interpolateColorFrom:to:by:">+ interpolateColorFrom:to:by:</A></DD>
+		
+			<DD> <A HREF="#+ getColorFromIndex:">+ getColorFromIndex:</A></DD>
+		
+		</DL>
+	
+	</blockquote>
+
+
+
+
+	<P><HR WIDTH=50% ALIGN=LEFT>
+	<H2>Class Methods</H2>
+ 
+	
+		
+		<A NAME="+ getColorFromIndex:"></A><H3><A NAME="//apple_ref/occ/clm/NSColor (GPTColorExtras)/getColorFromIndex:">getColorFromIndex:</A></H3>
+		<CODE>+ (NSColor *)<B>getColorFromIndex:</B>(int)<EM>param</EM>
+			
+		</CODE><P>
+		Gnuplot uses is a color index to map linestyles to a set of fixed 
+colors. The index is taken modulo max_number_of_colors. 
+Negative numbers have special meanings (-2 = axes, -1 = grid).
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="+ interpolateColorFrom:to:by:"></A><H3><A NAME="//apple_ref/occ/clm/NSColor (GPTColorExtras)/interpolateColorFrom:to:by:">interpolateColorFrom:to:by:</A></H3>
+		<CODE>+ (NSColor *)<B>interpolateColorFrom:</B>(NSColor *)<EM>c0</EM> <B>to:</B>(NSColor *)<EM>c1</EM> <B>by:</B>(double)<EM>param</EM>
+			
+		</CODE><P>
+		Gnuplot uses is a mapping from [0 1] to an arbitrary color space and 
++(NSColor *)interpolateColorFrom: to: by: defined does that for us. 
+It returns an instance of NSColor that is an interpolation between 
+the colors <I>c0</I> and <I>c1</I>. When gray is 0 the color is <I>c0</I> and when gray 
+is 1 the returned color is <I>c1</I>.
+	
+
+
+
+
+
+
+<P><HR>
+Version 1.1 Copyright &copy;2001.  All Rights Reserved.  
+<P>
+</BODY></HTML>
