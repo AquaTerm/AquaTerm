@@ -23,7 +23,7 @@
 {
   if (self = [super init])
   {
-    image = [anImage retain];
+    image = [anImage copy];
   }
   return self;
 }

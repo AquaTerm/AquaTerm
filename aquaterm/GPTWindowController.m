@@ -13,14 +13,14 @@
     /**"
     *** The designated initializer
     "**/
--(id)initWithIndex:(unsigned)index andTitle:(NSString *)title
+-(id)initWithIndex:(int)index andTitle:(NSString *)title
 {   
     self = [super initWithWindowNibName:@"GPTWindow"];
     if (self)
     {
         model = [[AQTModel alloc] init];
         viewTitle = [[NSString stringWithString:title] retain];
-        [[self window] setTitle:viewTitle];
+        // [[self window] setTitle:viewTitle];
         viewIndex = index;	
         // [viewOutlet setControllerReference:self];
         // Let the view have a ref to its controller (FAQ: is this kosher? NO)
@@ -35,9 +35,14 @@
     *** The title is optional and this init, controls the default title
     *** which is Figure <index>  
     "**/
--(id)initWithIndex:(unsigned)index
+-(id)initWithIndex:(int)index
 {   
-    return [self initWithIndex:(unsigned)index andTitle:[NSString stringWithFormat:@"Figure %d", index]];
+    return [self initWithIndex:(int)index andTitle:[NSString stringWithFormat:@"Figure %d", index]];
+}
+-(void)awakeFromNib
+{
+	[[self window] setTitle:viewTitle];
+    [viewOutlet setNeedsDisplay:YES];
 }
 
 -(void)dealloc
@@ -59,7 +64,7 @@
     return viewOutlet;
 }
 
--(unsigned)viewIndex
+-(int)viewIndex
 {
     return viewIndex;
 }

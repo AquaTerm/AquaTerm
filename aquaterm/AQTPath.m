@@ -15,7 +15,7 @@
     *** Since the app is a viewer we do three things with the object:
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
--(id)initWithPath:(NSBezierPath *)aPath filled:(BOOL)fill color:(float)gray colorIndex:(int)cIndex indexedColor:(BOOL)icFlag
+-(id)initWithPath:(NSBezierPath *)aPath filled:(BOOL)fill color:(NSColor *)aColor colorIndex:(int)cIndex indexedColor:(BOOL)icFlag
 {
   if (self = [super init])
   {
@@ -27,32 +27,38 @@
     path = [[NSBezierPath bezierPath] retain];
     [path appendBezierPath:aPath];
     [path setLineWidth:[aPath lineWidth]];
-    mappedColor = gray;
+    // mappedColor = gray;
     colorIndex = cIndex;
     hasIndexedColor = icFlag;
+    if (!hasIndexedColor)
+    {
+      [self setColor:aColor];
+    }
   }
   return self; 
 }
 
--(id)initWithPolyline:(NSBezierPath *)aPath color:(float)gray
-{
-  return [self initWithPath:aPath filled:NO color:gray colorIndex:-3 indexedColor:NO]; 
-}
 
 -(id)initWithPolyline:(NSBezierPath *)aPath colorIndex:(int)cIndex
 {
-  return [self initWithPath:aPath filled:NO color:0.5 colorIndex:cIndex indexedColor:YES];  
-}
-
--(id)initWithPolygon:(NSBezierPath *)aPath color:(float)gray
-{
-  return [self initWithPath:aPath filled:YES color:gray colorIndex:-3 indexedColor:NO];
+  return [self initWithPath:aPath filled:NO color:nil colorIndex:cIndex indexedColor:YES];  
 }
 
 -(id)initWithPolygon:(NSBezierPath *)aPath colorIndex:(int)cIndex
 {
-  return [self initWithPath:aPath filled:YES color:0.5 colorIndex:cIndex indexedColor:YES];
+  return [self initWithPath:aPath filled:YES color:nil colorIndex:cIndex indexedColor:YES];
 }
+
+-(id)initWithPolygon:(NSBezierPath *)aPath color:(NSColor *)aColor
+{
+  return [self initWithPath:aPath filled:YES color:aColor colorIndex:0 indexedColor:NO];
+}
+
+-(id)initWithPolyline:(NSBezierPath *)aPath color:(NSColor *)aColor
+{
+  return [self initWithPath:aPath filled:NO color:aColor colorIndex:0 indexedColor:NO]; 
+}
+
 
 -(void)dealloc
 {
@@ -98,8 +104,8 @@
    }
    else
    {
-     // continuous color mode
-      [self setColor:[colorMap colorForFloat:mappedColor]];
+     // Do nothing, this corresponds to fixed RGB as of AQTProtocol v0.3.0
+     //  [self setColor:[colorMap colorForFloat:mappedColor]];
    }
 }
 

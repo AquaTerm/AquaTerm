@@ -1,7 +1,6 @@
 Finish printing code
  
 Shape up saving
- - let the user decide on format (EPS/PDF) in save sheet
  - should I also place tex snippet on pasteboard? (HIG?)
 
 Copying
@@ -9,7 +8,7 @@ Copying
 
 Colormaps
  - set from inspector panel
- - set from client app too?
+ - set from client app
 
 Drag & Drop
  - should AquaTerm provide dnd?

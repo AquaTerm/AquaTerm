@@ -13,14 +13,14 @@
     IBOutlet id viewOutlet;	/*" Points to the rendering view "*/
     AQTModel	*model;		/*" Holds the model for the view "*/ 
     NSString	*viewTitle;	/*" The title of the model from gnuplot's set term aqua <n> title command "*/
-    int 	viewIndex;	/*" The number by which gnuplot refers to the model "*/ 
+    int 		viewIndex;	/*" The number by which the client refers to the model "*/ 
 }
 
--(id)initWithIndex:(unsigned)index andTitle:(NSString *)title;	// Designated init
--(id)initWithIndex:(unsigned)index;
+-(id)initWithIndex:(int)index andTitle:(NSString *)title;	
+-(id)initWithIndex:(int)index;
 
 -(id)viewOutlet;
--(unsigned)viewIndex;
+-(int)viewIndex;
 -(void)setModel:(AQTModel *)newModel;
 -(AQTModel *)model;
 @end

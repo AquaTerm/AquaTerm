@@ -8,24 +8,25 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class GPTReceiverObject, GPTWindowController, GPTView, AQTModel, AQTColorInspector;
+@class AQTBuilder, GPTWindowController, GPTView, AQTModel, AQTColorInspector;
 
 @interface GPTController : NSObject 
 {
-    GPTReceiverObject 	*receiverObject;	/*" DO connection handler  "*/
-    NSMutableArray 	*gptWindowControllers;	/*" Array of windowcontrollers "*/
-    NSWindow		*frontWindow;		/*" The main (frontmost) window of the app "*/
-    NSPopUpButton 	*saveFormatPopup;
-    NSBox		*extendSavePanelView;	
+    AQTBuilder 			*builder;				/*" Implements AQTProtocol methods "*/
+    NSMutableArray 		*gptWindowControllers;	/*" Array of windowcontrollers "*/
+    NSWindow			*frontWindow;			/*" The main (frontmost) window of the app "*/
+    NSPopUpButton 		*saveFormatPopup;
+    NSBox				*extendSavePanelView;	
     AQTColorInspector 	*inspector;
+    NSConnection		*doConnection;
 }
 
 /* FAQ: since the window controller is made a delegate of the window (in the NIB) does that mean that it has "first access" to all window calls??? */
 
 -(id)init;
 -(void)awakeFromNib;
--(void)setModel:(AQTModel *)gptModel forView:(unsigned)index;
--(GPTWindowController *)controllerForView:(unsigned)index;
+-(void)setModel:(AQTModel *)gptModel forView:(int)index;
+-(GPTWindowController *)controllerForView:(int)index;
 -(NSWindow *)frontWindow;
 -(void)setFrontWindow:(NSWindow *)mainWindow;
 -(IBAction)print:(id)sender; 

@@ -31,6 +31,12 @@
    [modelObjects release];
    [super dealloc];
 }
+
+-(int)count
+{
+  return [modelObjects count];
+}
+
 -(NSRect)bounds
 {
   NSRect trackingRect = NSMakeRect(0,0,0,0);

@@ -17,6 +17,7 @@
     AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors so that the (single) property inspector knows the colormap of each window (model) "*/
 }
 -(id)init;
+-(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;

@@ -9,94 +9,88 @@
 #import "AQTColorMap.h"
 
 @implementation AQTColorMap
-    /**"
-    *** Mappings for colors both indexed and gradient for a particular AQTModel. 
-    "**/
--(id)initWithColorDict:(NSDictionary *)indexColors
-              rampFrom:(NSColor *)contColorMin
-                    to:(NSColor *)contColorMax
+-(id)init
 {
-    if (self = [super init]) {
-        indexedColormap = [indexColors retain];
-        minColor = [contColorMin retain];
-        maxColor = [contColorMax retain];
+  int i;
+  NSColor *dummyColor = [NSColor clearColor];
+  
+  if (self = [super init])
+  {
+    indexedColormap = [[NSMutableArray alloc] initWithCapacity:256];	// 256 is a _hint_, not allocated!
+    // Make sure we have _1_ object in the array
+    // [indexedColormap addObject:dummyColor];
+    // for (i=0;i<256;i++)
+    // {
+    //   [indexedColormap addObject:dummyColor];
+    // }
+
+    // Expand colormap to 10 colors
+    [self setColor:[NSColor redColor] forIndex:0];
+    [self setColor:[NSColor blueColor] forIndex:1];
+    [self setColor:[NSColor greenColor] forIndex:2];
+    [self setColor:[NSColor cyanColor] forIndex:3];
+    [self setColor:[NSColor magentaColor] forIndex:4];
+    [self setColor:[NSColor brownColor] forIndex:5];
+    [self setColor:[NSColor orangeColor] forIndex:6];
+    [self setColor:[NSColor brownColor] forIndex:7];
+    [self setColor:[NSColor purpleColor] forIndex:8];
+    [self setColor:[NSColor blackColor] forIndex:9];
     }
     return self;
 }
 
--(id)init
-{
-  // create a color dictionary
-    NSDictionary *aColorDict =
-    [NSDictionary dictionaryWithObjects:
-      [NSArray arrayWithObjects:
-        [NSColor whiteColor], // -4
-        [NSColor yellowColor], // -3
-        [NSColor blackColor], // -2
-        [NSColor lightGrayColor], // -1
-        [NSColor redColor], // 0
-        [NSColor greenColor], // 1
-        [NSColor blueColor], // 2
-        [NSColor cyanColor], // 3
-        [NSColor magentaColor], // 4
-        [NSColor orangeColor], // 5
-        [NSColor purpleColor], // 6
-        [NSColor brownColor], // 7
-        [NSColor grayColor], // 8
-        nil]
-    forKeys:
-      [NSArray arrayWithObjects:
-        @"-4", // ? backgroundColor
-        @"-3", // ?
-        @"-2", // ?
-        @"-1", // ?
-        @"0", // lineColor1
-        @"1", // lineColor2
-        @"2", // lineColor3
-        @"3", // lineColor4
-        @"4", // lineColor5
-        @"5", // lineColor6
-        @"6", // lineColor7
-        @"7", // lineColor8
-        @"8", // lineColor9
-        nil]
-      ];
-
-  return [self initWithColorDict:aColorDict rampFrom:[NSColor blueColor] to:[NSColor yellowColor]];
-}
-
 -(void)dealloc {
-    [indexedColormap release];
-    [minColor release];
-    [maxColor release];
-    [super dealloc];
+	[indexedColormap release];
+	[super dealloc];
 }
 
--(NSColor *)colorForFloat:(float)param
-/*" returns a color corresponding to a point on a gradient "*/
+-(void)setColor:(NSColor *)newColor forIndex:(int)index
 {
-  float	r  = [minColor redComponent],
-        g  = [minColor greenComponent],
-        b  = [minColor blueComponent];
-  float	zr = [maxColor redComponent] - r,
-        zg = [maxColor greenComponent] - g,
-        zb = [maxColor blueComponent] - b;
-
-  return [NSColor colorWithCalibratedRed:r+zr*param
-                                   green:g+zg*param
-                                    blue:b+zb*param
-                                   alpha:1.0];
+  // Grow list automagically
+  int i, maxColors = [indexedColormap count];
+  if (index >= 0)
+  {
+    if (index >= maxColors)
+    {
+      // grow colormap to accomodate this color too by inserting clearColor inbetween indices
+      for(i = 0; i < (index - maxColors + 1); i++)
+      {
+        [indexedColormap addObject:[NSColor clearColor]];
+      }
+    }
+    [indexedColormap replaceObjectAtIndex:index withObject:newColor];
+  }
 }
 
 -(NSColor *)colorForIndex:(int)index
     /**"
-    *** Gnuplot uses is a color index to map linestyles to a set of fixed
-    *** colors. The index is taken modulo max_number_of_colors.
-    *** Negative numbers have special meanings (-2 = axes, -1 = grid).
+    *** AquaTerm uses is a color index to map to a set of
+    *** colors. 
+    *** Negative numbers have special meanings (-4 = background, -2 = axes, -1 = grid).
     "**/
 {
-    // magic number? perhaps thi should be made a #define
-    return [indexedColormap objectForKey:[NSString stringWithFormat:@"%d", index % 9]]; 
+  if (index<0)
+  {
+    switch (index)
+    {
+      case -1:
+        return [NSColor lightGrayColor];
+        break;
+      case -2:
+        return [NSColor blackColor];
+        break;
+      case -4:
+        return [NSColor whiteColor];
+        break;
+      default:
+        return [NSColor yellowColor];
+        break;
+    }
+  }
+  else
+  {
+    return [indexedColormap objectAtIndex:index];
+  }
 }
 
 @end

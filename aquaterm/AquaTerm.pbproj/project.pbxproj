@@ -8,6 +8,7 @@
 		080E96DDFE201D6D7F000001 = {
 			children = (
 				F5FEAC1401A6B3CE0143D50D,
+				F5B4A77E0222A7D9014110D6,
 			);
 			isa = PBXGroup;
 			name = Extras;
@@ -247,7 +248,7 @@
 	<key>CFBundleExecutable</key>
 	<string>AquaTerm</string>
 	<key>CFBundleGetInfoString</key>
-	<string>AquaTerm v0.2.0</string>
+	<string>AquaTerm v0.3.0</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -257,11 +258,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>AquaTerm v0.2.0</string>
+	<string>AquaTerm v0.3.0</string>
 	<key>CFBundleSignature</key>
 	<string>AqTS</string>
 	<key>CFBundleVersion</key>
-	<string>0.2.0</string>
+	<string>0.3.0</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu1</string>
 	<key>NSPrincipalClass</key>
@@ -275,7 +276,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5AB087F0175BC8B01EB16F3,
-				F5AB08840175BC8B01EB16F3,
 				F5AB08850175BC8B01EB16F3,
 				F5AB08860175BC8B01EB16F3,
 				F5FEAC1501A6B3CE0143D50D,
@@ -287,6 +287,7 @@
 				F50F0B520205D1AF01AA2E68,
 				F50F0B560205D23401AA2E68,
 				F59F5FCB021011D301A18598,
+				F57A4138022288E5014110D6,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -310,7 +311,6 @@
 			files = (
 				29B9732CFDCFA39411CA2CEA,
 				F5AB08890175BC8B01EB16F3,
-				F5AB088D0175BC8B01EB16F3,
 				F5AB088E0175BC8B01EB16F3,
 				F5AB088F0175BC8B01EB16F3,
 				F55D242901C11B5201A80104,
@@ -321,6 +321,7 @@
 				F50F0B530205D1AF01AA2E68,
 				F50F0B570205D23401AA2E68,
 				F59F5FCC021011D301A18598,
+				F57A4139022288E5014110D6,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -572,6 +573,28 @@
 			settings = {
 			};
 		};
+		F57A4136022288E5014110D6 = {
+			isa = PBXFileReference;
+			path = AQTBuilder.h;
+			refType = 4;
+		};
+		F57A4137022288E5014110D6 = {
+			isa = PBXFileReference;
+			path = AQTBuilder.m;
+			refType = 4;
+		};
+		F57A4138022288E5014110D6 = {
+			fileRef = F57A4136022288E5014110D6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F57A4139022288E5014110D6 = {
+			fileRef = F57A4137022288E5014110D6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F59F5FC9021011D301A18598 = {
 			isa = PBXFileReference;
 			path = AQTImage.h;
@@ -602,16 +625,6 @@
 		F5AB086E0175BC8B01EB16F3 = {
 			isa = PBXFileReference;
 			path = GPTController.m;
-			refType = 4;
-		};
-		F5AB08760175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			path = GPTReceiverObject.h;
-			refType = 4;
-		};
-		F5AB08770175BC8B01EB16F3 = {
-			isa = PBXFileReference;
-			path = GPTReceiverObject.m;
 			refType = 4;
 		};
 		F5AB08780175BC8B01EB16F3 = {
@@ -655,12 +668,6 @@
 			settings = {
 			};
 		};
-		F5AB08840175BC8B01EB16F3 = {
-			fileRef = F5AB08760175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5AB08850175BC8B01EB16F3 = {
 			fileRef = F5AB08780175BC8B01EB16F3;
 			isa = PBXBuildFile;
@@ -681,12 +688,6 @@
 		};
 		F5AB08890175BC8B01EB16F3 = {
 			fileRef = F5AB086E0175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5AB088D0175BC8B01EB16F3 = {
-			fileRef = F5AB08770175BC8B01EB16F3;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -719,12 +720,12 @@
 			children = (
 				F50F0B510205D1AF01AA2E68,
 				F50F0B500205D1AF01AA2E68,
-				F5AB08760175BC8B01EB16F3,
-				F5AB08770175BC8B01EB16F3,
 				F5AB086D0175BC8B01EB16F3,
 				F5AB086E0175BC8B01EB16F3,
 				F5AB087A0175BC8B01EB16F3,
 				F5AB087B0175BC8B01EB16F3,
+				F57A4136022288E5014110D6,
+				F57A4137022288E5014110D6,
 			);
 			isa = PBXGroup;
 			name = Controller;
@@ -757,6 +758,11 @@
 			settings = {
 			};
 		};
+		F5B4A77E0222A7D9014110D6 = {
+			isa = PBXFileReference;
+			path = AQTProtocol.mdoc;
+			refType = 4;
+		};
 		F5C4C2DC0199DF380143D54F = {
 			fileRef = 29B97318FDCFA39411CA2CEA;
 			isa = PBXBuildFile;
@@ -775,7 +781,7 @@
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
-			buildToolPath = "~/source/plotting/aquaterm/makedocs";
+			buildToolPath = "~/Source/scitech/aquaterm/makedocs";
 			dependencies = (
 			);
 			isa = PBXLegacyTarget;
