@@ -22,8 +22,6 @@ static id adapter;                   // Adapter object
 // separately below. For other calling conventions you must write a
 // C wrapper routine to call aqdriv() or aqdriv_().
 //
-// FIXME: what is appropriate on OS X?
-//
 #ifdef PG_PPU
 #define AQDRIV aqdriv_
 #else
@@ -239,7 +237,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 13:
       LOG(@"IFUNC=13, Draw dot"); // FIXME
-      //[adapter dotAtPoint:NSMakePoint(rbuf[0], rbuf[1])];
       [adapter moveToPoint:NSMakePoint(rbuf[0], rbuf[1])];
       [adapter addLineToPoint:NSMakePoint(rbuf[0]+1.0, rbuf[1])];
       break;
@@ -286,11 +283,12 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 17:
     {
+       BOOL isRunning;
        NSArray *eventData;
        NSString *event;
        NSPoint pos;
        char key;
-       LOG(@"IFUNC=17, Read cursor"); // FIXME
+       LOG(@"IFUNC=17, Read cursor"); 
        /*
         Parameters passed to handler:
         RBUF(1): initial x position of cursor.
@@ -305,13 +303,18 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         RBUF(2): y position of cursor.
         CHR(1:1): character typed by user.
         */
-
+       
        [adapter setAcceptingEvents:YES];
        do {
-          [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+          isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
           event = [adapter lastEvent];
-       }
-       while ([event isEqualToString:@"0"]);
+          LOG(@"---> %@", event);
+          if (![event isEqualToString:@"0"])
+          {
+             isRunning = NO;
+          }
+       } while (isRunning);
+       
        [adapter setAcceptingEvents:NO];
        // Dissect the event here...
        eventData = [event componentsSeparatedByString:@":"];
@@ -331,7 +334,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        
        rbuf[0] = pos.x;
        rbuf[1] = pos.y;
-       chr[0] = key; // FIXME: Make this upper case.
+       chr[0] = key; // FIXME: Make this upper case?
     }
     break;
        
@@ -409,9 +412,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 24: // FIXME: this is used for erasing, with color 0.
     {
       LOG(@"IFUNC=24, Rectangle Fill");
-      // First, remove objects _completely_ hidden behind rectangles drawn in background color...
-      LOG(@"Erasing Rect(%f, %f, %f, %f)",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1]);
-      [adapter eraseRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
       [adapter addFilledRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
     }
       break;
@@ -422,62 +422,91 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       LOG(@"25");
       break;
 
-      //--- IFUNC=26, Line of pixels ------------------------------------------
+       //--- IFUNC=26, Line of pixels ------------------------------------------
     case 26:
     {
-      static BOOL processingBitmap = NO;
-      static unsigned char *pixPtr;
-      static unsigned char *dataPtr;
-      static int pixCount;
-      static int maxPixCount;
-      static NSSize bitmapSize;
-      static NSRect imageBounds;
+       static unsigned char *pixPtr;
+       static unsigned char *dataPtr;
+       static int pixCount;
+       static int lineCount;
+       static NSSize bitmapSize;
+       static NSRect imageBounds;
+       static BOOL useTransform = YES;
+       float m11=rbuf[7], m12=rbuf[8], m21=rbuf[9], m22=rbuf[10], tx=rbuf[11], ty=rbuf[12];
+       float detA = m11*m22-m12*m21;
 
-      switch((int)rbuf[0])
-      {
-        case 0:
-          // Set up memory storage and basic parameters
-          processingBitmap = YES;
-          bitmapSize = NSMakeSize((int)rbuf[1], (int)rbuf[2]);
-          imageBounds = NSMakeRect(rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5]);
-          LOG(@"bitmapsize: %@\nimageBounds: %@", NSStringFromSize(bitmapSize), NSStringFromRect(imageBounds));
-          LOG(@"Matrix: %f, %f, %f, %f, %f, %f", rbuf[7], rbuf[8], rbuf[9], rbuf[10], rbuf[11], rbuf[12]); // FIXME
-          [adapter setImageTransformM11:rbuf[7] m12:rbuf[8] m21:rbuf[9] m22:rbuf[10] tX:rbuf[11] tY:rbuf[12]];
-          pixCount = 0;
-          maxPixCount = 3*bitmapSize.width*bitmapSize.height*sizeof(unsigned char);
-          pixPtr = (unsigned char *)malloc(maxPixCount);
-          dataPtr = pixPtr;
-          break;
-        case -1:
-          // End of data indicator
-          LOG(@"End.");
-          [adapter addImageWithBitmap:pixPtr size:bitmapSize bounds:imageBounds];
-          [adapter resetImageTransform];
-          processingBitmap = NO;
-          free(pixPtr);
-          break;
-        default:
-        {
-          // Write 3*n pixels to buffer
-          int i;
-          int n = (int)rbuf[0];
-          // NSLog(@"Pixels... n=%f data=%f, %f, %f, ...", rbuf[0], rbuf[1], rbuf[2], rbuf[3]);
-          for (i = 1; i<=n;i++)
+       switch((int)rbuf[0])
+       {
+          case 0:
+             // Set up memory storage and basic parameters
+             bitmapSize = NSMakeSize((int)rbuf[1], (int)rbuf[2]);
+             imageBounds = NSMakeRect(rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5]);
+             LOG(@"bitmapsize: %@\nimageBounds: %@", NSStringFromSize(bitmapSize), NSStringFromRect(imageBounds));
+             LOG(@"Matrix: %f, %f, %f, %f, %f, %f", m11, m12, m21, m22, tx, ty); 
+             //
+             // Invert the transform...
+             //
+             if (fabs(detA) > 1e-16)
+             {
+                float sc = 1.0/detA;
+                [adapter setImageTransformM11:m22*sc m12:-m12*sc m21:-m21*sc m22:m11*sc tX:(m21*ty-m22*tx)*sc tY:(m12*tx-m11*ty)*sc];
+                useTransform = YES;
+             }
+             else
+             {
+                NSLog(@"Transformation matrix not invertible. Scaling image to bounds.");
+                useTransform = NO;
+             }
+             pixCount = 0;
+             lineCount = bitmapSize.height - 1;
+             pixPtr = (unsigned char *)malloc(3*bitmapSize.width*bitmapSize.height*sizeof(unsigned char));
+             dataPtr = pixPtr + lineCount * (3 * (int)bitmapSize.width);
+             break;
+          case -1:
+             // End of data indicator
+             LOG(@"End.");
+             if (useTransform)
+             {
+                [adapter addTransformedImageWithBitmap:pixPtr size:bitmapSize clipRect:imageBounds];
+             }
+             else
+             {
+                [adapter addImageWithBitmap:pixPtr size:bitmapSize bounds:imageBounds];                
+             }
+             [adapter resetImageTransform];
+             free(pixPtr);
+             break;
+          default:
           {
-            float red, green, blue;
-            [adapter getColormapEntry:(int)rbuf[i] red:&red green:&green blue:&blue];
+             //
+             // Write 3*n pixels to buffer
+             // NB. Images in AQT are stored with upper left pixel first (flipped)
+             //
+             int i;
+             int n = (int)rbuf[0];
+             for (i = 1; i<=n; i++)
+             {
+                float red, green, blue;
+                if(pixCount == (int)bitmapSize.width)
+                {
+                   pixCount = 0;
+                   lineCount--;
+                   dataPtr = pixPtr + lineCount * (3 * (int)bitmapSize.width);
+                }
+                [adapter getColormapEntry:(int)rbuf[i] red:&red green:&green blue:&blue];
 
-            *dataPtr = (unsigned char)(255*red);
-            dataPtr++;
-            *dataPtr = (unsigned char)(255*green);
-            dataPtr++;
-            *dataPtr = (unsigned char)(255*blue);
-            dataPtr++;
+                *dataPtr = (unsigned char)(255*red);
+                dataPtr++;
+                *dataPtr = (unsigned char)(255*green);
+                dataPtr++;
+                *dataPtr = (unsigned char)(255*blue);
+                dataPtr++;
+                pixCount++;
+             }
           }
-        }
-          break;
-      }
-
+             break;
+       }
+       
 
       LOG(@"IFUNC=26, Line of pixels");
     }
