@@ -23,7 +23,7 @@
    _color.blue = 0.0;
    _fontName = @"Times-Roman";
    _fontSize = 14.0;
-   _linewidth = .2;
+   _linewidth = 1.0;
    _transform.m11 = 1.0;
    _transform.m22 = 1.0;
 }
