@@ -98,12 +98,6 @@
 {
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
-#ifdef TIMING
-   static float totalTime = 0.0;
-   float thisTime;
-   NSDate *startTime = [NSDate date];
-#endif
-   NSRect debugRect;
 
    // Model object is responsible for background...
    [self setAQTColor];
@@ -114,16 +108,7 @@
    while ((graphic = [enumerator nextObject]))
    {
       [graphic renderInRect:dirtyRect];
-#ifdef DEBUG_BOUNDS
-      [[NSColor orangeColor] set];
-      NSFrameRect(NSInsetRect([graphic bounds], -1, -1));
-#endif
    }
-#ifdef TIMING
-   thisTime = -[startTime timeIntervalSinceNow];
-   totalTime += thisTime;
-   NSLog(@"Render time: %f for %d objects. Total: %f", thisTime, [modelObjects count], totalTime);
-#endif
 }
 @end
 
