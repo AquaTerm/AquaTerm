@@ -171,6 +171,7 @@
 				F51551CC01FE762E01000102,
 				F54B0FE601FF5CDC014110A7,
 				F5E70370026D8645012F88DF,
+				F55BA2E303589FD301D20925,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -249,9 +250,9 @@
 	<key>CFBundleExecutable</key>
 	<string>AquaTerm</string>
 	<key>CFBundleGetInfoString</key>
-	<string>AquaTerm v0.3.0</string>
+	<string>AquaTerm v0.3.1</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>AquaTerm.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -259,11 +260,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>AquaTerm v0.3.0</string>
+	<string>AquaTerm v0.3.1</string>
 	<key>CFBundleSignature</key>
 	<string>AqTS</string>
 	<key>CFBundleVersion</key>
-	<string>0.3.0</string>
+	<string>0.3.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu1</string>
 	<key>NSPrincipalClass</key>
@@ -302,6 +303,7 @@
 				F54B0FE501FF3656014110A7,
 				F5B46F320209827F01A80104,
 				F5E70372026D8645012F88DF,
+				F55BA2E503589FD301D20925,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -477,6 +479,27 @@
 			name = ExtendSavePanel.nib;
 			path = English.lproj/ExtendSavePanel.nib;
 			refType = 4;
+		};
+		F55BA2E303589FD301D20925 = {
+			children = (
+				F55BA2E403589FD301D20925,
+			);
+			isa = PBXVariantGroup;
+			name = AquaTerm.icns;
+			path = "";
+			refType = 4;
+		};
+		F55BA2E403589FD301D20925 = {
+			isa = PBXFileReference;
+			name = English;
+			path = English.lproj/AquaTerm.icns;
+			refType = 4;
+		};
+		F55BA2E503589FD301D20925 = {
+			fileRef = F55BA2E303589FD301D20925;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F55D241701C0F0F501A80104 = {
 			isa = PBXFileReference;
