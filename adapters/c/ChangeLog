@@ -1,3 +1,19 @@
+2003-12-29 22:53  persquare
+
+	* README: Update.
+
+2003-12-29 16:08  persquare
+
+	* Makefile, demo.c, eventdemo1.c, eventdemo2.c: Updating to AQT1.0.
+
+2003-12-29 16:07  persquare
+
+	* c2aqt.h, c2aqt.m, test.c: AQT1.0 exposes a C API.
+
+2003-02-09 16:08  persquare
+
+	* ChangeLog: Adding ChangeLog
+
 2002-08-04 16:58  persquare
 
 	* test.c: Fixed path to image

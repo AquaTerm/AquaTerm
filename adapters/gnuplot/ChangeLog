@@ -1,3 +1,46 @@
+2003-12-29 23:11  persquare
+
+	* aquaTerm.trm: Update to 1.0.a1.
+
+2003-09-01 14:53  persquare
+
+	* aquaTerm.trm: Activating font selection.
+
+2003-09-01 14:39  persquare
+
+	* aquaTerm.trm: Getting labels to work. Kludgy. Must be fixed.
+
+2003-08-20 17:07  persquare
+
+	* aquaTerm.trm: Line handling in drivers and adapter done. Added
+	pm3d to gnuplot. Moving "smartness" from drivers to builder class.
+
+2003-08-19 23:03  persquare
+
+	* aquaTerm.trm: Synchronizing with changes in adapter.
+
+2003-08-19 11:03  persquare
+
+	* aquaTerm.trm: Fixing scaling bug.
+
+2003-08-19 00:01  persquare
+
+	* aquaTerm.trm: Fixes wrt #import. Applied resolution increase from
+	bugfix branch. Compiles but broken.
+
+2003-08-06 23:46  persquare
+
+	* aquaTerm.trm: Increasing resolution to 1/10 pt (1/720 in).
+
+2003-08-05 16:29  persquare
+
+	* aquaTerm.trm: Now using libaqt and revised AquaTerm. Needs hack
+	in gnuplot to work.
+
+2003-02-09 16:08  persquare
+
+	* ChangeLog: Adding ChangeLog
+
 2002-10-12 23:23  persquare
 
 	* README.txt: Added README

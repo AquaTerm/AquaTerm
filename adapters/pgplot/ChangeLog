@@ -1,3 +1,118 @@
+2003-12-29 23:12  persquare
+
+	* aqdriv.m, README, xlf_gcc_AQT.conf: Update to 1.0.a1.
+
+2003-11-18 23:37  persquare
+
+	* aqdriv.m: Use new addEdgeToPoint: method for building polygons to
+	get rid of malloc'd buffer.
+
+2003-11-11 22:05  persquare
+
+	* aqdriv.m: Fixing leaks. Note to self: create/destroy arpool in
+	_same_ context.
+
+2003-11-06 12:22  persquare
+
+	* aqdriv.m: Cleanup. Changing behaviour wrt endplot, now leaves
+	plot onscreen.
+
+2003-11-06 01:32  persquare
+
+	* aqdriv.m: Adding -waitNextEvent to adapter.
+
+2003-11-03 18:23  persquare
+
+	* aqdriv.m: Fixing polygon memory allocation. Cleaning.
+
+2003-11-03 13:04  persquare
+
+	* aqdriv.m: Fixing transformation matrix inversion and mousing.
+
+2003-10-27 13:46  persquare
+
+	* aqdriv.m: Removing excess logging.
+
+2003-10-25 01:00  persquare
+
+	* aqdriv.m: Updating syntax. Disabling poolrelease since it caused
+	segfault.
+
+2003-10-22 16:13  persquare
+
+	* aqdriv.m: Autoreleasepool cleaning.
+
+2003-10-22 15:47  persquare
+
+	* aqdriv.m: Fixing event handling.
+
+2003-10-21 22:16  persquare
+
+	* aqdriv.m: Basic event handling.
+
+2003-10-21 13:43  persquare
+
+	* aqdriv.m: Updating to reflect changes in adapter
+
+2003-09-03 11:39  persquare
+
+	* aqdriv.m: Modifying image handling, allowing transformation
+	matrix. FIXME: pgplot specific code in AQTView for testing.
+
+2003-08-27 11:16  persquare
+
+	* aqdriv.m: Bugfixes.
+
+2003-08-23 21:44  persquare
+
+	* aqdriv.m: Allow multiple open plots. Temporarily enable excessive
+	logging to highlight some problems in driver.
+
+2003-08-21 13:45  persquare
+
+	* aqdriv.m: Fixing mouse feedback.
+
+2003-08-20 17:07  persquare
+
+	* aqdriv.m: Line handling in drivers and adapter done. Added pm3d
+	to gnuplot. Moving "smartness" from drivers to builder class.
+
+2003-08-19 22:05  persquare
+
+	* aqdriv.m: Adding lineCapStyle control to AQTPath. Adding
+	-addFilledRect:, -addPolylineWithPoints: and renaming a few
+	methods.
+
+2003-08-19 17:02  persquare
+
+	* aqdriv.m: Fixing color handling. Cleaning.
+
+2003-08-19 00:02  persquare
+
+	* g77_gcc_AQT.conf: Shaping up.
+
+2003-08-14 14:23  persquare
+
+	* aqdriv.m: Adding error handling in the adapter. Optional error
+	handler callback function in client. Adapter checks for server
+	compatibility.
+
+2003-08-07 11:16  persquare
+
+	* g77_gcc_AQT.conf: Minor change.
+
+2003-08-01 18:16  persquare
+
+	* g77_gcc_AQT.conf: New config file.
+
+2003-08-01 18:14  persquare
+
+	* aqdriv.m: Now using libaqt and revised AquaTerm.
+
+2003-02-09 16:08  persquare
+
+	* ChangeLog: Adding ChangeLog
+
 2003-02-09 15:20  persquare
 
 	* aqdriv.m: Allow pgplot to set size of wiev

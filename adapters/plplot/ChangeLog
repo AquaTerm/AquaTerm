@@ -1,3 +1,28 @@
+2003-12-29 23:14  persquare
+
+	* aqtplplot.m: Update to 1.0.a1.
+
+2003-12-29 22:59  persquare
+
+	* README: Some info...
+
+2003-10-19 23:25  persquare
+
+	* aqtplplot.m: Enabled zombies.
+
+2003-10-06 16:31  persquare
+
+	* aqtplplot.m: Fixing scaling and text rotation.
+
+2003-09-30 18:01  persquare
+
+	* aqtplplot.m: Initial changes to get plplot working with the new
+	architecture.
+
+2003-02-09 16:08  persquare
+
+	* ChangeLog: Adding ChangeLog
+
 2002-10-21 16:51  persquare
 
 	* aqtplplot.h, aqtplplot.m: Adding plplot adapter
