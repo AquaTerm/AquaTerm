@@ -22,13 +22,18 @@ static id adapter;                          // Adapter object
 #include "plDevs.h"
 #include "ps.h"
 
+/* declarations for functions local to aqt.c */
+
+void proc_str (PLStream *, EscText *);
+static void esc_purge(char *, const char *);
+
 /* Driver entry and dispatch setup */
 
 void plD_dispatch_init_aqt      ( PLDispatchTable *pdt );
 
 void plD_init_aqt               (PLStream *);
 void plD_line_aqt               (PLStream *, short, short, short, short);
-void plD_polyline_aqt   	(PLStream *, short *, short *, PLINT);
+void plD_polyline_aqt   		(PLStream *, short *, short *, PLINT);
 void plD_eop_aqt                (PLStream *);
 void plD_bop_aqt                (PLStream *);
 void plD_tidy_aqt               (PLStream *);
@@ -263,10 +268,10 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
             [adapter takeColorFromColormapEntry:(1-pls->curcmap)*pls->icol0 + pls->curcmap*(pls->icol1+pls->ncol0)];
             colorChange = FALSE;
          };
-         [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0], pls->dev_y[0])];
+         [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0]/SCALE, pls->dev_y[0]/SCALE)];
          for (i = 1; i < pls->dev_npts ; i++)
          {
-            [adapter addEdgeToVertexPoint:NSMakePoint(pls->dev_x[i], pls->dev_y[i])];
+            [adapter addEdgeToVertexPoint:NSMakePoint(pls->dev_x[i]/SCALE, pls->dev_y[i]/SCALE)];
          };
          break;
       case PLESC_DI:                  // handle DI command
