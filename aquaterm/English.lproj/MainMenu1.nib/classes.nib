@@ -1,7 +1,7 @@
 {
     IBClasses = (
         {
-            ACTIONS = {copy = id; help = id; print = id; saveFigureAs = id; }; 
+            ACTIONS = {copy = id; help = id; print = id; saveFigureAs = id; test = id; }; 
             CLASS = AQTController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
