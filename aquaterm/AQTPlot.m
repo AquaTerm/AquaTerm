@@ -203,8 +203,8 @@
 - (void)removeGraphicsInRect:(NSRect)targetRect
 {
    // FIXME: Where does this belong? Here, category or in model proper (not functional in client)
-   // [model removeObjectsInRect:aRect]; // updates bounds automatically.
    NSRect testRect;
+   NSRect clipRect = AQTRectFromSize([model canvasSize]);
    NSRect newBounds = NSZeroRect;
    int i;
    int  objectCount = [model count];
@@ -214,7 +214,8 @@
    if (objectCount == 0 || AQTIntersectsRect(targetRect, [model bounds]) == NO)
       return;
 
-   if (AQTContainsRect(targetRect, [model bounds]))
+   // Apply clipRect (=canvasRect) to graphic bounds before comparing.
+   if (AQTContainsRect(targetRect, NSIntersectionRect([model bounds], clipRect)))
    {
       [model removeAllObjects];
    }
@@ -223,7 +224,7 @@
       for (i = objectCount - 1; i >= 0; i--)
       {
          testRect = [[modelObjects objectAtIndex:i] bounds];
-         if (AQTContainsRect(targetRect, testRect))
+         if (AQTContainsRect(targetRect, NSIntersectionRect(testRect, clipRect)))
          {
             [model removeObjectAtIndex:i];
          }
