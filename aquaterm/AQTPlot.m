@@ -174,11 +174,11 @@ static inline void NOOP_(id x, ...) {;}
 #pragma mark === AQTClientProtocol methods ===
 -(void)setModel:(AQTModel *)newModel
 {
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__); 
+   LOG([newModel description]);
    BOOL viewNeedResize = YES;
-   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
    [newModel retain];
-   if (model)
-   {
+   if (model) {
       // Respect the windowsize set by user
       viewNeedResize = !AQTProportionalSizes([model canvasSize], [newModel canvasSize]);
    }
@@ -186,19 +186,20 @@ static inline void NOOP_(id x, ...) {;}
    model = newModel;		// Make it point to new model
    [model updateBounds];
    
-   if (_isWindowLoaded)
-   {
+   if (_isWindowLoaded) {
       [self _aqtSetupViewShouldResize:viewNeedResize];
       [model invalidate]; // Invalidate all of canvas
    }
-   LOG(@"dirtyRect = %@", NSStringFromRect([model dirtyRect]));
 }
 
 -(void)appendModel:(AQTModel *)newModel
 {
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (!model) {
+      LOG(@"No model, passing to setModel:");
       [self setModel:newModel];
    } else {
+      LOG([newModel description]);
       BOOL viewNeedResize = !AQTProportionalSizes([model canvasSize], [newModel canvasSize]);
       [model appendModel:newModel];
       if (_isWindowLoaded)
@@ -216,18 +217,18 @@ static inline void NOOP_(id x, ...) {;}
    [canvas setNeedsDisplayInRect:[canvas convertRectToViewCoordinates:[model dirtyRect]]];
    [[canvas window] makeKeyAndOrderFront:self];
    [model clearDirtyRect];
-   LOG(@"dirtyRect = %@", NSStringFromRect([model dirtyRect]));   
 }
 
 /* This is a "housekeeping" method, to avoid buildup of hidden objects, does not imply redraw(?) */
 - (void)removeGraphicsInRect:(NSRect)targetRect
 {
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    [model removeGraphicsInRect:targetRect];
-   LOG(@"dirtyRect = %@", NSStringFromRect([model dirtyRect]));
 }
 
 -(void)setAcceptingEvents:(BOOL)flag
 {
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    _acceptingEvents = flag; // && (_client != nil);
    if (_isWindowLoaded)
    {
@@ -240,9 +241,21 @@ static inline void NOOP_(id x, ...) {;}
    NSLog(@"close");
 }
 
+-(void)setClient:(id)client
+{
+   LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   [client retain];
+   if ([client isProxy]) {
+      [client setProtocolForProxy:@protocol(AQTEventProtocol)];
+   }
+   [_client release];
+   _client = client;		
+}
+
+#pragma mark === Local methods ===
+
 -(BOOL)invalidateClient //:(id)aClient
 {
-   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
    [self setAcceptingEvents:NO];
    [self setClient:nil];
    [self setClientInfoName:@"No connection" pid:-1];
@@ -250,17 +263,6 @@ static inline void NOOP_(id x, ...) {;}
    return YES;
 }
 
--(void)setClient:(id)client
-{
-   [client retain];
-   if ([client isProxy])
-   {
-      NSLog(@"Setting prot for client proxy");
-      [client setProtocolForProxy:@protocol(AQTEventProtocol)];
-   }
-   [_client release];
-   _client = client;		
-}
 
 -(void)setClientInfoName:(NSString *)name pid:(int)pid
 {

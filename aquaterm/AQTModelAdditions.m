@@ -22,27 +22,21 @@
 
 -(void)appendModel:(AQTModel *)newModel
 {
-   
-   // FIXME: Check for change in canvasSize, and act on it!
    BOOL backgroundDidChange; // FIXME
    NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    backgroundDidChange = !AQTEqualColors([self color], [newModel color]);
    [self setTitle:[newModel title]];
+   [self setCanvasSize:[newModel canvasSize]];
    [self setColor:[newModel color]];
    [self setBounds:AQTUnionRect([self bounds], [newModel updateBounds])];
    [self addObjectsFromArray:[newModel modelObjects]];
-   NSLog(@"oldBounds = %@", NSStringFromRect([self bounds]));
-   NSLog(@"addedBounds = %@", NSStringFromRect([newModel bounds]));
-   
    dirtyRect = backgroundDidChange?AQTRectFromSize([self canvasSize]):AQTUnionRect(dirtyRect, [newModel bounds]);
-   NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
 }
 
 
 
 - (void)removeGraphicsInRect:(NSRect)targetRect
 {
-    // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
     NSRect testRect;
     NSRect clipRect = AQTRectFromSize([self canvasSize]);
     NSRect newBounds = NSZeroRect;
@@ -74,7 +68,6 @@
        }
     }
     [self setBounds:newBounds];
-    // NSLog(@"Removed %d objs, new bounds: %@", objectCount - [modelObjects count], [self description]);
     dirtyRect = AQTUnionRect(dirtyRect, targetRect);
 }
 
