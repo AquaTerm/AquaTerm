@@ -1,5 +1,5 @@
 //
-//  GPTModel.h
+//  AQTModel.h
 //  AquaTerm
 //
 //  Created by per on Fri Nov 02 2001.
@@ -7,13 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GPTGraphic.h"
+#import "AQTGraphic.h"
 
-@interface GPTModel : GPTGraphic 
+@interface AQTModel : AQTGraphic 
 {
     NSMutableArray	*modelObjects;	/*" An array of GPTGraphic objects (leaf or collection) "*/ 
 }
 -(id)init;
--(void)addObject:(GPTGraphic *)aGPTObject;
+-(void)addObject:(AQTGraphic *)graphic;
+-(void)removeObject:(AQTGraphic *)graphic;
+-(void)removeObjectsInRect:(NSRect)targetRect;
 -(void)renderInRect:(NSRect)boundsRect;
 @end

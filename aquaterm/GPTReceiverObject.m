@@ -1,8 +1,8 @@
 #import "GPTReceiverObject.h"
 #import "GPTController.h"
-#import "GPTPath.h"
-#import "GPTLabel.h"
-#import "GPTModel.h"
+#import "AQTPath.h"
+#import "AQTLabel.h"
+#import "AQTModel.h"
 #import "GPTView.h"
 #import "GPTColorExtras.h"
 
@@ -19,7 +19,7 @@
     if (self = [super init])
     {
         listener = listeningObject;	// set reference to the object listening (GPTController)
-        gptModel = [[GPTModel alloc] init];
+        aqtModel = [[AQTModel alloc] init];
         currentFont = [[NSFont fontWithName:@"Times-Roman" size:16.0] retain];
         currentFigure = 0;
         gptConnection = [[NSConnection defaultConnection] retain];
@@ -35,7 +35,7 @@
 - (void)dealloc
 {
     [gptConnection release];
-    [gptModel release];
+    [aqtModel release];
     [currentFont release];
     [super dealloc];
 }
@@ -60,7 +60,8 @@
     // 
     NSMutableDictionary *tmpDict = [NSMutableDictionary dictionaryWithObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"AQTVersion"];
     [tmpDict setObject:[NSNumber numberWithFloat:AQUA_XMAX] forKey:@"AQTXMax"];                                      
-    [tmpDict setObject:[NSNumber numberWithFloat:AQUA_YMAX] forKey:@"AQTYMax"];                                      
+    [tmpDict setObject:[currentFont fontName] forKey:@"AQTFontName"];                                      
+    [tmpDict setObject:[NSNumber numberWithFloat:[currentFont pointSize]] forKey:@"AQTFontSize"];                                      
     //
     // Get hold of app settings and return them
     //
@@ -71,13 +72,21 @@
     If the model is part of a multiplot the flag is set to NO. "*/
 - (oneway void) renderInViewShouldRelease:(BOOL)release
 {  
-    [listener setModel:gptModel forView:currentFigure];	// the listener (GPTController) will retain this object
+    [listener setModel:aqtModel forView:currentFigure];	// the listener (GPTController) will retain this object
     if (release)
     {
-        [gptModel release];
-        gptModel = [[GPTModel alloc] init];
+        [aqtModel release];
+        aqtModel = [[AQTModel alloc] init];
     }
 }
+
+    /*" Clear part of the rendering area by removing every object completely 
+    inside that area. "*/
+-(oneway void) clearRect:(NSRect)rect
+{
+  [aqtModel removeObjectsInRect:rect];
+}
+
     /*" Add a string (label) to the model currently being built. "*/
 - (oneway void) addString:(bycopy NSString *)text 
                      atPoint:(bycopy NSPoint)point 
@@ -86,29 +95,27 @@
                      withIndexedColor:(bycopy int)colorIndex
 {
     NSDictionary *attrs = [NSDictionary dictionaryWithObject:currentFont forKey:NSFontAttributeName];
-	//
-	// FIXME: The current attributes should be stored locally and [currentAttrs copy] used for last arg. below
-	// 
-    GPTLabel *theLabel=[[GPTLabel alloc] initWithLinestyle:colorIndex 
-                                            origin:point 
-                                            justification:justification 
-                                            angle:angle
-                                            string:text 
-                                            attributes:attrs];
-    
-    [gptModel addObject:theLabel];
+
+    AQTLabel *theLabel=[[AQTLabel alloc] initWithString:text 
+                                             attributes:attrs 
+                                               position:point 
+                                                  angle:angle 
+                                          justification:justification 
+                                             colorIndex:colorIndex];
+    [aqtModel addObject:theLabel];
     [theLabel release];
     
 }
-    /*" Set the font to be used. Not implemented. "*/
+    /*" Set the font to be used. "*/
 - (oneway void) setFontWithName:(bycopy NSString *)newFontName size:(bycopy float)newFontSize
 {   
     //
     // FIXME: Sanity check here, please!
     //
     NSFont *newFont;
-    NSMutableArray *allFonts = [NSMutableArray arrayWithCapacity:0];
-    [allFonts setArray:[[NSFontManager sharedFontManager] availableFonts]];
+    // NSMutableArray *allFonts = [NSMutableArray arrayWithCapacity:0];
+    // [allFonts setArray:[[NSFontManager sharedFontManager] availableFonts]];
+    NSMutableArray *allFonts = [NSMutableArray arrayWithArray:[[NSFontManager sharedFontManager] availableFonts]];
     if ([allFonts containsObject:newFontName])
     {
       newFont = [NSFont fontWithName:newFontName size:newFontSize];    
@@ -124,55 +131,27 @@
     /*" Add a path to the model currently being built "*/
 - (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex
 {
-    GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:colorIndex
-                                      linewidth:1.0			/* FIXME! */ 
-                                      isFilled:NO 
-                                      gray:0 
-                                      path:aPath];	
-
-    [gptModel addObject:thePath];
+    AQTPath *thePath=[[AQTPath alloc] initWithPolyline:aPath colorIndex:colorIndex];	
+    [aqtModel addObject:thePath];
     [thePath release];
 }
 - (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color
 {
-  //
-  // FIXME: The GPTPath methods does not live up to the needs of
-  // 		the methods declared in AQTProtocol.h  
-  //
-  GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:0
-                                      linewidth:1.0			/* FIXME! */ 
-                                      isFilled:NO 
-                                      gray:color 
-                                      path:aPath];	
-
-    [gptModel addObject:thePath];
+    AQTPath *thePath=[[AQTPath alloc] initWithPolyline:aPath color:color];    
+    [aqtModel addObject:thePath];
     [thePath release];
 
 }
 - (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex
 {
-  //
-  // FIXME: The GPTPath methods does not live up to the needs of
-  // 		the methods declared in AQTProtocol.h  
-  //
-    GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:colorIndex
-                                      linewidth:1.0			/* FIXME! */ 
-                                      isFilled:YES 
-                                      gray:0 
-                                      path:aPath];	
-
-    [gptModel addObject:thePath];
+    AQTPath *thePath=[[AQTPath alloc] initWithPolygon:aPath colorIndex:colorIndex];	
+    [aqtModel addObject:thePath];
     [thePath release];
 }
 - (oneway void) addPolygon:(bycopy NSBezierPath *)aPath withColor:(bycopy float)color
 {
-    GPTPath *thePath=[[GPTPath alloc] initWithLinestyle:0
-                                      linewidth:1.0			/* FIXME! */ 
-                                      isFilled:YES 
-                                      gray:color 
-                                      path:aPath];	
-
-    [gptModel addObject:thePath];
+    AQTPath *thePath=[[AQTPath alloc] initWithPolygon:aPath color:color];	
+    [aqtModel addObject:thePath];
     [thePath release];
 }
 
@@ -184,6 +163,5 @@
     // Q: make window key and front? A: NO, just make sure it is shown 
     // 
     // (void)[listener selectWindow:currentFigure];	
-    // NSLog(@"Current figure is %d\n",  currentModel);	// FIXME! The window doesn't show until the plot is rendered.
 }
 @end

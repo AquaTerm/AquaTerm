@@ -1,6 +1,6 @@
 #import "GPTWindowController.h"
 #import "GPTView.h"
-#import "GPTModel.h"
+#import "AQTModel.h"
 
 @implementation GPTWindowController
     /**"
@@ -18,7 +18,7 @@
     self = [super initWithWindowNibName:@"GPTWindow"];
     if (self)
     {
-        model = [[GPTModel alloc] init];
+        model = [[AQTModel alloc] init];
         viewTitle = [[NSString stringWithString:title] retain];
         [[self window] setTitle:viewTitle];
         viewIndex = index;	
@@ -61,7 +61,7 @@
     return viewIndex;
 }
 
--(void)setModel:(GPTModel *)newModel
+-(void)setModel:(AQTModel *)newModel
 {
     [model release];					// let go of old model 
     model = [newModel retain];				// Make it point to new model (FIXME: multiplot requires care! OK)
@@ -69,7 +69,7 @@
     [viewOutlet setNeedsDisplay:YES];			// Tell view to update itself
 }
 
--(GPTModel *)model
+-(AQTModel *)model
 {
     return model;
 }

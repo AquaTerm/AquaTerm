@@ -58,7 +58,7 @@
     *** the current terminal (figure), indexed from zero and upwards.
     *** If a windowController for terminal <n> doesn't exist, it is created. 
     "**/
--(void)setModel:(GPTModel *)gptModel forView:(unsigned)index
+-(void)setModel:(AQTModel *)aqtModel forView:(unsigned)index
 {
     GPTWindowController *theController;
     //
@@ -71,7 +71,7 @@
         [gptWindowControllers addObject:theController];	// The windowController is added to the array, and thus retained
         [theController release];			// By releasing here, every windowController is released when the main nib is deallocated
     }
-    [theController setModel:gptModel];    		// Then hand the model over to the corresponding controller
+    [theController setModel:aqtModel];    		// Then hand the model over to the corresponding controller
     if (![[theController window] isVisible])
     {
         // The window was hidden (due to e.g. a close action)

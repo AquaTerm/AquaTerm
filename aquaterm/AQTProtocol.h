@@ -16,6 +16,7 @@
 // drawing to the same model
 //
 - (oneway void) renderInViewShouldRelease:(BOOL)release;
+-(oneway void) clearRect:(NSRect)rect;
 //
 // Add a string to the current model, where:
 // justification is {LEFT=0, CENTER, RIGHT}

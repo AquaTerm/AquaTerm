@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class GPTReceiverObject, GPTWindowController, GPTView, GPTModel;
+@class GPTReceiverObject, GPTWindowController, GPTView, AQTModel;
 
 @interface GPTController : NSObject 
 {
@@ -21,7 +21,7 @@
 
 -(id)init;
 -(void)awakeFromNib;
--(void)setModel:(GPTModel *)gptModel forView:(unsigned)index;
+-(void)setModel:(AQTModel *)gptModel forView:(unsigned)index;
 -(GPTWindowController *)controllerForView:(unsigned)index;
 -(void)setFrontWindow:(NSWindow *)mainWindow;
 -(IBAction)print:(id)sender; 
