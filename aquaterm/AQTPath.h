@@ -14,14 +14,11 @@
     NSBezierPath *path;	/*" A collection of bezier paths sharing the same (style)properties "*/
     BOOL hasIndexedColor; /*" TRUE => fill and stroke in _fillColor; FALSE => stroke in _strokeColor "*/
     BOOL isFilled;
-    // float mappedColor;	/*" The parametrized fill color [0..1] "*/
 }
 -(id)initWithPath:(NSBezierPath *)aPath filled:(BOOL)filled color:(NSColor *)color colorIndex:(int)cIndex indexedColor:(BOOL)icFlag;
 -(id)initWithPolyline:(NSBezierPath *)aPath colorIndex:(int)cIndex;
 -(id)initWithPolygon:(NSBezierPath *)aPath colorIndex:(int)cIndex;
 -(id)initWithPolyline:(NSBezierPath *)aPath color:(NSColor *)color;
 -(id)initWithPolygon:(NSBezierPath *)aPath color:(NSColor *)color;
-// -(id)initWithPolyline:(NSBezierPath *)aPath color:(float)gray;
-// -(id)initWithPolygon:(NSBezierPath *)aPath color:(float)gray;
 -(void)renderInRect:(NSRect)boundsRect;
 @end

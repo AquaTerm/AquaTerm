@@ -8,17 +8,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class AQTColorMap;
+@class AQTColorMap, AQTModel;
 
 @interface AQTGraphic : NSObject
 {
     NSColor *color;
   /* hasIndexedColor should be part of the subclasses that have an option! */
-//     BOOL hasIndexedColor; /*" TRUE => fill and stroke in _fillColor; FALSE => stroke in _strokeColor "*/
     int colorIndex;	  /*" Could mean color or linestyle (dash) depending on graphic object "*/
+    NSSize canvasSize;
 }
 
 /*" accessor methods "*/
+-(NSSize)canvasSize;
+-(void)setCanvasSize:(NSSize)cs;
 -(NSRect)bounds;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;
@@ -26,11 +28,6 @@
 
 /*" drawing "*/
 -(void)renderInRect:(NSRect)boundsRect;
-
-// - will be removed next time I see it <BS>
-/* this has to go, not compliant with new color handling
--(void)setColorFromIndex:(int)colorIndex;
-*/
 
 /*" color handling "*/
 -(NSColor *)color;

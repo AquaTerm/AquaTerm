@@ -13,13 +13,13 @@
 
 @interface AQTModel : AQTGraphic /*" NSObject "*/ 
 {
-    NSMutableArray	*modelObjects;	/*" An array of GPTGraphic objects (leaf or collection) "*/
+    NSMutableArray	*modelObjects;	/*" An array of AQTGraphic objects (leaf or collection) "*/
     AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors so that the (single) property inspector knows the colormap of each window (model) "*/
     NSString 		*title;			/*" Associate a title with the model. Default is 'Figure n'. "*/
     // ---- Timing for adapter testing -----
   	double			timeTaken;
 }
--(id)init;
+-(id)initWithSize:(NSSize)canvasSize;
 -(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;

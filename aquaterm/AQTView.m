@@ -12,8 +12,6 @@
 
 @implementation AQTView
 
-// Should provide a -initWithFrame:model: 
-
 -(void)dealloc
 {
   [model release];
@@ -23,8 +21,8 @@
 -(void)setModel:(AQTModel *)newModel
 {
   [newModel retain];
-  [model release];		
-  model = newModel;		
+  [model release];
+  model = newModel;
 }
 
 - (AQTModel *)model
@@ -53,12 +51,10 @@
   if (!isPrinting)
   {
     //
-    // Erase by drawing background color and a stylish line around the view
+    // Erase by drawing background color
     //
     [[[model colormap] colorForIndex:-4] set];
     [[NSBezierPath bezierPathWithRect:theBounds] fill];
-    [[NSColor blackColor] set];
-    [[NSBezierPath bezierPathWithRect:theBounds] stroke];
   }
   //
   // Tell the model to draw itself

@@ -116,7 +116,7 @@
 {
   NSWindowController *controller = [[notification object] windowController];
   unsigned index;
-
+  
   if(controller && [controller isKindOfClass:[GPTWindowController class]])
   {
     index = [gptWindowControllers indexOfObjectIdenticalTo:controller];
@@ -183,6 +183,7 @@
 -(IBAction)print:(id)sender
 {
   AQTView *printView;
+  AQTModel *currentModel = [frontView model];
   NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; // [self printInfo];
   NSSize paperSize = [printInfo paperSize];
   NSPrintOperation *printOp;
@@ -196,15 +197,15 @@
   paperSize.height -= ([printInfo topMargin] + [printInfo bottomMargin]);
   if ([printInfo orientation] == NSPortraitOrientation)
   {
-    paperSize.height = (AQUA_YMAX * paperSize.width) / AQUA_XMAX;
+    paperSize.height = ([currentModel canvasSize].height * paperSize.width) / [currentModel canvasSize].width;
   }
   else
   {
-    paperSize.width = (AQUA_XMAX * paperSize.height) / AQUA_YMAX;
+    paperSize.width = ([currentModel canvasSize].width * paperSize.height) / [currentModel canvasSize].height;
   }
 
   printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
-  [printView setModel:[frontView model]];
+  [printView setModel:currentModel];
   [printView setIsPrinting:YES];
 
   printOp = [NSPrintOperation printOperationWithView:printView];
@@ -244,11 +245,12 @@
   NSData *data;
   NSString *filename;
   AQTView *printView;
+  AQTModel *currentModel = [frontView model];
 
   if (NSFileHandlingPanelOKButton == returnCode)
   {
-    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
-    [printView setModel:[frontView model]];
+    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [currentModel canvasSize].width, [currentModel canvasSize].height)];
+    [printView setModel:currentModel];
     [printView setIsPrinting:YES];
     filename = [[theSheet filename] stringByDeletingPathExtension];
     if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
@@ -272,6 +274,7 @@
   //
   NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
   AQTView *printView;
+  AQTModel *currentModel = [frontView model];
   
   if (!frontWindow)
   {
@@ -279,7 +282,7 @@
     return;
   }
 
-  printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
+  printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [currentModel canvasSize].width, [currentModel canvasSize].height)];
   [printView setModel:[frontView model]];
   [printView setIsPrinting:YES];
   [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];

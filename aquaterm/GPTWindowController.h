@@ -10,7 +10,7 @@
 @interface GPTWindowController : NSWindowController
 {
     @private
-    IBOutlet id viewOutlet;	/*" Points to the rendering view "*/
+    IBOutlet AQTView *viewOutlet;	/*" Points to the rendering view "*/
     AQTModel	*tempModel;		/*" Holds the model for the view "*/ 
     int 		viewIndex;	/*" The number by which the client refers to the model "*/ 
 }

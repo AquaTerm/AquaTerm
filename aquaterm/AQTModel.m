@@ -16,13 +16,14 @@
 *** collection itself (not exploited at present).
 "**/
 
--(id)init
+-(id)initWithSize:(NSSize)size
 {
   self = [super init];
   if (self)
   {
     modelObjects = [[NSMutableArray alloc] initWithCapacity:0];
     [self setTitle:@"Untitled"];
+    canvasSize = size;
   }
   return self;
 }
@@ -57,6 +58,7 @@
 "**/
 -(void)addObject:(AQTGraphic *)graphic
 {
+  [graphic setCanvasSize:[self canvasSize]];
   [modelObjects addObject:graphic];
 }
 

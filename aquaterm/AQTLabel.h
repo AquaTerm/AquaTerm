@@ -17,13 +17,11 @@
 
 @interface AQTLabel : AQTGraphic /*" NSObject "*/
 {
-    NSString *string;		/*" The text (label, legend etc.) "*/
-    NSString *fontName;
-    float fontSize;
+    NSAttributedString *string;		/*" The text (label, legend etc.) "*/
     NSPoint position;		/*" The position of the text "*/
     float angle;		
     int justification;		/*" Justification with respect to the position of the text "*/
 }
--(id)initWithString:(NSString *)string attributes:(NSDictionary *)attrs position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify colorIndex:(int)cIndex;
+-(id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify;
 -(void)renderInRect:(NSRect)boundsRect;
 @end

@@ -54,11 +54,11 @@
 
 -(void)renderInRect:(NSRect)boundsRect
 {
-  NSSize docSize = NSMakeSize(842,595); // FIXME!!! Should refer to document size instead
+  // NSSize docSize = [root size]; //NSMakeSize(842,595); // FIXME!!! Should refer to document size instead
   NSAffineTransform *localTransform = [NSAffineTransform transform];
   NSRect scaledBounds = [self bounds];
-  float xScale = boundsRect.size.width/docSize.width;
-  float yScale = boundsRect.size.height/docSize.height;
+  float xScale = boundsRect.size.width/canvasSize.width;
+  float yScale = boundsRect.size.height/canvasSize.height;
   //
   // Get the transform due to view resizing
   //

@@ -29,7 +29,10 @@
  -(void)awakeFromNib
 {
   [viewOutlet setModel:tempModel];
+  [viewOutlet setFrameOrigin:NSMakePoint(0.0, 0.0)];
+  [viewOutlet setNeedsDisplay:YES];
   [[self window] setTitle:[tempModel title]];
+  [[self window] setContentSize:[tempModel canvasSize]];
   [tempModel release];
   tempModel = nil;
 }
@@ -56,8 +59,11 @@
   if ([self isWindowLoaded])
   {
     [viewOutlet setModel:newModel];
-    [[self window] setTitle:[newModel title]];
+    [viewOutlet setFrameOrigin:NSMakePoint(0.0, 0.0)];
     [viewOutlet setNeedsDisplay:YES];    
+    [[self window] setTitle:[newModel title]];
+    [[self window] setContentSize:[newModel canvasSize]];
+    
     if(![[self window] isVisible])
     {
       [self showWindow:self];
@@ -67,7 +73,7 @@
   {
     [newModel retain];
     [tempModel release];		// let go of any temporary model not used (unlikely)
-    tempModel = newModel;		// Make it point to new model (FIXME: multiplot requires care! OK)
+    tempModel = newModel;		// Make it point to new model 
     [self window];				// Load it!
   }
 }

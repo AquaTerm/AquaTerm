@@ -27,7 +27,6 @@
     path = [[NSBezierPath bezierPath] retain];
     [path appendBezierPath:aPath];
     [path setLineWidth:[aPath lineWidth]];
-    // mappedColor = gray;
     colorIndex = cIndex;
     hasIndexedColor = icFlag;
     if (!hasIndexedColor)
@@ -79,10 +78,9 @@
 
 -(void)renderInRect:(NSRect)boundsRect
 {
-    NSSize docSize = NSMakeSize(842,595); // FIXME!!! Should refer to document size instead
     NSAffineTransform *localTransform = [NSAffineTransform transform];
-    float xScale = boundsRect.size.width/docSize.width;
-    float yScale = boundsRect.size.height/docSize.height;
+    float xScale = boundsRect.size.width/canvasSize.width;
+    float yScale = boundsRect.size.height/canvasSize.height;
     //
     // Get the transform due to view resizing
     //
@@ -99,13 +97,7 @@
 {
    if (hasIndexedColor)
    {	// Always brace in if-contructs!
-     // [self setColor:[NSString stringWithFormat:@"%d",colorIndex]];
       [self setColor:[colorMap colorForIndex:colorIndex]];
-   }
-   else
-   {
-     // Do nothing, this corresponds to fixed RGB as of AQTProtocol v0.3.0
-     //  [self setColor:[colorMap colorForFloat:mappedColor]];
    }
 }
 

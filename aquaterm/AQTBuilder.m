@@ -29,7 +29,7 @@ static inline void NOOP_(id x, ...) {;}
 {
   if(self = [super init])
   {
-	font = [[NSFont fontWithName:@"Times-Roman" size:16.0] retain];
+    font = [[NSFont fontWithName:@"Times-Roman" size:16.0] retain];
     colormap = [[AQTColorMap alloc] init];	// Request the default colormap
     model = nil;	// Model _should_ be nil
   }
@@ -66,14 +66,18 @@ static inline void NOOP_(id x, ...) {;}
 //
 // ---- State-changing methods ----
 //
-- (oneway void)openModel:(int)newModel
+- (oneway void)openModel:(int)refNumber
+{
+  [self openModel:refNumber size:NSMakeSize(AQT_XMAX, AQT_YMAX)];
+}
+- (oneway void)openModel:(int)newModel size:(NSSize)canvasSize
 {
   if (model)
   {
     LOG(@"Calling openModel: without closing previous model");
     [self closeModel];
   }
-  model = [[AQTModel alloc] init];
+  model = [[AQTModel alloc] initWithSize:canvasSize];
   modelNumber = newModel;
   [self setTitle:[NSString stringWithFormat:@"Figure %d", modelNumber]];
   //
@@ -102,7 +106,7 @@ static inline void NOOP_(id x, ...) {;}
     // Hand over model to renderer and release it
     [model updateColors:colormap];
     LOG(@"builder/closeModel setmodel:forView:%d",index);
-    
+
     [renderer setModel:model forView:modelNumber];	// the renderer will retain this object
     [model release];
     model = nil;
@@ -119,8 +123,18 @@ static inline void NOOP_(id x, ...) {;}
   //
   NSMutableDictionary *tmpDict = [NSMutableDictionary dictionaryWithCapacity:0];
   [tmpDict setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"AQTVersion"];
-  [tmpDict setObject:[NSNumber numberWithFloat:AQUA_XMAX] forKey:@"AQTXMax"];
-  [tmpDict setObject:[NSNumber numberWithFloat:AQUA_YMAX] forKey:@"AQTYMax"];
+  if (model)
+  {
+    // If there is an open model, user may have changed canvas size
+    [tmpDict setObject:[NSNumber numberWithFloat:[model canvasSize].width] forKey:@"AQTXMax"];
+    [tmpDict setObject:[NSNumber numberWithFloat:[model canvasSize].height] forKey:@"AQTYMax"];
+  }
+  else
+  {
+    // otherwise return default values
+    [tmpDict setObject:[NSNumber numberWithFloat:AQT_XMAX] forKey:@"AQTXMax"];
+    [tmpDict setObject:[NSNumber numberWithFloat:AQT_YMAX] forKey:@"AQTYMax"];
+  }
   [tmpDict setObject:[NSNumber numberWithFloat: 0.6] forKey:@"AQTFontWHRatio"];
   [tmpDict setObject:[NSNumber numberWithFloat: 1.0] forKey:@"AQTPixelWHRatio"];
   [tmpDict setObject:@"Times-Roman" forKey:@"AQTDefaultFontName"];
@@ -138,7 +152,7 @@ static inline void NOOP_(id x, ...) {;}
 - (oneway void)setFontWithName:(bycopy NSString *)newFontName size:(bycopy float)newFontSize
 {
   NSFont *newFont;
-  
+
   if ([[[NSFontManager sharedFontManager] availableFonts] containsObject:newFontName])
   {
     newFont = [NSFont fontWithName:newFontName size:newFontSize];
@@ -169,20 +183,47 @@ static inline void NOOP_(id x, ...) {;}
                   atAngle:(bycopy float)angle
          withIndexedColor:(bycopy int)colorIndex
 {
-  NSDictionary *attrs = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+  // NSDictionary *attrs = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+  NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
+      font, NSFontAttributeName,
+      [colormap colorForIndex:colorIndex], NSForegroundColorAttributeName,
+      nil];
 
-  AQTLabel *theLabel=[[AQTLabel alloc] initWithString:text
-                                           attributes:attrs
-                                             position:point
-                                                angle:angle
-                                        justification:justification
-                                           colorIndex:colorIndex];
+  NSAttributedString *attrStr = [[NSAttributedString alloc] initWithString:text
+                                                                attributes:attrs];
+  /*
+   AQTLabel *theLabel=[[AQTLabel alloc] initWithString:text
+                                            attributes:attrs
+                                              position:point
+                                                 angle:angle
+                                         justification:justification
+                                            colorIndex:colorIndex];
+   [model addObject:theLabel];
+   [theLabel release];
+   */
+  [self addAttributedString:attrStr
+                    atPoint:point
+          withJustification:justification
+                    atAngle:angle];
+  [text release];
+
+}
+
+- (oneway void) addAttributedString:(bycopy NSAttributedString *)text
+                            atPoint:(bycopy NSPoint)point
+                  withJustification:(bycopy int)justification
+                            atAngle:(bycopy float)angle
+{
+  AQTLabel *theLabel=[[AQTLabel alloc] initWithAttributedString:text
+                                                       position:point
+                                                          angle:angle
+                                                  justification:justification];
   [model addObject:theLabel];
   [theLabel release];
 
 }
 
-// Add a path to the model currently being built 
+// Add a path to the model currently being built
 - (oneway void) addPolyline:(bycopy NSBezierPath *)aPath withIndexedColor:(bycopy int)colorIndex
 {
   AQTPath *thePath=[[AQTPath alloc] initWithPolyline:aPath colorIndex:colorIndex];
@@ -254,17 +295,17 @@ static inline void NOOP_(id x, ...) {;}
   [tempImage release];
 }
 
-// Render the model _without_ closing it 
+// Render the model _without_ closing it
 - (oneway void)render
 {
   [model updateColors:colormap];	// Get all objects to set its own color before display
-    LOG(@"builder/render calling setmodel:forView:%d",index);
+  LOG(@"builder/render calling setmodel:forView:%d",index);
 
   [renderer setModel:model forView:modelNumber];	// the renderer will retain this object
 }
 
 
-// Clear part of the grap by removing every object _completely_ inside rect 
+// Clear part of the grap by removing every object _completely_ inside rect
 -(oneway void) clearRect:(NSRect)rect
 {
   [model removeObjectsInRect:rect];
@@ -272,7 +313,7 @@ static inline void NOOP_(id x, ...) {;}
 
 //
 //	---- Deprecated methods, will disappear as of AQTProtocol 0.4.0 ----
-// 
+//
 
 - (oneway void) selectModel:(int)currentModel
 {

@@ -7,10 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <AQTProtocol.h>
+#import <AQTBaseMethods.h>
+#import <AQTExtendedMethods.h>
+
+#define AQT_XMAX (11.69*72.0)    /* paper width times screen resolution. 11.69*72 = 841.68 */
+#define AQT_YMAX (8.26*72.0)	/* paper height times screen resolution. 8.26*72 = 594.72 */
+
 
 @class GPTController, AQTModel, AQTColorMap;
-@interface AQTBuilder : NSObject <AQTProtocol>
+@interface AQTBuilder : NSObject <AQTBaseMethods, AQTExtendedMethods>
 {
   AQTModel 		*model;			/*" Graph being built "*/
   AQTColorMap	*colormap;		/*" Current Colormap, defaults to FIXME! "*/

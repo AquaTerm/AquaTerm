@@ -7,6 +7,7 @@
 //
 
 #import "AQTLabel.h"
+#import "AQTModel.h"
 #import "math.h"
 
 #define max(a, b) a>b?a:b 
@@ -18,17 +19,14 @@
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
 
--(id)initWithString:(NSString *)aString attributes:(NSDictionary *)attrs position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify colorIndex:(int)cIndex 
+-(id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle justification:(int)justify  
 {
   if (self=[super init])
   {
-    string = [[NSString alloc] initWithString:aString];
-    fontName = [[NSString alloc] initWithString:[[attrs objectForKey:NSFontAttributeName] fontName]];
-    fontSize =  [[attrs objectForKey:NSFontAttributeName] pointSize];
+    string = [[NSAttributedString alloc] initWithAttributedString:aString];
     position=aPoint;
     angle = textAngle;
     justification = justify;
-    colorIndex=cIndex; 
   }
   return self; 
 }
@@ -36,24 +34,21 @@
 -(void)dealloc
 {
   [string release];
-  [fontName release];
   [super dealloc];
 }
 
 -(NSRect)bounds
 {
   NSAffineTransform *tempTrans = [NSAffineTransform transform];
-  NSDictionary *tempAttrs = [NSDictionary dictionaryWithObject:[NSFont fontWithName:fontName 																						  size:fontSize] 
-                                                        forKey:NSFontAttributeName];
   NSRect tempBounds;
   NSPoint tempJust;
 
   [tempTrans rotateByDegrees:angle];
-      
-  tempBounds.size = [string sizeWithAttributes:tempAttrs];
+
+  tempBounds.size = [string size];
   tempJust = [tempTrans  transformPoint:NSMakePoint(-justification*tempBounds.size.width/2, -tempBounds.size.height/2)];
-  tempBounds.size = [tempTrans transformSize:[string sizeWithAttributes:tempAttrs]];
-  
+  tempBounds.size = [tempTrans transformSize:[string size]];
+
   tempBounds.origin.x = position.x+tempJust.x;
   tempBounds.origin.y = position.y+tempJust.y;
   return tempBounds;
@@ -66,20 +61,13 @@
 -(void)renderInRect:(NSRect)boundsRect
 {
   NSAffineTransform *transf = [NSAffineTransform transform];
-  NSMutableDictionary *scaledAttrs = [NSMutableDictionary dictionaryWithCapacity:2];
-  NSSize docSize = NSMakeSize(842,595); 	// FIXME!!! Magic numbers representing an iso_a4 at 72dpi (max size)
   NSSize boundingBox;
-  float xScale = boundsRect.size.width/docSize.width;				// get scale changes wrt max size
-  float yScale = boundsRect.size.height/docSize.height;
-  float fontScale = sqrt(0.5*(xScale*xScale + yScale*yScale));	// Scale font size sensibly;
-  // 
-  // Set the attributes for the scaled string (restrict font size to [9pt - fontSize])
-  // and get the bounding box for the string
-  // FIXME!: another magic number (9) for min. font size
-  //
-  [scaledAttrs setObject:[NSFont fontWithName:fontName size:max((fontSize * fontScale), 9.0)] forKey:NSFontAttributeName];
-  [scaledAttrs setObject:color forKey:NSForegroundColorAttributeName]; 
-  boundingBox = [string sizeWithAttributes:scaledAttrs];
+  
+  float xScale = boundsRect.size.width/canvasSize.width;				// get scale changes wrt max size
+  float yScale = boundsRect.size.height/canvasSize.height;
+
+  boundingBox = [string size];
+
   //
   // Position local coordinate system and apply justification
   //
@@ -90,7 +78,7 @@
   //
   // Draw (finally!)
   //
-  [string drawAtPoint:NSMakePoint(0,0) withAttributes:scaledAttrs];
+  [string drawAtPoint:NSMakePoint(0,0)];
   // 
   // Restore orientation
   // 
