@@ -11,7 +11,7 @@ void _f2aqtConvertString(char *dst, int dstLen, const char *src, int srcLen)
    int n = (srcLen > dstLen-1)?dstLen-1:srcLen;
    (void)strncpy(dst, src, n);
    dst[n] = '\0';
-   printf("Converted: %s, (%d)\n", dst, strlen(dst));
+   // printf("Converted: %s, (%d)\n", dst, strlen(dst));
 }
 /*" Class initialization etc."*/
 int aqtInit_(void) // FIXME: retval?
