@@ -76,15 +76,19 @@
    _isWindowLoaded = YES;
 }
 
+#ifdef MEM_DEBUG
 - (void)release
 {
    NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
    [super release];
 }
+#endif
 
 -(void)dealloc
 {
+#ifdef MEM_DEBUG
    NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+#endif
    [model release];
    [_clientName release];
    [super dealloc];
@@ -240,11 +244,10 @@
 
 -(BOOL)invalidateClient:(id)aClient
 {
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
-
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
    if (_client == aClient)
    {
-      NSLog(@"invalidating %d", _client);
+      // NSLog(@"invalidating %d", _client);
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];

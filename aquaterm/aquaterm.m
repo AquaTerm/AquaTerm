@@ -19,7 +19,7 @@ static BOOL _mayCleanPool = YES;
 void _aqtCleanPool(void)
 {
    // wait in NSConnectionReplyMode ?
-   NSLog(@"#arpool=%d", [NSAutoreleasePool autoreleasedObjectCount]);
+   // NSLog(@"#arpool=%d", [NSAutoreleasePool autoreleasedObjectCount]);
    if (_mayCleanPool)
    {
       [_pool release];
@@ -27,7 +27,7 @@ void _aqtCleanPool(void)
    }
    else
    {
-      NSLog(@"Cleaning disabled");
+      // NSLog(@"Cleaning disabled");
    }
 }
 
@@ -70,7 +70,7 @@ void aqtSetErrorHandler(void (*func)(const char *msg))
 
 void _aqtEventTranslator(int index, NSString *event)
 {
-   NSLog(@"_aqtEventTranslator --- %@ from %d", event, index);
+   // NSLog(@"_aqtEventTranslator --- %@ from %d", event, index);
    _mayCleanPool = NO;
    _aqtEventHandlerPtr(index, [event UTF8String]);
    _mayCleanPool = YES;

@@ -89,7 +89,9 @@
 
 - (void)dealloc
 {
+#ifdef MEM_DEBUG
    NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+#endif
    [_model release];
    [_colormap release];
    [super dealloc];

@@ -119,7 +119,7 @@ _{43:%{x,y}:%key Error } "*/
 
 - (void)connectionDidDie:(id)x
 {
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    // Make sure we can't access any invalid objects:
    _selectedBuilder = nil;
 }
@@ -398,7 +398,6 @@ Default is RoundLineCapStyle. "*/
 - (void)eraseRect:(NSRect)aRect
 {
    // FIXME: Possibly keep a list of rects to be erased and pass them before any append command??
-   //NSLog(@"implement --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    [_clientManager clearPlotRect:aRect];
 }
 

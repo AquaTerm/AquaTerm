@@ -23,7 +23,7 @@
 - (void)clearErrorState
 {
    BOOL serverDidDie = NO;
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    NS_DURING
       [_server ping];
    NS_HANDLER
@@ -67,8 +67,8 @@
       {
          _logLimit = (int)strtol(envPtr, (char **)NULL, 10);
       }
-      NSLog(@"LogLimit = %d", _logLimit);
-      [self logMessage:[NSString stringWithFormat:@"Warning: Logging at level %d", _logLimit] logLevel:3];
+      // NSLog(@"LogLimit = %d", _logLimit);
+      [self logMessage:[NSString stringWithFormat:@"Warning: Logging at level %d", _logLimit] logLevel:1];
    }
    return self;
 }
@@ -175,7 +175,7 @@
    NSEnumerator *enumObjects = [[_plotControllers allKeys] objectEnumerator];
    id key;
 
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
 
    while (key = [enumObjects nextObject])
    {
@@ -215,7 +215,7 @@
 
 - (NSNumber *)keyForPlotController:(AQTPlotController *)pc
 {
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (pc != nil)
    {
       NSArray *keys = [_plotControllers allKeysForObject:pc];
@@ -233,7 +233,7 @@
    NSNumber *key;
    AQTPlotController *pc;
    id newHandler;
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 
    if (errorState == YES)
    {
@@ -256,7 +256,7 @@
       else
          [localException raise];
 */
-      NSLog([localException name]);
+      //NSLog([localException name]);
       NS_ENDHANDLER
    if (newHandler)
    {
@@ -277,7 +277,7 @@
 {
    NSNumber *key;
    AQTPlotBuilder *aBuilder;
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 
    if (errorState == YES) return nil; // FIXME: Clear error state here too???
 
@@ -294,7 +294,7 @@
 - (void)renderPlot // FIXME: check _activePlotKey
 {
    AQTPlotBuilder *pb;
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 
    if (errorState == YES || _activePlotKey == nil) return;
 
@@ -313,7 +313,7 @@
 
 - (void)clearPlot  // FIXME: check _activePlotKey
 {
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (errorState == YES || _activePlotKey == nil) return;
 
    [[_builders objectForKey:_activePlotKey] clearAll];
@@ -325,7 +325,7 @@
 {
    AQTPlotBuilder *pb;
    AQTPlotController *pc;
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 
    if (errorState == YES || _activePlotKey == nil) return;
 
@@ -347,10 +347,10 @@
 
 - (void)closePlot
 {
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (_activePlotKey == nil)
    {
-      NSLog(@"_activePlotKey == nil, discards...");
+      // NSLog(@"_activePlotKey == nil, discards...");
       return;
    }
    NS_DURING
@@ -368,7 +368,7 @@
 
 - (void)setAcceptingEvents:(BOOL)flag  // FIXME: check _activePlotKey
 {
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (errorState == YES || _activePlotKey == nil) return;
    [[_plotControllers objectForKey:_activePlotKey] setAcceptingEvents:flag];
 }
@@ -377,7 +377,7 @@
 {
    // FIXME: Check for nil-key, possibly embedd -keyForPlotController: code here.
    NSNumber *key = [self keyForPlotController:(AQTPlotController *)sender];
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 
    if (_activePlotKey == nil) return;
 
@@ -391,7 +391,7 @@
 - (NSString *)lastEvent  // FIXME: check _activePlotKey
 {
    NSString *event;
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 
    if (errorState == YES) return @"42:Server error";
    if (_activePlotKey == nil) return @"43:No plot selected";
