@@ -55,6 +55,24 @@
         [server retain];
         [statusOutlet setStringValue:@"Connected to AquaTerm!"];
         //
+        // Get the server/protocol version
+        //
+        if([server respondsToSelector:@selector(getAquaTermInfo)])
+        {
+          NSLog(@"Dictionary: \n%@", [server getAquaTermInfo]);
+        } 
+        else
+        {
+          NSLog(@"Warning --- AQTProtocol v0.1.0, you should update AquaTerm");
+        }
+        //
+        // Make sure we get notified when things happen to the server
+        //
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                              selector:@selector(serverDidCloseConnection:)
+                                              name:NSConnectionDidDieNotification
+                                              object:[server connectionForProxy]];
+        //
         // Set the protocol for the conversation
         //
         [server setProtocolForProxy:@protocol(AQTProtocol)];
@@ -71,6 +89,8 @@
       [statusOutlet setStringValue:@"Already connected to AquaTerm!"];
     }
 }
+
+
 
 - (IBAction)addPathAction:(id)sender
 {
@@ -96,10 +116,15 @@
     [server renderInViewShouldRelease:NO];
 }
 
+- (IBAction)setFontAction:(id)sender
+{
+    NSString *fontNameString = [NSString stringWithString:[fontFieldOutlet stringValue]];
+    [server setFontWithName:fontNameString size:18.0];
+}
+
 - (IBAction)addTextAction:(id)sender
 {
   NSPoint aPoint= NSMakePoint(AQUA_XMAX*randomNumber(), AQUA_YMAX*randomNumber());
-
   [server addString:@"Hello world!" 
           atPoint:aPoint 
           withJustification:justifyLeft 
@@ -112,6 +137,18 @@
 {
   [server renderInViewShouldRelease:YES];
 }
+
+- (void)serverDidCloseConnection:(NSNotification *)notification
+{
+    NSLog(@"Notification: -serverDidCloseConnection");
+    [statusOutlet setStringValue:@"Not connected to AquaTerm"];
+    server = nil;
+}
+- (void)gotNotification:(NSNotification *)notification
+{
+    NSLog(@"Notification name = %@", [notification name]);
+}
+
 
 float randomNumber(void)
 {

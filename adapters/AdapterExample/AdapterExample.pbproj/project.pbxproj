@@ -15,7 +15,6 @@
 			children = (
 				F54BF39E01A1D1A101000112,
 				F54BF39F01A1D1A101000112,
-				F54BF3A501A1D59D01000112,
 				F5FEAC0E01A6B1730143D50D,
 			);
 			isa = PBXGroup;
@@ -367,11 +366,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		F54BF3A501A1D59D01000112 = {
-			isa = PBXFileReference;
-			path = gptProtocol.h;
-			refType = 4;
 		};
 		F5FEAC0E01A6B1730143D50D = {
 			isa = PBXFileReference;
