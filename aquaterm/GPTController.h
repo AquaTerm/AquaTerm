@@ -3,7 +3,7 @@
 //  AGPT3
 //
 //  Created by per on Sat Oct 06 2001.
-//  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2001, 2002 Aquaterm. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -12,11 +12,11 @@
 
 @interface GPTController : NSObject 
 {
-	GPTReceiverObject 	*receiverObject;		/*" DO connection handler  "*/
-	NSMutableArray 		*gptWindowControllers;	/*" Array of windowcontrollers "*/
-	NSWindow			*frontWindow;			/*" The main (frontmost) window of the app "*/
-	NSPopUpButton 		*saveFormatPopup;
-    NSBox				*extendSavePanelView;
+    GPTReceiverObject 	*receiverObject;	/*" DO connection handler  "*/
+    NSMutableArray 	*gptWindowControllers;	/*" Array of windowcontrollers "*/
+    NSWindow		*frontWindow;		/*" The main (frontmost) window of the app "*/
+    NSPopUpButton 	*saveFormatPopup;
+    NSBox		*extendSavePanelView;	
     AQTColorInspector 	*inspector;
 }
 

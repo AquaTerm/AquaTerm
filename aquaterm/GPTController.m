@@ -154,6 +154,11 @@
 - (IBAction)saveFigureAs:(id)sender
 {
   NSSavePanel *savePanel = [NSSavePanel savePanel];
+  // trying to avert situation where saveas command with no window locks up AQT
+  if (!frontWindow) {
+    NSLog(@"Save as... selected without a window");
+    return;
+  }
   if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])  
   {
 	NSLog(@"Failed to load ExtendSavePanel.nib");
