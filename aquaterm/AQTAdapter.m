@@ -17,7 +17,7 @@
 #import "AQTPlotBuilder.h"
 #import "AQTConnectionProtocol.h"
 
-static AQTColor colormap[AQT_COLORMAP_SIZE];
+static AQTColor colormap[AQT_COLORMAP_SIZE];  // FIXME: proper handling
 
 @implementation AQTAdapter
 /*" AQTAdapter is a class that provides an interface to the functionality of AquaTerm.
@@ -267,17 +267,17 @@ Default is RoundLineCapStyle. "*/
   [_selectedBuilder setLineCapStyle:capStyle];
 }
 
-/*" Add text at coordinate given by pos, rotated by angle degrees and justified (along the rotated baseline) according to just.
-_{just Description}
-_{0 LeftJustified}
+/*" Add text at coordinate given by pos, rotated by angle degrees and aligned (with respect to pos, along the rotated baseline) according to align.
+_{align Description}
+_{0 LeftAligned}
 _{1 Centered}
-_{2 RightJustified}
+_{2 RightAligned}
 The text can be either an NSString or an NSAttributedString. By using NSAttributedString a subset of the attributes defined in AppKit may be used to format the string beyond the fontface ans size. The currently supported attributes are
 _{Attribute value}
 _{@"NSSuperScript" raise-level}
 _{@"NSUnderline" 0or1}
 "*/
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle align:(int)just
 {
   [_selectedBuilder addLabel:text position:pos angle:angle justification:just];
 }

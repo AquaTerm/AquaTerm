@@ -19,7 +19,14 @@ enum {
   AQTSquareLineCapStyle = 2
 };
 
-//@protocol AQTConnectionProtocol;
+enum {
+   AQTAlignLeft = 0,
+   AQTAlignCenter = 1,
+   AQTAlignRight = 2
+};
+
+
+@protocol AQTConnectionProtocol;
 @class AQTPlotBuilder;
 @interface AQTAdapter : NSObject
 {
@@ -71,24 +78,24 @@ enum {
 - (void)setFontname:(NSString *)newFontname;
 - (float)fontsize;
 - (void)setFontsize:(float)newFontsize;
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle justification:(int)just;
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle align:(int)just;
 
   /*" Line handling "*/
 - (float)linewidth;
 - (void)setLinewidth:(float)newLinewidth;
 - (void)setLineCapStyle:(int)capStyle;
-- (void)moveToPoint:(NSPoint)point;  // AQTPath
-- (void)addLineToPoint:(NSPoint)point;  // AQTPath
+- (void)moveToPoint:(NSPoint)point;  
+- (void)addLineToPoint:(NSPoint)point; 
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
 
   /*" Rect and polygon handling"*/
-- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; // AQTPatch
+- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; 
 - (void)addFilledRect:(NSRect)aRect;
 - (void)eraseRect:(NSRect)aRect;
 
   /*" Image handling "*/
 - (void)setImageTransformM11:(float)m11 m12:(float)m12 m21:(float)m21 m22:(float)m22 tX:(float)tX tY:(float)tY;
 - (void)resetImageTransform;
-- (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage
-- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds; // AQTImage
+- (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; 
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds; 
 @end
