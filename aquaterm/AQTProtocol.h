@@ -8,6 +8,7 @@
 //
 // Return a version number string for AquaTerm in the form #.#.#
 // corresponding to major_version.minor_version.bugfix_version
+// as well as user settings such as default font etc.
 //
 - (bycopy NSDictionary *) getAquaTermInfo;
 //
@@ -16,6 +17,9 @@
 // drawing to the same model
 //
 - (oneway void) renderInViewShouldRelease:(BOOL)release;
+//
+// remove all objects found _completely_ contained in rect
+//
 -(oneway void) clearRect:(NSRect)rect;
 //
 // Add a string to the current model, where:

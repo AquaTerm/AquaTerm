@@ -60,8 +60,13 @@
     // 
     NSMutableDictionary *tmpDict = [NSMutableDictionary dictionaryWithObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"AQTVersion"];
     [tmpDict setObject:[NSNumber numberWithFloat:AQUA_XMAX] forKey:@"AQTXMax"];                                      
+    [tmpDict setObject:[NSNumber numberWithFloat:AQUA_YMAX] forKey:@"AQTYMax"];                                      
+    [tmpDict setObject:[NSNumber numberWithFloat:8.0] forKey:@"AQTVTic"];                                      
+    [tmpDict setObject:[NSNumber numberWithFloat:8.0] forKey:@"AQTHTic"];                                      
     [tmpDict setObject:[currentFont fontName] forKey:@"AQTFontName"];                                      
     [tmpDict setObject:[NSNumber numberWithFloat:[currentFont pointSize]] forKey:@"AQTFontSize"];                                      
+    [tmpDict setObject:@"Times-Roman" forKey:@"AQTDefaultFontName"];                                      
+    [tmpDict setObject:[NSNumber numberWithFloat:16.0] forKey:@"AQTDefaultFontSize"];                                      
     //
     // Get hold of app settings and return them
     //
@@ -117,6 +122,7 @@
     // [allFonts setArray:[[NSFontManager sharedFontManager] availableFonts]];
     NSMutableArray *allFonts = [NSMutableArray arrayWithArray:[[NSFontManager sharedFontManager] availableFonts]];
     if ([allFonts containsObject:newFontName])
+    // if ([[[NSFontManager sharedFontManager] availableFonts] containsObject:newFontName])
     {
       newFont = [NSFont fontWithName:newFontName size:newFontSize];    
     }
@@ -124,6 +130,7 @@
     {
       newFont = [NSFont systemFontOfSize:newFontSize];
     }
+    [newFont retain];
     [currentFont release];
     currentFont = newFont;
 }

@@ -19,31 +19,35 @@
 			F5653B8901C4E81801A80104,
 			F5653B8A01C4E89A01A80104,
 			F5653B8B01C4E9B601A80104,
+			F5077D3201C5776F0143D55F,
+			F5077D3301C578800143D55F,
+			F5D0888801C820C90143D55F,
+			F5D0888901C820C90143D55F,
+			F5D0888A01C823580143D55F,
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
-				ContentSize = "{1024, 641}";
+				ContentSize = "{1241, 930}";
 				LeftSlideOut = {
 					ActiveTab = 0;
-					Frame = "{{0, 23}, {1024, 618}}";
+					Frame = "{{0, 23}, {1241, 907}}";
 					Split0 = {
-						ActiveTab = 1;
-						Frame = "{{252, 0}, {772, 618}}";
+						Frame = "{{252, 0}, {989, 907}}";
 						Split0 = {
-							Frame = "{{0, 233}, {772, 385}}";
+							Frame = "{{0, 25}, {989, 882}}";
 						};
 						SplitCount = 1;
 						Tab0 = {
 							Debugger = {
 								ActiveTab = 1;
-								Frame = "{{0, 0}, {772, 280}}";
+								Frame = "{{0, 0}, {989, 280}}";
 								Split0 = {
-									Frame = "{{0, 88}, {772, 192}}";
+									Frame = "{{0, 114}, {989, 166}}";
 									Split0 = {
-										Frame = "{{0, 0}, {373, 192}}";
+										Frame = "{{0, 0}, {478, 166}}";
 									};
 									Split1 = {
-										Frame = "{{382, 0}, {390, 192}}";
+										Frame = "{{487, 0}, {502, 166}}";
 									};
 									SplitCount = 2;
 								};
@@ -52,24 +56,24 @@
 									Frame = "{{0, 0}, {957, 50}}";
 								};
 								Tab1 = {
-									Frame = "{{0, 0}, {772, 63}}";
+									Frame = "{{0, 0}, {989, 89}}";
 								};
 								TabCount = 2;
 							};
-							Frame = "{{0, 0}, {772, 280}}";
+							Frame = "{{0, 0}, {989, 280}}";
 							LauncherConfigVersion = 4;
 						};
 						Tab1 = {
-							Frame = "{{0, 0}, {772, 208}}";
+							Frame = "{{0, 0}, {989, 208}}";
 							LauncherConfigVersion = 3;
 							Runner = {
-								Frame = "{{0, 0}, {772, 208}}";
+								Frame = "{{0, 0}, {989, 208}}";
 							};
 						};
 						Tab2 = {
-							BuildMessageFrame = "{{0, 0}, {774, 217}}";
-							BuildTranscriptFrame = "{{0, 226}, {774, 1}}";
-							Frame = "{{0, 0}, {772, 225}}";
+							BuildMessageFrame = "{{0, 0}, {991, 217}}";
+							BuildTranscriptFrame = "{{0, 226}, {991, 1}}";
+							Frame = "{{0, 0}, {989, 225}}";
 						};
 						Tab3 = {
 							Frame = "{{0, 0}, {772, 295}}";
@@ -78,24 +82,24 @@
 					};
 					SplitCount = 1;
 					Tab0 = {
-						Frame = "{{0, 0}, {227, 618}}";
+						Frame = "{{0, 0}, {227, 907}}";
 					};
 					Tab1 = {
-						ClassesFrame = "{{0, 0}, {202, 373}}";
-						Frame = "{{0, 0}, {200, 618}}";
-						MembersFrame = "{{0, 382}, {202, 236}}";
+						ClassesFrame = "{{0, 0}, {202, 493}}";
+						Frame = "{{0, 0}, {200, 815}}";
+						MembersFrame = "{{0, 502}, {202, 313}}";
 						OptionsSetName = "Flat, all classes";
 					};
 					Tab2 = {
 						Frame = "{{0, 0}, {200, 907}}";
 					};
 					Tab3 = {
-						Frame = "{{0, 0}, {200, 608}}";
+						Frame = "{{0, 0}, {200, 815}}";
 						Split0 = {
-							Frame = "{{0, 0}, {200, 296}}";
+							Frame = "{{0, 0}, {200, 396}}";
 						};
 						Split1 = {
-							Frame = "{{0, 305}, {200, 303}}";
+							Frame = "{{0, 405}, {200, 410}}";
 						};
 						SplitCount = 2;
 					};
@@ -110,10 +114,9 @@
 		wantsSCM = -1;
 	};
 	29B97326FDCFA39411CA2CEA = {
-		activeExec = 1;
+		activeExec = 0;
 		customExecs = {
 			macosx = (
-				F55D241501C0C79801A80104,
 			);
 		};
 		targetExecs = {
@@ -122,28 +125,17 @@
 			);
 		};
 	};
-	F55D241501C0C79801A80104 = {
-		activeArgIndex = 2147483647;
-		argumentStrings = (
-		);
-		debuggerPlugin = GDBDebugging;
-		dylibVariantSuffix = "";
-		enableDebugStr = 1;
-		environmentEntries = (
-		);
-		isa = PBXExecutable;
-		launchableReference = F55D241601C0C79801A80104;
-		shlibInfoDictList = (
-		);
-		sourceDirectories = (
-		);
-		startupPath = "<<ProductDirectory>>";
+	F5077D3201C5776F0143D55F = {
+		fileReference = F5AB08770175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 120;
+		state = 2;
 	};
-	F55D241601C0C79801A80104 = {
-		isa = PBXApplicationReference;
-		name = AquaTerm.app;
-		path = /Users/per/Source/AQT/aquaterm/build/AquaTerm.app;
-		refType = 0;
+	F5077D3301C578800143D55F = {
+		fileReference = F5AB08770175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 133;
+		state = 2;
 	};
 	F55D242101C0F0F501A80104 = {
 		fileReference = F55D241801C0F0F501A80104;
@@ -154,38 +146,43 @@
 	F55D242E01C11DDD01A80104 = {
 		fileReference = F5AB08770175BC8B01EB16F3;
 		isa = PBXFileBreakpoint;
-		lineNumber = 128;
+		lineNumber = 135;
 		state = 2;
 	};
 	F5653B8701C4E64B01A80104 = {
 		fileReference = F55D241A01C0F0F501A80104;
 		isa = PBXFileBreakpoint;
-		lineNumber = 58;
+		lineNumber = 57;
 		state = 2;
 	};
 	F5653B8801C4E64B01A80104 = {
 		fileReference = F55D241A01C0F0F501A80104;
 		isa = PBXFileBreakpoint;
-		lineNumber = 61;
+		lineNumber = 60;
 		state = 2;
 	};
 	F5653B8901C4E81801A80104 = {
 		fileReference = F55D241A01C0F0F501A80104;
 		isa = PBXFileBreakpoint;
-		lineNumber = 54;
+		lineNumber = 53;
 		state = 2;
 	};
 	F5653B8A01C4E89A01A80104 = {
 		fileReference = F55D241A01C0F0F501A80104;
 		isa = PBXFileBreakpoint;
-		lineNumber = 60;
+		lineNumber = 59;
 		state = 2;
 	};
 	F5653B8B01C4E9B601A80104 = {
 		fileReference = F55D241A01C0F0F501A80104;
 		isa = PBXFileBreakpoint;
-		lineNumber = 54;
+		lineNumber = 53;
 		state = 2;
+	};
+	F5AB08770175BC8B01EB16F3 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{77, 474}, {750, 502}}";
+		};
 	};
 	F5C4C2B30199DE090143D54F = {
 		activeExec = 0;
@@ -211,6 +208,24 @@
 		);
 		sourceDirectories = (
 		);
+	};
+	F5D0888801C820C90143D55F = {
+		fileReference = F5AB08770175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 131;
+		state = 1;
+	};
+	F5D0888901C820C90143D55F = {
+		fileReference = F5AB08770175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 127;
+		state = 1;
+	};
+	F5D0888A01C823580143D55F = {
+		fileReference = F5AB08770175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 124;
+		state = 1;
 	};
 	F5E5F6C201874BDA0143D54B = {
 		activeArgIndex = 2147483647;
