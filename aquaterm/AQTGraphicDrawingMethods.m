@@ -6,6 +6,7 @@
 //  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
 //
 
+
 #import "AQTGraphicDrawingMethods.h"
 
 #import "AQTLabel.h"
@@ -13,7 +14,24 @@
 #import "AQTPatch.h"
 #import "AQTImage.h"
 
+//
+// Using an undocumented method in NSFont.
+//
+@interface NSFont (NSFontHiddenMethods)
+- (NSGlyph)_defaultGlyphForChar:(unichar)theChar;
+@end
+
 @implementation AQTGraphic (AQTGraphicDrawingMethods)
++ (NSImage *)sharedScratchPad
+{
+   static NSImage *scratchPadImage;
+   if (!scratchPadImage)
+   {
+      scratchPadImage = [[NSImage alloc] initWithSize:NSMakeSize(10,10)];
+   }
+   return scratchPadImage;
+}
+
 -(void)renderInRect:(NSRect)boundsRect
 {
    NSLog(@"Error: *** AQTGraphicDrawing ***");
@@ -98,89 +116,66 @@
 @end
 
 @implementation AQTLabel (AQTLabelDrawing)
+
 -(void)_aqtLabelUpdateCache
 {
    int i = 0;
-   NSRange fullRange, effRange;
-
-   [_cache release];
-   _cache = [[NSMutableAttributedString alloc] initWithAttributedString:string];
-   fullRange = NSMakeRange (0, [(NSAttributedString *)_cache length]);
-   [_cache addAttribute:NSFontAttributeName
-                  value:[NSFont fontWithName:fontName size:fontSize]
-                  range:fullRange];
-   [_cache addAttribute:NSForegroundColorAttributeName
-                  value:[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0]
-                  range:fullRange];
+   NSFont *aFont = [NSFont fontWithName:fontName size:fontSize];
+   NSString *text = [string string]; // Yuck!
+   int strLen = [text length];
+   NSAffineTransform *aTransform = [NSAffineTransform transform];
+   NSBezierPath *tmpPath = [NSBezierPath bezierPath];
+   NSSize tmpSize;
+   NSPoint pos = NSZeroPoint;
    //
-   // Fix sub/superscript appearance
+   // appendBezierPathWithGlyph needs a valid context...
    //
-   while(i < fullRange.length)
+   [[AQTGraphic sharedScratchPad] lockFocus];
+   //
+   // Create glyphs and convert to path
+   //
+   [tmpPath moveToPoint:pos];
+   for(i=0; i<strLen; i++)
    {
-      id attrValue = [_cache attribute:NSSuperscriptAttributeName
-                               atIndex:i
-                 longestEffectiveRange:&effRange
-                               inRange:fullRange];
-      if (attrValue)
-      {
-         float subcriptLevel = [attrValue floatValue];
-         [_cache addAttribute:NSFontAttributeName
-                        value:[NSFont fontWithName:fontName size:fontSize*0.75]
-                        range:effRange];
-         [_cache addAttribute:NSBaselineOffsetAttributeName
-                        value:[NSNumber numberWithFloat:-subcriptLevel*fontSize*0.1]
-                        range:effRange];
+      // FIXME: Honor attributes here (NSSuperscriptAttributeName, NSUnderlineStyleAttributeName) 
+      NSGlyph theGlyph = [aFont _defaultGlyphForChar:[text characterAtIndex:i]];
+      NSSize offset = [aFont advancementForGlyph:theGlyph];
+      [tmpPath appendBezierPathWithGlyph:theGlyph inFont:aFont];
+      pos.x += offset.width;
+      pos.y += offset.height;
+      [tmpPath moveToPoint:pos];
+   }
+   [[AQTGraphic sharedScratchPad] unlockFocus];
+   tmpSize = [tmpPath bounds].size;
+   //
+   // Place the path according to position, angle and align
+   //
+   [aTransform translateXBy:position.x yBy:position.y];
+   [aTransform rotateByDegrees:angle];
+   [aTransform translateXBy:-justification*tmpSize.width*0.5 yBy:-tmpSize.height*0.5]; // FIXME: compensate for baseline/center diff
+   [tmpPath transformUsingAffineTransform:aTransform];
 
-      }
-      i += effRange.length;
-   }   
+   [self _setCache:tmpPath];
 }
 
 -(NSRect)updateBounds
 {
-    NSAffineTransform *tempTrans = [NSAffineTransform transform];
-    NSRect tempBounds;
-    NSSize tempSize;
-    NSPoint tempJust;
-
-    if (![self _cache])
-    {
-       [self _aqtLabelUpdateCache];
-    }
-    
-    [tempTrans rotateByDegrees:angle];
-    tempSize = [(NSAttributedString *)[self _cache] size];
-    tempJust = [tempTrans  transformPoint:NSMakePoint(-justification*tempSize.width/2, -tempSize.height/2)];
-    tempBounds.size = [tempTrans transformSize:[(NSAttributedString *)[self _cache] size]];
-
-    tempBounds.origin.x = position.x+tempJust.x;
-    tempBounds.origin.y = position.y+tempJust.y;
-    [self setBounds:tempBounds];
-    return tempBounds;
-}
-
--(void)renderInRect:(NSRect)boundsRect
-{
-   NSSize boundingBox;
+   NSRect tempBounds;
    if (![self _cache])
    {
       [self _aqtLabelUpdateCache];
    }
-   boundingBox = [_cache size];
-   //NSLog([tmpString description]);
+   tempBounds = [_cache bounds];
+   [self setBounds:tempBounds];
+   return tempBounds;
+}
+
+-(void)renderInRect:(NSRect)boundsRect
+{
+   if (NSIntersectsRect(boundsRect, [self bounds]))
    {
-      NSAffineTransform *transf = [NSAffineTransform transform];
-      NSGraphicsContext *context = [NSGraphicsContext currentContext];
-      //
-      // Position local coordinate system and apply justification
-      //
-      [transf translateXBy:position.x yBy:position.y];
-      [transf rotateByDegrees:angle];
-      [transf translateXBy:-justification*boundingBox.width/2.0 yBy:-boundingBox.height/2.0];
-      [context saveGraphicsState];
-      [transf concat];
-      [(NSAttributedString *)_cache drawAtPoint:NSMakePoint(0.0, 0.0)];
-      [context restoreGraphicsState];
+      [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
+      [_cache  fill];
    }
 }
 @end
@@ -204,8 +199,7 @@
    if (![self _cache])
    {
       [self _aqtPathUpdateCache];
-   }
-   
+   }   
    tmpBounds = NSInsetRect([[self _cache] bounds], -.001, -.001);
    [self  setBounds:tmpBounds];
    return tmpBounds;
@@ -215,12 +209,6 @@
 {
    if (NSIntersectsRect(boundsRect, [self bounds]))
    {
-      if (pointCount == 0)
-         return;
-      if (![self _cache])
-      {
-         [self _aqtPathUpdateCache];
-      }
       [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
       [_cache stroke];
    }
@@ -254,12 +242,6 @@
 {
    if (NSIntersectsRect(boundsRect, [self bounds]))
    {
-      if (pointCount == 0)
-         return;
-      if (![self _cache])
-      {
-         [self _aqtPatchUpdateCache];
-      }
       [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
       [_cache stroke];
       [_cache fill];

@@ -12,6 +12,7 @@
 #import "AQTModel.h"
 
 @interface AQTGraphic (AQTGraphicDrawingMethods)
++ (NSImage *)sharedScratchPad;
 -(id)_cache;
 -(void)_setCache:(id)object;
 -(NSRect)updateBounds;
