@@ -86,7 +86,6 @@
 			children = (
 				17587328FF379C6511CA2CBB,
 				CBF30BC204D54A2E00EBD329,
-				CBD51E8E04EBA83A00EBD329,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -116,7 +115,6 @@
 				29B97326FDCFA39411CA2CEA,
 				F5DB1B640219BFD2014110D6,
 				CBF30BC104D54A2E00EBD329,
-				CBD51E8D04EBA83A00EBD329,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -134,9 +132,6 @@
 				F57C16A102506DE3010D3DE4,
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
-				CBD8F3F004D90CE100EBD329,
-				CB86D8990589B67900D208BA,
-				CBC8D54B04F2258500EBD329,
 				F55D7FF10219BEF4014110D6,
 			);
 			isa = PBXGroup;
@@ -249,7 +244,7 @@
 	<key>CFBundleExecutable</key>
 	<string>AquaTerm</string>
 	<key>CFBundleGetInfoString</key>
-	<string>AquaTerm v0.3.2</string>
+	<string>AquaTerm v1.0.a1</string>
 	<key>CFBundleIconFile</key>
 	<string>AquaTerm.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -259,11 +254,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>AquaTerm v0.3.2</string>
+	<string>AquaTerm v1.0.a1</string>
 	<key>CFBundleSignature</key>
 	<string>AqTS</string>
 	<key>CFBundleVersion</key>
-	<string>0.3.2</string>
+	<string>1.0.a1</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>©2001-2003, The AquaTerm Project  
 http://aquaterm.sourceforge.net</string>
@@ -406,13 +401,6 @@ http://aquaterm.sourceforge.net</string>
 			path = "";
 			refType = 4;
 		};
-		CB288B40058E5C0F00D208BA = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = f2aquaterm.m;
-			path = /Users/per/source/sci/adapters/fortran/f2aquaterm.m;
-			refType = 0;
-		};
 		CB2DDBA7056D103C00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -515,13 +503,6 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
-		CB6564640529BE1200D208BA = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = aqtplplot.m;
-			path = ../adapters/plplot/aqtplplot.m;
-			refType = 2;
-		};
 		CB6785CE05866FCE00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -582,38 +563,6 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
-		CB86D8990589B67900D208BA = {
-			children = (
-				CBFACB3C058F0DCE00D208BA,
-				CBFACB3D058F0DCE00D208BA,
-				CB86D89C0589B6E800D208BA,
-				CB86DD310589CA5700D208BA,
-			);
-			isa = PBXGroup;
-			name = Examples;
-			refType = 4;
-		};
-		CB86D89C0589B6E800D208BA = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			name = eventdemo1.c;
-			path = /Users/per/source/sci/adapters/c/eventdemo1.c;
-			refType = 0;
-		};
-		CB86DD310589CA5700D208BA = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			name = eventdemo2.c;
-			path = /Users/per/source/sci/adapters/c/eventdemo2.c;
-			refType = 0;
-		};
-		CB92C704056404CC00D208BA = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = NSDebug.h;
-			path = /System/Library/Frameworks/Foundation.framework/Versions/C/Headers/NSDebug.h;
-			refType = 0;
-		};
 		CB9E42E00586855A00D208BA = {
 			children = (
 				CB6785CE05866FCE00D208BA,
@@ -635,13 +584,6 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		CBAFDE0F04DE8F5F00EBD329 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = aquaTerm.trm;
-			path = ../adapters/gnuplot/aquaTerm.trm;
-			refType = 2;
 		};
 		CBB06FE305740E0E00D208BA = {
 			children = (
@@ -702,22 +644,6 @@ http://aquaterm.sourceforge.net</string>
 			settings = {
 			};
 		};
-		CBC8D54B04F2258500EBD329 = {
-			children = (
-				CB92C704056404CC00D208BA,
-				CBC8D54C04F225E200EBD329,
-			);
-			isa = PBXGroup;
-			name = MiscDocs;
-			refType = 4;
-		};
-		CBC8D54C04F225E200EBD329 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = README;
-			path = "/Volumes/Earth/Users/per/source/AQT/gnuplot-3.8i.0/term/README";
-			refType = 0;
-		};
 		CBD51DED04EB839F00EBD329 = {
 			isa = PBXFrameworkReference;
 			name = CoreFoundation.framework;
@@ -744,105 +670,6 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXBuildStyle;
 			name = BuildStyle;
 		};
-		CBD51E8804EBA83A00EBD329 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CBD51E8904EBA83A00EBD329 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXResourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CBD51E8A04EBA83A00EBD329 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CBD51E8B04EBA83A00EBD329 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CBD51E8C04EBA83A00EBD329 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXRezBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CBD51E8D04EBA83A00EBD329 = {
-			buildPhases = (
-				CBD51E8804EBA83A00EBD329,
-				CBD51E8904EBA83A00EBD329,
-				CBD51E8A04EBA83A00EBD329,
-				CBD51E8B04EBA83A00EBD329,
-				CBD51E8C04EBA83A00EBD329,
-			);
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOL_FLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRINCIPAL_CLASS = "";
-				PRODUCT_NAME = fwk;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
-				WRAPPER_EXTENSION = framework;
-			};
-			dependencies = (
-			);
-			isa = PBXFrameworkTarget;
-			name = fwk;
-			productInstallPath = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-			productName = fwk;
-			productReference = CBD51E8E04EBA83A00EBD329;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string></string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string></string>
-	<key>CFBundleIdentifier</key>
-	<string></string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string></string>
-	<key>CFBundlePackageType</key>
-	<string>FMWK</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>0.0.1d1</string>
-</dict>
-</plist>
-";
-		};
-		CBD51E8E04EBA83A00EBD329 = {
-			isa = PBXFrameworkReference;
-			path = fwk.framework;
-			refType = 3;
-		};
 		CBD51E8F04EBAAEE00EBD329 = {
 			fileRef = 29B97325FDCFA39411CA2CEA;
 			isa = PBXBuildFile;
@@ -854,40 +681,6 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		CBD8F3EF04D90CDC00EBD329 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = aqdriv.m;
-			path = ../adapters/pgplot/aqdriv.m;
-			refType = 2;
-		};
-		CBD8F3F004D90CE100EBD329 = {
-			children = (
-				CB288B40058E5C0F00D208BA,
-				CBE2B439058DCEB900D208BA,
-				CBE2B43A058DCEB900D208BA,
-				CBD8F3EF04D90CDC00EBD329,
-				CBAFDE0F04DE8F5F00EBD329,
-				CB6564640529BE1200D208BA,
-			);
-			isa = PBXGroup;
-			name = Adapters;
-			refType = 4;
-		};
-		CBE2B439058DCEB900D208BA = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = f2aqt.h;
-			path = /Users/per/source/sci/adapters/fortran/f2aqt.h;
-			refType = 0;
-		};
-		CBE2B43A058DCEB900D208BA = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = f2aqt.m;
-			path = /Users/per/source/sci/adapters/fortran/f2aqt.m;
-			refType = 0;
 		};
 		CBE5EB120549E11200D208BA = {
 			isa = PBXTargetDependency;
@@ -1120,20 +913,6 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXGroup;
 			name = oldsource;
 			refType = 4;
-		};
-		CBFACB3C058F0DCE00D208BA = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = demo.f;
-			path = ../adapters/fortran/demo.f;
-			refType = 2;
-		};
-		CBFACB3D058F0DCE00D208BA = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = eventdemo1.f;
-			path = /Users/per/source/sci/adapters/fortran/eventdemo1.f;
-			refType = 0;
 		};
 //CB0
 //CB1
