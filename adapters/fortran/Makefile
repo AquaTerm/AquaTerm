@@ -49,3 +49,6 @@ f2aquaterm.o: f2aquaterm.m
 done:
 	@echo "Done."
 	@echo ""
+clean:
+	-rm demo eventdemo1 *.o *~
+
