@@ -20,4 +20,6 @@
 -(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;
 -(void)renderInRect:(NSRect)boundsRect;
+-(void)setColor:(NSColor *)newColor;
+-(void)setColorFromIndex:(int)colorIndex;
 @end

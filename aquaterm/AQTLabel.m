@@ -7,7 +7,6 @@
 //
 
 #import "AQTLabel.h"
-#import "GPTColorExtras.h"
 #import "math.h"
 
 #define max(a, b) a>b?a:b 
@@ -31,7 +30,7 @@
     justification = justify;
     colorIndex=cIndex; 
   }
-  [self setColor:[NSColor getColorFromIndex:cIndex]];
+  [self setColorFromIndex:cIndex];
 
   return self; 
 }
@@ -46,7 +45,7 @@
 -(NSRect)bounds
 {
   NSAffineTransform *tempTrans = [NSAffineTransform transform];
-  NSDictionary *tempAttrs = [NSDictionary dictionaryWithObject:[NSFont fontWithName:fontName 																											  		      					   size:fontSize] 
+  NSDictionary *tempAttrs = [NSDictionary dictionaryWithObject:[NSFont fontWithName:fontName 																						  size:fontSize] 
                                                         forKey:NSFontAttributeName];
   NSRect tempBounds;
   NSPoint tempJust;

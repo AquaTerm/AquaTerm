@@ -32,7 +32,7 @@
     
     if (hasIndexedColor)
     {
-      [self setColor:[NSColor getColorFromIndex:indexedColor]];	
+      [self setColorFromIndex:indexedColor];	
     }
     else
     {

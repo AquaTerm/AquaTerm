@@ -8,21 +8,6 @@
 
 #import "AQTGraphic.h"
 
-@interface AQTGraphic (privateAQTGraphicMethods)
--(void)setColor:(NSColor *)newColor; 
-@end
-
-@implementation AQTGraphic (privateAQTGraphicMethods)
--(void)setColor:(NSColor *)newColor
-{
-  [newColor retain];
-  [color release];
-  color = newColor;
-}
-
-@end
-
-
 @implementation AQTGraphic
     /**"
     *** An abstract class to derive model objects from
@@ -63,6 +48,63 @@
     // Not purely abstract, draw a filled box to indicate trouble;-)
     [[NSColor redColor] set];
     [NSBezierPath fillRect:boundsRect];
+}
+
+-(void)setColor:(NSColor *)newColor
+{
+  [newColor retain];
+  [color release];
+  color = newColor;
+}
+
+    /**"
+    *** Gnuplot uses is a color index to map linestyles to a set of fixed
+    *** colors. The index is taken modulo max_number_of_colors.
+    *** Negative numbers have special meanings (-2 = axes, -1 = grid).
+    "**/
+-(void)setColorFromIndex:(int)colorIndex
+{
+    switch (colorIndex % 9)
+    {
+        case -3:	// XOR, solid 
+            [self setColor:[NSColor yellowColor]];
+            break;
+        case -2:	// border
+            [self setColor:[NSColor blackColor]]; // axes
+            break;
+        case -1:	// X/Y axis
+            [self setColor:[NSColor lightGrayColor]]; // grid
+            break;
+        case 0:
+            [self setColor:[NSColor redColor]];
+            break;
+        case 1:
+            [self setColor:[NSColor greenColor]];
+            break;
+        case 2:
+            [self setColor:[NSColor blueColor]];
+            break;
+        case 3:
+            [self setColor:[NSColor cyanColor]];
+            break;
+        case 4:
+            [self setColor:[NSColor magentaColor]];
+            break;
+        case 5:
+            [self setColor:[NSColor orangeColor]];
+            break;
+        case 6:
+            [self setColor:[NSColor purpleColor]];
+            break;
+        case 7:
+            [self setColor:[NSColor brownColor]];
+            break;
+        case 8:
+            [self setColor:[NSColor grayColor]];
+            break;
+        default:
+            [self setColor:[NSColor yellowColor]];
+       } 
 }
 
 @end
