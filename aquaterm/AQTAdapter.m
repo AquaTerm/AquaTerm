@@ -384,6 +384,23 @@ _{@"NSUnderline" 0or1}
    return event;
 }
 
+- (NSString *)waitNextEvent // FIXME: timeout? Hardcoded to 60s
+{
+   NSString *event;
+   BOOL isRunning;
+   [_selectedBuilder setAcceptingEvents:YES];
+   do {
+      isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:60.0]];
+      event = [self lastEvent];
+      if (![event isEqualToString:@"0"])
+      {
+         isRunning = NO;
+      }
+   } while (isRunning);
+   [_selectedBuilder setAcceptingEvents:NO];
+   return event;
+}
+
 /* Creates a new builder instance, adds it to the list of builders and makes it the selected builder. If the referenced builder exists, it is selected and cleared. */
 /*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
 - (void)openPlotWithIndex:(int)refNum

@@ -61,6 +61,7 @@ enum {
   /*" Event handling "*/
 - (void)setAcceptingEvents:(BOOL)flag;
 - (NSString *)lastEvent;
+- (NSString *)waitNextEvent; 
 
 /*" Plotting related commands "*/
 
