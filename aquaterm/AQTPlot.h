@@ -18,6 +18,7 @@
   int 		viewIndex;	/*" The number by which the client refers to the model "*/
   BOOL _isWindowLoaded;
   NSPoint _selectedPoint;
+  char _keyPressed;
   BOOL _selectedPointIsValid;
 
 }
@@ -28,7 +29,7 @@
 -(void)setModel:(AQTModel *)newModel;
 
 - (void)beginMouseInput;
-- (void)mouseDownAt:(NSPoint)pos;
+- (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
 - (NSPoint) selectedPoint;
 - (BOOL) selectedPointIsValid;
 

@@ -76,6 +76,7 @@
 {
   return _mouseIsActive;
 }
+
 - (void)setMouseIsActive:(BOOL)flag
 {
   _mouseIsActive = flag;
@@ -90,14 +91,19 @@
   }
 }
 
--(void)mouseDown:(NSEvent *)theEvent
+- (NSPoint)_convertToCanvasCoordinatesFromPoint:(NSPoint) aPoint
 {
-  NSPoint pos;
   NSAffineTransform *localTransform = [NSAffineTransform transform];
   [localTransform scaleXBy:[model canvasSize].width/NSWidth([self bounds])
                        yBy:[model canvasSize].height/NSHeight([self bounds])];
 
-  NSLog(NSStringFromPoint([theEvent locationInWindow]));
+  return [localTransform transformPoint:aPoint]; 
+}
+-(void)mouseDown:(NSEvent *)theEvent
+{
+   NSPoint pos;
+   char aKey = '\0';
+  //NSLog(NSStringFromPoint([theEvent locationInWindow]));
   if (![self mouseIsActive])
   {
     return;
@@ -107,27 +113,44 @@
   switch([theEvent type])
   {
     case NSLeftMouseDown:
-      NSLog(@"A");
+       aKey = 'A';
+       //      NSLog(@"A");
       break;
     case NSRightMouseDown:
-      NSLog(@"X");
+       aKey = 'X';
+       //      NSLog(@"X");
       break;
     default:
       NSLog(@"Other key");
       break;
   }
-  [[[self window] delegate] mouseDownAt:[localTransform transformPoint:pos]];
-  //keyPressed = 'A';
+  [[[self window] delegate] mouseDownAt:[self _convertToCanvasCoordinatesFromPoint:pos] key:aKey];
 }
 
 -(void)keyDown:(NSEvent *)theEvent
 {
   NSPoint pos;
+   NSRect viewBounds = [self bounds];
+   char aKey;
   NSLog([theEvent characters]);
-  NSLog(NSStringFromPoint([[self window] mouseLocationOutsideOfEventStream]));
+  aKey = [[theEvent characters] UTF8String][0];
+//  NSLog(NSStringFromPoint([[self window] mouseLocationOutsideOfEventStream]));
   pos = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
   NSLog(NSStringFromPoint(pos));
-  // Just crop it to be inside [self bounds];
+  if (!NSPointInRect(pos, viewBounds))
+  {
+     // Just crop it to be inside [self bounds];
+     if (pos.x < 0 )
+        pos.x = 0;
+     else if (pos.x > NSWidth(viewBounds))
+        pos.x = NSWidth(viewBounds);
+     if (pos.y < 0 )
+        pos.y = 0;
+     else if (pos.y > NSHeight(viewBounds))
+        pos.y = NSHeight(viewBounds);
+  }
+  NSLog(NSStringFromPoint(pos));
+  [[[self window] delegate] mouseDownAt:[self _convertToCanvasCoordinatesFromPoint:pos] key:aKey];
 }
 
 -(void)drawRect:(NSRect)aRect // FIXME: Consider dirty rect!!! 
