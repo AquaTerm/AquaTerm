@@ -200,7 +200,7 @@
 - (void)processEvent:(NSString *)event
 {
    NSLog(@"builder got event: %@", event);
-  [owner processEvent:event];
+   [owner processEvent:event]; // FIXME: Needs autoreleasing here???
 }
 
 - (NSString *)lastEvent
