@@ -32,7 +32,7 @@
   NSImage *curImg = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Cross" ofType:@"tiff"]];
   crosshairCursor = [[NSCursor alloc] initWithImage:curImg hotSpot:NSMakePoint(7,7)];
   [curImg release];
-  [self setMouseIsActive:YES];
+  [self setIsProcessingEvents:NO];
 }
 
 -(void)dealloc
@@ -72,20 +72,20 @@
 }
 */
 
-- (BOOL)mouseIsActive
+- (BOOL)isProcessingEvents
 {
-  return _mouseIsActive;
+  return _isProcessingEvents;
 }
 
-- (void)setMouseIsActive:(BOOL)flag
+- (void)setIsProcessingEvents:(BOOL)flag
 {
-  _mouseIsActive = flag;
+  _isProcessingEvents = flag;
   [[self window] invalidateCursorRectsForView:self];
 }
 
 -(void)resetCursorRects
 {
-  if ([self mouseIsActive])
+  if ([self isProcessingEvents])
   {
     [self addCursorRect:[self bounds] cursor:crosshairCursor];
   }
@@ -101,58 +101,54 @@
 }
 -(void)mouseDown:(NSEvent *)theEvent
 {
-   NSPoint pos;
-   char aKey = '\0';
-  //NSLog(NSStringFromPoint([theEvent locationInWindow]));
-/*
- if (![self mouseIsActive])
+  if ([self isProcessingEvents])
   {
-    return;
+    NSString *eventString;
+    NSPoint pos = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    char aKey = '\0';
+    // Inform the delegate...
+    switch([theEvent type])
+    {
+      // Do some stuff here...
+      case NSLeftMouseDown:
+        // aKey = 'A';
+        break;
+      case NSRightMouseDown:
+        // aKey = 'X';
+        break;
+      default:
+        NSLog(@"Other key");
+        break;
+    }
+    eventString = [NSString stringWithFormat:@"1:%@:misc", NSStringFromPoint([self _convertToCanvasCoordinatesFromPoint:pos])];
+    [[[self window] delegate] setLastEvent:eventString];
   }
-   */
-  // Inform the delegate...
-  pos = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  switch([theEvent type])
-  {
-    case NSLeftMouseDown:
-       aKey = 'A';
-       //      NSLog(@"A");
-      break;
-    case NSRightMouseDown:
-       aKey = 'X';
-       //      NSLog(@"X");
-      break;
-    default:
-      NSLog(@"Other key");
-      break;
-  }
-  [[[self window] delegate] mouseDownAt:[self _convertToCanvasCoordinatesFromPoint:pos] key:aKey];
 }
 
 -(void)keyDown:(NSEvent *)theEvent
 {
-  NSPoint pos;
-   NSRect viewBounds = [self bounds];
-   char aKey;
-  NSLog([theEvent characters]);
-  aKey = [[theEvent characters] UTF8String][0];
-//  NSLog(NSStringFromPoint([[self window] mouseLocationOutsideOfEventStream]));
-  pos = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
-  NSLog(NSStringFromPoint(pos));
-  if (!NSPointInRect(pos, viewBounds))
+  if ([self isProcessingEvents])
   {
-     // Just crop it to be inside [self bounds];
-     if (pos.x < 0 )
+    NSString *eventString;
+    NSPoint pos = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+    NSRect viewBounds = [self bounds];
+    char aKey = [[theEvent characters] UTF8String][0];;
+    // NSLog([theEvent characters]);
+    if (!NSPointInRect(pos, viewBounds))
+    {
+      // Just crop it to be inside [self bounds];
+      if (pos.x < 0 )
         pos.x = 0;
-     else if (pos.x > NSWidth(viewBounds))
+      else if (pos.x > NSWidth(viewBounds))
         pos.x = NSWidth(viewBounds);
-     if (pos.y < 0 )
+      if (pos.y < 0 )
         pos.y = 0;
-     else if (pos.y > NSHeight(viewBounds))
+      else if (pos.y > NSHeight(viewBounds))
         pos.y = NSHeight(viewBounds);
+    }
+    eventString = [NSString stringWithFormat:@"2:%@:%c", NSStringFromPoint([self _convertToCanvasCoordinatesFromPoint:pos]), aKey];
+    [[[self window] delegate] setLastEvent:eventString];
   }
-  NSLog(NSStringFromPoint(pos));
-  [[[self window] delegate] mouseDownAt:[self _convertToCanvasCoordinatesFromPoint:pos] key:aKey];
 }
 
 -(void)drawRect:(NSRect)aRect // FIXME: Consider dirty rect!!! 
@@ -160,7 +156,6 @@
   AQTColor canvasColor = [model color]; 
   NSRect scaledBounds = [self bounds];	// Depends on whether we're printing or drawing to screen
   NSAffineTransform *localTransform = [NSAffineTransform transform];
-//  [localTransform translateXBy:.5 yBy:.5];
   [localTransform scaleXBy:NSWidth(scaledBounds)/[model canvasSize].width
                        yBy:NSHeight(scaledBounds)/[model canvasSize].height];
   [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone]; // FIXME: user prefs

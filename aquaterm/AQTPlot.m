@@ -20,6 +20,7 @@
   {
     [self setModel:aModel];
     [self setClientInfoName:@"No connection" pid:-1];
+    [self setAcceptingEvents:NO];
     [self setLastEvent:@"0"];
     [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
   }
@@ -123,14 +124,9 @@
 
 -(void)setAcceptingEvents:(BOOL)flag
 {
-  [self setLastEvent:@"0"];
    _acceptingEvents = flag && (_client != nil);
-/*
- if (_acceptingEvents == YES)
-   {
-      [_client processEvent:@"Okey-dokey"];
-   }
-*/
+   [viewOutlet setIsProcessingEvents:_acceptingEvents];
+  [self setLastEvent:@"0"];
 }
 
 - (NSString *)lastEvent
@@ -142,10 +138,23 @@
 {
   [event retain];
   [lastEvent autorelease];	
-  lastEvent = event;		
+  lastEvent = event;
+  // Also inform client
+  if(_acceptingEvents)
+  {
+    NS_DURING
+      [_client processEvent:event];
+    NS_HANDLER
+      NSLog([localException name]);
+      if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
+        [self invalidateClient:_client]; // invalidate client
+      else
+        [localException raise];
+    NS_ENDHANDLER
+  }
 }
 
-
+/*
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey
 {
   NSLog(@"Got coord: %@ and key: %c", NSStringFromPoint(pos), aKey);
@@ -176,7 +185,7 @@
 {
   return _selectedPoint;
 }
-
+*/
 #pragma mark === Delegate methods ===
 - (void)windowWillClose:(NSNotification *)notification
 {
@@ -191,18 +200,20 @@
 #pragma mark === From client handler ===
  
 /*" The following methods applies to the currently selected view "*/
--(NSDictionary *)status
+/*
+ -(NSDictionary *)status
 {
   NSDictionary *tmpDict = [NSDictionary dictionaryWithObject:@"Status line" forKey:@"theKey"];
   return tmpDict;
 }
-
--(char)mouseDownInfo:(inout NSPoint *)mouseLoc
+*/
+/*
+ -(char)mouseDownInfo:(inout NSPoint *)mouseLoc
 {
   *mouseLoc = [self selectedPoint];
   return [self keyPressed];
 }
-
+*/
 -(void)close
 {
   NSLog(@"close");

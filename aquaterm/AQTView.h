@@ -18,14 +18,14 @@
   problem is that saving should behave like printing
   */
   //BOOL isPrinting;
-  BOOL _mouseIsActive; /*" Holds state of mouse input."*/
+  BOOL _isProcessingEvents; /*" Holds state of mouse input."*/
   NSCursor *crosshairCursor;  /*" Holds an alternate cursor for use with mouse input."*/
 }
 - (void)setModel:(AQTModel *)newModel;
 - (AQTModel *)model;
 //- (void)setIsPrinting:(BOOL)flag;
 - (BOOL)isPrinting;
-- (BOOL)mouseIsActive;
-- (void)setMouseIsActive:(BOOL)flag;
+- (BOOL)isProcessingEvents;
+- (void)setIsProcessingEvents:(BOOL)flag;
 
 @end

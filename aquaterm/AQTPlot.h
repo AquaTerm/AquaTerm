@@ -32,9 +32,9 @@
 -(void)setClientInfoName:(NSString *)name pid:(int)pid;
 -(BOOL)invalidateClient:(id)aClient;
 
-- (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
-- (char)keyPressed;
-- (NSPoint)selectedPoint;
+// - (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
+// - (char)keyPressed;
+// - (NSPoint)selectedPoint;
 - (void)setLastEvent:(NSString *)theEvent;
 
 @end

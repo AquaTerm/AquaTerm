@@ -36,7 +36,7 @@
   // Set up a DO connection:
   //   
   doConnection = [[NSConnection defaultConnection] retain];
-  [doConnection setIndependentConversationQueueing:YES];	// FAQ: Needed to sync calls!!!!
+  //[doConnection setIndependentConversationQueueing:YES];	// FAQ: Needed to sync calls!!!!
   [doConnection setRootObject:self];
 
   if([doConnection registerName:@"aquatermServer"] == NO)
@@ -170,7 +170,7 @@ void customEventHandler(NSString *event)
    [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)]; // discards transform
    [adapter setAcceptingEvents:YES];
    [adapter render];
-   [adapter release];
+//   [adapter release];
    
 /*
  for(i=0; i<1000; i++)
