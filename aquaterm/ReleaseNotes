@@ -2,6 +2,8 @@
 AquaTerm 1.0.b1
   Enable Page Setup again.
   Fixing a problem with text alignment caused by leading spaces in the text.
+  Remember save destination folder and file type. (#872996)
+  Adding user preferences.
 
 AquaTerm 1.0.a2
   Bugfixes
