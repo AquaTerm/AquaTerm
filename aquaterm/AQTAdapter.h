@@ -66,7 +66,8 @@ extern const int AQTAlignTop;
   /*" Color handling "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b;
 - (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b;
-- (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b;
+- (void)getColorRed:(float *)r green:(float *)g blue:(float *)b;
+- (void)getBackgroundColorRed:(float *)r green:(float *)g blue:(float *)b;
 
   /*" Text handling "*/
 - (void)setFontname:(NSString *)newFontname;

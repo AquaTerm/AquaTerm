@@ -54,7 +54,8 @@ void aqtTakeBackgroundColorFromColormapEntry(int index);
 /*" Color handling "*/
 void aqtSetColor(float r, float g, float b);
 void aqtSetBackgroundColor(float r, float g, float b);
-void aqtGetCurrentColor(float *r, float *g, float *b);;
+void aqtGetColor(float *r, float *g, float *b);
+void aqtGetBackgroundColor(float *r, float *g, float *b);
 
 /*" Text handling "*/
 void aqtSetFontname(const char *newFontname);

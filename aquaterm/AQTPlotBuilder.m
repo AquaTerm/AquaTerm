@@ -144,6 +144,11 @@
    }
 }
 
+- (AQTColor)backgroundColor
+{
+   return [_model color];
+}
+
 - (void)takeColorFromColormapEntry:(int)index
 {
    [self setColor:[_colormap colorForIndex:index]];

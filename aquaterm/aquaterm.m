@@ -198,9 +198,9 @@ void aqtSetBackgroundColor(float r, float g, float b)
    [_adapter setBackgroundColorRed:r green:g blue:b];
 }
 
-void aqtGetCurrentColor(float *r, float *g, float *b)
+void aqtGetColor(float *r, float *g, float *b)
 {
-   [_adapter getCurrentColorRed:r green:g blue:b];
+   [_adapter getColorRed:r green:g blue:b];
 }
 
 /*" Text handling "*/

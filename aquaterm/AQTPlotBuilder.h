@@ -45,6 +45,7 @@
   /*" Color handling "*/
 - (AQTColor)color;
 - (void)setColor:(AQTColor)newColor;
+- (AQTColor)backgroundColor;
 - (void)setBackgroundColor:(AQTColor)newColor;
 
 - (void)takeColorFromColormapEntry:(int)index;

@@ -292,13 +292,23 @@ _{43:%{x,y}:%key Error } "*/
 }
 
 /*" Get current RGB color components by reference. "*/
-- (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b
+- (void)getColorRed:(float *)r green:(float *)g blue:(float *)b
 {
    AQTColor tmpColor = [_selectedBuilder color];
    *r = tmpColor.red;
    *g = tmpColor.green;
    *b = tmpColor.blue;
 }
+
+/*" Get background color components by reference. "*/
+- (void)getBackgroundColorRed:(float *)r green:(float *)g blue:(float *)b
+{
+   AQTColor tmpColor = [_selectedBuilder backgroundColor];
+   *r = tmpColor.red;
+   *g = tmpColor.green;
+   *b = tmpColor.blue;
+}
+
 
 /*" Set the font to be used. Applies to all future operations. Default is Times-Roman."*/
 - (void)setFontname:(NSString *)newFontname
