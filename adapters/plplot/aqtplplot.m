@@ -17,11 +17,10 @@ static id adapter;                          // Adapter object
 // ----------------------------------------------------------------
 // --- Start of PlPlot function aqtrm()
 // ----------------------------------------------------------------
-#include "plplot/plplotP.h"
-#include "plplot/drivers.h"
-//#include "plplot/aqtplplot.h"
-#include "plplot/plDevs.h"
-#include "plplot/ps.h"
+#include "plplotP.h"
+#include "drivers.h"
+#include "plDevs.h"
+#include "ps.h"
 
 /* Driver entry and dispatch setup */
 
@@ -57,7 +56,8 @@ int colorChange;
 
 #define AQT_Max_X       (10.0*72.0)
 #define AQT_Max_Y       (10.0*72.0)
-#define DPI             72
+#define DPI             72.0
+#define SCALE           10.0
 
 //---------------------------------------------------------------------
 //   aqt_init()
@@ -73,6 +73,7 @@ void plD_init_aqt(PLStream *pls)
       arpool = [[NSAutoreleasePool alloc] init];
       adapter = [[AQTAdapter alloc] init];
    }
+   [adapter setBackgroundColorRed:0.0 green:0.0 blue:0.0];
 
    pls->termin = 1;		// If interactive terminal, set true.
    pls->color = 1;		// aqt is color terminal
@@ -96,7 +97,7 @@ void plD_init_aqt(PLStream *pls)
    //
    //  Set the bounds for plotting.  initially set it to be a 400 x 400 array
    //
-   plP_setphy((PLINT) 0, (PLINT) (AQT_Max_X), (PLINT) 0, (PLINT) (AQT_Max_Y));
+   plP_setphy((PLINT) 0, (PLINT) (SCALE*AQT_Max_X), (PLINT) 0, (PLINT) (SCALE*AQT_Max_Y));
 
 }
 
@@ -130,8 +131,8 @@ void plD_line_aqt(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
       [adapter takeColorFromColormapEntry:(1-pls->curcmap)*pls->icol0 + pls->curcmap*(pls->icol1+pls->ncol0)];
       colorChange = FALSE;
    }
-   [adapter moveToPoint:NSMakePoint((int) x1a + .3, (int) y1a + .3)];
-   [adapter addLineToPoint:NSMakePoint((int) x2a + .3, (int) y2a + .3)];
+   [adapter moveToPoint:NSMakePoint((float)x1a/SCALE, (float)y1a/SCALE)];
+   [adapter addLineToPoint:NSMakePoint((float)x2a/SCALE, (float)y2a/SCALE)];
 }
 
 //---------------------------------------------------------------------
@@ -314,7 +315,7 @@ void proc_str (PLStream *pls, EscText *args)
    //  Set the font height - the 1.2 factor was trial and error
 
    ft_ht = 1.2*pls->chrht * 72.0/25.4; /* ft_ht in points. ht is in mm */
-
+   //
    //  Now find the angle of the text relative to the screen...
    //
    angle = pls->diorot * 90.;
@@ -323,10 +324,6 @@ void proc_str (PLStream *pls, EscText *args)
       alpha = a1 - angle;
    else
       alpha = 360. - a1 - angle;
-
-   alpha = alpha * PI / 180.;
-   // [adapter useOrientation:alpha];
-
    //
    // any transformation if there is one - normally on text there isn't any
    //
@@ -548,7 +545,7 @@ void proc_str (PLStream *pls, EscText *args)
 */
       }
 
-      [adapter addLabel:s position:NSMakePoint(args->x, args->y) angle:alpha justification:jst];
+      [adapter addLabel:s position:NSMakePoint((float)args->x/SCALE, (float)args->y/SCALE) angle:alpha justification:jst];
 
       [s release];
 
