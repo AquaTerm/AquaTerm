@@ -5,18 +5,26 @@ This is an early release for testing purposes. Please provide feedback and featu
 * How to use AquaTerm:
 AquaTerm is a graphics terminal that can be used to easily add aqua graphics to (primarily scientific) legacy applications written in C, FORTRAN or any other language that can send remote messages.
 
-AquaTerm register with the system and responds to a (small) set of remote messages, listed and explained in AQTProtocol.h. 
+AquaTerm register with the system and responds to a (small) set of remote messages, listed and explained in AQTBaseMethods.h, AQTExtendedMethods.h (AQTProtocol.h). 
 
 * Documentation
 
 All documentation is available at http://aquaterm.sourceforge.net
 
-* Major changes
+* AquaTerm changes
+------------------
 AquaTerm 0.3.2
-  Bugfix: Help was broken
-  Canvas size settable from client
-  Window respects canvas width/height ratio
+  Bugfix: Help is now working
+  Window size settable from client
+  Resize respects window width/height ratio
   Handles attributed strings
+  Splitting AQTProtocol, separating Foundation and AppKit dependencies. 
+    AQTProtocol.h provides backwards compatibility
+  Source included in distro, use 
+	pbxbuild -target AquaTerm clean
+	pbxbuild -target AquaTerm -buildstyle Deployment
+    to build the executable from the command line or use PB. 
+    To build the (somewhat outdated) docs you need autodoc.
 
 AquaTerm 0.3.1
   Bugfix: Save as EPS/PDF (#605454)
@@ -30,9 +38,12 @@ AquaTerm 0.3.0
   Help menu links to homepage
 
 * Adapter changes
+-----------------
 AquaTerm 0.3.2
   PLPLOT
     Added driver for PLPLOT contributed by Mark Franz
+  PGPLOT
+    Window size controlled from PGPLOT
 
 AquaTerm 0.3.1
   Gnuplot
@@ -60,7 +71,7 @@ AquaTerm 0.3.0
   C/FORTRAN
     Updated drivers for C and FORTRAN
 
-* How to get the source for AquaTerm:
+* How to get the latest source for AquaTerm:
 
 The source for AquaTerm is available in the CVS repository at http://sourceforge.net/projects/aquaterm
 The source corresponding to this release is tagged: release-0_3_2
