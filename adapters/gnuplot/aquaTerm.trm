@@ -1,0 +1,633 @@
+/* -*- objc -*-
+ * $Id: aquaTerm.trm,v 1.1 2001/11/13 18:56:29 persquare Exp $
+ *
+ */
+
+/* GNUPLOT - aqua.trm */
+
+
+/*
+ * This file is included by ../term.c via ../term.h.
+ *
+ * This terminal driver supports:
+ *     Aqua (MacOS X/Cocoa)
+ *
+ * AUTHORS
+ *  Per Persson from openstep.trm by Robert Lutwak
+ * 
+ * send your comments or suggestions to (info-gnuplot@dartmouth.edu).
+ *
+ * This terminal attempts to connect, via the MacOS X Distributed
+ * Objects system, to the "gnuplotServer."  If there is no such
+ * service registered with the OS, the terminal attempts to fire
+ * up AGPTerm.app.  If the user has not set the environment variable
+ * GNUTERMAPP, the terminal uses the users ApplicationPaths Workspace
+ * dwrite to search for AGPTerm.app (Note:  this is usually something
+ * like /Applications, ~/Applications, ~/Network/Applications, etc.).
+ * In order to use this filter, you MUST have AGPTerm.app or some other
+ * application capable of handling the gnuplot DO protocol installed
+ * on your system.
+ *
+ * Once connected to the server, all gnuplot primitives are sent, 
+ * via the D.O. system, to AGPTerm.app, which produces the graphs, 
+ * manages the windows etc.
+ * 
+ *
+ * Defaults are
+ * ''
+ *
+ * to choose window by title
+ * 'set term next title "Window title"
+ *
+ */
+
+#include "driver.h"
+
+#ifdef TERM_REGISTER
+register_term(aqua)
+#endif
+
+#ifdef TERM_PROTO
+/*
+ * 2001-08-18	PP
+ * src/tables.h defines S_OUTPUT which is also defined in
+ * /System/Library/Frameworks/CoreServices.framework/Frameworks/OT.framework/Headers/OpenTransportProtocol.h:736: 
+ * included from Foundation/NSFoundation.h
+ * => conflicting types for `S_OUTPUT'
+ * Avoid conflict by selecting only needed headers
+ */ 
+#import <Foundation/NSConnection.h>
+#import <Foundation/NSDistantObject.h>
+#import <Foundation/NSAutoreleasePool.h>
+#import <Foundation/NSPortCoder.h>
+#import <Foundation/NSNotification.h>
+#import <AppKit/NSWorkspace.h>
+#import <AppKit/NSBezierPath.h>
+#import <stdarg.h>
+
+/* Debugging extras */
+static inline void NOOP_(id x, ...) {;}
+
+
+#ifdef LOGGING
+#define LOG  NSLog
+#else
+#define LOG  NOOP_
+#endif
+
+
+/* Required entries */
+TERM_PUBLIC void AQUA_options __PROTO((void));
+TERM_PUBLIC void AQUA_init __PROTO((void));
+TERM_PUBLIC void AQUA_reset __PROTO((void));
+TERM_PUBLIC void AQUA_text __PROTO((void));
+TERM_PUBLIC void AQUA_graphics __PROTO((void));
+TERM_PUBLIC void AQUA_move __PROTO((unsigned int x, unsigned int y));
+TERM_PUBLIC void AQUA_vector __PROTO((unsigned int x, unsigned int y));
+TERM_PUBLIC void AQUA_linetype __PROTO((int linetype));
+TERM_PUBLIC void AQUA_put_text __PROTO((unsigned int x, unsigned int y,const char *str));
+
+/* Optional entries */
+// TERM_PUBLIC int AQUA_text_angle __PROTO((int));
+TERM_PUBLIC int AQUA_justify_text __PROTO((enum JUSTIFY));
+TERM_PUBLIC int AQUA_set_font __PROTO((const char *font));  /* "font,size" */
+TERM_PUBLIC void AQUA_set_pointsize __PROTO((double size)); /* notification of set pointsize */
+TERM_PUBLIC int flags; /* various flags */
+TERM_PUBLIC void AQUA_suspend __PROTO((void)); /* after one plot of multiplot */
+TERM_PUBLIC void AQUA_resume __PROTO((void));  /* before subsequent plot of multiplot */
+// TERM_PUBLIC void AQUA_boxfill __PROTO((int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height)); /* clear part of multiplot */
+TERM_PUBLIC void AQUA_linewidth __PROTO((double linewidth));
+TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
+#ifdef PM3D
+	TERM_PUBLIC int AQUA_make_palette __PROTO((t_sm_palette *palette));
+	TERM_PUBLIC void AQUA_set_color __PROTO((double gray));
+	TERM_PUBLIC void AQUA_filled_polygon __PROTO((int points, gpiPoint *corners));
+#endif
+/* End of entries */
+
+
+#define AQUA_XMAX (11.69*72)	/* = 842, paper width times screen resolution */
+#define AQUA_YMAX (8.26*72)	/* = 595, paper height times screen resolution */
+#define AQUA_VTIC 8			
+#define AQUA_HTIC 8
+#define AQUA_VCHAR 16			/* default is 14 point characters */
+#define AQUA_HCHAR (AQUA_VCHAR*6/10)
+
+
+@interface NSBezierPath (NSBezierPathDOCategory)
+- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder; 
+@end
+
+/*
+ * This defines the protocol for the DO connection
+ * Really should be included since it is used at the
+ * receiving end as well... That, however is against 
+ * gnuplot guidelines for .trm files
+ *
+ */
+@protocol gptProtocol
+- (oneway void) gptRenderRelease:(BOOL)yesOrNo;
+//- (oneway void) gptLinetype:(int) linetype;
+- (oneway void) gptPutString:(bycopy NSString *)textString AtPoint:(bycopy NSPoint)coord WithJustification:(bycopy int) mode WithLinetype:(bycopy int) linetype;
+- (oneway void) gptSetFont:(bycopy NSString *)font;
+//- (oneway void) gptSetColor:(bycopy double) gray;
+- (oneway void) gptSetPath:(bycopy NSBezierPath *)aPath WithLinetype:(bycopy int) linetype FillColor:(bycopy double) gray PathIsFilled:(bycopy BOOL)isFilled;
+
+//- (oneway void) gptLinewidth:(double) linewidth;
+- (oneway void) gptCurrentWindow:(int) currentWindow;
+// ---- the following two are stubs -----------
+- (oneway void) gptPointsize:(double) pointsize;
+- (oneway void) gptDidSetPointsize:(double) size;
+@end
+
+#define GOT_AQUA_PROTO
+#endif
+
+#ifndef TERM_PROTO_ONLY
+
+#ifdef TERM_BODY
+
+
+static NSAutoreleasePool *arpool;       // our autorelease pool 
+static id gnuTermAccess;                // local object manages the D.O. connection
+static NSBezierPath *thePath;
+static int currentJustificationMode;
+static int currentLinetype;
+static double currentGray; 
+static int currentWindow = 0;
+
+
+@implementation NSBezierPath (NSBezierPathDOCategory)
+- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder 
+{
+	if ([portCoder isBycopy]) 
+		return self;
+	return [super replacementObjectForPortCoder:portCoder];
+}
+@end
+
+
+/*
+ * Interface for ObjC NSConnection code
+ */ 
+@interface GnuTermDriver:NSObject 
+{
+  @private
+    NSDistantObject *server;
+}
+/*
+ * Minimal set of methods
+ */
+- init;
+/*
+ * Accessors etc.
+ */
+ -(NSDistantObject *)server;
+/*
+ * Rest of methods
+ */ 
+- (void)senderIsInvalid:(NSNotification *)notification;
+@end
+/*
+ * The actual instances of the methods
+ */
+@implementation GnuTermDriver
+- init
+{
+	BOOL defaultApp = YES;
+	NSString *appString;
+    NSConnection *myConnection;
+	/*
+	 * Establish a connection to graphics terminal (server)
+	 * First check if a  server is registered already
+	 * If not, check if environment variable GNUTERM is set
+	 * and try to launch that application
+	 * Finally default to looking for a hardcoded app in 
+	 * standard locations.
+	 *
+	 */
+    server = [NSConnection rootProxyForConnectionWithRegisteredName:@"gnuplotServer" host:nil];
+
+    if (server) /* Server is running ready to go */
+    {		
+    	[server retain];
+    	// printf("Connected to server\n");
+	}
+    else /* Server isn't running, we must fire it up */
+    {
+		if (getenv("GNUTERMAPP") == (char *)NULL)
+		{
+    		appString = [NSString stringWithString:@"AquaTerm"];
+		}
+		else
+		{
+			appString = [NSString stringWithCString:getenv("GNUTERMAPP")];
+    		defaultApp = NO;
+		}
+		// printf("Trying to launch %s\n", [appString cString]); 
+		/* Try to launch application */
+        if ([[NSWorkspace sharedWorkspace] launchApplication:appString] == NO) 
+        {
+	    	printf("Failed to launch gnuplot server.\n");
+	    	if (defaultApp)
+	    	{
+	    		printf("You must either put the server application in \n");
+	    		printf("the /Applications folder, ~/Applications folder\n");
+	    		printf("or set the environment variable GNUTERMAPP to the\n");
+	    		printf("full path of the server application, e.g.\n");
+	    		printf("setenv GNUTERMAPP \"/some/strange/location/MyServer.app\"\n");
+	    	}
+	    	else
+	    	{
+	    		printf("Check environment variable GNUTERMAPP for errors\n");
+	    	}
+	    	/*
+	    	 * FIXME: Gnuplot should default to something here...
+	    	 */
+        }
+        else 
+        {
+	    /* Wait for it to register Server methods with OS */
+	    	do {
+	      		server =[NSConnection
+			 	rootProxyForConnectionWithRegisteredName:@"gnuplotServer" host:nil];
+	    	} while (!server);	/* This could result in a hang, but I've never seen it fail. (why?) */
+    		[server retain];
+		}
+    }
+    // NSLog(@"Server: %@\n", server);
+    /* 
+     * By limiting ourselves to known protocol
+     * we speed up the messaging 
+     */
+    [server setProtocolForProxy:@protocol(gptProtocol)];
+
+    /* If the server dies we want to know about it */
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+    										 selector:@selector(senderIsInvalid:) 
+    											 name:NSConnectionDidDieNotification  
+    										   object:nil
+    										   ]; 
+/*
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+    										 selector:@selector(senderIsInvalid:) 
+    											 name:@"listenerIsClosing"  
+    										   object:nil
+    										   ]; 
+*/
+	return self;
+}
+
+-(void)dealloc
+{
+  [server release];
+  [super dealloc];
+}
+
+-(NSDistantObject *)server
+{
+    return server;
+}
+
+- (void) senderIsInvalid: (NSNotification *) notification
+{
+	LOG(@"Lost connection to server...\nMessage: %@\n", [notification object]);
+    //[server invalidate];
+    // server = 0;
+}
+
+@end
+
+
+enum AQUA_id {
+    AQUA_DEFAULT,
+    AQUA_TITLE,
+    AQUA_OTHER
+};
+
+
+static struct gen_table AQUA_opts[] =
+{
+    { "d$efault", AQUA_DEFAULT },
+    { "ti$tle", AQUA_TITLE },
+    { NULL, AQUA_OTHER }
+};
+
+static char AQUA_title[MAX_LINE_LEN + 1];
+
+
+   /**"
+   *** AQUA_options is called 0 or more times before a call to AQUA_init occurs.
+   *** It is important that the option <n> is passed correctly to GNUTERMAPP
+   *** A particularly tricky situation is when option <n> is passed before the first
+   *** operation resulting in a call to AQUA_init.
+   "**/
+TERM_PUBLIC void
+AQUA_options()
+{
+    struct value a;
+
+    LOG(@"AQUA_options");    
+
+    while (!END_OF_COMMAND) 
+    {
+      switch(lookup_table(&AQUA_opts[0],c_token)) 
+      {
+         case AQUA_DEFAULT:
+            /*
+                something...
+            */
+            c_token++;
+            break;
+         case AQUA_TITLE:
+            c_token++;
+            if (!isstring(c_token)) 
+            { 
+               fprintf(stderr, "usage:  set term aqua title \"newtitle\"\n"); 
+            }
+            quote_str(AQUA_title, c_token, MAX_LINE_LEN + 1);
+            break;
+         case AQUA_OTHER:
+            currentWindow = (int) real(const_express(&a));
+            /* Make sure we have a connection before passing a message */
+            if (gnuTermAccess)
+            {
+                // set the window number
+               [[gnuTermAccess server]  gptCurrentWindow:currentWindow];
+
+            }
+            break;	
+        default:            
+            /*
+                something...
+            */
+            break;
+      }
+    }
+    // sprintf(term_options, "Current window \"%d\"\n", currentWindow);
+}
+
+
+TERM_PUBLIC void
+AQUA_init()
+{
+    LOG(@"Aqua Init --- order is important!");
+    /*
+        * Init is called when plotting after _every_ 'set term aqua'
+        * Make sure we don't leak mem by allocating every time
+        */
+    if (arpool == NULL)
+    {
+        arpool = [[NSAutoreleasePool alloc] init]; 
+        gnuTermAccess = [[GnuTermDriver alloc] init]; 
+        thePath = [[NSBezierPath alloc] init];
+        currentJustificationMode = 0;
+        currentLinetype = 0;
+        currentGray = 0.0;
+    }
+    term->xmax = AQUA_XMAX;
+    term->ymax = AQUA_YMAX;
+}
+
+TERM_PUBLIC void
+AQUA_reset()
+{
+}
+
+
+TERM_PUBLIC void
+AQUA_text()
+{
+    if ([thePath isEmpty] == NO)
+    {
+        // This happens if a (stroked) path hasn't been sent
+        // PM3D patches are _always_ sent immediately
+        [[gnuTermAccess server] gptSetPath:thePath 
+                            WithLinetype:currentLinetype 
+                                FillColor:currentGray 
+                            PathIsFilled:NO];    
+        [thePath removeAllPoints];                                 
+    }
+    [[gnuTermAccess server] gptRenderRelease:YES]; // Draw!
+}
+
+
+TERM_PUBLIC void
+AQUA_graphics()
+{
+}
+
+TERM_PUBLIC void
+AQUA_move(unsigned int x, unsigned int y)
+{
+    [thePath moveToPoint:NSMakePoint(x, y)];
+    // [[gnuTermAccess server] gptMoveTo:x :y];
+}
+
+
+TERM_PUBLIC void
+AQUA_vector(unsigned int x, unsigned int y)
+{
+    [thePath lineToPoint:NSMakePoint(x, y)];
+    //[[gnuTermAccess server] gptVectorTo:x :y];
+}
+
+
+TERM_PUBLIC void
+AQUA_linetype(int linetype)
+{
+    /*
+     * Change linetype
+     */
+    if ([thePath isEmpty] == NO)
+    {
+        // This happens if a (stroked) path hasn't been sent
+        // PM3D patches are _always_ sent immediately
+        [[gnuTermAccess server] gptSetPath:thePath 
+                            WithLinetype:currentLinetype 
+                                FillColor:currentGray 
+                            PathIsFilled:NO];    
+        [thePath removeAllPoints];                                 
+    }
+    if (linetype < 0)
+    {
+    	if (linetype < -3)
+    	{
+			linetype = -3;
+			LOG(@"Unknown linetype");
+		}
+	}
+    // [[gnuTermAccess server] gptLinetype:linetype]; 
+    currentLinetype = linetype;   
+}
+
+TERM_PUBLIC void
+AQUA_put_text(unsigned int x, unsigned int y, const char *str)
+{
+    if (!strlen(str))
+		return;
+    [[gnuTermAccess server] gptPutString:[NSString stringWithCString:str] 
+                                 AtPoint:NSMakePoint(x, y)
+                       WithJustification:currentJustificationMode
+                      	    WithLinetype:currentLinetype];    
+}
+
+TERM_PUBLIC int 
+AQUA_justify_text (enum JUSTIFY mode)
+{
+        currentJustificationMode = mode;
+	//[[gnuTermAccess server] gptJustifyText:mode];
+	return (TRUE);
+}
+
+TERM_PUBLIC int 
+AQUA_set_font(const char *font)	/* "font,size" */
+{
+	[[gnuTermAccess server] gptSetFont:[NSString stringWithCString:font]];
+	return (TRUE);
+}
+
+TERM_PUBLIC void 
+AQUA_set_pointsize(double size) /* notification of set pointsize */
+{
+	LOG(@"    AQUA_set_pointsize(%f)",size);
+	// [[gnuTermAccess server] gptDidSetPointsize:size];
+}
+
+TERM_PUBLIC void 
+AQUA_suspend(void)	/* after one plot of multiplot */
+{
+                if ([thePath isEmpty] == NO)
+                {
+                    // This happens if a (stroked) path hasn't been sent
+                    // PM3D patches are _always_ sent immediately
+                    [[gnuTermAccess server] gptSetPath:thePath 
+                                      WithLinetype:currentLinetype 
+                                         FillColor:currentGray 
+                                      PathIsFilled:NO];    
+                    [thePath removeAllPoints];                                 
+                }
+
+	LOG(@"    AQUA_suspend");
+	[[gnuTermAccess server] gptRenderRelease:NO];
+}
+ 
+TERM_PUBLIC void 
+AQUA_resume(void)	/* before subsequent plot of multiplot */
+{
+	LOG(@"    AQUA_resume");
+}
+  
+TERM_PUBLIC void 
+AQUA_linewidth(double linewidth)
+{
+	LOG(@"      AQUA_linewidth(%f)",linewidth);
+	// [[gnuTermAccess server] gptLinewidth:linewidth];
+        [thePath setLineWidth:linewidth];
+}
+
+TERM_PUBLIC void 
+AQUA_pointsize(double pointsize)
+{
+	LOG(@"      AQUA_pointsize(%f)",pointsize);
+	// [[gnuTermAccess server] gptPointsize:pointsize];
+}
+
+#ifdef PM3D
+	TERM_PUBLIC int 
+	AQUA_make_palette(t_sm_palette *palette)
+	{
+		return(0);
+	}
+
+	TERM_PUBLIC void 
+	AQUA_set_color(double gray)
+	{
+                
+		LOG(@"[pm3d] AQUA_set_color(%f)", gray);
+		// [[gnuTermAccess server] gptSetColor:gray];
+                if ([thePath isEmpty] == NO)
+                {
+                    // This happens if a (stroked) path hasn't been sent before drawing PM3D patches
+                    [[gnuTermAccess server] gptSetPath:thePath 
+                                      WithLinetype:currentLinetype 
+                                         FillColor:currentGray 
+                                      PathIsFilled:NO];    
+                    [thePath removeAllPoints];                                 
+                }
+                currentGray = gray;
+	}
+
+	TERM_PUBLIC void 
+	AQUA_filled_polygon(int points, gpiPoint *corners)
+	{
+		int i;
+		
+		// [[gnuTermAccess server] gptMoveTo:corners[0].x :corners[0].y];
+                [thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
+		for (i=1;i<points;i++)
+		{
+                    [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
+                    // [[gnuTermAccess server] gptVectorTo:corners[i].x :corners[i].y];
+		}
+                // Would "closePath", omitting last line + closePath etc improve speed????
+                [[gnuTermAccess server] gptSetPath:thePath 
+                                      WithLinetype:currentLinetype 
+                                         FillColor:currentGray 
+                                      PathIsFilled:YES];
+                [thePath removeAllPoints];                                 
+	}
+
+#endif
+
+
+#endif /* TERM_BODY */
+
+#ifdef TERM_TABLE
+
+
+TERM_TABLE_START(aqua_driver)
+    "aqua",
+    "Interface to aqua under MacOS X",
+    AQUA_XMAX, AQUA_YMAX, AQUA_VCHAR, AQUA_HCHAR, AQUA_VTIC, AQUA_HTIC, 
+    AQUA_options, AQUA_init, AQUA_reset,
+    AQUA_text, null_scale, AQUA_graphics, AQUA_move, AQUA_vector,
+    AQUA_linetype, AQUA_put_text, 
+    /* optionals */
+    null_text_angle,
+    AQUA_justify_text, do_point, do_arrow, AQUA_set_font,
+    AQUA_pointsize, TERM_CAN_MULTIPLOT,
+    AQUA_suspend, AQUA_resume,
+    0 /* AQUA_boxfill */, AQUA_linewidth
+	, 0, 0, 0, 0, 0
+#ifdef PM3D
+    , AQUA_make_palette,
+    0 /* AQUA_previous_palette */,
+    AQUA_set_color,
+    AQUA_filled_polygon
+#endif
+TERM_TABLE_END(aqua_driver)
+
+#undef LAST_TERM
+#define LAST_TERM aqua_driver
+
+#endif /* TERM_TABLE */
+#endif /* TERM_PROTO_ONLY */
+
+
+
+#ifdef TERM_HELP
+START_HELP(aqua)
+"1 aqua",
+"?commands set terminal aqua",
+"?set terminal aqua",
+"?set term aqua",
+"?terminal aqua",
+"?term aqua",
+"?aqua",
+"?Aqua",
+" No options to set in the Aqua driver."
+END_HELP(aqua)
+#endif /* TERM_HELP */
+
+
