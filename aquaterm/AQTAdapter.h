@@ -34,7 +34,7 @@ extern const int AQTAlignTop;
    id _aqtReserved2;
 }
 
-/*" Class initialization "*/
+/*" Class initialization etc."*/
 - (id)init;
 - (id)initWithServer:(id)localServer;
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr;

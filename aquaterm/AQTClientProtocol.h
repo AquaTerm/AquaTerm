@@ -1,6 +1,7 @@
 @protocol AQTClientProtocol
-- (void)setPlot:(bycopy id)aPlot; // (id)?
-- (void)appendPlot:(bycopy id)aPlot;
+- (void)setModel:(bycopy id)aModel; // (id)?
+- (void)appendModel:(bycopy id)aModel;
+- (void)draw;
 - (void)removeGraphicsInRect:(NSRect)aRect;
 - (void)setAcceptingEvents:(BOOL)flag;
 - (void)close;

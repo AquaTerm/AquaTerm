@@ -77,8 +77,15 @@ Event handling of user input is provided through an optional callback function.
    return [self initWithServer:nil];
 }
 
+- (void)release
+{
+   // FIXME: May never be called
+   NSLog(@"rc = %d", [self retainCount]);
+   [super release];
+}
 - (void)dealloc
 {
+   // FIXME: May never be called
    [_clientManager terminateConnection]; 
    [super dealloc];
 }
@@ -100,6 +107,11 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 - (void)setEventHandler:(void (*)(int index, NSString *event))fPtr
 {
    [_clientManager setEventHandler:fPtr];
+}
+
+- (void)terminate
+{
+   [_clientManager terminateConnection]; 
 }
 
 #pragma mark === Control operations ===
@@ -366,16 +378,23 @@ Default is RoundLineCapStyle. "*/
 /*" Add a filled rectangle. Will attempt to remove any objects that will be covered by aRect."*/
 - (void)addFilledRect:(NSRect)aRect
 {
+   // If the filled rect covers a substantial area, it is worthwile to clear it first.
+   if (NSWidth(aRect)*NSHeight(aRect) > 100.0)
+   {
+      [_clientManager clearPlotRect:aRect];
+   }
    [_selectedBuilder addFilledRect:aRect];
 }
 
-/*" Remove any objects inside aRect."*/
+/*" Remove any objects %completely inside aRect. Does %not force a redraw of the plot."*/
 - (void)eraseRect:(NSRect)aRect
 {
-   NSLog(@"implement --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   // FIXME: Possibly keep a list of rects to be erased and pass them before any append command??
+   //NSLog(@"implement --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   [_clientManager clearPlotRect:aRect];
 }
 
-/*" Set a transformation matrix for images added by #)addTransformedImageWithBitmap:size:clipRect:, see NSImage documentation for details. "*/
+/*" Set a transformation matrix for images added by #addTransformedImageWithBitmap:size:clipRect:, see NSImage documentation for details. "*/
 - (void)setImageTransformM11:(float)m11 m12:(float)m12 m21:(float)m21 m22:(float)m22 tX:(float)tX tY:(float)tY
 {
    AQTAffineTransformStruct trans;
@@ -388,7 +407,7 @@ Default is RoundLineCapStyle. "*/
    [_selectedBuilder setImageTransform:trans];
 }
 
-/*" Set transformation matrix to unity, e.g. no transform "*/
+/*" Set transformation matrix to unity, i.e. no transform. "*/
 - (void)resetImageTransform
 {
    AQTAffineTransformStruct trans;
@@ -397,13 +416,13 @@ Default is RoundLineCapStyle. "*/
    [_selectedBuilder setImageTransform:trans];
 }
 
-/*" Add a bitmap image of size bitmapSize scaled to fit destBounds, does %not apply transform. Bitmap format is 24bits per pixel in sequnce RGBRGBÉ "*/
+/*" Add a bitmap image of size bitmapSize scaled to fit destBounds, does %not apply transform. Bitmap format is 24bits per pixel in sequence RGBRGB... with 8 bits per color."*/
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
    [_selectedBuilder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
 }
 
-/*" Add a bitmap image of size bitmapSize %honoring transform, transformed image is clipped to destBounds. Bitmap format is 24bits per pixel in sequnce RGBRGBÉ "*/
+/*" Add a bitmap image of size bitmapSize %honoring transform, transformed image is clipped to destBounds. Bitmap format is 24bits per pixel in sequence RGBRGB...  with 8 bits per color."*/
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
 {
    [_selectedBuilder addTransformedImageWithBitmap:bitmap size:bitmapSize clipRect:destBounds];

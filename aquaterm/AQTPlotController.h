@@ -14,9 +14,15 @@
 @interface AQTPlotController : NSObject <AQTEventProtocol>
 {
    id<AQTClientProtocol> _handler; 	/*" The handler object in AquaTerm responsible for communication "*/
+   BOOL shouldAppendPlot;
 }
 - (void)setHandler:(id)newHandler;
-- (void)setModel:(AQTModel *)newModel;
+- (BOOL)handlerIsProxy;
+
+- (void)setShouldAppendPlot:(BOOL)flag;
+- (void)updatePlotWithModel:(AQTModel *)newModel;
+- (void)drawPlot;
+- (void)clearPlotRect:(NSRect)aRect;
 
 - (void)setAcceptingEvents:(BOOL)flag;
 

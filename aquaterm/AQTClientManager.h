@@ -37,7 +37,8 @@
 - (void)closePlot; 
 
 - (void)renderPlot; 
-- (void)clearPlot; 
+- (void)clearPlot;
+- (void)clearPlotRect:(NSRect)aRect;
 
 - (void)setAcceptingEvents:(BOOL)flag; 
 - (void)processEvent:(NSString *)event sender:(id)sender;

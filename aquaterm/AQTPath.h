@@ -12,7 +12,7 @@
 /*" This balances the fixed size of the objects vs. the need for dynamic allocation of storage. "*/
 #define STATIC_POINT_STORAGE 24
 // FIXME: Base actual number on tests
-
+// FIXME: Define AQTFarAwayPoint to separate disjoint line segments that otherwise have the same attributes?.
 @interface AQTPath : AQTGraphic 
 {
    NSPointArray path;

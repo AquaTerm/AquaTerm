@@ -167,6 +167,9 @@
 {
    NSEnumerator *enumObjects = [[_plotControllers allKeys] objectEnumerator];
    id key;
+
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
+
    while (key = [enumObjects nextObject])
    {
       _activePlotKey = key;
@@ -264,14 +267,38 @@
    AQTPlotBuilder *pb = [_builders objectForKey:_activePlotKey];
    if ([pb modelIsDirty])
    {
-      [[_plotControllers objectForKey:_activePlotKey] setModel:[pb model]];
+      AQTPlotController *pc = [_plotControllers objectForKey:_activePlotKey];
+      [pc updatePlotWithModel:[pb model]];
+      [pc drawPlot];
+      if ([pc handlerIsProxy])
+      {
+         [pb removeAllParts];
+      }
    }
 }
 
 - (void)clearPlot
 {
    [[_builders objectForKey:_activePlotKey] clearAll];
+   [[_plotControllers objectForKey:_activePlotKey] setShouldAppendPlot:NO];
    [self renderPlot];
+}
+
+- (void)clearPlotRect:(NSRect)aRect
+{
+   AQTPlotBuilder *pb = [_builders objectForKey:_activePlotKey];
+   AQTPlotController *pc = [_plotControllers objectForKey:_activePlotKey];
+   if ([pb modelIsDirty])
+   {
+      [pc updatePlotWithModel:[pb model]]; // Push any pending output to the viewer, don't draw
+      if ([pc handlerIsProxy])
+      {
+         [pb removeAllParts];
+      }
+   }
+   // FIXME make sure in server that this combo doesn't draw unnecessarily
+   [pc clearPlotRect:aRect];
+   // [pc draw];
 }
 
 - (void)closePlot

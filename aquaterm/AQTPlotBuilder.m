@@ -196,20 +196,9 @@
    _capStyle = capStyle;
 }
 
-- (void)eraseRect:(NSRect)aRect
+- (void)removeAllParts
 {
-   NSLog(@"refactor --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
-   // FIXME: Possibly keep a list of rects to be erased and pass them before any append command??
-/*
- NS_DURING
-      [_handler removeGraphicsInRect:aRect];
-   NS_HANDLER
-      if((nil != owner) && [owner respondsToSelector:@selector(_handlerError:)])
-         [owner _handlerError:[localException name]]; 
-      else
-         [localException raise];
-   NS_ENDHANDLER
-*/
+   [_model removeAllModelObjects];
 }
 
 - (void)clearAll 
@@ -366,13 +355,13 @@
 - (void)addFilledRect:(NSRect)aRect
 {
    // FIXME: This could (should) be implemented by a separate class, using NSDrawFilledRect(List)
-   // to improve drawing speed. For now, use AQTPatch
+   // to improve drawing speed. 
    NSPoint pointList[4]={
       NSMakePoint(NSMinX(aRect), NSMinY(aRect)),
       NSMakePoint(NSMaxX(aRect), NSMinY(aRect)),
       NSMakePoint(NSMaxX(aRect), NSMaxY(aRect)),
       NSMakePoint(NSMinX(aRect), NSMaxY(aRect))};
-   [self eraseRect:aRect];
+   // [self eraseRect:aRect];
    [self addPolygonWithPoints:pointList pointCount:4];
 }
 //

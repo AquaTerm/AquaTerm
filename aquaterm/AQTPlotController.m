@@ -18,20 +18,54 @@
    _handler = newHandler;
 }
 
-- (void)setModel:(AQTModel *)newModel
+- (BOOL)handlerIsProxy
+{
+   [[AQTClientManager sharedManager]
+        logMessage:[NSString stringWithFormat:@"handlerIsProxy: %@", [_handler isProxy]?@"YES":@"NO -- be careful!"]
+          logLevel:4];
+   NSLog(@"handlerIsProxy: %@", [_handler isProxy]?@"YES":@"NO -- be careful!");
+   return [_handler isProxy];
+}
+
+- (void)setShouldAppendPlot:(BOOL)flag
+{
+   shouldAppendPlot = flag && [self handlerIsProxy];
+}
+
+- (void)updatePlotWithModel:(AQTModel *)newModel
 {
    NS_DURING
-         [_handler setPlot:newModel];
+      if (shouldAppendPlot)
+      {
+         [_handler appendModel:newModel];         
+      }
+      else
+      {
+         [_handler setModel:newModel];
+         [self setShouldAppendPlot:YES];
+      }
    NS_HANDLER
          [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
    NS_ENDHANDLER
 }
 
-#pragma mark === AQTEventProtocol methods ===
-
-- (void)processEvent:(NSString *)event
+- (void)drawPlot
 {
-   [[AQTClientManager sharedManager] processEvent:event sender:self]; // FIXME: Needs autoreleasing here???
+   // NSLog(@"implement --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
+   NS_DURING
+      [_handler draw];
+   NS_HANDLER
+      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+   NS_ENDHANDLER
+}
+
+- (void)clearPlotRect:(NSRect)aRect
+{
+   NS_DURING
+      [_handler removeGraphicsInRect:aRect];
+   NS_HANDLER
+      [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
+   NS_ENDHANDLER
 }
 
 - (void)setAcceptingEvents:(BOOL)flag
@@ -42,4 +76,12 @@
       [[AQTClientManager sharedManager] _aqtHandlerError:[localException name]];
    NS_ENDHANDLER   
 }
+
+#pragma mark === AQTEventProtocol methods ===
+
+- (void)processEvent:(NSString *)event
+{
+   [[AQTClientManager sharedManager] processEvent:event sender:self]; // FIXME: Needs autoreleasing here???
+}
+
 @end
