@@ -17,6 +17,8 @@
   int			modelNumber;	/*" Current model number, set by client when initializing model "*/
   NSFont		*font;			/*" Current font, defaults to Times-Roman at 16pt "*/
   GPTController *renderer;		/*" Reference to object responsible for storing and rendering (finished) models "*/
+  // ---- Timing for adapter testing -----
+  NSDate		*startTime;
 }
 -(void)setRenderer:(GPTController *)newRenderer;
 -(GPTController *)renderer;

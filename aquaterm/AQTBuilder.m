@@ -75,6 +75,11 @@ static inline void NOOP_(id x, ...) {;}
   }
   model = [[AQTModel alloc] init];
   modelNumber = newModel;
+  [self setTitle:[NSString stringWithFormat:@"Figure %d", modelNumber]];
+  //
+  // ----- Code for timing -----
+  //
+  startTime = [[NSDate date] retain];
 }
 
 - (oneway void)closeModel
@@ -85,10 +90,19 @@ static inline void NOOP_(id x, ...) {;}
   }
   else
   {
+    //
+    // ----- Code for timing -----
+    //
+    [model setTimeTaken:-[startTime timeIntervalSinceNow]];
+    [startTime release];
+    startTime = nil;
+    //
+    // ----- End timing -----
+    //
     // Hand over model to renderer and release it
     [model updateColors:colormap];
     LOG(@"builder/closeModel setmodel:forView:%d",index);
-
+    
     [renderer setModel:model forView:modelNumber];	// the renderer will retain this object
     [model release];
     model = nil;
@@ -116,6 +130,10 @@ static inline void NOOP_(id x, ...) {;}
   return tmpDict;
 }
 
+- (oneway void)setTitle:(NSString *)newTitle
+{
+  [model setTitle:newTitle];
+}
 // Set the font to be used.
 - (oneway void)setFontWithName:(bycopy NSString *)newFontName size:(bycopy float)newFontSize
 {
@@ -225,28 +243,13 @@ static inline void NOOP_(id x, ...) {;}
 
 - (oneway void) addImage:(bycopy NSData *)imageData  bounds:(NSRect)theBounds
 {
-/*
- AQTImage *tempImage;
-  // NSData *tmpData = [NSData dataWithContentsOfFile:@"/Users/per/Pictures/m31.jpg"];
-  // fake some data from file instead:
-  
-   tempImage = [[AQTImage alloc] initWithData:imageData bounds:theBounds];
-  // NSImage *anImage = [[NSImage alloc] initWithData:imageData];
-  // [anImage setFlipped:YES];
-  // [anImage setDataRetained:YES];
-  // tempImage = [[AQTImage alloc] initWithImage:anImage];
-  // [tempImage setBounds:theBounds];
-  [model addObject:tempImage];
-  [tempImage release];
-  // [anImage release];
-*/
   NSLog(@"(void)addImage::   Warning, this method is obsolete and will be removed!");
-  
 }
 
-- (oneway void)addImageFromFile:(bycopy NSString *)filename
+- (oneway void) addImageFromFile:(bycopy NSString *)filename bounds:(NSRect)theBounds
 {
   AQTImage *tempImage = [[AQTImage alloc] initWithContentsOfFile:filename];
+  [tempImage setBounds:theBounds];
   [model addObject:tempImage];
   [tempImage release];
 }

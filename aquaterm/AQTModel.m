@@ -10,26 +10,28 @@
 #import "AQTColorMap.h"
 
 @implementation AQTModel
-    /**"
-    *** A class representing a collection of objects making up the plot. 
-    *** The objects can be leaf object like GPTPath and GPTLabel or a 
-    *** collection itself (not exploited at present).
-    "**/
+/**"
+*** A class representing a collection of objects making up the plot.
+*** The objects can be leaf object like GPTPath and GPTLabel or a
+*** collection itself (not exploited at present).
+"**/
 
--(id)init	
+-(id)init
 {
-    self = [super init];
-    if (self)
-    {
-        modelObjects = [[NSMutableArray alloc] initWithCapacity:0];
-    }
-    return self;
+  self = [super init];
+  if (self)
+  {
+    modelObjects = [[NSMutableArray alloc] initWithCapacity:0];
+    [self setTitle:@"Untitled"];
+  }
+  return self;
 }
 
 -(void)dealloc
 {
-   [modelObjects release];
-   [super dealloc];
+  [title release];
+  [modelObjects release];
+  [super dealloc];
 }
 
 -(int)count
@@ -50,12 +52,12 @@
   return trackingRect;
 }
 
-    /**"
-    *** Add any subclass of AQTGraphic to the collection of objects.
-    "**/
+/**"
+*** Add any subclass of AQTGraphic to the collection of objects.
+"**/
 -(void)addObject:(AQTGraphic *)graphic
 {
-    [modelObjects addObject:graphic];
+  [modelObjects addObject:graphic];
 }
 
 -(void)removeObject:(AQTGraphic *)graphic
@@ -65,32 +67,32 @@
 
 -(void)removeObjectsInRect:(NSRect)targetRect
 {
-    AQTGraphic *graphic;
-    NSEnumerator *enumerator = [modelObjects objectEnumerator];
-    
-    while ((graphic = [enumerator nextObject]))
+  AQTGraphic *graphic;
+  NSEnumerator *enumerator = [modelObjects objectEnumerator];
+
+  while ((graphic = [enumerator nextObject]))
+  {
+    [graphic removeObjectsInRect:targetRect];	// recursively remove objects
+    if (NSContainsRect(targetRect, [graphic bounds]))
     {
-      [graphic removeObjectsInRect:targetRect];	// recursively remove objects
-      if (NSContainsRect(targetRect, [graphic bounds]))
-      {
-        [self removeObject:graphic];
-      }
+      [self removeObject:graphic];
     }
+  }
 }
 
 
-    /**"
-    *** Tell every object in the collection to draw itself.
-    "**/
+/**"
+*** Tell every object in the collection to draw itself.
+"**/
 -(void)renderInRect:(NSRect)boundsRect
 {
-    AQTGraphic *graphic;
-    NSEnumerator *enumerator = [modelObjects objectEnumerator];
-    
-    while ((graphic = [enumerator nextObject]))
-    {
-       [graphic renderInRect:boundsRect];
-    }
+  AQTGraphic *graphic;
+  NSEnumerator *enumerator = [modelObjects objectEnumerator];
+
+  while ((graphic = [enumerator nextObject]))
+  {
+    [graphic renderInRect:boundsRect];
+  }
 }
 
 -(void)setColormap:(AQTColorMap *)newColorMap
@@ -104,19 +106,43 @@
   return modelColorMap;
 }
 
+-(void)setTitle:(NSString *)newTitle
+{
+  [newTitle retain];
+  [title release];
+  title = newTitle;
+}
+
+-(NSString *)title
+{
+  return [title copy];
+}
+
 
 // -- updateColors: --
 // 	override parent class' implementation
 -(void) updateColors:(AQTColorMap *)colorMap;
 {
-    AQTGraphic *graphic;
-    NSEnumerator *enumerator = [modelObjects objectEnumerator];
+  AQTGraphic *graphic;
+  NSEnumerator *enumerator = [modelObjects objectEnumerator];
 
-    [self setColormap: colorMap]; // Remember map for inspector! PP
-    while ((graphic = [enumerator nextObject]))
-    {
-        [graphic updateColors:colorMap];
-    }
+  [self setColormap: colorMap]; // Remember map for inspector! PP
+  while ((graphic = [enumerator nextObject]))
+  {
+    [graphic updateColors:colorMap];
+  }
 }
+
+// ---- Timing for adapter testing -----
+-(double)timeTaken
+{
+  return timeTaken;
+}
+
+-(void)setTimeTaken:(double)timer
+{
+  timeTaken = timer;
+}
+
 
 @end

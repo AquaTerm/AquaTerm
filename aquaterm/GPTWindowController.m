@@ -13,41 +13,25 @@
     /**"
     *** The designated initializer
     "**/
--(id)initWithIndex:(int)index andTitle:(NSString *)title
-{   
-    self = [super initWithWindowNibName:@"GPTWindow"];
-    if (self)
-    {
-        model = [[AQTModel alloc] init];
-        viewTitle = [[NSString stringWithString:title] retain];
-        // [[self window] setTitle:viewTitle];
-        viewIndex = index;	
-        // [viewOutlet setControllerReference:self];
-        // Let the view have a ref to its controller (FAQ: is this kosher? NO)
-        // I don't think there is anything wrong with it, if there is a reason
-        // for the view to contact the w-controller, but it could be done
-        // easilly in IB so why do it here? <BS>
-    }
-    return self;
+ -(id)initWithIndex:(int)index
+{
+  self = [super initWithWindowNibName:@"GPTWindow"];
+  if (self)
+  {
+    viewIndex = index;
+    model = [[AQTModel alloc] init];
+  }
+  return self;
 }
 
-    /**"
-    *** The title is optional and this init, controls the default title
-    *** which is Figure <index>  
-    "**/
--(id)initWithIndex:(int)index
-{   
-    return [self initWithIndex:(int)index andTitle:[NSString stringWithFormat:@"Figure %d", index]];
-}
 -(void)awakeFromNib
 {
-	[[self window] setTitle:viewTitle];
+	[[self window] setTitle:[model title]];
     [viewOutlet setNeedsDisplay:YES];
 }
 
 -(void)dealloc
 {   
-    [viewTitle release];
     [model release];
     [super dealloc];
 }
@@ -55,7 +39,7 @@
     /*" Describe model. (for debugging) "*/
 -(NSString *)description
 {
-    return [NSString stringWithFormat:@"Plot #%d, \"%@\"\nModel: %@", viewIndex, viewTitle, [model description]];
+    return [NSString stringWithFormat:@"Plot \"%@\"\nModel: %@", [model title], [model description]];
 }
 
     /*" Accessor methods for the GPTView instance "*/
@@ -72,17 +56,19 @@
 -(void)setModel:(AQTModel *)newModel
 {
   [newModel retain];
-  [model release];			// let go of old model
-  model =  newModel;		// Make it point to new model (FIXME: multiplot requires care! OK)
-  
-    // Check if window is has been loaded
+  [model release];		// let go of old model
+  model = newModel;		// Make it point to new model (FIXME: multiplot requires care! OK)
+
+  // FIXME: Voodo below!  
+  // Check if window is has been loaded
     if ([self window])
     {
       if (![[self window] isVisible])
       {
         // The window was hidden (due to e.g. a close action)
         [[self window] orderFront:self];
-      }      
+      }
+      [[self window] setTitle:[model title]];
       [viewOutlet setNeedsDisplay:YES];	// Tell view to update itself
     }
 }

@@ -12,6 +12,7 @@
 #import "AQTPrintView.h"
 #import "AQTColorInspector.h"
 #import "AQTBuilder.h"
+#import "AQTModel.h"
 
 @implementation GPTController
     /**"
@@ -27,7 +28,7 @@
       [builder setRenderer:self];
       gptWindowControllers = [[NSMutableArray arrayWithCapacity:0] retain];
       // Force (pre-)loading of window NIB-file.... 
-      [self setModel:nil forView:0];
+      [self setModel:[[[AQTModel alloc] init] autorelease] forView:0];
       [[[self controllerForView:0] window] close];
     }
     return self;
@@ -114,9 +115,10 @@
   //
   if (theController == nil)
   {
+    // FIXME: For now, the windowcontroller holds the index, that is unneccessary, see -controllerForView:
     theController = [[GPTWindowController allocWithZone:[self zone]] initWithIndex:index];
     [self addWindowController:theController];	// The windowController is added to the array, and thus retained
-    [theController release];			// By releasing here, every windowController is released when the main nib is deallocated
+    [theController release];					// By releasing here, every windowController is released when the main nib is deallocated
   }
   [theController setModel:aqtModel];    		// Then hand the model over to the corresponding controller
 }
@@ -128,7 +130,7 @@
 -(GPTWindowController *)controllerForView:(int)index
 {
   //
-  // FIXME! should be a dictionary of some kind
+  // FIXME! should be a dictionary of some kind => no need for wc to know its index
   //
   GPTWindowController *wc;
   NSEnumerator *enumerator = [[self windowControllers] objectEnumerator];
