@@ -229,7 +229,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=13, Draw dot ------------------------------------------------
 
     case 13:
-      LOG(@"IFUNC=13, Draw dot"); // FIXME
+      LOG(@"IFUNC=13, Draw dot"); // FIXME (set buttstyle explicitly?)
       [adapter moveToPoint:NSMakePoint(rbuf[0], rbuf[1])];
       [adapter addLineToPoint:NSMakePoint(rbuf[0]+1.0, rbuf[1])];
       break;
@@ -294,23 +294,15 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         RBUF(2): y position of cursor.
         CHR(1:1): character typed by user.
         */
-       
-       [adapter setAcceptingEvents:YES];
-       do {
-          isRunning = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-          event = [adapter lastEvent];
-          LOG(@"---> %@", event);
-          if (![event isEqualToString:@"0"])
-          {
-             isRunning = NO;
-          }
-       } while (isRunning);
-       
-       [adapter setAcceptingEvents:NO];
+
+       event = [adapter waitNextEvent];
        // Dissect the event here...
        eventData = [event componentsSeparatedByString:@":"];
        switch ([[eventData objectAtIndex:0] intValue])
        {
+          case 0:
+             NSLog(@"Timeout...");
+             break;
           case 1: // Mouse down
              pos = NSPointFromString([eventData objectAtIndex:1]);
              key = ([[eventData objectAtIndex:2] intValue]==1)?'A':'X';
@@ -349,7 +341,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       static int vMax = 0;
       static int vStore = 0;
       static NSPoint *vertices = nil;
-      LOG(@"IFUNC=20, Polygon fill"); // FIXME
+      LOG(@"IFUNC=20, Polygon fill"); // FIXME (clean this code)
 
       if (vMax == 0)
       {
@@ -528,7 +520,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=27, World-coordinate scaling --------------------------------
 
     case 27:
-      LOG(@"IFUNC=27, World-coordinate scaling"); // FIXME
+      LOG(@"IFUNC=27, World-coordinate scaling"); // FIXME (Use???)
       break;
 
       //--- IFUNC=28, Draw marker ---------------------------------------------
