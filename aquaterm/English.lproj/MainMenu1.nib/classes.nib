@@ -2,6 +2,7 @@
     IBClasses = (
         {
             ACTIONS = {
+                cascadeWindows = id; 
                 debug = id; 
                 lineDrawingTest = id; 
                 mailBug = id; 
@@ -10,6 +11,7 @@
                 showPrefs = id; 
                 stringDrawingTest = id; 
                 testview = id; 
+                tileWindows = id; 
             }; 
             CLASS = AQTController; 
             LANGUAGE = ObjC; 

@@ -268,6 +268,14 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
+		CB0C496E065ABF7C00AC22F7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = INSTALL;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		CB138D3E05722C2E00D208BA = {
 			children = (
 				CBB8466E056C0A4B00D208BA,
@@ -905,7 +913,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				GCC_PREPROCESSOR_DEFINITIONS = "AQT_APP TIMING";
+				GCC_PREPROCESSOR_DEFINITIONS = AQT_APP;
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
 				INSTALL_PATH = "$(USER_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = /tmp/AquaTerm.dst/usr/local/lib;
@@ -1402,6 +1410,7 @@
 				CB7217FB06072ABA008DCEAD,
 				F57C16A202506DE3010D3DE4,
 				CB72184806072CF6008DCEAD,
+				CB0C496E065ABF7C00AC22F7,
 				CBAA608305E7AFF0009B33CD,
 				F57C16A302506DE3010D3DE4,
 			);

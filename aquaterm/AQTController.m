@@ -173,8 +173,44 @@ extern void aqtLineDrawingTest(id sender);
 #pragma mark === Actions ===
 -(IBAction)showPrefs:(id)sender;
 {
-   [[AQTPrefController sharedPrefController] showPrefs]; 
+   [[AQTPrefController sharedPrefController] showPrefs];    
+}
+
+ -(IBAction)tileWindows:(id)sender;
+{
+   /* FIXME: This algorithm just divides the screen into N equally size tiles and fits the 
+      windows into the tiles trying to maximize screen usage. Could be improved... */ 
+   NSRect screenFrame = [[NSScreen mainScreen] visibleFrame];
+   NSSize tileSize;
+   NSPoint tileOrigin;
    
+   int i, row, col, nRow, nCol;
+   int n = [handlerList count];
+   
+   if (n==0)
+      return;
+   
+   nRow = nCol = 1 + (int)sqrt(n-1);
+   tileSize = NSMakeSize((int)screenFrame.size.width/nCol, (int)screenFrame.size.height/nRow);
+   tileOrigin = NSMakePoint(NSMinX(screenFrame), NSMaxY(screenFrame)-tileSize.height);
+   for(i=0;i<[handlerList count];i++) {
+      row = i/nCol;
+      col = i%nRow;
+      NSLog(@"(row, col)=(%d, %d)", row, col);
+      NSRect tmpFrame = NSMakeRect(tileOrigin.x+col*tileSize.width, tileOrigin.y-row*tileSize.height, tileSize.width, tileSize.height);
+      [[handlerList objectAtIndex:i] constrainWindowToFrame:tmpFrame];
+   }
+}
+
+-(IBAction)cascadeWindows:(id)sender
+{
+   // FIXME: Cascading point should be reset (moved) when a window hits screen bottom
+   int i;
+   NSRect screenFrame = [[NSScreen mainScreen] visibleFrame];
+   cascadingPoint = NSMakePoint(NSMinX(screenFrame), NSMaxY(screenFrame));
+   for(i=0;i<[handlerList count];i++) {
+      [[handlerList objectAtIndex:i] cascadeWindowOrderFront:YES];
+   }
 }
 
 -(IBAction)showHelp:(id)sender

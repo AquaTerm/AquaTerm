@@ -17,6 +17,8 @@
 #import "AQTEventProtocol.h"
 
 #define TITLEBAR_HEIGHT 22.0
+#define WINDOW_MIN_WIDTH 200.0
+#define WINDOW_MAX_WIDTH 1000.0
 
 @implementation AQTPlot
 -(id)init
@@ -38,8 +40,9 @@
    contentSize = [model canvasSize];
    windowSize = contentSize;
    windowSize.height += TITLEBAR_HEIGHT;
-   maxSize = NSMakeSize(2.0*contentSize.width, 2.0*contentSize.height + TITLEBAR_HEIGHT);
-   minSize = NSMakeSize(0.5*contentSize.width, 0.5*contentSize.height + TITLEBAR_HEIGHT);
+   // FIXME: Better handling of min/max size
+   maxSize = NSMakeSize(WINDOW_MAX_WIDTH, WINDOW_MAX_WIDTH*contentSize.height/contentSize.width + TITLEBAR_HEIGHT);
+   minSize = NSMakeSize(WINDOW_MIN_WIDTH, WINDOW_MIN_WIDTH*contentSize.height/contentSize.width + TITLEBAR_HEIGHT);
    ratio = windowSize;
    
    [canvas setModel:model];
@@ -71,7 +74,8 @@
 
 -(void)awakeFromNib
 {
-   [[NSApp delegate] setWindowPos:[canvas window]];
+   // [[NSApp delegate] setWindowPos:[canvas window]];
+   [self cascadeWindowOrderFront:NO];
    if (model)
    {
       [self _aqtSetupViewShouldResize:YES];
@@ -97,6 +101,34 @@
    [_clientName release];
    [super dealloc];
 }
+
+-(void)cascadeWindowOrderFront:(BOOL)orderFront
+{
+   [[NSApp delegate] setWindowPos:[canvas window]];
+   if (orderFront)
+      [[canvas window] makeKeyAndOrderFront:self];      
+}   
+
+-(void)constrainWindowToFrame:(NSRect)tileFrame
+{
+   NSRect tmpFrame;
+   float tileContentHWRatio = (tileFrame.size.height - TITLEBAR_HEIGHT)/tileFrame.size.width;
+   float canvasHWRatio = [model canvasSize].height/[model canvasSize].width;
+   
+   if (canvasHWRatio < tileContentHWRatio) {
+      // limited by width
+      float height = tileFrame.size.width*canvasHWRatio+TITLEBAR_HEIGHT;
+      tmpFrame = NSMakeRect(tileFrame.origin.x, tileFrame.origin.y+(tileFrame.size.height-height), tileFrame.size.width, height);
+   } else {
+      // limited by height
+      tmpFrame = NSMakeRect(tileFrame.origin.x, tileFrame.origin.y, (tileFrame.size.height - TITLEBAR_HEIGHT)/canvasHWRatio, tileFrame.size.height);
+   }
+   NSLog(@"%@ --> %@", NSStringFromRect(tileFrame), NSStringFromRect(tmpFrame));
+   [[canvas window] setFrame:tmpFrame display:YES];
+   [[canvas window] makeKeyAndOrderFront:self];      
+}   
+
+
 
 /*" Accessor methods for the AQTView instance "*/
 -(id)canvas
@@ -310,6 +342,7 @@
 {
    // FIXME: take screen size into account
    NSSize tmpSize = [model canvasSize]; 
+   // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (tmpSize.width > tmpSize.height)
    {
       // decide by width

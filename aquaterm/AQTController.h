@@ -22,6 +22,8 @@
 - (void)removePlot:(id)aPlot;
 - (void)setWindowPos:(NSWindow *)plotWindow;
 
+-(IBAction)tileWindows:(id)sender;
+-(IBAction)cascadeWindows:(id)sender;
 -(IBAction)showHelp:(id)sender;
 -(IBAction)showPrefs:(id)sender;
 -(IBAction)debug:(id)sender;
