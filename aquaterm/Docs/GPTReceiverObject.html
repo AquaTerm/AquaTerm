@@ -13,7 +13,7 @@
 
 
 	<blockquote><DL><DT><B>Conforms To:</B></DT>
-	<DD>gptProtocol</DD>
+	<DD>AQTProtocol</DD>
 </DL></blockquote>
 
 
@@ -26,7 +26,7 @@
 
 <H2>Class Description</H2>
 GPTReceiverObject is the class controlling the DO connection. 
-It creates an NSConnection and register the service &quot;gnuplotServer&quot; 
+It creates an NSConnection and register the service &quot;aquatermServer&quot; 
 with the system.
 
 
@@ -51,17 +51,20 @@ with the system.
 	
 		<CODE>NSConnection *<B>gptConnection</B>;</CODE><BR>
 		<CODE>GPTController *<B>listener</B>;</CODE><BR>
-		<CODE>GPTModel *<B>gptModel</B>;</CODE><BR>
+		<CODE>AQTModel *<B>aqtModel</B>;</CODE><BR>
 		<CODE>unsigned <B>currentFigure</B>;</CODE><BR>
+		<CODE>NSFont *<B>currentFont</B>;</CODE><BR>
 	<P><TABLE>
 	
 		<TR><TD>gptConnection</TD><TD>The DO connection object</TD></TR>
 	
 		<TR><TD>listener</TD><TD>The object that listens to the messages from this object</TD></TR>
 	
-		<TR><TD>gptModel</TD><TD>The graph being built</TD></TR>
+		<TR><TD>aqtModel</TD><TD>The graph being built</TD></TR>
 	
 		<TR><TD>currentFigure</TD><TD>The current term number, set by &quot;set term aqua &lt;n&gt;&quot; in gnuplot</TD></TR>
+	
+		<TR><TD>currentFont</TD><TD>The current font, defaults to Times-Roman at 16pt</TD></TR>
 	
 	</TABLE>
 	</blockquote>
@@ -80,6 +83,8 @@ with the system.
 		
 			<DD> <A HREF="#- dealloc">- dealloc</A></DD>
 		
+			<DD> <A HREF="#- connection">- connection</A></DD>
+		
 		</DL>
 	
 	</blockquote>
@@ -94,6 +99,12 @@ with the system.
  
 	
 		
+		<A NAME="- connection"></A><H3><A NAME="//apple_ref/occ/instm/GPTReceiverObject/connection">connection</A></H3><P>
+		<CODE>- (NSConnection *)<B>connection</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- dealloc"></A><H3><A NAME="//apple_ref/occ/instm/GPTReceiverObject/dealloc">dealloc</A></H3><P>
 		<CODE>- (void)<B>dealloc</B>
 		</CODE><P>
@@ -111,6 +122,6 @@ with the system.
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2001.  All Rights Reserved.  
+Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
 <P>
 </BODY></HTML>

@@ -48,6 +48,9 @@ action and manages the DO connection object.
 		<CODE>GPTReceiverObject *<B>receiverObject</B>;</CODE><BR>
 		<CODE>NSMutableArray *<B>gptWindowControllers</B>;</CODE><BR>
 		<CODE>NSWindow *<B>frontWindow</B>;</CODE><BR>
+		<CODE>NSPopUpButton *<B>saveFormatPopup</B>;</CODE><BR>
+		<CODE>NSBox *<B>extendSavePanelView</B>;</CODE><BR>
+		<CODE>AQTColorInspector *<B>inspector</B>;</CODE><BR>
 	<P><TABLE>
 	
 		<TR><TD>receiverObject</TD><TD>DO connection handler</TD></TR>
@@ -55,6 +58,12 @@ action and manages the DO connection object.
 		<TR><TD>gptWindowControllers</TD><TD>Array of windowcontrollers</TD></TR>
 	
 		<TR><TD>frontWindow</TD><TD>The main (frontmost) window of the app</TD></TR>
+	
+		<TR><TD>saveFormatPopup</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>extendSavePanelView</TD><TD>No description.</TD></TR>
+	
+		<TR><TD>inspector</TD><TD>No description.</TD></TR>
 	
 	</TABLE>
 	</blockquote>
@@ -77,9 +86,19 @@ action and manages the DO connection object.
 		
 			<DD> <A HREF="#- controllerForView:">- controllerForView:</A></DD>
 		
+			<DD> <A HREF="#- frontWindow">- frontWindow</A></DD>
+		
 			<DD> <A HREF="#- setFrontWindow:">- setFrontWindow:</A></DD>
 		
 			<DD> <A HREF="#- print:">- print:</A></DD>
+		
+			<DD> <A HREF="#- saveFigureAs:">- saveFigureAs:</A></DD>
+		
+			<DD> <A HREF="#- savePanelDidEnd:returnCode:contextInfo:">- savePanelDidEnd:returnCode:contextInfo:</A></DD>
+		
+			<DD> <A HREF="#- copy:">- copy:</A></DD>
+		
+			<DD> <A HREF="#- help:">- help:</A></DD>
 		
 		</DL>
 	
@@ -111,6 +130,26 @@ to keep track of the model to render when the user print.
 it doesn't exist.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- copy:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/copy:">copy:</A></H3><P>
+		<CODE>- (IBAction)<B>copy:</B>(id)<EM>sender</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- frontWindow"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/frontWindow">frontWindow</A></H3><P>
+		<CODE>- (NSWindow *)<B>frontWindow</B>
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- help:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/help:">help:</A></H3><P>
+		<CODE>- (IBAction)<B>help:</B>(id)<EM>sender</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- init"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/init">init</A></H3><P>
 		<CODE>- (id)<B>init</B>
 		</CODE><P>
@@ -125,6 +164,20 @@ it doesn't exist.
 corresponding to the main window.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- saveFigureAs:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/saveFigureAs:">saveFigureAs:</A></H3><P>
+		<CODE>- (IBAction)<B>saveFigureAs:</B>(id)<EM>sender</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
+		<A NAME="- savePanelDidEnd:returnCode:contextInfo:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/savePanelDidEnd:returnCode:contextInfo:">savePanelDidEnd:returnCode:contextInfo:</A></H3><P>
+		<CODE>- (void)<B>savePanelDidEnd:</B>(NSSavePanel *)<EM>theSheet</EM> <B>returnCode:</B>(int)<EM>returnCode</EM> <B>contextInfo:</B>(NSPopUpButton *)<EM>formatPopUp</EM>
+			
+		</CODE><P>
+		No method description.
+	
+		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- setFrontWindow:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/setFrontWindow:">setFrontWindow:</A></H3><P>
 		<CODE>- (void)<B>setFrontWindow:</B>(NSWindow *)<EM>mainWindow</EM>
 			
@@ -133,7 +186,7 @@ corresponding to the main window.
 	
 		<P><HR WIDTH=25% ALIGN=LEFT>
 		<A NAME="- setModel:forView:"></A><H3><A NAME="//apple_ref/occ/instm/GPTController/setModel:forView:">setModel:forView:</A></H3><P>
-		<CODE>- (void)<B>setModel:</B>(GPTModel *)<EM>gptModel</EM> <B>forView:</B>(unsigned)<EM>index</EM>
+		<CODE>- (void)<B>setModel:</B>(AQTModel *)<EM>gptModel</EM> <B>forView:</B>(unsigned)<EM>index</EM>
 			
 		</CODE><P>
 		When the controller receives a model from the sender (e.g. gnuplot) 
@@ -146,6 +199,6 @@ If a windowController for terminal &lt;n&gt; doesn't exist, it is created.
 
 
 <P><HR>
-Version 1.1 Copyright &copy;2001.  All Rights Reserved.  
+Version 1.1 Copyright &copy;2002.  All Rights Reserved.  
 <P>
 </BODY></HTML>
