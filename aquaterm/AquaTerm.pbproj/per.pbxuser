@@ -1,7 +1,12 @@
 // !$*UTF8*$!
 {
+	089C165DFE840E0CC02AAC07 = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{77, 474}, {750, 502}}";
+		};
+	};
 	29B97313FDCFA39411CA2CEA = {
-		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA;
+		activeBuildStyle = 4A9504CDFFE6A4B311CA0CBA;
 		activeTarget = 29B97326FDCFA39411CA2CEA;
 		addToTargets = (
 			29B97326FDCFA39411CA2CEA,
@@ -17,6 +22,7 @@
 			F5F7565A019830980143D562,
 			F5F7565F01984F4D0143D562,
 			F5C4C2A90199DAAF0143D54F,
+			F5FEAC2301A70E180143D50D,
 		);
 		perUserDictionary = {
 			PBXWorkspaceConfiguration = {
@@ -211,7 +217,13 @@
 	F5F7565F01984F4D0143D562 = {
 		fileReference = F5AB087B0175BC8B01EB16F3;
 		isa = PBXFileBreakpoint;
-		lineNumber = 55;
+		lineNumber = 56;
 		state = 2;
+	};
+	F5FEAC2301A70E180143D50D = {
+		fileReference = F5AB086E0175BC8B01EB16F3;
+		isa = PBXFileBreakpoint;
+		lineNumber = 78;
+		state = 1;
 	};
 }

@@ -146,6 +146,6 @@
     // Q: make window key and front? A: NO, just make sure it is shown 
     // 
     // (void)[listener selectWindow:currentFigure];	
-    NSLog(@"Current figure is %d\n",  currentModel);	// FIXME! The window doesn't show until the plot is rendered.
+    // NSLog(@"Current figure is %d\n",  currentModel);	// FIXME! The window doesn't show until the plot is rendered.
 }
 @end

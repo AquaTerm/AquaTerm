@@ -169,6 +169,7 @@
 				F5AB087C0175BC8B01EB16F3,
 				F5F7564F0198151B0143D562,
 				F5C4C2AE0199DD870143D54F,
+				F5FEAC2701A7219B0143D50D,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -246,16 +247,20 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>AquaTerm</string>
+	<key>CFBundleGetInfoString</key>
+	<string>AquaTerm v0.1.0</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>AquaTerm</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>AqTS</string>
 	<key>CFBundleVersion</key>
-	<string>0.1</string>
+	<string>0.1.0</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu1</string>
 	<key>NSPrincipalClass</key>
@@ -288,6 +293,7 @@
 				089C165EFE840E0CC02AAC07,
 				F5AB08870175BC8B01EB16F3,
 				F5C4C2DC0199DF380143D54F,
+				F5FEAC2901A7219B0143D50D,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -798,6 +804,7 @@
 				F5C4C2C40199DE090143D54F,
 				F5C4C2DA0199DE350143D54F,
 				F5C4C2DD0199E0700143D54F,
+				F5FEAC2A01A7219B0143D50D,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -992,6 +999,33 @@
 		};
 		F5FEAC1601A6B3CE0143D50D = {
 			fileRef = F5FEAC1401A6B3CE0143D50D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FEAC2701A7219B0143D50D = {
+			children = (
+				F5FEAC2801A7219B0143D50D,
+			);
+			isa = PBXVariantGroup;
+			name = Credits.rtf;
+			path = "";
+			refType = 4;
+		};
+		F5FEAC2801A7219B0143D50D = {
+			isa = PBXFileReference;
+			name = English;
+			path = English.lproj/Credits.rtf;
+			refType = 4;
+		};
+		F5FEAC2901A7219B0143D50D = {
+			fileRef = F5FEAC2701A7219B0143D50D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FEAC2A01A7219B0143D50D = {
+			fileRef = F5FEAC2701A7219B0143D50D;
 			isa = PBXBuildFile;
 			settings = {
 			};

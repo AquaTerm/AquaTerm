@@ -23,6 +23,7 @@
         [[self window] setTitle:viewTitle];
         viewIndex = index;	
         // [viewOutlet setControllerReference:self];	// Let the view have a ref to its controller (FAQ: is this kosher? NO)
+
     }
     return self;
 }

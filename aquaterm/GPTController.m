@@ -72,7 +72,11 @@
         [theController release];			// By releasing here, every windowController is released when the main nib is deallocated
     }
     [theController setModel:gptModel];    		// Then hand the model over to the corresponding controller
-
+    if (![[theController window] isVisible])
+    {
+        // The window was hidden (due to e.g. a close action)
+        [[theController window] orderFront:self];
+    } 
 }
     /**" 
     *** Returns the windowController for terminal <n> or nil if
