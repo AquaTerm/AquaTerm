@@ -379,7 +379,7 @@
    [scratch appendBezierPathWithPoints:path count:pointCount];
    [scratch setLineJoinStyle:NSRoundLineJoinStyle];
    [scratch setLineCapStyle:lineCapStyle];
-   [scratch setLineWidth:linewidth];
+   [scratch setLineWidth:[self isFilled]?1.0:linewidth];
    if([self isFilled])
    {
       [scratch closePath];
