@@ -1,21 +1,26 @@
 To install at default locations:
 1) Drag AquaTerm.app to /Applications
-2) Copy libaquaterm.1.0.0.dylib (in ./lib) to /usr/local/lib/ 
-3) Create a link libaquaterm.dylib -> libaquaterm.1.0.0.dylib using the command 
-sudo ln -s /usr/local/lib/libaquaterm.1.0.0.dylib /usr/local/lib/libaquaterm.dylib
-4) Copy the contents of ./include to /usr/local/include/aquaterm, create the directory if necessary.
+2) Drag AquaTerm.framework to /Library/Frameworks
+3) Then, for backwards compatibility, symlinks should be placed from /usr/local/lib/libaquaterm.dylib 
+to the executable inside the framework, and similar for the headers. Given that the framework is in 
+/Library/Frameworks the following needs to be done:
+
+ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm /usr/local/lib/libaquaterm.dylib
+ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm /usr/local/lib/libaquaterm.1.0.0.dylib
+ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/Headers/* /usr/local/include/aquaterm/.
 
 This is the result:
 ---
 /Applications
     AquaTerm.app
+/Library/Frameworks/AquaTerm.framework
 /usr/local/
     include/aquaterm/
-        aquaterm.h
-        AQTAdapter.h
+        aquaterm.h -> /Library/...../aquaterm.h
+        AQTAdapter.h -> /Library/...../AQTAdapter.h
     lib/
-        libaquaterm.1.0.0.dylib
-        libaquaterm.dylib -> libaquaterm.1.0.0.dylib
+        libaquaterm.1.0.0.dylib -> /Library/...../A/AquaTerm
+        libaquaterm.dylib -> /Library/...../A/AquaTerm
 ===
 Run the makefiles in C/ and fortran/
 The executables ./demo should produce the same result as menu option Debug->Testview in AquaTerm
