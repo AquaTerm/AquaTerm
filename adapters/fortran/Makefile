@@ -1,35 +1,32 @@
 ##
 ## XLF
 ##
-FC=xlf
-FFLAGS=-U -qextname
+# fc=xlf
+# FFLAGS=-U -qextname
 
 ##
 ## GNU g77
 ##
-# FC=g77
+# fc=g77
 # FFLAGS=-fcase-preserve
 
-all: msg tiny demo eventdemo1 done
+##
+## Absoft f77
+##
+# fc=f77
+# FFLAGS=-N15
 
-tiny: tiny.f f2aquaterm.o
-	$(FC) -o tiny $(FFLAGS) tiny.f f2aquaterm.o -L$(HOME)/lib -laquaterm -lobjc
+all: fcsel demo eventdemo1 done
 
-demo: demo.f f2aquaterm.o
-	$(FC) -o demo $(FFLAGS) demo.f f2aquaterm.o -L$(HOME)/lib -laquaterm -lobjc
-
-eventdemo1: eventdemo1.f f2aquaterm.o
-	$(FC) -o eventdemo1 $(FFLAGS) eventdemo1.f f2aquaterm.o -L$(HOME)/lib -laquaterm -lobjc
-
-f2aquaterm.o: f2aquaterm.m
-	gcc -c -I$(HOME)/include f2aquaterm.m 
-
-msg: 
+fcsel:
+ifndef fc
 	@echo ""
 	@echo "***********************************************************"
 	@echo "*"
 	@echo "*  To compile these examples, uncomment a compiler option "
-	@echo "*  in the Makefile (or add your own option). "
+	@echo "*  in the Makefile (or add your own option). You can also "
+	@echo "*  specify fc and FFLAGS on the make line, e.g. "
+	@echo "*  make fc=g77 FFLAGS=-fcase-preserve "
 	@echo "*"
 	@echo "*  Note that $(HOME)/lib"
 	@echo "*  and $(HOME)/include "
@@ -37,6 +34,17 @@ msg:
 	@echo "*"
 	@echo "***********************************************************"
 	@echo ""
+	@exit 1;
+endif
+
+demo: demo.f f2aquaterm.o
+	$(fc) -o demo $(FFLAGS) demo.f f2aquaterm.o -L$(HOME)/lib -laquaterm -lobjc
+
+eventdemo1: eventdemo1.f f2aquaterm.o
+	$(fc) -o eventdemo1 $(FFLAGS) eventdemo1.f f2aquaterm.o -L$(HOME)/lib -laquaterm -lobjc
+
+f2aquaterm.o: f2aquaterm.m
+	gcc -c -I$(HOME)/include f2aquaterm.m 
 
 done:
 	@echo "Done."
