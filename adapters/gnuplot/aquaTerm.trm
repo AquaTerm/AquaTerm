@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.7 2001/12/13 13:25:52 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.8 2002/02/05 22:28:18 persquare Exp $
  *
  */
 
@@ -385,6 +385,8 @@ static inline void NOOP_(id x, ...) {;}
     {
       [server addPolyline:thePath withIndexedColor:linetype];
       [thePath removeAllPoints];
+      // Resetting linewidth
+      [thePath setLineWidth:1.0];
     }
     if (shouldRender)
     {
@@ -410,11 +412,14 @@ static inline void NOOP_(id x, ...) {;}
 
 -(void) setLinetype:(int)newLinetype
 {
+  linetype = newLinetype;
+  /* making linewidth change state instead
   if (newLinetype != linetype)
   {
     [self flushOrphanedGraphicsRender:NO release:NO];
     linetype = newLinetype;
   }
+  */
 }
 
 -(void) putText:(const char *)str at:(NSPoint)point
@@ -504,6 +509,8 @@ static inline void NOOP_(id x, ...) {;}
 
 -(void) setLinewidth:(double)linewidth
 {
+  /* Change state here instead of linestyle */
+  [self flushOrphanedGraphicsRender:NO release:NO];
   [thePath setLineWidth:linewidth];
 }
 
@@ -526,6 +533,7 @@ static inline void NOOP_(id x, ...) {;}
     [thePath closePath];
     [server addPolygon:thePath withColor:gray];
     [thePath removeAllPoints];
+    [thePath setLineWidth:1.0];
   NS_HANDLER
     if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
       [self invalidateServer];
@@ -638,18 +646,21 @@ AQUA_graphics()
 TERM_PUBLIC void
 AQUA_move(unsigned int x, unsigned int y)
 {
-  [gnuTermAccess moveToPoint:NSMakePoint(x, y)];
+    LOG(@"AQUA_move(%d, %d)", x,y);
+    [gnuTermAccess moveToPoint:NSMakePoint(x, y)];
 }
 
 TERM_PUBLIC void
 AQUA_vector(unsigned int x, unsigned int y)
 {
+  LOG(@"AQUA_vector(%d, %d)", x,y);
   [gnuTermAccess lineToPoint:NSMakePoint(x, y)];
 }
 
 TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
+  LOG(@"AQUA_linetype(%d)", linetype);
   [gnuTermAccess setLinetype: linetype];
 }
 
@@ -694,6 +705,7 @@ AQUA_set_font(const char *font) /* "font,size" */
 TERM_PUBLIC void 
 AQUA_set_pointsize(double size) /* notification of set pointsize */
 {
+    LOG(@"AQUA_set_pointsize(%f)", size);
 }
 
 TERM_PUBLIC void 
@@ -716,12 +728,14 @@ AQUA_boxfill(int style, unsigned int x1, unsigned int y1, unsigned int width, un
 TERM_PUBLIC void 
 AQUA_linewidth(double linewidth)
 {
+  LOG(@"AQUA_linewidth(%f)", linewidth);
   [gnuTermAccess setLinewidth:linewidth];
 }
 
 TERM_PUBLIC void 
 AQUA_pointsize(double pointsize)
 {
+  LOG(@"AQUA_pointsize(%f)", pointsize);
 }
 
 #ifdef PM3D
