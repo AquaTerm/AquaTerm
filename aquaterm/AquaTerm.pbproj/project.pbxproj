@@ -410,7 +410,8 @@
 		};
 		F54B0FE401FF3656014110A7 = {
 			isa = PBXFileReference;
-			path = help.html;
+			name = help.html;
+			path = English.lproj/help.html;
 			refType = 4;
 		};
 		F54B0FE501FF3656014110A7 = {
@@ -421,7 +422,8 @@
 		};
 		F54B0FE601FF5CDC014110A7 = {
 			isa = PBXFileReference;
-			path = ExtendSavePanel.nib;
+			name = ExtendSavePanel.nib;
+			path = English.lproj/ExtendSavePanel.nib;
 			refType = 4;
 		};
 		F54B0FE701FF5CDC014110A7 = {
