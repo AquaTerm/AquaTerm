@@ -9,6 +9,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSGeometry.h>
 #import <Foundation/NSDistantObject.h>
+#import <Foundation/NSDictionary.h>
 
 #define AQT_COLORMAP_SIZE 256
 
@@ -23,12 +24,13 @@ enum {
 @protocol AQTConnectionProtocol, AQTClientProtocol;
 @interface AQTAdapter : NSObject
 {
+  NSMutableDictionary *_builders;
   NSString *_uniqueId; 	/*" A unique string used to identify this adapter in AquaTerm "*/
   NSString *_procName; 	/*" Holds the name of the process who instantiated the object "*/
   int _procId;		/*" Holds the pid of the process who instantiated the object "*/
   NSDistantObject <AQTConnectionProtocol> *_server;	/*" The viewer app's (AquaTerm) default connection "*/
   NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
-  AQTPlotBuilder *_builder; 	/*" The object responsible for assembling a model object from client's calls"*/
+  AQTPlotBuilder *_selectedBuilder; 	/*" The object responsible for assembling a model object from client's calls"*/
   void (*_errorHandler)(NSString *msg);	/*" A callback function optionally installed by the client "*/
 }
 
@@ -40,6 +42,8 @@ enum {
 
   /*" Control operations "*/
 - (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title; // if title param is nil, title defaults to Figure <n>
+- (BOOL)selectPlot:(int)refNum;
+- (void)clearPlot;
 - (void)closePlot;
 - (void)render; //(push [partial] model to renderer)
 

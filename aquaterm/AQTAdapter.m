@@ -40,7 +40,8 @@ error handling callback function for the client.
 {
   if(self = [super init])
   {
-    [self setBuilder:[[AQTPlotBuilder alloc] init]];
+    //[self setBuilder:[[AQTPlotBuilder alloc] init]];
+    _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
     _uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
     _procName = [[NSString stringWithString:[[NSProcessInfo processInfo] processName]] retain];
     _procId = [[NSProcessInfo processInfo] processIdentifier];
@@ -93,7 +94,7 @@ error handling callback function for the client.
   [_server release];
   [_uniqueId release];
   [_procName release];
-  [_builder release];
+  [_builders release];
   [super dealloc];
 }
 
@@ -106,12 +107,12 @@ error handling callback function for the client.
 - (void)setBuilder:(AQTPlotBuilder *)newBuilder
 {
   [newBuilder retain];
-  [_builder release];
-  _builder=newBuilder;
+  [_selectedBuilder release];
+  _selectedBuilder=newBuilder;
 }
 - (AQTPlotBuilder *)builder
 {
-  return _builder;
+  return _selectedBuilder;
 }
 
 /*" Set the current color, used for all subsequent items, using explicit RGB components. "*/
@@ -121,7 +122,7 @@ error handling callback function for the client.
   newColor.red = r;
   newColor.green = g;
   newColor.blue = b;
-  [_builder setColor:newColor];
+  [_selectedBuilder setColor:newColor];
 }
 
 /*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the current colormap. "*/
@@ -129,7 +130,7 @@ error handling callback function for the client.
 {
   if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
   {
-    [_builder setColor:colormap[index]];
+    [_selectedBuilder setColor:colormap[index]];
   }
 }
 
@@ -140,7 +141,7 @@ error handling callback function for the client.
   newColor.red = r;
   newColor.green = g;
   newColor.blue = b;
-  [_builder setBackgroundColor:newColor];  
+  [_selectedBuilder setBackgroundColor:newColor];
 }
 
 /*" Set the background color, overriding any previous color, using the color stored at the position given by index in the current colormap. "*/
@@ -148,14 +149,14 @@ error handling callback function for the client.
 {
   if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
   {
-    [_builder setBackgroundColor:colormap[index]];
+    [_selectedBuilder setBackgroundColor:colormap[index]];
   }
 }
 
 /*" Get current RGB color components by reference. "*/
 - (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b
 {
-  AQTColor tmpColor = [_builder color];
+  AQTColor tmpColor = [_selectedBuilder color];
   *r = tmpColor.red;
   *g = tmpColor.green;
   *b = tmpColor.blue;
@@ -185,95 +186,98 @@ error handling callback function for the client.
 
 - (NSString *)fontname
 {
-  return [_builder fontname];
+  return [_selectedBuilder fontname];
 }
 
 - (void)setFontname:(NSString *)newFontname
 {
-  [_builder setFontname:newFontname];
+  [_selectedBuilder setFontname:newFontname];
 }
 
 - (float)fontsize
 {
-  return [_builder fontsize];
+  return [_selectedBuilder fontsize];
 }
 
 - (void)setFontsize:(float)newFontsize
 {
-  [_builder setFontsize:newFontsize];
+  [_selectedBuilder setFontsize:newFontsize];
 }
 
 /*" Return the current linewidth (in points)."*/
 - (float)linewidth
 {
-  return [_builder linewidth];
+  return [_selectedBuilder linewidth];
 }
 
 /*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth. "*/
 - (void)setLinewidth:(float)newLinewidth
 {
-  [_builder setLinewidth:newLinewidth];
+  [_selectedBuilder setLinewidth:newLinewidth];
 }
 
 - (void)setLineCapStyle:(int)capStyle
 {
-  [_builder setLineCapStyle:capStyle];
+  [_selectedBuilder setLineCapStyle:capStyle];
 }
 
 
 - (void)addLabel:(NSString *)text position:(NSPoint)pos angle:(float)angle justification:(int)just
 {
-  [_builder addLabel:text position:pos angle:angle justification:just];
+  [_selectedBuilder addLabel:text position:pos angle:angle justification:just];
 }
 
 /*" Moves the current point (in canvas coordinates) in preparation for a new sequence of line segments. "*/
 - (void)moveToPoint:(NSPoint)point
 {
-  [_builder moveToPoint:point];
+  [_selectedBuilder moveToPoint:point];
 }
 
 /*" Add a line segment from the current point (given by a previous #moveToPoint: or #addLineToPoint). "*/
 - (void)addLineToPoint:(NSPoint)point
 {
-  [_builder addLineToPoint:point];
+  [_selectedBuilder addLineToPoint:point];
 }
 
 /*" Add a sequence of line segments specified by a list of start-, end-, and joinpoint(s) in points. Parameter pc is number of line segments + 1."*/
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
 {
-  [_builder addPolylineWithPoints:points pointCount:pc];
+  [_selectedBuilder addPolylineWithPoints:points pointCount:pc];
 }
 
 /*" Add a polygon specified by a list of corner points. Number of corners is passed in pc."*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
-  [_builder addPolygonWithPoints:points pointCount:pc];
+  [_selectedBuilder addPolygonWithPoints:points pointCount:pc];
 }
 
 /*" Add a filled rectangle. Should normally be preceeded with #eraseRect: to remove any objects that will be covered by aRect."*/
 - (void)addFilledRect:(NSRect)aRect
 {
-  [_builder addFilledRect:aRect];
+  [_selectedBuilder addFilledRect:aRect];
 }
 
 /*" Remove any objects inside aRect."*/
 - (void)eraseRect:(NSRect)aRect
 {
-  [_builder eraseRect:aRect];
+  [_selectedBuilder eraseRect:aRect];
 }
 
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
-  [_builder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
+  [_selectedBuilder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
 }
-//
-// Control operations
-//
+
+#pragma mark === Control operations ===
+/*" Creates a new builder instance, adds it to the list of builders and makes it the selected builder "*/
 - (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title // if title param is nil, title defaults to Figure <n>
 {
-  [self setBuilder:[[AQTPlotBuilder alloc] init]];
-  [_builder setSize:canvasSize];
-  [_builder setTitle:title?title:[NSString stringWithFormat:@"Figure %d", refNum]];
+  AQTPlotBuilder *newBuilder=[[AQTPlotBuilder alloc] init];
+  [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
+  _selectedBuilder = newBuilder;
+  [newBuilder release];
+  [_selectedBuilder setSize:canvasSize];
+  [_selectedBuilder setTitle:title?title:[NSString stringWithFormat:@"Figure %d", refNum]];
   NS_DURING
     [_handler selectView:refNum];
   NS_HANDLER
@@ -282,16 +286,49 @@ error handling callback function for the client.
     else
       [localException raise];
   NS_ENDHANDLER
-
 }
+
+/*" Get the builder instance for refNum and make it the selected builder. If no builder exists for refNum, the selected builder remain unchanged. Returns YES on success. "*/
+- (BOOL)selectPlot:(int)refNum
+{
+  AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSString stringWithFormat:@"%d", refNum]];
+  if(tmpBuilder)
+  {
+    _selectedBuilder = tmpBuilder;
+    NS_DURING
+      [_handler selectView:refNum];
+    NS_HANDLER
+      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+        [self _serverError];
+      else
+        [localException raise];
+    NS_ENDHANDLER
+    return YES;
+  }
+  return NO;
+}
+
+- (void)clearPlot
+{
+  if (_selectedBuilder)
+  {
+    [_selectedBuilder eraseRect:NSMakeRect(0,0,1000,1000)]; // FIXME: !!!
+    [self render];
+  }
+  
+}
+
+/*" Removes the selected builder from the list of builders and sets selected builder to nil."*/
 - (void)closePlot
 {
+  NSEnumerator *enumKeys = [_builders keyEnumerator];
+  NSString *aKey;
   // FIXME: Check if model is dirty and that buffers are flushed,
   // don't set model unless necessary -- just release the local
-  if ([_builder modelIsDirty])
+  if (_selectedBuilder && [_selectedBuilder modelIsDirty])
   {
     NS_DURING
-      [_handler setModel:[_builder model]];
+      [_handler setModel:[_selectedBuilder model]];
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
@@ -299,14 +336,26 @@ error handling callback function for the client.
         [localException raise];
     NS_ENDHANDLER
   }
+  // remove this builder
+  while (aKey = [enumKeys nextObject])
+  {
+    if ([_builders objectForKey:aKey] == _selectedBuilder)
+    {
+      [_builders removeObjectForKey:aKey];
+      break; // Found it.
+    }
+  }
+  _selectedBuilder = nil;
 }
+
+/*" Hand a copy of the current plot to the viewer "*/
 - (void)render //(push [partial] model to renderer)
 {
   // FIXME: if model hasn't changed, don't update!!!
-  if ([_builder modelIsDirty])
+  if (_selectedBuilder && [_selectedBuilder modelIsDirty])
   {
     NS_DURING
-      [_handler setModel:[_builder model]];	
+      [_handler setModel:[_selectedBuilder model]];
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
@@ -316,17 +365,17 @@ error handling callback function for the client.
   }
   else
   {
-    // [_handler setModel:[_builder model]];	
+    // [_handler setModel:[_selectedBuilder model]];
     NSLog(@"*** Warning -- Rendering non-dirty model ***");
   }
 }
 - (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options
 {
   char keyPressed;
-   if([_builder modelIsDirty])
-   {
-      [self render];
-   }
+  if([_selectedBuilder modelIsDirty])
+  {
+    [self render];
+  }
   NS_DURING
     [_handler beginMouse];
     do
