@@ -71,7 +71,6 @@
 			children = (
 				CBC4B40F05E4C40D001BE8D7,
 				CBC4B44B05E4C784001BE8D7,
-				CB9B378205F35EB400930A35,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -106,7 +105,6 @@
 				CBC4B42705E4C784001BE8D7,
 				CBAA608105E7AFA7009B33CD,
 				CB7C709D05EA274E00D4CD15,
-				CB9B378105F35EB400930A35,
 			);
 		};
 		29B97314FDCFA39411CA2CEA = {
@@ -125,7 +123,6 @@
 				29B97323FDCFA39411CA2CEA,
 				CBF17AA505EE6BE600AAB4C4,
 				19C28FACFE9D520D11CA2CBB,
-				CBAA608305E7AFF0009B33CD,
 				F55D7FF10219BEF4014110D6,
 				CBC4B44A05E4C784001BE8D7,
 			);
@@ -374,6 +371,66 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		CB7217DB06072905008DCEAD = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/ReadMe",
+				"$(SRCROOT)/ReleaseNotes\n$(SRCROOT)/ReleaseNotes",
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+				"$(SRCROOT)/help.html",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "perl makeHelp c fortran gnuplot pgplot plplot > help.html";
+		};
+		CB7217EF060729FF008DCEAD = {
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				CB72180806072AE9008DCEAD,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB7217FB06072ABA008DCEAD = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.html;
+			path = help.html;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB7217FC06072ABA008DCEAD = {
+			fileRef = CB7217FB06072ABA008DCEAD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB72180806072AE9008DCEAD = {
+			fileRef = CB7217FB06072ABA008DCEAD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB72184806072CF6008DCEAD = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = ReleaseNotes;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		CB72184906072CF6008DCEAD = {
+			fileRef = CB72184806072CF6008DCEAD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CB77583A056B83E300D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -437,85 +494,6 @@
 			isa = PBXTargetDependency;
 			target = CBC4B42705E4C784001BE8D7;
 			targetProxy = CB7C70A105EA276200D4CD15;
-		};
-		CB9B377E05F35EB400930A35 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CB9B377F05F35EB400930A35 = {
-			buildActionMask = 2147483647;
-			files = (
-				CB9B37B605F35F1700930A35,
-			);
-			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CB9B378005F35EB400930A35 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CB9B378105F35EB400930A35 = {
-			buildPhases = (
-				CB9B377E05F35EB400930A35,
-				CB9B377F05F35EB400930A35,
-				CB9B378005F35EB400930A35,
-			);
-			buildRules = (
-			);
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = /tmp/AquaTerm.dst/usr/local/lib;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-laquaterm.1.0.0 -framework Foundation";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = BugTool;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
-			};
-			dependencies = (
-				CB9B378705F35EC000930A35,
-			);
-			isa = PBXNativeTarget;
-			name = BugTool;
-			productName = BugTool;
-			productReference = CB9B378205F35EB400930A35;
-			productType = "com.apple.product-type.tool";
-		};
-		CB9B378205F35EB400930A35 = {
-			explicitFileType = "compiled.mach-o.executable";
-			includeInIndex = 0;
-			isa = PBXFileReference;
-			path = BugTool;
-			refType = 3;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CB9B378605F35EC000930A35 = {
-			containerPortal = 29B97313FDCFA39411CA2CEA;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = CBC4B42705E4C784001BE8D7;
-			remoteInfo = AquaTerm;
-		};
-		CB9B378705F35EC000930A35 = {
-			isa = PBXTargetDependency;
-			target = CBC4B42705E4C784001BE8D7;
-			targetProxy = CB9B378605F35EC000930A35;
-		};
-		CB9B37B605F35F1700930A35 = {
-			fileRef = FEBB59CE055CF10B00EEC8EA;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		CB9E42E00586855A00D208BA = {
 			children = (
@@ -867,6 +845,8 @@
 				CBC4B43205E4C784001BE8D7,
 				CBC4B43B05E4C784001BE8D7,
 				CBC4B44505E4C784001BE8D7,
+				CB7217DB06072905008DCEAD,
+				CB7217EF060729FF008DCEAD,
 			);
 			buildRules = (
 			);
@@ -969,6 +949,8 @@
 				CBC4B43805E4C784001BE8D7,
 				CBC4B43905E4C784001BE8D7,
 				CBC4B43A05E4C784001BE8D7,
+				CB7217FC06072ABA008DCEAD,
+				CB72184906072CF6008DCEAD,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1411,7 +1393,10 @@
 		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
+				CB7217FB06072ABA008DCEAD,
 				F57C16A202506DE3010D3DE4,
+				CB72184806072CF6008DCEAD,
+				CBAA608305E7AFF0009B33CD,
 				F57C16A302506DE3010D3DE4,
 			);
 			isa = PBXGroup;
@@ -1423,7 +1408,7 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = text;
-			path = ReadMe.txt;
+			path = ReadMe;
 			refType = 4;
 			sourceTree = "<group>";
 		};
