@@ -62,6 +62,7 @@
    [[canvas window] setMinSize:minSize];
    [canvas setNeedsDisplay:YES];
    [[canvas window] setIsVisible:YES];
+   [[canvas window] orderFront:self];
 }
 
 -(void)awakeFromNib
@@ -177,12 +178,19 @@
 }
 
 #pragma mark === Delegate methods ===
+- (BOOL)windowShouldClose:(id)sender
+{
+   BOOL shouldClose = YES; 
+   if (_client)
+   {
+      [sender orderOut:self];
+      shouldClose = NO;
+   }
+   return shouldClose;
+}
+
 - (void)windowWillClose:(NSNotification *)notification
 {
-   // FIXME: What to do when a valid client still exists?
-   // Quite OK since client still retains AQTPlot instance, will however release it when finished =>
-   // => orphaned window ?
-
    [[NSApp delegate] removePlot:self];
 }
 
