@@ -35,7 +35,7 @@ It also provides some utility functionality such an indexed colormap, and an opt
 error handling callback function for the client.
 "*/
 
-/*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #{initWithHandler:} with a nil argument."*/
+/*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
 -(id)initWithHandler:(id)localHandler
 {
   if(self = [super init])
@@ -129,14 +129,11 @@ error handling callback function for the client.
 {
   if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
   {
-//    AQTColor newColor;
-//    newColor.red = colormap[index].red;
-//    newColor.green = colormap[index].green;
-//    newColor.blue = colormap[index].blue;
     [_builder setColor:colormap[index]];
   }
 }
 
+/*" Set the background color, overriding any previous color, using explicit RGB components. "*/
 - (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b
 {
   AQTColor newColor;
@@ -146,6 +143,7 @@ error handling callback function for the client.
   [_builder setBackgroundColor:newColor];  
 }
 
+/*" Set the background color, overriding any previous color, using the color stored at the position given by index in the current colormap. "*/
 - (void)takeBackgroundColorFromColormapEntry:(int)index
 {
   if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
@@ -153,7 +151,6 @@ error handling callback function for the client.
     [_builder setBackgroundColor:colormap[index]];
   }
 }
-
 
 /*" Get current RGB color components by reference. "*/
 - (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b
@@ -186,9 +183,6 @@ error handling callback function for the client.
   }
 }
 
-
-
-
 - (NSString *)fontname
 {
   return [_builder fontname];
@@ -209,11 +203,13 @@ error handling callback function for the client.
   [_builder setFontsize:newFontsize];
 }
 
+/*" Return the current linewidth (in points)."*/
 - (float)linewidth
 {
   return [_builder linewidth];
 }
 
+/*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth. "*/
 - (void)setLinewidth:(float)newLinewidth
 {
   [_builder setLinewidth:newLinewidth];
@@ -224,39 +220,46 @@ error handling callback function for the client.
   [_builder setLineCapStyle:capStyle];
 }
 
-- (void)eraseRect:(NSRect)aRect
-{
-  [_builder eraseRect:aRect];
-}
 
 - (void)addLabel:(NSString *)text position:(NSPoint)pos angle:(float)angle justification:(int)just
 {
   [_builder addLabel:text position:pos angle:angle justification:just];
 }
 
+/*" Moves the current point (in canvas coordinates) in preparation for a new sequence of line segments. "*/
 - (void)moveToPoint:(NSPoint)point
 {
   [_builder moveToPoint:point];
 }
 
+/*" Add a line segment from the current point (given by a previous #moveToPoint: or #addLineToPoint). "*/
 - (void)addLineToPoint:(NSPoint)point
 {
   [_builder addLineToPoint:point];
 }
 
+/*" Add a sequence of line segments specified by a list of start-, end-, and joinpoint(s) in points. Parameter pc is number of line segments + 1."*/
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
 {
   [_builder addPolylineWithPoints:points pointCount:pc];
 }
 
+/*" Add a polygon specified by a list of corner points. Number of corners is passed in pc."*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
   [_builder addPolygonWithPoints:points pointCount:pc];
 }
 
+/*" Add a filled rectangle. Should normally be preceeded with #eraseRect: to remove any objects that will be covered by aRect."*/
 - (void)addFilledRect:(NSRect)aRect
 {
   [_builder addFilledRect:aRect];
+}
+
+/*" Remove any objects inside aRect."*/
+- (void)eraseRect:(NSRect)aRect
+{
+  [_builder eraseRect:aRect];
 }
 
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds

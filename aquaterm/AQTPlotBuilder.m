@@ -172,9 +172,9 @@
   if (_pointCount > 1)
   {
     [self addPolylineWithPoints:_path pointCount:_pointCount];
+    _pointCount = 0;
     didFlush = YES;
   }
-  _pointCount = 0;
   return didFlush;
 }
 
@@ -182,11 +182,22 @@
 {
   if (_pointCount > 1)
   {
-    [self _flushLineSegmentBuffer];
+    // Only flush if this creates a disjoint path,
+    // if the point is just the latest endpoint, skip it
+    if (!NSEqualPoints(point, _path[_pointCount-1]))
+    {
+      [self _flushLineSegmentBuffer];
+      _path[0]=point;
+      _pointCount = 1;
+    }
   }
-  _path[0]=point;
-  _pointCount = 1;
-  _modelIsDirty = YES;
+  else
+  {
+    // This is an initial move or a move-after-move case,
+    // just accept it
+    _path[0]=point;
+    _pointCount = 1;
+  }
 }
 
 - (void)addLineToPoint:(NSPoint)point
@@ -195,6 +206,9 @@
   _pointCount++;
   if (_pointCount == MAX_PATH_POINTS)
   {
+    // Split the line 
+    [self addPolylineWithPoints:_path pointCount:_pointCount];
+    _pointCount = 0;
     [self moveToPoint:point];
   }
   _modelIsDirty = YES;
@@ -202,7 +216,10 @@
 
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
 {
-  AQTPath *tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount color:_color];
+  AQTPath *tmpPath;
+  if (pc > MAX_PATH_POINTS)
+    NSLog(@"Path too long (%d)", pc);	// FIXME: take action here!
+  tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount color:_color];
   [tmpPath setLinewidth:_linewidth];
   [tmpPath setLineCapStyle:_capStyle];
   [_model addObject:tmpPath];

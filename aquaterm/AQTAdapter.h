@@ -42,7 +42,6 @@ enum {
 - (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title; // if title param is nil, title defaults to Figure <n>
 - (void)closePlot;
 - (void)render; //(push [partial] model to renderer)
-- (void)eraseRect:(NSRect)aRect;
 
   /*" Interactions with user "*/
 - (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options;
@@ -73,9 +72,10 @@ enum {
 - (void)addLineToPoint:(NSPoint)point;  // AQTPath
 - (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
 
-  /*" Filled areas"*/
+  /*" Rect and polygon handling"*/
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; // AQTPatch
 - (void)addFilledRect:(NSRect)aRect;
+- (void)eraseRect:(NSRect)aRect;
 
   /*" Image handling "*/
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage
