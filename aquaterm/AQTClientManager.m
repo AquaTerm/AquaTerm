@@ -13,38 +13,13 @@
 #import "AQTConnectionProtocol.h"
 
 @implementation AQTClientManager
-- (void)_aqtServerError:(NSString *)msg
-{
-   if (_errorHandler)
-   {
-      _errorHandler(msg);
-   }
-   else
-   {
-      [self logMessage:[NSString stringWithFormat:@"Server error: %@", msg] logLevel:1];
-   }
-}
-
-- (void)_aqtHandlerError:(NSString *)msg
-{
-   // Do something!
-   // [self closePlot];
-   [self logMessage:[NSString stringWithFormat:@"Handler error: %@", msg] logLevel:1];
-   // Test for server prescence
-   NS_DURING
-      [_server ping];
-   NS_HANDLER
-      // Dang! Server is borken
-      [self _aqtServerError:[localException name]];
-   NS_ENDHANDLER
-}
 
 + (AQTClientManager *)sharedManager
 {
    static AQTClientManager *sharedManager = nil;
    if (sharedManager == nil)
    {
-      sharedManager = [[self alloc] init]; 
+      sharedManager = [[self alloc] init];
    }
    return sharedManager;
 }
@@ -78,7 +53,7 @@
    [_plotControllers release];
    [super dealloc];
 }
-   
+
 - (void)setServer:(id)server
 {
    _server = server;
@@ -136,10 +111,12 @@
          }
       }
       NS_HANDLER
+         /*
          if ([[localException name] isEqualToString:NSInvalidSendPortException])
             [self _aqtServerError:[localException name]];
          else
             [localException raise];
+          */
       NS_ENDHANDLER
       [self logMessage:didConnect?@"Connected!":@"Could not connect" logLevel:1];
       return didConnect;
@@ -231,11 +208,14 @@
                                     name:[[NSProcessInfo processInfo] processName]
                                      pid:[[NSProcessInfo processInfo] processIdentifier]];
    NS_HANDLER
-      if ([[localException name] isEqualToString:NSInvalidSendPortException])
+/*
+ if ([[localException name] isEqualToString:NSInvalidSendPortException])
          [self _aqtServerError:[localException name]];
       else
          [localException raise];
-   NS_ENDHANDLER
+*/
+      NSLog([localException name]);
+      NS_ENDHANDLER
    if (newHandler)
    {
       // set active plot
@@ -312,7 +292,7 @@
       [self logMessage:@"Discarding exception..." logLevel:1];
    NS_ENDHANDLER
    [_plotControllers removeObjectForKey:_activePlotKey];
-   [_builders removeObjectForKey:_builders];
+   [_builders removeObjectForKey:_activePlotKey];
    [self setActivePlotKey:nil];
 }
 
