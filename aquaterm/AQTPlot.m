@@ -185,7 +185,7 @@
    if (_isWindowLoaded)
    {
       [self _aqtSetupViewShouldResize:NO];
-      dirtyRect = backgroundDidChange?AQTRectFromSize([model canvasSize]):[newModel bounds];
+      dirtyRect = AQTUnionRect(dirtyRect, backgroundDidChange?AQTRectFromSize([model canvasSize]):[newModel bounds]);
 
 #ifdef DEBUG_BOUNDS
       NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
@@ -235,6 +235,7 @@
    }
    [model setBounds:newBounds];
    // NSLog(@"Removed %d objs, new bounds: %@", objectCount - [modelObjects count], [self description]);
+   dirtyRect = AQTUnionRect(dirtyRect, targetRect);
 }
 
 -(void)setAcceptingEvents:(BOOL)flag
