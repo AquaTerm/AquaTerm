@@ -209,7 +209,7 @@
   if (NSFileHandlingPanelOKButton == returnCode)
   {
     printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
-    [printView setModel:[[frontWindow windowController] model]];
+    [printView setModel:[[[frontWindow windowController] viewOutlet] model]];
     filename = [[theSheet filename] stringByDeletingPathExtension];
     if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
     {
@@ -233,7 +233,7 @@
   NSData *data;
   NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
   AQTView *printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, AQUA_XMAX, AQUA_YMAX)];
-  [printView setModel:[[frontWindow windowController] model]];
+  [printView setModel:[[[frontWindow windowController] viewOutlet] model]];
   data = [printView dataWithEPSInsideRect:[printView bounds]];
   [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, NSStringPboardType, nil] owner:nil];
   if (YES !=[pasteboard setData:data forType:NSStringPboardType])
