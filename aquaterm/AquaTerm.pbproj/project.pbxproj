@@ -135,6 +135,7 @@
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
 				CBD8F3F004D90CE100EBD329,
+				CB86D8990589B67900D208BA,
 				CBC8D54B04F2258500EBD329,
 				F55D7FF10219BEF4014110D6,
 			);
@@ -405,6 +406,13 @@ http://aquaterm.sourceforge.net</string>
 			path = "";
 			refType = 4;
 		};
+		CB288B40058E5C0F00D208BA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = f2aquaterm.m;
+			path = /Users/per/source/sci/adapters/fortran/f2aquaterm.m;
+			refType = 0;
+		};
 		CB2DDBA7056D103C00D208BA = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -482,18 +490,6 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		CB5B1BE504A9C0F900EBD329 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = AQTClientHandler.h;
-			refType = 4;
-		};
-		CB5B1BE604A9C0F900EBD329 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = AQTClientHandler.m;
-			refType = 4;
 		};
 		CB5B1BEE04A9C2E900EBD329 = {
 			fileEncoding = 30;
@@ -585,6 +581,31 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		CB86D8990589B67900D208BA = {
+			children = (
+				CBFACB3C058F0DCE00D208BA,
+				CBFACB3D058F0DCE00D208BA,
+				CB86D89C0589B6E800D208BA,
+				CB86DD310589CA5700D208BA,
+			);
+			isa = PBXGroup;
+			name = Examples;
+			refType = 4;
+		};
+		CB86D89C0589B6E800D208BA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = eventdemo1.c;
+			path = /Users/per/source/sci/adapters/c/eventdemo1.c;
+			refType = 0;
+		};
+		CB86DD310589CA5700D208BA = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = eventdemo2.c;
+			path = /Users/per/source/sci/adapters/c/eventdemo2.c;
+			refType = 0;
 		};
 		CB92C704056404CC00D208BA = {
 			fileEncoding = 30;
@@ -843,6 +864,9 @@ http://aquaterm.sourceforge.net</string>
 		};
 		CBD8F3F004D90CE100EBD329 = {
 			children = (
+				CB288B40058E5C0F00D208BA,
+				CBE2B439058DCEB900D208BA,
+				CBE2B43A058DCEB900D208BA,
 				CBD8F3EF04D90CDC00EBD329,
 				CBAFDE0F04DE8F5F00EBD329,
 				CB6564640529BE1200D208BA,
@@ -850,6 +874,20 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXGroup;
 			name = Adapters;
 			refType = 4;
+		};
+		CBE2B439058DCEB900D208BA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = f2aqt.h;
+			path = /Users/per/source/sci/adapters/fortran/f2aqt.h;
+			refType = 0;
+		};
+		CBE2B43A058DCEB900D208BA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = f2aqt.m;
+			path = /Users/per/source/sci/adapters/fortran/f2aqt.m;
+			refType = 0;
 		};
 		CBE5EB120549E11200D208BA = {
 			isa = PBXTargetDependency;
@@ -1070,14 +1108,10 @@ http://aquaterm.sourceforge.net</string>
 		};
 		CBF30BD804D5527700EBD329 = {
 			children = (
-				CB5B1BE504A9C0F900EBD329,
-				CB5B1BE604A9C0F900EBD329,
 				F5FEAC1401A6B3CE0143D50D,
 				F5E99A51036446DA01EBD329,
 				F5E99A52036446DA01EBD329,
 				F5B4A77E0222A7D9014110D6,
-				F5AB087A0175BC8B01EB16F3,
-				F5AB087B0175BC8B01EB16F3,
 				F50F0B500205D1AF01AA2E68,
 				F50F0B510205D1AF01AA2E68,
 				F57A4136022288E5014110D6,
@@ -1086,6 +1120,20 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXGroup;
 			name = oldsource;
 			refType = 4;
+		};
+		CBFACB3C058F0DCE00D208BA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = demo.f;
+			path = ../adapters/fortran/demo.f;
+			refType = 2;
+		};
+		CBFACB3D058F0DCE00D208BA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = eventdemo1.f;
+			path = /Users/per/source/sci/adapters/fortran/eventdemo1.f;
+			refType = 0;
 		};
 //CB0
 //CB1
@@ -1275,18 +1323,6 @@ http://aquaterm.sourceforge.net</string>
 			path = AQTImage.m;
 			refType = 4;
 		};
-		F5AB087A0175BC8B01EB16F3 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = GPTWindowController.h;
-			refType = 4;
-		};
-		F5AB087B0175BC8B01EB16F3 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = GPTWindowController.m;
-			refType = 4;
-		};
 		F5AB08990175CCF101EB16F3 = {
 			children = (
 				F5E3AFA9026D80D2012F88DF,
@@ -1303,11 +1339,11 @@ http://aquaterm.sourceforge.net</string>
 			children = (
 				CB5B187104A9A49E00EBD329,
 				CB5B187204A9A49E00EBD329,
+				CBF3083904D51CF100EBD329,
+				CBF3083A04D51CF100EBD329,
 				FEBB59CE055CF10B00EEC8EA,
 				FEBB59D0055CF40600EEC8EA,
 				FE8252ACC5B321F400CFA73B,
-				CBF3083904D51CF100EBD329,
-				CBF3083A04D51CF100EBD329,
 			);
 			isa = PBXGroup;
 			name = AppController;
