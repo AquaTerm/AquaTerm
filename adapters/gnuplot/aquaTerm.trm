@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.26 2004/02/25 14:41:21 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.27 2004/03/14 20:28:14 persquare Exp $
  *
  */
 
@@ -245,7 +245,8 @@ TERM_PUBLIC void
 AQUA_init()
 {
   float fontSize, fontWHRatio;
-  LOG(@"Aqua Init");
+  NSString *title;
+  LOG(@"Aqua Init (open plot)");
   if (arpool == NULL)   
     {
       arpool = [[NSAutoreleasePool alloc] init];
@@ -259,29 +260,14 @@ AQUA_init()
 	  exit(1);
 	}
     }
+  /*
   term->xmax = AQUA_XMAX; 
   term->ymax = AQUA_YMAX; 
   term->v_char = (unsigned int) AQUA_VCHAR;
   term->h_char = (unsigned int) AQUA_HCHAR;
   term->v_tic = (unsigned int) AQUA_VTIC;
   term->h_tic = (unsigned int) AQUA_HTIC;  
-}
-
-TERM_PUBLIC void
-AQUA_reset()
-{
-}
-
-TERM_PUBLIC void
-AQUA_text()
-{
-  [adapter renderPlot];
-}
-
-TERM_PUBLIC void
-AQUA_graphics()
-{
-  NSString *title;
+  */
 
   /* Must open plot before all other commands */
 
@@ -310,7 +296,6 @@ AQUA_graphics()
   [adapter setPlotSize:NSMakeSize(AQUA_xSize/AQUA_RESOLUTION, AQUA_ySize/AQUA_RESOLUTION)];
   [adapter setPlotTitle:[NSString stringWithCString:AQUA_title]];
   
-  
   //
   // Set up the basic indexed colormap for gnuplot
   //
@@ -329,6 +314,27 @@ AQUA_graphics()
   [adapter setColormapEntry:10 red:1.0 green:0.6471 blue:0.0];// orange
   [adapter setColormapEntry:11 red:0.5 green:0.4980 blue:0.3137];// coral
   [adapter setColormapEntry:12 red:0.25 green:0.25 blue:0.25];// grey
+
+}
+
+TERM_PUBLIC void
+AQUA_reset()
+{
+  LOG(@"Aqua reset");
+}
+
+TERM_PUBLIC void
+AQUA_text()
+{
+  LOG(@"Aqua text (render)");
+  [adapter renderPlot];
+}
+
+TERM_PUBLIC void
+AQUA_graphics()
+{
+  LOG(@"Aqua graphics (empty, should erase?)");
+  [adapter eraseRect:NSMakeRect(0.0, 0.0, AQUA_xSize/AQUA_RESOLUTION, AQUA_ySize/AQUA_RESOLUTION)];
 }
 
 TERM_PUBLIC void
