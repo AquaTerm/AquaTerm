@@ -323,6 +323,10 @@ error handling callback function for the client.
 - (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options
 {
   char keyPressed;
+   if([_builder modelIsDirty])
+   {
+      [self render];
+   }
   NS_DURING
     [_handler beginMouse];
     do
