@@ -16,7 +16,7 @@
 
 #define MIN_FONTSIZE 9.0
 
-#define max(a, b) ((a)>(b)?(a):(b))
+#define MAX(a, b) ((a)>(b)?(a):(b))
 
 @interface AQTGraphic (AQTGraphicDrawing)
 -(void)renderInRect:(NSRect)boundsRect;
@@ -120,7 +120,7 @@
   {
     NSFont *tmpFont = [[tmpString attributesAtIndex:i effectiveRange:nil] objectForKey:NSFontAttributeName];
     [tmpString addAttribute:NSFontAttributeName
-                      value:[NSFont fontWithName:[tmpFont fontName] size:max([tmpFont pointSize]*fontScale, MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
+                      value:[NSFont fontWithName:[tmpFont fontName] size:MAX([tmpFont pointSize]*fontScale, MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
   }
   boundingBox = [tmpString size];
   //
