@@ -1,0 +1,46 @@
+2003-02-09 15:20  persquare
+
+	* aqdriv.m: Allow pgplot to set size of wiev
+
+2002-12-18 14:42  persquare
+
+	* aqdriv.m: Interactive devices _needs_ this to draw intermediate
+	plots.
+
+2002-10-11 17:58  persquare
+
+	* aqdriv.m: Setting default colors 0-15 on driver init. Fix for bug
+	#593895
+
+2002-08-12 17:05  persquare
+
+	* aqdriv.m: Speeding up adapter by better buffering
+
+2002-04-18 21:09  persquare
+
+	* aqdriv.m: Adding -dotAtPoint: for IFUNC=13, Draw dot
+
+2002-04-18 20:59  persquare
+
+	* README: Updating instructions
+
+2002-04-18 17:02  persquare
+
+	* aqdriv.m: Added buffering to polyline and polygon. An order of
+	magnitude or more in speedup most of the time, still slow in some
+	cases (don't know why).
+
+2002-02-26 00:02  persquare
+
+	* aqdriv.m: Synching with aquaterm. Not fully functional, restart
+	AQT to reset default colormap.
+
+2002-02-11 14:10  persquare
+
+	* aqdriv.m: Should not clear plot like this...
+
+2002-02-11 13:18  persquare
+
+	* README, aqdriv.m, g77_cc_AQT.conf, iand.c: Adding support for
+	PGPLOT
+

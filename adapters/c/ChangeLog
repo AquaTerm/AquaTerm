@@ -1,0 +1,19 @@
+2002-08-04 16:58  persquare
+
+	* test.c: Fixed path to image
+
+2002-08-04 16:50  persquare
+
+	* README: Added README file (bug #585237)
+
+2002-05-27 14:47  persquare
+
+	* c2aqt.h, c2aqt.m: Adding example of how to create an octave/AQT
+	binding using matwrap and the C example
+
+2002-04-24 16:06  persquare
+
+	* c2aqt.h, c2aqt.m, test.c: Adding a C example based on a generic
+	adapter. Up-to-date with AQTProtocol v0.3. This is a first step
+	towards a unified adapter strategy.
+
