@@ -44,13 +44,17 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 	aqtSelectPlot
 	aqtSetAcceptingEvents
 	aqtSetBackgroundColor
+	aqtSetClipRect
 	aqtSetColor
 	aqtSetColormapEntry
+	aqtSetDefaultClipRect
 	aqtSetEventHandler
 	aqtSetFontname
 	aqtSetFontsize
 	aqtSetImageTransform
 	aqtSetLineCapStyle
+	aqtSetLinestylePattern
+	aqtSetLinestyleSolid
 	aqtSetLinewidth
 	aqtSetPlotSize
 	aqtSetPlotTitle
@@ -66,7 +70,7 @@ our @EXPORT = qw(
 	AQT_EVENTBUF_SIZE
 );
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub AUTOLOAD {
     # This AUTOLOAD is used to 'autoload' constants from the constant()
@@ -159,12 +163,16 @@ None by default.
   $did_select = aqtSelectPlot($refNum)
   aqtSetAcceptingEvents($flag)
   aqtSetBackgroundColor($r, $g, $b)
+  aqtSetClipRect($originX, $originY, $width, $height)
   aqtSetColor($r, $g, $b)
   aqtSetColormapEntry($entryIndex, $r, $g, $b)
+  aqtSetDefaultClipRect()
   aqtSetFontname($newFontname)
   aqtSetFontsize($newFontsize)
   aqtSetImageTransform($m11, $m12, $m21, $m22, $tX, $tY)
   aqtSetLineCapStyle($capStyle)
+  aqtSetLinestylePattern(\@pattern, $phase)
+  aqtSetLinestyleSolid();
   aqtSetLinewidth($newLinewidth)
   aqtSetPlotSize($width, $height)
   aqtSetPlotTitle($title)
@@ -257,6 +265,12 @@ sub aqtAddTransformedImageWithBitmap{
 	c_aqtAddTransformedImageWithBitmap($bitmap, $pixWide, $pixHigh, $clipX, $clipY, $clipWidth, $clipHeight);
 }
 
+sub aqtSetLinestylePattern{
+	my ($pattern, $phase) = @_;
+	my $pattern_packedArr = pack("f*",@$pattern);
+	c_aqtSetLinestylePattern($pattern_packedArr, 0+@$pattern, $phase);
+}
+
 #
 # end of Perl <-> C translation section
 #
@@ -275,7 +289,7 @@ The bitmap display routines convert character strings into color intensities, fo
 
 =head1 KNOWN ISSUES
 
-You should get the latest version of AquaTerm from CVS, or at least a version more recent then January 22, 2005, as not all the above functions existed in previous versions. Alternatively, you can of course just comment out the offending function in this file & in the .xs file.
+You should get the latest version of AquaTerm from CVS, or at least a version more recent then March 1, 2005, as not all the above functions existed in previous versions. Alternatively, you can of course just comment out the offending function in this file & in the .xs file.
 
 =head1 BUGS
 
@@ -289,7 +303,7 @@ http://aquaterm.sourceforge.net/
 
 =head1 AUTHOR
 
-Hazen Babcock, E<lt>hbabcockos1@mac.com<gt>
+Hazen Babcock, hbabcockos1 at mac.com
 
 =head1 COPYRIGHT AND LICENSE
 

@@ -221,3 +221,24 @@ c_aqtWaitNextEvent(buffer)
 		RETVAL = aqtWaitNextEvent(buffer);
 	OUTPUT:
 		RETVAL
+
+void
+aqtSetClipRect(originX, originY, width, height)
+	float	originX
+	float	originY
+	float	width
+	float	height
+	
+void
+aqtSetDefaultClipRect();
+
+void
+c_aqtSetLinestylePattern(newPattern, newCount, newPhase)
+	char *	newPattern
+	int 	newCount
+	float	newPhase
+    CODE:
+    	aqtSetLinestylePattern((float *)newPattern, newCount, newPhase);
+
+void
+aqtSetLinestyleSolid();

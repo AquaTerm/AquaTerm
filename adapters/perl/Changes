@@ -10,4 +10,13 @@ Revision history for Perl extension Graphics::AquaTerm.
 	    would also work.
         - added a HOW_TO_USE file to the distribution which is
            basically a text version of what you might someday 
-	   see on CPAN
+	       see on CPAN
+
+0.02  Sun Mar 6 2005
+		- updated the driver to support the following new
+		   functions that have been added to AquaTerm
+		  aqtSetClipRect
+		  aqtSetDefaultClipRect
+		  aqtSetLinestylePattern
+		  aqtSetLinestyleSolid
+		  

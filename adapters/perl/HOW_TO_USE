@@ -52,12 +52,16 @@ SUPPORTED FUNCTIONS (AND HOW TO CALL THEM):
   $did_select = aqtSelectPlot($refNum)
   aqtSetAcceptingEvents($flag)
   aqtSetBackgroundColor($r, $g, $b)
+  aqtSetClipRect($originX, $originY, $width, $height)
   aqtSetColor($r, $g, $b)
   aqtSetColormapEntry($entryIndex, $r, $g, $b)
+  aqtSetDefaultClipRect()
   aqtSetFontname($newFontname)
   aqtSetFontsize($newFontsize)
   aqtSetImageTransform($m11, $m12, $m21, $m22, $tX, $tY)
   aqtSetLineCapStyle($capStyle)
+  aqtSetLinestylePattern(\@pattern, $phase)
+  aqtSetLinestyleSolid();
   aqtSetLinewidth($newLinewidth)
   aqtSetPlotSize($width, $height)
   aqtSetPlotTitle($title)
@@ -78,4 +82,4 @@ A NOTE ON DISPLAYING BITMAPS
 
 
 
-Hazen Babcock, hbabcockos1@mac.com
+Hazen Babcock, hbabcockos1 at mac.com
