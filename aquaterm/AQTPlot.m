@@ -88,7 +88,7 @@
 -(void)dealloc
 {
 #ifdef MEM_DEBUG
-   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   NSLog(@"[%@(0x%x) %@] %s:%d", NSStringFromClass([self class]), self, NSStringFromSelector(_cmd), __FILE__, __LINE__);
 #endif
    [model release];
    [_clientName release];

@@ -32,9 +32,12 @@
 
 -(void)dealloc
 {
-  [title release];
-  [modelObjects release];
-  [super dealloc];
+#ifdef MEM_DEBUG
+   NSLog(@"[%@(0x%x) %@] %s:%d", NSStringFromClass([self class]), self, NSStringFromSelector(_cmd), __FILE__, __LINE__);
+#endif
+   [title release];
+   [modelObjects release];
+   [super dealloc];
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
