@@ -80,14 +80,11 @@ int main(void)
    {
       f = (float)i/255.0;
       aqtSetColor(1.0, f, f/2.0);
-      aqtMoveTo(320+i, 370);
-      aqtAddLineTo(320+i, 350);
+      aqtAddFilledRect(320+i, 350, 1, 20);
       aqtSetColor(0.0, f, (1.0-f));
-      aqtMoveTo(320+i, 348);
-      aqtAddLineTo(320+i, 328);
+      aqtAddFilledRect(320+i, 328, 1, 20);
       aqtSetColor((1.0-f), (1.0-f), (1.0-f));
-      aqtMoveTo(320+i, 326);
-      aqtAddLineTo(320+i, 306);
+      aqtAddFilledRect(320+i, 306, 1, 20);
    }
    // Lines
    aqtTakeColorFromColormapEntry(1);
@@ -286,4 +283,5 @@ int main(void)
    aqtRenderPlot();
    // Let go of plot _when done_
    aqtClosePlot();
+   aqtTerminate();
 }

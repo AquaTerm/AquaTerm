@@ -105,14 +105,11 @@ C     Continuous colors
       f = 0.0
       do 20 i = 0, 255
          call aqtSetColor(1.0, f/256.0, f/512.0)
-         call aqtMoveTo(320.+f, 370.)
-         call aqtAddLineTo(320.+f, 350.)
+         call aqtAddFilledRect(320.+f, 350., 1., 20.);
          call aqtSetColor(0.0, f/256.0, (1.0-f/256.0))
-         call aqtMoveTo(320.+f, 348.)
-         call aqtAddLineTo(320.+f, 328.)
+         call aqtAddFilledRect(320.+f, 328., 1., 20.);
          call aqtSetColor((1.0-f/256.0), (1.0-f/256.0), (1.0-f/256.0))
-         call aqtMoveTo(320.+f, 326.)
-         call aqtAddLineTo(320.+f, 306.)
+         call aqtAddFilledRect(320.+f, 306., 1., 20.);
          f = f+1.0
  20   end do
 C     Lines
