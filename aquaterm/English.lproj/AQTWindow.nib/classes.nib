@@ -3,7 +3,7 @@
         {
             CLASS = AQTPlot; 
             LANGUAGE = ObjC; 
-            OUTLETS = {viewOutlet = AQTView; }; 
+            OUTLETS = {canvas = AQTView; }; 
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = AQTView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
