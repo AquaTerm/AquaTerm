@@ -28,7 +28,9 @@
 - (id)canvas;
 - (void)setClient:(id)client;
 - (void)setClientInfoName:(NSString *)name pid:(int)pid;
+- (BOOL)clientValidAndResponding;
 - (BOOL)invalidateClient:(id)aClient;
+- (BOOL)acceptingEvents;
 
 - (void)processEvent:(NSString *)theEvent;
 

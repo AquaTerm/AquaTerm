@@ -15,7 +15,7 @@
   NSMutableArray	*handlerList;		/*" Array of client handlers "*/
   NSPopUpButton		*saveFormatPopup;
   NSBox			*extendSavePanelView;
-  NSConnection		*doConnection;
+ // NSConnection		*doConnection;
   NSPoint cascadingPoint;
 }
 

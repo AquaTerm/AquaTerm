@@ -46,8 +46,9 @@ extern void aqtLineDrawingTest(id sender);
 {
   //
   // Set up a DO connection:
-  //   
-  doConnection = [[NSConnection defaultConnection] retain];
+  //
+  // doConnection = [[NSConnection defaultConnection] retain];
+  NSConnection * doConnection = [NSConnection defaultConnection];
   //[doConnection setIndependentConversationQueueing:YES];	// FAQ: Needed to sync calls!!!!
   [doConnection setRootObject:self];
 
@@ -79,9 +80,44 @@ extern void aqtLineDrawingTest(id sender);
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-   // FIXME: Warn if active clients and refuse(?) if events are active
-   NSLog(@"Implement %@, %s:%d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
-   return NSTerminateNow;
+   // Warn if active clients and refuse(?) if events are active
+   int terminateDecision = NSTerminateNow;
+   BOOL validClients = NO;
+   BOOL eventsActive = NO;
+   NSEnumerator *enumObjects = [handlerList objectEnumerator];
+   AQTPlot *aHandler;
+   while (aHandler = [enumObjects nextObject])
+   {
+      if ([aHandler clientValidAndResponding])
+      {
+         validClients = YES;
+         if ([aHandler acceptingEvents])
+         {
+            eventsActive = YES;
+         }
+      }
+   }
+
+   if(validClients)
+   {
+      int retCode;
+      if(eventsActive)
+      {
+         retCode = NSRunCriticalAlertPanel(@"Clients still awaiting events",
+                                           @"There are still clients connected to AquaTerm awaiting events and quitting now may leave them in an infinite loop.\nYou can leave AquaTerm running by pressing Cancel or confirm quitting by pressing Quit.",
+                                           @"Cancel",
+                                           @"Quit", nil);
+      }
+      else
+      {
+         retCode = NSRunAlertPanel(@"Clients still connected",
+                                   @"There are still clients connected to AquaTerm and quitting now may disrupt them.\nYou can leave AquaTerm running by pressing Cancel or confirm quitting by pressing Quit.",
+                                   @"Cancel",
+                                   @"Quit", nil);
+      }
+      terminateDecision = (retCode == NSAlertDefaultReturn)?NSTerminateCancel:NSTerminateNow;
+   }
+   return terminateDecision;
 }
 - (void)applicationWillTerminate:(NSNotification *)notification
 {

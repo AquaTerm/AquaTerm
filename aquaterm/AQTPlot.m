@@ -101,6 +101,26 @@
    return model;
 }
 
+- (BOOL)clientValidAndResponding
+{
+   BOOL validAndResponding = NO;
+   if (_client != nil)
+   {
+      validAndResponding = YES;
+      NS_DURING
+         [_client ping];
+      NS_HANDLER
+         validAndResponding = NO;
+      NS_ENDHANDLER
+   }      
+   return validAndResponding;
+}
+
+- (BOOL)acceptingEvents;
+{
+   return _acceptingEvents;
+}
+
 #pragma mark === AQTClientProtocol methods ===
 -(void)setModel:(AQTModel *)newModel
 {
