@@ -130,6 +130,7 @@
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
 				CBD8F3F004D90CE100EBD329,
+				CBC8D54B04F2258500EBD329,
 				F55D7FF10219BEF4014110D6,
 			);
 			isa = PBXGroup;
@@ -462,6 +463,21 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXFileReference;
 			name = aquaTerm.trm;
 			path = /Volumes/Earth/Users/per/source/AQT/adapters/gnuplot/aquaTerm.trm;
+			refType = 0;
+		};
+		CBC8D54B04F2258500EBD329 = {
+			children = (
+				CBC8D54C04F225E200EBD329,
+			);
+			isa = PBXGroup;
+			name = MiscDocs;
+			refType = 4;
+		};
+		CBC8D54C04F225E200EBD329 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = README;
+			path = "/Volumes/Earth/Users/per/source/AQT/gnuplot-3.8i.0/term/README";
 			refType = 0;
 		};
 		CBD51DED04EB839F00EBD329 = {

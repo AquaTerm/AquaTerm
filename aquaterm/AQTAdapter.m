@@ -10,17 +10,12 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #import "AQTAdapter.h"
-#import "AQTPlotBuilder.h"
-/*
 #import "AQTGraphic.h"
-#import "AQTModel.h"
-#import "AQTLabel.h"
-#import "AQTPath.h"
-#import "AQTPatch.h"
-#import "AQTImage.h"
-*/
+#import "AQTPlotBuilder.h"
 #import "AQTConnectionProtocol.h"
 #import "AQTClientProtocol.h"
+
+static AQTColor colormap[AQT_COLORMAP_SIZE];
 
 @interface AQTAdapter (AQTAdapterPrivateMethods)
 - (BOOL)_connectToServer;
@@ -34,14 +29,14 @@ As such, it bridges the gap between client's procedural calls requesting operati
 such as drawing a line or placing a label and the object-oriented graph being built.
 The actual assembling of the graph is performed by an instance of class AQTPlotBuilder.
 
-It seemlessly provides a connection to the viewer (AquaTerm.app) without any work on behalf of the client. 
+It seemlessly provides a connection to the viewer (AquaTerm.app) without any work on behalf of the client.
 
 It also provides some utility functionality such an indexed colormap, and an optional
 error handling callback function for the client.
 "*/
 
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #{initWithHandler:} with a nil argument."*/
--(id)initWithHandler:(id)localHandler 
+-(id)initWithHandler:(id)localHandler
 {
   if(self = [super init])
   {
@@ -92,7 +87,7 @@ error handling callback function for the client.
   NS_DURING
     [_server removeAQTClientWithId:_uniqueId]; // Where to place this???
   NS_HANDLER
-      NSLog(@"Discarding exception...");
+    NSLog(@"Discarding exception...");
   NS_ENDHANDLER
   [_handler release];
   [_server release];
@@ -119,23 +114,81 @@ error handling callback function for the client.
   return _builder;
 }
 
-/*
- - (AQTColor)color {
-  return _color;
-}
-*/
+/*" Set the current color, used for all subsequent items, using explicit RGB components. "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b
 {
-  [_builder setColorRed:r green:g blue:b];
+  AQTColor newColor;
+  newColor.red = r;
+  newColor.green = g;
+  newColor.blue = b;
+  [_builder setColor:newColor];
 }
-/*
-- (void)setColor:(AQTColor)newColor
-{
-  _color = newColor;
-}
-*/
 
-// FIXME: key-value coding for accessors?
+/*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the current colormap. "*/
+- (void)takeColorFromColormapEntry:(int)index
+{
+  if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
+  {
+//    AQTColor newColor;
+//    newColor.red = colormap[index].red;
+//    newColor.green = colormap[index].green;
+//    newColor.blue = colormap[index].blue;
+    [_builder setColor:colormap[index]];
+  }
+}
+
+- (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b
+{
+  AQTColor newColor;
+  newColor.red = r;
+  newColor.green = g;
+  newColor.blue = b;
+  [_builder setBackgroundColor:newColor];  
+}
+
+- (void)takeBackgroundColorFromColormapEntry:(int)index
+{
+  if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
+  {
+    [_builder setBackgroundColor:colormap[index]];
+  }
+}
+
+
+/*" Get current RGB color components by reference. "*/
+- (void)getCurrentColorRed:(float *)r green:(float *)g blue:(float *)b
+{
+  AQTColor tmpColor = [_builder color];
+  *r = tmpColor.red;
+  *g = tmpColor.green;
+  *b = tmpColor.blue;
+}
+
+/*" Set an RGB entry in the current colormap at the position given by entryIndex. "*/
+- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b
+{
+  if (entryIndex < AQT_COLORMAP_SIZE-1 && entryIndex >= 0)
+  {
+    colormap[entryIndex].red = r;
+    colormap[entryIndex].green = g;
+    colormap[entryIndex].blue = b;
+  }
+}
+
+/*" Set an RGB entry in the current colormap at the position given by entryIndex. "*/
+- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b
+{
+  if (entryIndex < AQT_COLORMAP_SIZE-1 && entryIndex >= 0)
+  {
+    *r = colormap[entryIndex].red;
+    *g = colormap[entryIndex].green;
+    *b = colormap[entryIndex].blue;
+  }
+}
+
+
+
+
 - (NSString *)fontname
 {
   return [_builder fontname];
@@ -219,36 +272,34 @@ error handling callback function for the client.
   if ([_builder modelIsDirty])
   {
     NS_DURING
-      [_handler setModel:[_builder model]];	// the renderer will retain this object
+      [_handler setModel:[_builder model]];
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
       else
         [localException raise];
     NS_ENDHANDLER
-  //  _modelIsDirty = NO;
   }
 }
 - (void)render //(push [partial] model to renderer)
 {
   // FIXME: if model hasn't changed, don't update!!!
-    if ([_builder modelIsDirty])
-    {
-  NS_DURING
-      [_handler setModel:[_builder model]];	// the renderer will retain this object
+  if ([_builder modelIsDirty])
+  {
+    NS_DURING
+      [_handler setModel:[_builder model]];	
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
       else
         [localException raise];
     NS_ENDHANDLER
-      //_modelIsDirty = NO;
-    }
-    else
-    {
-      //[_handler setModel:_model];	// the renderer will retain this object
-      NSLog(@"*** Error -- trying to render non-dirty model ***");
-    }
+  }
+  else
+  {
+    // [_handler setModel:[_builder model]];	
+    NSLog(@"*** Warning -- Rendering non-dirty model ***");
+  }
 }
 - (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options
 {
@@ -274,38 +325,38 @@ error handling callback function for the client.
 @implementation AQTAdapter (AQTAdapterPrivateMethods)
 - (BOOL)_connectToServer
 {
-  
+
   BOOL didConnect = NO;
   _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-    if (!_server)
-/*
- {
-      [_server retain];
-      [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
-      didConnect = YES;
+  if (!_server)
+    /*
+     {
+       [_server retain];
+       [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
+       didConnect = YES;
+     }
+     else
+     */
+  {
+    NSLog(@"Launching server...");
+    if (![self _launchServer])
+    {
+      NSLog(@"Launching failed.");
     }
     else
- */
     {
-      NSLog(@"Launching server...");
-      if (![self _launchServer])
+      // Wait for server to start up
+      int timer = 10;
+      while (--timer && !didConnect)
       {
-        NSLog(@"Launching failed.");
-      }
-      else
-      {
-        // Wait for server to start up
-        int timer = 10;
-        while (--timer && !didConnect)
-        {
-          // sleep 1s
-          NSLog(@"Waiting...");
-          [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
-          // check for server connection
-          _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-        }
+        // sleep 1s
+        NSLog(@"Waiting...");
+        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+        // check for server connection
+        _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
       }
     }
+  }
   NS_DURING
     if (_server)
     {
@@ -321,7 +372,7 @@ error handling callback function for the client.
         NSLog(@"server is too old info");
         _server = nil;
       }
-    }    
+    }
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
@@ -372,7 +423,7 @@ error handling callback function for the client.
         else
           [localException raise];
       NS_ENDHANDLER
-    }    
+    }
   }
 }
 @end

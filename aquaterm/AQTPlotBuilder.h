@@ -26,12 +26,13 @@
 - (void)setModel:(AQTModel *)newModel;
 - (AQTModel *)model;
 - (BOOL)modelIsDirty;
+- (void)flushBuffers;
 - (void)setSize:(NSSize)canvasSize;
 - (void)setTitle:(NSString *)title;
 /*" Color handling "*/
-  //- (AQTColor)color;
-- (void)setColorRed:(float)r green:(float)g blue:(float)b;
- //- (void)setColor:(AQTColor)newColor;
+- (AQTColor)color;
+- (void)setColor:(AQTColor)newColor;
+- (void)setBackgroundColor:(AQTColor)newColor;
   /*" Text handling "*/
 - (NSString *)fontname;
 - (void)setFontname:(NSString *)newFontname;

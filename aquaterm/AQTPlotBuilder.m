@@ -46,12 +46,13 @@
   [newModel retain];
   [_model release];
   _model = newModel;
+  _modelIsDirty = YES;
 }
 
 - (AQTModel *)model
 {
   // FIXME: Flush buffers before returning the model
-  [self _flushLineSegmentBuffer];
+  [self flushBuffers];
   _modelIsDirty = NO;
   return _model;
 }
@@ -59,6 +60,12 @@
 {
   return _modelIsDirty; 
 }
+
+-(void)flushBuffers
+{
+  [self _flushLineSegmentBuffer];
+}
+
 - (void)setSize:(NSSize)canvasSize
 {
   [_model setSize:canvasSize];
@@ -69,27 +76,30 @@
   [_model setTitle:title];  
 }
 
-/*
  - (AQTColor)color {
    return _color;
  }
- */
-- (void)setColorRed:(float)r green:(float)g blue:(float)b
-{  
-  if ((r != _color.red) || (g != _color.green) || (b != _color.blue))
+
+ - (void)setColor:(AQTColor)newColor
+{
+  if ((newColor.red != _color.red) || (newColor.green != _color.green) || (newColor.blue != _color.blue))
   {
-    _modelIsDirty = [self _flushLineSegmentBuffer] || _modelIsDirty;
-    _color.red = r;
-    _color.green = g;
-    _color.blue = b;
+    [self flushBuffers];
+    _color = newColor;
   }
 }
-/*
- - (void)setColor:(AQTColor)newColor
- {
-   _color = newColor;
- }
- */
+
+- (void)setBackgroundColor:(AQTColor)newColor
+{
+  AQTColor oldColor = [_model color];
+  if ((newColor.red != oldColor.red) || (newColor.green != oldColor.green) || (newColor.blue != oldColor.blue))
+  {
+    [_model setColor:newColor];
+    _modelIsDirty = YES;
+  }
+}
+
+
 - (NSString *)fontname
 {
   return _fontname;
@@ -124,7 +134,7 @@
 {
   if (newLinewidth != _linewidth)
   {
-    _modelIsDirty = [self _flushLineSegmentBuffer] || _modelIsDirty;
+    [self flushBuffers];
     _linewidth = newLinewidth;
   }
 }	
