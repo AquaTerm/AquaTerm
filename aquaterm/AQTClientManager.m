@@ -107,7 +107,7 @@
       {
          // Wait for server to start up
          int timer = 10;
-         while (--timer && !didConnect)
+         while (--timer && !_server)
          {
             // sleep 1s
             [self logMessage:[NSString stringWithFormat:@"Waiting... %d", timer] logLevel:2];
