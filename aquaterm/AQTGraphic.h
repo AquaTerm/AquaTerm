@@ -17,7 +17,6 @@ typedef struct _AQTColor {
 } AQTColor;
 
 
-
 @interface AQTGraphic : NSObject <NSCoding>
 {
     NSSize canvasSize;

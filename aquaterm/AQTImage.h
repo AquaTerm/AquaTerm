@@ -14,7 +14,6 @@
 {
   NSData *bitmap;
   NSSize bitmapSize;
-  //NSRect renderBounds;
 }
 - (id)initWithBitmap:(const char *)bytes size:(NSSize)size bounds:(NSRect)bounds;
 - (NSData *)bitmap;
