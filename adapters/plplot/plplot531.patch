@@ -1,0 +1,212 @@
+--- plplot-5.3.1/configure.ac	Fri Jun 25 09:16:30 2004
++++ plplot-5.3.1_patched/configure.ac	Sat Oct 30 16:05:42 2004
+@@ -235,6 +235,7 @@
+ m4_include(cf/tk.ac)
+ m4_include(cf/ps.ac)
+ m4_include(cf/wingcc.ac)
++m4_include(cf/aqt.ac)
+ m4_include(cf/drivers-finish.ac)
+ 
+ 
+--- plplot-5.3.1/cf/drivers-init.ac	Tue May 25 08:37:15 2004
++++ plplot-5.3.1_patched/cf/drivers-init.ac	Sat Oct 30 16:04:48 2004
+@@ -58,6 +58,7 @@
+ dnl consumption, but this is not necessary.
+ 
+ builtin([define], [PL_DRIVERS_DEVICE_LIST], [
++    aqt:aqt:yes,		  
+     cgm:cgm:yes,
+     dg300:dg300:no,
+     png:gd:yes, jpeg:gd:yes,
+--- plplot-5.3.1/include/plDevs.h.in	Mon Jun 14 23:51:57 2004
++++ plplot-5.3.1_patched/include/plDevs.h.in	Sat Oct 30 16:06:51 2004
+@@ -34,6 +34,7 @@
+ #ifndef __PLDEVS_H__
+ #define __PLDEVS_H__
+ 
++#undef PLD_aqt
+ #undef PLD_plmeta
+ #undef PLD_null
+ #undef PLD_xterm
+--- plplot-5.3.1/include/drivers.h	Mon Jun 14 23:51:57 2004
++++ plplot-5.3.1_patched/include/drivers.h	Sat Oct 30 16:07:57 2004
+@@ -34,6 +34,7 @@
+ 
+ void plD_dispatch_init_mac8	( PLDispatchTable *pdt );
+ void plD_dispatch_init_mac1	( PLDispatchTable *pdt );
++void plD_dispatch_init_aqt	( PLDispatchTable *pdt );
+ void plD_dispatch_init_nx	( PLDispatchTable *pdt );
+ void plD_dispatch_init_os2	( PLDispatchTable *pdt );
+ void plD_dispatch_init_xw	( PLDispatchTable *pdt );
+--- plplot-5.3.1/include/plcore.h	Mon Jun 14 23:51:57 2004
++++ plplot-5.3.1_patched/include/plcore.h	Sat Oct 30 16:08:26 2004
+@@ -241,6 +241,9 @@
+ #if defined(PLD_wingcc) && !defined(ENABLE_DYNDRIVERS)
+     plD_dispatch_init_wingcc,
+ #endif
++#if defined(PLD_aqt) && !defined(ENABLE_DYNDRIVERS)
++    plD_dispatch_init_aqt,
++#endif
+     NULL
+ };
+ 
+--- plplot-5.3.1/drivers/Makefile.am	Mon Jun 14 23:51:53 2004
++++ plplot-5.3.1_patched/drivers/Makefile.am	Sat Oct 30 16:40:44 2004
+@@ -28,6 +28,7 @@
+ if enable_dyndrivers
+ 
+ EXTRA_LTLIBRARIES = \
++	aqt.la \
+ 	cgm.la \
+ 	dg300.la \
+ 	gd.la \
+@@ -98,6 +99,7 @@
+ 
+ cgm_la_CFLAGS = $(CDINCCMD)
+ gd_la_CFLAGS = $(GDINCCMD)
++aqt_la_CFLAGS = $(AQTINCCMD)
+ gnome_la_CFLAGS = $(GTK_CFLAGS) $(GNOME_INCLUDEDIR)
+ ntk_la_CFLAGS = \
+ 	-I$(top_srcdir)/bindings/tcl \
+@@ -139,6 +141,9 @@
+ gd_la_SOURCES = gd.c
+ gd_la_LDFLAGS = $(ldflags) $(libplplot) $(GDLIBCMD)
+ 
++aqt_la_SOURCES = aqt.c
++aqt_la_LDFLAGS = $(ldflags) $(libplplot) $(AQTLIBCMD)
++
+ wingcc_la_SOURCES = wingcc.c
+ wingcc_la_LDFLAGS = $(ldflags) $(libplplot) $(GDI32LIBCMD)
+ 
+@@ -278,6 +283,7 @@
+ # For AM_CONDITIONALS must use SOURCES, not LIBADD
+ libplplotdrv_la_SOURCES = $(tksources) $(matrixsources) $(tkwinsources)
+ EXTRA_libplplotdrv_la_SOURCES = \
++	aqt.c \
+ 	cgm.c \
+ 	dg300.c \
+ 	gd.c \
+@@ -317,6 +323,7 @@
+ 
+ cgm_lo_CFLAGS = $(CDINCCMD)
+ gd_lo_CFLAGS = $(GDINCCMD)
++aqt_lo_CFLAGS = $(AQTINCCMD)
+ gnome_lo_CFLAGS = $(GTK_CFLAGS) $(GNOME_INCLUDEDIR)
+ ntk_lo_CFLAGS = \
+ 	-I$(top_srcdir)/bindings/tcl \
+@@ -346,6 +353,7 @@
+ AM_CPPFLAGS = \
+ 	$(cgm_lo_CFLAGS) \
+ 	$(gd_lo_CFLAGS) \
++	$(aqt_lo_CFLAGS) \
+ 	$(gnome_lo_CFLAGS) \
+ 	$(tkwin_lo_CFLAGS) \
+ 	$(wingcc_lo_CFLAGS) \
+@@ -371,6 +379,7 @@
+ 	$(ITCLLIBCMD) \
+ 	$(TCLLIBCMD) \
+ 	$(FREETYPELIBCMD) \
++	$(AQTLIBCMD) \
+ 	$(xflags) $(lmflag)
+ 
+ # These dependencies required for some reason if using the LIBADD method.
+diff -Nur -Xplplot_cf_ignore plplot-5.3.1/cf/aqt.ac plplot-5.3.1_patched/cf/aqt.ac
+--- plplot-5.3.1/cf/aqt.ac	Thu Jan  1 01:00:00 1970
++++ plplot-5.3.1_patched/cf/aqt.ac	Sun Oct 31 16:02:56 2004
+@@ -0,0 +1,96 @@
++dnl cf/aqt.ac for PLplot  -*- autoconf -*-
++dnl
++dnl -------------------------------------------------------------------------
++dnl Find libaquaterm library and headers required to build aquaterm driver.
++dnl Written by Per Persson following Alan W. Irwin
++dnl -------------------------------------------------------------------------
++dnl
++dnl Copyright (C) 2004  Per Persson
++dnl
++dnl This file is part of PLplot.
++dnl
++dnl PLplot is free software; you can redistribute it and/or modify
++dnl it under the terms of the GNU Library General Public License as published
++dnl by the Free Software Foundation; version 2 of the License.
++dnl
++dnl PLplot is distributed in the hope that it will be useful,
++dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
++dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++dnl GNU Library General Public License for more details.
++dnl
++dnl You should have received a copy of the GNU Library General Public License
++dnl along with the file PLplot; if not, write to the Free Software
++dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
++
++AQTLIBSTR=-laquaterm
++
++if test "$enable_aqt" = "yes"; then
++    AC_MSG_CHECKING(for AquaTerm header files)
++    if test -z "$AQTINCDIR"; then
++        AC_PREPROC_IFELSE([#include <aquaterm/AQTAdapter.h>],
++	[ AQTINCDIR=default
++	  AC_MSG_RESULT([found in $AQTINCDIR]) ], [
++        incdirs="\
++        /usr/include \
++        /usr/local/include"
++
++        for dir in $incdirs; do
++            if test -r "$dir/aquaterm/AQTAdapter.h"; then
++               AQTINCDIR="$dir"
++               break
++            fi
++        done
++        if test -z "$AQTINCDIR"; then
++	    AC_MSG_RESULT(not found)
++            AC_MSG_WARN([AquaTerm header files not found, setting enable_aqt=no])
++            AQTINCDIR=default
++            enable_aqt=no
++	else
++	    AC_MSG_RESULT([found in $AQTINCDIR])
++        fi ])
++    fi
++    if test "$AQTINCDIR" = "/usr/include"; then
++        AQTINCDIR=default
++    fi
++    AQTINCCMD="-ObjC"
++    AQTINCPATH=""
++    PL_ADD_TO_INCS($AQTINCDIR, AQTINCCMD, AQTINCPATH)
++
++fi
++
++if test "$enable_aqt" = "yes"; then
++    if test -z "$AQTLIBDIR"; then
++        AC_CHECK_LIB(aquaterm, aqtInit, [ AQTLIBDIR=default ], [
++        libdirs="\
++        /usr/lib \
++        /usr/local/lib"
++
++        for dir in $libdirs; do
++            if test -r "$dir/libaquaterm.dylib"; then
++                AQTLIBDIR="$dir"
++                break
++            fi
++        done
++        if test -z "$AQTLIBDIR"; then
++            AC_MSG_WARN([libaquaterm not found, setting enable_aqt=no])
++            AQTLIBDIR=default
++            enable_aqt=no
++
++        fi ], -lobjc)
++    fi
++    if test "$AQTLIBDIR" = "default"; then
++        AQTLIBDIR=/usr/lib
++    fi
++    if test "$AQTLIBDIR" = "/usr/lib"; then
++        AQTLIBDIR=default
++    fi
++    AQTLIBCMD="$AQTLIBSTR -lobjc -Wl,-framework -Wl,Foundation"
++    AQTLIBPATH=""
++    PL_ADD_TO_LIBS($AQTLIBDIR, $AQTLIBSTR, AQTLIBCMD, AQTLIBPATH)
++
++fi
++
++
++AC_SUBST(AQTINCCMD)
++AC_SUBST(AQTLIBCMD)
++
