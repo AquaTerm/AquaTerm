@@ -198,9 +198,12 @@
 }
 
 
--(IBAction)debugInfo:(id)sender
+-(IBAction)help:(id)sender
 {
-  NSLog(@"Debug log: %@", [[receiverObject connection] remoteObjects]);
+  NSString *helpURL = [[NSBundle mainBundle] pathForResource:@"help" ofType:@"html"];
+  if (helpURL)
+  {
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:helpURL]];
+  }
 }
-
 @end

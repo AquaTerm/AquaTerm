@@ -28,5 +28,5 @@
 -(IBAction)saveFigureAs:(id)sender;
 -(void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (IBAction)copy:(id)sender;
--(IBAction)debugInfo:(id)sender;
+-(IBAction)help:(id)sender;
 @end
