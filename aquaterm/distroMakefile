@@ -55,7 +55,7 @@ fortran:
 
 gnuplot:
 	mkdir -p $(DEST)/gnuplot
-	cp $(ADAPTSRCDIR)/gnuplot/{aquaTerm.trm,ReadMe,ReleaseNotes} $(DEST)/gnuplot/.
+	cp $(ADAPTSRCDIR)/gnuplot/{aquaTerm.trm,ReadMe,ReleaseNotes,gnuplot_command_c.patch} $(DEST)/gnuplot/.
 
 pgplot:
 	mkdir -p $(DEST)/pgplot
