@@ -19,7 +19,8 @@ C     output strings
       dimension yPtr(128) 
       parameter (pi = 3.14152692)
       integer middle, baseline, bottom, top, left, center, right
-      integer rgbImage(2,2)
+C     Declare the image: it will be 2x2 in size.
+      integer*1 rgbImage(6,2)
 C     
 C     labels (probably better ways to do this...)
 C     
@@ -246,20 +247,32 @@ C     Alternative to polyline:
       call aqtTakeColorFromColormapEntry(5)
       call aqtAddPolygon(xPtr, yPtr, 32);
 
-C     FIXME Images
-      rgbImage(1,1)=65280
-      rgbImage(2,1)=65280
-      rgbImage(1,2)=65280
-      rgbImage(2,2)=65280
+C     Images
+C     Pixel(1,1) RGB (red)
+      rgbImage(1,1) = 255
+      rgbImage(2,1) = 0
+      rgbImage(3,1) = 0
+C     Pixel(2,1) RGB (green)
+      rgbImage(4,1) = 0
+      rgbImage(5,1) = 255
+      rgbImage(6,1) = 0
+C     Pixel(1,2) RGB (blue)
+      rgbImage(1,2) = 0
+      rgbImage(2,2) = 0
+      rgbImage(3,2) = 255
+C     Pixel(2,2) RGB (black)
+      rgbImage(4,2) = 0
+      rgbImage(5,2) = 0
+      rgbImage(6,2) = 0
       call aqtTakeColorFromColormapEntry(1)
       call aqtAddLabel('FIXME: Images', 320., 220., 0.0, left)
       call aqtAddImageWithBitmap(rgbImage, 2, 2, 328., 200., 4., 4.)
       call aqtAddLabel('bits', 330., 180., 0.0, center)
-      call aqtAddImageWithBitmap(rgbImage, 2,2, 360., 190., 40., 15.)
+      call aqtAddImageWithBitmap(rgbImage, 2, 2, 360., 190., 40., 15.)
       call aqtAddLabel('fit bounds', 380., 180., 0.0, center)
       call aqtSetImageTransform(9.23880, 3.82683, -3.82683, 9.23880, 
      $     494.6, 186.9 )
-      call aqtAddTransformedImageWithBitmap(rgbImage, 2,2, 
+      call aqtAddTransformedImageWithBitmap(rgbImage, 2, 2, 
      $     0., 0., 600., 400.)
       call aqtAddLabel('scale, rotate & translate', 500., 180., 0.0, 
      $     center)
