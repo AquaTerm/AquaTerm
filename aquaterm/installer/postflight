@@ -1,0 +1,6 @@
+#!/bin/sh
+ln -s /usr/local/lib/libaquaterm.1.0.0.dylib /usr/local/lib/libaquaterm.dylib
+#if  ln -s /usr/local/lib/libaquaterm.1.0.0.dylib /usr/local/lib/libaquaterm.dylib ; then
+#    echo "linked OK"
+#fi
+exit 0

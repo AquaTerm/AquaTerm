@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ -e /usr/local/lib/libaquaterm.dylib ]; then
+    rm /usr/local/lib/libaquaterm.dylib
+fi
+exit 0
