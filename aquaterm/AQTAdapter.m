@@ -9,7 +9,9 @@
 // FIXME: Use only C types, and improve method names.
 #import <ApplicationServices/ApplicationServices.h>
 
+
 #import "AQTAdapter.h"
+#import "AQTAdapterPrivateMethods.h"
 #import "AQTGraphic.h"
 #import "AQTImage.h"
 #import "AQTPlotBuilder.h"
@@ -17,12 +19,6 @@
 #import "AQTClientProtocol.h"
 
 static AQTColor colormap[AQT_COLORMAP_SIZE];
-
-@interface AQTAdapter (AQTAdapterPrivateMethods)
-- (BOOL)_connectToServer;
-- (BOOL)_launchServer;
-- (void)_serverError;
-@end
 
 @implementation AQTAdapter
 /*" AQTAdapter is a class that provides an interface to the functionality of AquaTerm.
@@ -41,7 +37,6 @@ error handling callback function for the client.
 {
   if(self = [super init])
   {
-    //[self setBuilder:[[AQTPlotBuilder alloc] init]];
     _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
     _handlers = [[NSMutableDictionary alloc] initWithCapacity:256];
     _uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
@@ -54,22 +49,7 @@ error handling callback function for the client.
     }
     else
     {
-      if([self _connectToServer])
-      {
-/*
- NS_DURING
-          _selectedHandler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
-          [_selectedHandler retain];
-          [_selectedHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
-        NS_HANDLER
-          if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-            [self _serverError];
-          else
-            [localException raise];
-        NS_ENDHANDLER
-*/
-      }
-      else
+      if([self _connectToServer] == NO)
       {
         // FIXME: Check up on this
         [self autorelease];
@@ -90,7 +70,7 @@ error handling callback function for the client.
 {
   NSLog(@"byebye from adapter %@", _uniqueId);
   NS_DURING
-    [_server removeAQTClientWithId:_uniqueId]; // Where to place this???
+    [_server removeAQTClient:self]; // Where to place this???
   NS_HANDLER
     NSLog(@"Discarding exception...");
   NS_ENDHANDLER
@@ -102,19 +82,33 @@ error handling callback function for the client.
   [super dealloc];
 }
 
+- (void)setAcceptingEvents:(BOOL)flag
+{
+   NSEnumerator *enumObjects = [_handlers objectEnumerator];
+   NSDistantObject <AQTClientProtocol> *aHandler;
+   NSLog(@"setAcceptingEvents:%@", flag?@"Yes":@"No");
+   if (flag == YES)
+   {
+      // Make sure only one view per client process events
+      while (aHandler = [enumObjects nextObject])
+      {
+         [aHandler setAcceptingEvents:NO];
+      }
+   }
+   [_selectedHandler setAcceptingEvents:flag];
+}
+
 /*" Optionally set an error handling routine to override default behaviour "*/
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr
 {
   _errorHandler = fPtr;
 }
-/*
-- (void)setBuilder:(AQTPlotBuilder *)newBuilder
+/*" Optionally set an event handling routine"*/
+- (void)setEventHandler:(void (*)(NSString *event))fPtr
 {
-  [newBuilder retain];
-  [_selectedBuilder release];
-  _selectedBuilder=newBuilder;
+   _eventHandler = fPtr;
 }
-*/
+
 - (AQTPlotBuilder *)builder
 {
   return _selectedBuilder;
@@ -284,11 +278,7 @@ error handling callback function for the client.
 {
   AQTAffineTransformStruct trans;
   trans.m11 = 1.0;
-//  trans.m12 = m12;
-//  trans.m21 = m21;
   trans.m22 = 1.0;
-//  trans.tX = tX;
-//  trans.tY = tY;
   [_selectedBuilder setImageTransform:trans];
 }
 
@@ -299,13 +289,12 @@ error handling callback function for the client.
 
 #pragma mark === Control operations ===
 /*" Creates a new builder instance, adds it to the list of builders and makes it the selected builder "*/
-- (void)openPlotIndex:(int)refNum // size:(NSSize)canvasSize title:(NSString *)title // if title param is nil, title defaults to Figure <n>
+- (void)openPlotIndex:(int)refNum 
 {
   id newHandler;
   AQTPlotBuilder *newBuilder;
   NS_DURING
-    //[_selectedHandler selectView:refNum];
-    newHandler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
+    newHandler = [_server addAQTClient:self name:_procName pid:_procId];
   NS_HANDLER
     if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
       [self _serverError];
@@ -322,8 +311,6 @@ error handling callback function for the client.
     [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
     _selectedBuilder = newBuilder;
     [newBuilder release];
-//    [_selectedBuilder setSize:canvasSize];
-//    [_selectedBuilder setTitle:title?title:[NSString stringWithFormat:@"Figure %d", refNum]];
   }
 }
 
@@ -364,8 +351,10 @@ error handling callback function for the client.
 
 /*" Removes the selected builder from the list of builders and sets selected builder to nil."*/
 - (void)closePlot
+// FIXME: The semantics have changed!!! This should CLOSE the window. NOT close the connection
+// Maybe change name to avoid confusion with old meaning...
 {
-  NSEnumerator *enumKeys = [_builders keyEnumerator];
+ NSEnumerator *enumKeys = [_builders keyEnumerator];
   NSString *aKey;
   // FIXME: Check if model is dirty and that buffers are flushed,
   // don't set model unless necessary -- just release the local
@@ -380,6 +369,7 @@ error handling callback function for the client.
         [localException raise];
     NS_ENDHANDLER
   }
+/*
   // remove this builder & handler
   while (aKey = [enumKeys nextObject])
   {
@@ -392,6 +382,7 @@ error handling callback function for the client.
   }
   _selectedBuilder = nil;
   _selectedHandler = nil;
+ */
 }
 
 - (void)setPlotSize:(NSSize)canvasSize
@@ -405,7 +396,7 @@ error handling callback function for the client.
 }
 
 /*" Hand a copy of the current plot to the viewer "*/
-- (void)render //(push [partial] model to renderer)
+- (void)render 
 {
   // FIXME: if model hasn't changed, don't update!!!
   if (_selectedBuilder && [_selectedBuilder modelIsDirty])
@@ -425,133 +416,5 @@ error handling callback function for the client.
     NSLog(@"*** Warning -- Rendering non-dirty model ***");
   }
 }
-- (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options
-{
-  char keyPressed;
-  if([_selectedBuilder modelIsDirty])
-  {
-    [self render];
-  }
-  NS_DURING
-    [_selectedHandler beginMouse];
-    do
-    {
-      // Sleep this thread for .1 s at a time. FIXME: Will not work if non-DO client
-      [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
-    } while (![_selectedHandler mouseIsDone]);
-    keyPressed = [_selectedHandler mouseDownInfo:mouseLoc];
-  NS_HANDLER
-    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-      [self _serverError];
-    else
-      [localException raise];
-  NS_ENDHANDLER
-  return keyPressed;
-}
 @end
 
-@implementation AQTAdapter (AQTAdapterPrivateMethods)
-- (BOOL)_connectToServer
-{
-
-  BOOL didConnect = NO;
-  _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-  if (!_server)
-    /*
-     {
-       [_server retain];
-       [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
-       didConnect = YES;
-     }
-     else
-     */
-  {
-    NSLog(@"Launching server...");
-    if (![self _launchServer])
-    {
-      NSLog(@"Launching failed.");
-    }
-    else
-    {
-      // Wait for server to start up
-      int timer = 10;
-      while (--timer && !didConnect)
-      {
-        // sleep 1s
-        NSLog(@"Waiting...");
-        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
-        // check for server connection
-        _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-      }
-    }
-  }
-  NS_DURING
-    if (_server)
-    {
-      if ([_server conformsToProtocol:@protocol(AQTConnectionProtocol)])
-      {
-        NSLog(@"Conforming!");
-        [_server retain];
-        [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
-        didConnect = YES;
-      }
-      else
-      {
-        NSLog(@"server is too old info");
-        _server = nil;
-      }
-    }
-    NS_HANDLER
-      if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-        [self _serverError];
-      else
-        [localException raise];
-    NS_ENDHANDLER
-    NSLog(didConnect?@"Connected!":@"Not connected");
-    return didConnect;
-}
-
-// This is still troublesome... Needs to figure out if user is running from remote machine. NSTask
-- (BOOL)_launchServer
-{
-  NSURL *appURL;
-
-  if (getenv("AQUATERM_PATH") == (char *)NULL)
-  { // No, search for it in standard locations
-    NSURL *tmpURL;
-    appURL = (LSFindApplicationForInfo(NULL, NULL, (CFStringRef)@"AquaTerm.app", NULL, (CFURLRef *)&tmpURL) == noErr)?tmpURL:nil;
-  }
-  else
-  {
-    appURL = [NSURL fileURLWithPath:[NSString stringWithCString:getenv("AQUATERM_PATH")]];
-    // Setting error msg if anything goes wrong
-  }
-  return (LSOpenCFURLRef((CFURLRef)appURL, NULL) == noErr);
-}
-
-- (void)_serverError
-{
-  // NSLog(@"Caugth an error!");
-  if (_errorHandler)
-  {
-    _errorHandler(@"Server unavailable --- passing on.");
-  }
-  else
-  {
-    NSLog(@"Server error, no handler installed\nTrying to reconnect");
-    if([self _connectToServer])
-    {
-      NS_DURING
-        _selectedHandler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
-        [_selectedHandler retain];
-        [_selectedHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
-      NS_HANDLER
-        if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
-          [self _serverError];
-        else
-          [localException raise];
-      NS_ENDHANDLER
-    }
-  }
-}
-@end

@@ -104,10 +104,12 @@
    NSPoint pos;
    char aKey = '\0';
   //NSLog(NSStringFromPoint([theEvent locationInWindow]));
-  if (![self mouseIsActive])
+/*
+ if (![self mouseIsActive])
   {
     return;
   }
+   */
   // Inform the delegate...
   pos = [self convertPoint:[theEvent locationInWindow] fromView:nil];
   switch([theEvent type])
@@ -209,7 +211,7 @@
   AQTGraphic *graphic;
   NSEnumerator *enumerator = [modelObjects objectEnumerator];
   NSDate *startTime=  [NSDate date];
-  NSRect debugRect;
+//  NSRect debugRect;
   NSAffineTransform *localTransform = [NSAffineTransform transform];
   [localTransform scaleXBy:NSWidth(boundsRect)/canvasSize.width
                        yBy:NSHeight(boundsRect)/canvasSize.height];
@@ -237,10 +239,10 @@
 {
   NSMutableAttributedString *tmpString = [[NSMutableAttributedString alloc] initWithAttributedString:string];
   NSSize boundingBox;
-    int i, l = [tmpString length];
+//    int i, l = [tmpString length];
   float xScale = boundsRect.size.width/canvasSize.width; // get scale changes wrt max size
   float yScale = boundsRect.size.height/canvasSize.height;
-  float fontScale = sqrt(0.5*(xScale*xScale + yScale*yScale));
+//  float fontScale = sqrt(0.5*(xScale*xScale + yScale*yScale));
   float fontsize = [[[string attributesAtIndex:0 effectiveRange:nil] objectForKey:@"AQTFontsizeKey"] floatValue];
   NSFont *tmpFont = [NSFont fontWithName:[[string attributesAtIndex:0 effectiveRange:nil] objectForKey:@"AQTFontnameKey"]
                                     size:fontsize];

@@ -25,35 +25,37 @@ enum {
 @interface AQTAdapter : NSObject
 {
   NSMutableDictionary *_builders;
-  NSMutableDictionary *_handlers; 
-
+  NSMutableDictionary *_handlers;
+  BOOL _acceptingEvents;
   NSString *_uniqueId; 	/*" A unique string used to identify this adapter in AquaTerm "*/
   NSString *_procName; 	/*" Holds the name of the process who instantiated the object "*/
   int _procId;		/*" Holds the pid of the process who instantiated the object "*/
   NSDistantObject <AQTConnectionProtocol> *_server;	/*" The viewer app's (AquaTerm) default connection "*/
-//  NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
   AQTPlotBuilder *_selectedBuilder; 	/*" The object responsible for assembling a model object from client's calls"*/
   NSDistantObject <AQTClientProtocol> *_selectedHandler; 	/*" The handler object in AquaTerm responsible for communication "*/
   void (*_errorHandler)(NSString *msg);	/*" A callback function optionally installed by the client "*/
+  void (*_eventHandler)(NSString *event); /*" A callback function optionally installed by the client "*/
 }
 
 /*" Class initialization "*/
 - (id)init;
 - (id)initWithServer:(id)localServer;
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr;
-// - (void)setBuilder:(AQTPlotBuilder *)newBuilder;
+- (void)setEventHandler:(void (*)(NSString *event))fPtr;
+
 
   /*" Control operations "*/
-- (void)openPlotIndex:(int)refNum;  // size:(NSSize)canvasSize title:(NSString *)title; // if title param is nil, title defaults to Figure <n>
+- (void)openPlotIndex:(int)refNum; 
 - (BOOL)selectPlot:(int)refNum;
 - (void)clearPlot;
 - (void)closePlot;
 - (void)setPlotSize:(NSSize)canvasSize;
 - (void)setPlotTitle:(NSString *)title;
-- (void)render; //(push [partial] model to renderer)
+- (void)render; 
 
   /*" Interactions with user "*/
-- (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options;
+- (void)setAcceptingEvents:(BOOL)flag;
+
 
 /*" Plot related commands "*/
 

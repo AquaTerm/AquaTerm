@@ -10,6 +10,7 @@
 #import "AQTPlot.h"
 // Needed for testing only:
 #import "AQTAdapter.h"
+#import "AQTAdapterPrivateMethods.h"
 
 @implementation AQTController
 /**"
@@ -52,7 +53,7 @@
 //
 // Methods from AQTConnectionProtocol
 //
--(id)addAQTClientWithId:(NSString *)identifier name:(NSString *)name pid:(int)procId
+-(id)addAQTClient:(id)client name:(NSString *)name pid:(int)procId
 {
   id newHandler;
 /*
@@ -65,6 +66,7 @@
   {
 */
     newHandler = [[AQTPlot alloc] init];
+    [newHandler setClient:client];
     //[newHandler setOwner:self];
 //    [handlerList setObject:newHandler forKey:identifier];
 //    [newHandler release];
@@ -72,12 +74,13 @@
   return newHandler;
 }
 
--(void)removeAQTClientWithId:(NSString *)identifier
+-(void)removeAQTClient:(id)client
 {
   //
   // FIXME: The handler should be allowed to remain until final plot window is closed
   //
-  if ([handlerList objectForKey:identifier])
+/*
+ if ([handlerList objectForKey:identifier])
   {
     NSLog(@"Removing client!");
     NSLog(@"handler rc: %d", [handlerList objectForKey:identifier]);
@@ -87,6 +90,7 @@
   {
     NSLog(@"Not found!");
   }
+ */
 }
 
 -(IBAction)showHelp:(id)sender
@@ -98,35 +102,47 @@
   }
 }
 
+// Testing the use of a callback function to handle errors in the server
+void customEventHandler(NSString *event)
+{
+   NSLog(@"Custom event handler --- %@", event);
+}
+
 
 -(IBAction)test:(id)sender
 {
   NSAffineTransform *t;
   NSAffineTransformStruct ts;
    AQTAdapter *adapter = [[AQTAdapter alloc] initWithServer:self];
-  NSMutableAttributedString *tmpStr = [[NSMutableAttributedString alloc] initWithString:@"Fancy string!"];
-   NSPoint polygon[5];
+  NSMutableAttributedString *tmpStr = [[NSMutableAttributedString alloc] initWithString:@"Fancy string! yaddadaddadadadda"];
+//   NSPoint polygon[5];
    unsigned char bytes[12]={
       255, 0, 0,
       0, 255, 0,
       0, 0, 255,
       0, 0, 0
    };
-   float xf=0.0;
-   int i;
-   int x,y;
+//   float xf=0.0;
+//   int i;
+//   int x,y;
    if (!adapter)
    {
       NSLog(@"Failed to init adapter");
    }
+   [adapter setEventHandler:customEventHandler];
    [adapter openPlotIndex:2];// size:NSMakeSize(400,300) title:@"Testing"];
    [adapter setPlotSize:NSMakeSize(400,300)];
    [adapter setPlotTitle:@"Testing"];
    [adapter addLabel:@"Left" position:NSMakePoint(200,160) angle:0.0 justification:0];
    [adapter addLabel:@"Center" position:NSMakePoint(200,150) angle:0.0 justification:1];
    [adapter addLabel:@"Right" position:NSMakePoint(200,170) angle:0.0 justification:2];
-   [tmpStr addAttribute:@"AQTFancyAttribute" value:@"superscript" range:NSMakeRange(3,5)];
-   [adapter addLabel:tmpStr position:NSMakePoint(100,100) angle:0.0 justification:2];
+   [tmpStr addAttribute:@"AQTFancyAttribute" value:@"superscript" range:NSMakeRange(3,2)];
+   [tmpStr addAttribute:@"NSSuperscriptAttributeName" value:[NSNumber numberWithInt:1] range:NSMakeRange(7,2)];
+   [tmpStr addAttribute:@"NSSuperscriptAttributeName" value:[NSNumber numberWithInt:0] range:NSMakeRange(9,2)];
+   [tmpStr addAttribute:@"NSUnderlineStyleAttributeName" value:[NSNumber numberWithInt:1] range:NSMakeRange(11,3)];
+   [adapter addLabel:tmpStr position:NSMakePoint(100,100) angle:0.0 justification:0];
+   [adapter setAcceptingEvents:YES];
+//   [adapter setAcceptingEvents:NO];
    [adapter closePlot];
 
    t = [NSAffineTransform transform];
@@ -153,6 +169,7 @@
    [adapter setPlotTitle:@"Image (tsr)"];
    [adapter setImageTransformM11:ts.m11 m12:ts.m12 m21:ts.m21 m22:ts.m22 tX:ts.tX tY:ts.tY];
    [adapter addImageWithBitmap:bytes size:NSMakeSize(2,2) bounds:NSMakeRect(50,50,100,100)];
+   [adapter setAcceptingEvents:YES];
    [adapter closePlot];
 
    

@@ -15,23 +15,19 @@
 {
   IBOutlet AQTView *viewOutlet;	/*" Points to the rendering view "*/
   AQTModel	*model;		/*" Holds the model for the view "*/
-//  int 		viewIndex;	/*" The number by which the client refers to the model "*/
   BOOL _isWindowLoaded;
   NSPoint _selectedPoint;
   char _keyPressed;
-  BOOL _mouseIsDone;
-
+  BOOL _acceptingEvents;
+  id _client;
 }
--(id)initWithModel:(AQTModel *)aModel index:(int)index;
+-(id)initWithModel:(AQTModel *)aModel; 
 
 -(id)viewOutlet;
--(int)viewIndex;
 -(void)setModel:(AQTModel *)newModel;
+-(void)setClient:(id)client;
 
-- (void)beginMouse;
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
 - (char)keyPressed;
 - (NSPoint)selectedPoint;
-- (BOOL)mouseIsDone;
-
 @end

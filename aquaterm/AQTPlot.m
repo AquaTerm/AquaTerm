@@ -9,24 +9,25 @@
 #import "AQTPlot.h"
 #import "AQTModel.h"
 #import "AQTView.h"
+#import "AQTAdapter.h"
+#import "AQTAdapterPrivateMethods.h"
 
 @implementation AQTPlot
--(id)initWithModel:(AQTModel *)aModel index:(int)index
+-(id)initWithModel:(AQTModel *)aModel 
 {
   
   if (self = [super init])
   {
     [self setModel:aModel];
     [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
-//    viewIndex = index;
   }
   return self;
 }
 
 -(id)init
 {
-  AQTModel *aModel = [[[AQTModel alloc] init] autorelease];
-  return [self initWithModel:aModel index:99];
+   AQTModel *aModel = [[[AQTModel alloc] init] autorelease];
+   return [self initWithModel:aModel]; 
 }
 
 -(void)_aqtSetupView
@@ -62,13 +63,6 @@
   return viewOutlet;
 }
 
-/*
--(int)viewIndex
-{
-  return viewIndex;
-}
-*/
-
 -(AQTModel *)model
 {
   return model;
@@ -86,19 +80,29 @@
   }
 }
 
-- (void)beginMouse 
+-(void)setClient:(id)client
 {
-  _mouseIsDone = NO;
-  [[self viewOutlet] setMouseIsActive:YES];
+   _client = client;
+}
+
+-(void)setAcceptingEvents:(BOOL)flag
+{
+   _acceptingEvents = flag;
+   if (_acceptingEvents == YES)
+   {
+      [_client _processEvent:@"Okey-dokey"];
+   }
 }
 
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey
 {
-  [[self viewOutlet] setMouseIsActive:NO];
   NSLog(@"Got coord: %@ and key: %c", NSStringFromPoint(pos), aKey);
   _selectedPoint = pos;
   _keyPressed = aKey;
-  _mouseIsDone = YES;
+  if (_acceptingEvents == YES)
+  {
+     [_client _processEvent:[NSString stringWithFormat:@"Got coord: %@ and key: %c",NSStringFromPoint(pos), aKey]];
+  }
 }
 
 - (char)keyPressed
@@ -111,46 +115,15 @@
   return _selectedPoint;
 }
 
--  (BOOL) mouseIsDone
-{
-  return _mouseIsDone;
-}
-
 #pragma mark === From client handler ===
  
 /*" The following methods applies to the currently selected view "*/
-/*
- -(void)setModel:(id)aModel
-{
-  AQTPlot *thePlot = [self _plotForView:currentView]; //[plotList objectForKey:key];
-
-  if (!thePlot)
-  {
-    NSString *key = [NSString stringWithFormat:@"%d", currentView];
-    thePlot = [[AQTPlot alloc] initWithModel:aModel index:currentView];
-    [plotList setObject:thePlot forKey:key];
-    [thePlot release];
-  }
-
-  [thePlot setModel:aModel];
-}
-*/
 -(NSDictionary *)status
 {
   NSDictionary *tmpDict = [NSDictionary dictionaryWithObject:@"Status line" forKey:@"theKey"];
   return tmpDict;
 }
-/*
--(void)beginMouse
-{
-  [[self _plotForView:currentView] beginMouseInput];//FIXME: change method to beginMouse
-}
 
--(BOOL)mouseIsDone
-{
-  return [[self _plotForView:currentView] selectedPointIsValid]; //FIXME: change method to mouseIsDone
-}
-*/
 -(char)mouseDownInfo:(inout NSPoint *)mouseLoc
 {
   *mouseLoc = [self selectedPoint];
