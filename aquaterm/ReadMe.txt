@@ -1,8 +1,5 @@
-AquaTerm 0.3.0
-
 ***** IMPORTANT *****
 This is an early release for testing purposes. Please provide feedback and feature requests!
-If you previously added AquaTerm support to gnuplot you will have to update the gnuplot driver
 *********************
 
 * How to use AquaTerm:
@@ -15,27 +12,48 @@ AquaTerm register with the system and responds to a (small) set of remote messag
 All documentation is available at http://aquaterm.sourceforge.net
 
 * Major changes
+AquaTerm 0.3.1
+  Bugfix: Save as EPS/PDF (#605454)
+  Bugfix: Copy PDF & EPS to clipboard
+  Added icon
 
-Save as EPS/PDF
-Copy PDF & EPS to clipboard
-Support for setting window title
-Help menu links to homepage
+AquaTerm 0.3.0
+  Save as EPS/PDF
+  Copy PDF & EPS to clipboard
+  Support for setting window title
+  Help menu links to homepage
 
 * Adapter changes
+AquaTerm 0.3.1
+  Gnuplot
+    Bugfix: Crash when using multiplot in octave/gnuplot (#558799)
+    Improved buffering
+    Implemented plotstyle 'dots' (#512628)
 
-Gnuplot
-  New syntax: set term aqua [<n> [title "windowtitle"]]
+  PGPLOT
+    Improved buffering
+    Bugfix: Restoring default colors (#593895)
 
-PGPLOT
-  Initial support for PGPLOT
+  C/FORTRAN
+    Minor fixes
 
-C/FORTRAN
-  Updated drivers for C and FORTRAN
+  Matwrap
+    Added makefile that uses matwrap to create an adapter for octave from the C example
+    
+AquaTerm 0.3.0
+  Gnuplot
+    New syntax: set term aqua [<n> [title "windowtitle"]]
+
+  PGPLOT
+    Initial support for PGPLOT
+
+  C/FORTRAN
+    Updated drivers for C and FORTRAN
 
 * How to get the source for AquaTerm:
 
 The source for AquaTerm is available in the CVS repository at http://sourceforge.net/projects/aquaterm
-The source corresponding to this release is tagged: release-0_3_0
+The source corresponding to this release is tagged: release-0_3_1
 
 From the terminal use (press return when prompted for password):
 cvs -d:pserver:anonymous@cvs.aquaterm.sourceforge.net:/cvsroot/aquaterm login
@@ -53,7 +71,7 @@ The classes with prefix GPT (Graph Plotting Terminal) are about to be replaced w
 
 * Legalities
 
-Copyright (c) 2001, Per Persson
+Copyright (c) 2001-2002, Per Persson, AquaTerm project
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
