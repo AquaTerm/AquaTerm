@@ -24,9 +24,12 @@
 }
 
 - (void)showPrefs {
+   float lw = [preferences floatForKey:@"MinimumLinewidth"];
    [imageInterpolateLevel selectItemAtIndex:[preferences integerForKey:@"ImageInterpolationLevel"]];
    [shouldAntialiasSwitch setIntValue:[preferences integerForKey:@"ShouldAntialiasDrawing"]];
-   [limitMinimumLinewidthSwitch setIntValue:[preferences integerForKey:@"limitMinimumLinewidth"]];
+   [minimumLinewidthSlider setFloatValue:lw];
+   [linewidthDisplay setStringValue:(lw < 0.04)?@"off":[NSString stringWithFormat:@"%4.2f", lw]];
+   [minimumLinewidthSlider setFloatValue:[preferences floatForKey:@"MinimumLinewidth"]];
    [convertSymbolFontSwitch setIntValue:[preferences integerForKey:@"ShouldConvertSymbolFont"]];
    [closeWindowSwitch setIntValue:[preferences integerForKey:@"CloseWindowWhenClosingPlot"]];
    [confirmCloseWindowSwitch setIntValue:[preferences integerForKey:@"ConfirmCloseWindowWhenClosingPlot"]];
@@ -57,13 +60,19 @@
 {
    [preferences setInteger:[imageInterpolateLevel indexOfSelectedItem] forKey:@"ImageInterpolationLevel"];
    [preferences setInteger:[shouldAntialiasSwitch intValue] forKey:@"ShouldAntialiasDrawing"];
-   [preferences setInteger:[limitMinimumLinewidthSwitch intValue] forKey:@"limitMinimumLinewidth"];
+   [preferences setFloat:[minimumLinewidthSlider floatValue] forKey:@"MinimumLinewidth"];
    [preferences setInteger:[convertSymbolFontSwitch intValue] forKey:@"ShouldConvertSymbolFont"];
    [preferences setInteger:[closeWindowSwitch intValue] forKey:@"CloseWindowWhenClosingPlot"];
    [preferences setInteger:[confirmCloseWindowSwitch intValue] forKey:@"ConfirmCloseWindowWhenClosingPlot"];
    [preferences setInteger:[showProcessNameSwitch intValue] forKey:@"ShowProcessName"];
    [preferences setInteger:[showProcessIdSwitch intValue] forKey:@"ShowProcessId"];
    [prefWindow orderOut:self];
+}
+
+- (IBAction)linewidthSliderMoved:(id)sender
+{
+   float lw = [sender floatValue];
+   [linewidthDisplay setStringValue:(lw < 0.04)?@"off":[NSString stringWithFormat:@"%4.2f", lw]];
 }
 
 @end

@@ -4,6 +4,7 @@
             ACTIONS = {
                 OKButtonPressed = id; 
                 cancelButtonPressed = id; 
+                linewidthSliderMoved = id; 
                 updateTitleExample = id; 
                 windowClosingChanged = id; 
             }; 
@@ -14,7 +15,8 @@
                 confirmCloseWindowSwitch = NSButton; 
                 convertSymbolFontSwitch = NSButton; 
                 imageInterpolateLevel = NSPopUpButton; 
-                limitMinimumLinewidthSwitch = NSButton; 
+                linewidthDisplay = NSTextField; 
+                minimumLinewidthSlider = NSSlider; 
                 prefWindow = NSWindow; 
                 shouldAntialiasSwitch = NSButton; 
                 showProcessIdSwitch = NSButton; 

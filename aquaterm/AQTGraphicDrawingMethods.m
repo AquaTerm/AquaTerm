@@ -65,7 +65,7 @@ static float _aqtMinimumLinewidth;
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
    
-   _aqtMinimumLinewidth = [[NSUserDefaults standardUserDefaults] boolForKey:@"limitMinimumLinewidth"]?0.25:0.0; // FIXME: make limit (0.25) a pref
+   _aqtMinimumLinewidth = [[NSUserDefaults standardUserDefaults] floatForKey:@"MinimumLinewidth"];
    
    while ((graphic = [enumerator nextObject]))
    {
