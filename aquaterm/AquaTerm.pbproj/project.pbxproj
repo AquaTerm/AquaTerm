@@ -279,7 +279,6 @@ http://aquaterm.sourceforge.net</string>
 				CB5B1BEC04A9C1EC00EBD329,
 				CB5B1BF004A9C2E900EBD329,
 				CB5B1BF104A9C2E900EBD329,
-				CBF3082F04D51B9400EBD329,
 				CBF3083704D51BCF00EBD329,
 				CBF3084104D5209800EBD329,
 			);
@@ -313,7 +312,6 @@ http://aquaterm.sourceforge.net</string>
 				F5E3AFAC026D80D2012F88DF,
 				CB5B187404A9A49E00EBD329,
 				CB5B1BED04A9C1EC00EBD329,
-				CBF3083004D51B9400EBD329,
 				CBF3083804D51BCF00EBD329,
 				CBF3084204D5209800EBD329,
 			);
@@ -539,7 +537,6 @@ http://aquaterm.sourceforge.net</string>
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				OPTIMIZATION_CFLAGS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
@@ -626,18 +623,6 @@ http://aquaterm.sourceforge.net</string>
 			path = AQTAdapter.m;
 			refType = 4;
 		};
-		CBF3082F04D51B9400EBD329 = {
-			fileRef = CBF3082D04D51B9300EBD329;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CBF3083004D51B9400EBD329 = {
-			fileRef = CBF3082E04D51B9400EBD329;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		CBF3083404D51BCF00EBD329 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -696,6 +681,7 @@ http://aquaterm.sourceforge.net</string>
 				CBF30BCB04D54A3E00EBD329,
 				CBF30BCD04D54A4000EBD329,
 				CBF30BCF04D54A4200EBD329,
+				FEDD21D404EE7C22008D3E17,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -710,6 +696,7 @@ http://aquaterm.sourceforge.net</string>
 				CBF30BCC04D54A3F00EBD329,
 				CBF30BCE04D54A4100EBD329,
 				CBF30BD004D54A4300EBD329,
+				FEDD21D504EE7C22008D3E17,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1160,6 +1147,8 @@ http://aquaterm.sourceforge.net</string>
 				CBF3083A04D51CF100EBD329,
 				CBF3082D04D51B9300EBD329,
 				CBF3082E04D51B9400EBD329,
+				FEDD21D204EE7C22008D3E17,
+				FEDD21D304EE7C22008D3E17,
 			);
 			isa = PBXGroup;
 			name = Controller;
@@ -1307,6 +1296,40 @@ http://aquaterm.sourceforge.net</string>
 		};
 		F5FEAC2901A7219B0143D50D = {
 			fileRef = F5FEAC2701A7219B0143D50D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//F50
+//F51
+//F52
+//F53
+//F54
+//FE0
+//FE1
+//FE2
+//FE3
+//FE4
+		FEDD21D204EE7C22008D3E17 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTPlotBuilder.h;
+			refType = 4;
+		};
+		FEDD21D304EE7C22008D3E17 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			path = AQTPlotBuilder.m;
+			refType = 4;
+		};
+		FEDD21D404EE7C22008D3E17 = {
+			fileRef = FEDD21D204EE7C22008D3E17;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		FEDD21D504EE7C22008D3E17 = {
+			fileRef = FEDD21D304EE7C22008D3E17;
 			isa = PBXBuildFile;
 			settings = {
 			};
