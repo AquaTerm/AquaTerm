@@ -1,0 +1,8 @@
+AquaTerm 1.0a2
+   
+AquaTerm 1.0a1
+    Moved all common code into libaquaterm.dylib, all adapters link with this.
+    Complete rewrite of common code, no reliance on AppKit (#605549)
+
+AquaTerm 0.3.2
+    Added driver for PLPLOT contributed by Mark Franz

@@ -1,0 +1,39 @@
+**********************************************************
+*
+* How to build PGPLOT 5.2.2 with support for AquaTerm 1.0
+* and shared libpgplot.dylib
+*
+**********************************************************
+
+0) get pgplot sources: http://www.astro.caltech.edu/~tjp/pgplot/
+
+1) create dir pgplot/sys_macosx if it doesn't exist
+
+2) copy *.conf files to pgplot/sys_macosx
+
+3) copy aqdriv.m to pgplot/drivers
+
+4) edit drivers.list (line 8) to include: 
+AQDRIV 0 /AQT AquaTerm.app under Mac OS X     C
+
+5) edit makemake (line 103) to include:
+AQDRIV="aqdriv.o"
+
+6) create dir pgplot_obj next to (NOT INSIDE!) pgplot
+
+7) cd to pgplot_obj
+
+8) do ../pgplot/makemake ../pgplot macosx g77_gcc_AQT
+   or ../pgplot/makemake ../pgplot macosx xlf_gcc_AQT
+   depending on Fortran compiler
+
+9) uncomment any other driver that you want in pgplot_obj/drivers.list (NOTE pgplot_obj) 
+
+10) ../pgplot/makemake ../pgplot macosx {g77, xlf}_gcc_AQT
+
+11) make
+
+12) Do try the demos, particularly pgdemo13 and pgdemo17 ;-)
+
+13) make install
+

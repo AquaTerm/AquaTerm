@@ -1,0 +1,6 @@
+To test the C examples, just run the makefile:
+make 
+then test by 
+./demo
+./eventdemo1
+./eventdemo2

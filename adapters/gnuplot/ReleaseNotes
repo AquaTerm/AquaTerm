@@ -1,0 +1,19 @@
+AquaTerm 1.0a2
+      Process a lot more options. Currently supported options are:
+      <n> title "theTitle" size <x> <y> fname "fontface" fsize <fontsize>
+      Points and boxfill Implemented.
+      Autoreleasepools should be handled in command() in gnuplot/src/command.c, 
+      leave a last line of defense in the driver.     
+   
+AquaTerm 1.0a1
+    Moved all common code into libaquaterm.dylib, all adapters link with this.
+    Complete rewrite of common code, no reliance on AppKit (#605549)
+    Increased resolution (#783895)
+
+AquaTerm 0.3.1
+    Bugfix: Crash when using multiplot in octave/gnuplot (#558799)
+    Improved buffering
+    Implemented plotstyle 'dots' (#512628)
+
+AquaTerm 0.3.0
+    New syntax: set term aqua [<n> [title "windowtitle"]]

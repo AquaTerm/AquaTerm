@@ -1,0 +1,16 @@
+AquaTerm 1.0a2
+   
+AquaTerm 1.0a1
+    Moved all common code into libaquaterm.dylib, all adapters link with this.
+    Complete rewrite of common code, no reliance on AppKit (#605549)
+    Mouse/keyboard support
+
+AquaTerm 0.3.2
+    Window size controlled from PGPLOT
+
+AquaTerm 0.3.1
+    Improved buffering
+    Bugfix: Restoring default colors (#593895)
+
+AquaTerm 0.3.0
+    Initial support for PGPLOT

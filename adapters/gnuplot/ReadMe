@@ -1,0 +1,19 @@
+Grab gnuplot3.8k tarball
+
+Copy and rename the new gnuplot adapter to term/aquaterm.trm (NB. no upper case 'T')
+
+edit configure manually. Look for the line
+LIBS="$LIBS -framework Foundation -framework AppKit" and replace it by
+LIBS="$LIBS -laquaterm -framework Foundation"
+
+./configure
+make
+make install
+
+If you plan on running long sessions with gnuplot, you also want to apply this patch (prevents incresing memory hogging).
+
+Copy the diff below and apply it (in gnuplot dir) using:
+patch <path/to/diff
+
+--- cut here ---
+Index: src/command.c===================================================================RCS file: /cvsroot/gnuplot/gnuplot/src/command.c,vretrieving revision 1.90diff -u -w -r1.90 command.c--- src/command.c	11 Jan 2004 20:06:56 -0000	1.90+++ src/command.c	15 Mar 2004 11:29:01 -0000@@ -63,6 +63,8 @@  *  */ +#import <Foundation/NSAutoreleasePool.h>+ #include "command.h"  #include "alloc.h"@@ -500,6 +502,7 @@ static void command() {+  NSAutoreleasePool *arpool = [[NSAutoreleasePool alloc] init];     int i;      for (i = 0; i < MAX_NUM_VAR; i++)@@ -509,7 +512,7 @@ 	define();     else 	(*lookup_ftable(&command_ftbl[0],c_token))();-+  [arpool release];     return; }--- cut here --- 
