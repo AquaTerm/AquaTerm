@@ -20,4 +20,14 @@ The executables ./demo should produce the same result as menu option Debug->Test
 
 Full source in ./aquaterm/
 
-More docs later... 
+The following environment variables may be of interest:
+AquaTerm.app (Must be set in ~/.MacOSX/environment.plist See http://developer.apple.com/qa/qa2001/qa1067.html )
+------------
+AQUATERM_REPORT_TIMING	set this to anything to log drawing time
+
+Clients
+-------
+AQUATERM_LOGLEVEL	set this in the range 0-4 to have increasing levels of logging, zero means no logging. 
+AQUATERM_PATH		set this to point to any non-standard location of AquaTerm.app e.g. /Users/you/source/build/AquaTerm.app
+GNUTERM			set this to "aqua" to make AquaTerm default output in Gnuplot
+PGPLOT_DEV		set this to "/AQT" to make AquaTerm default output in PGPLOT

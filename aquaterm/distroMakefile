@@ -31,36 +31,36 @@ headers:
 	mkdir -p $(DEST)/include
 	cp $(APPSRCDIR)/{AQTAdapter,aquaterm}.h $(DEST)/include/.
 
-adapters:cee fortran gnuplot pgplot plplot
+adapters:c fortran gnuplot pgplot plplot
 
 info:
-	cp $(APPSRCDIR)/{INSTALL,ReadMe.txt} $(DEST)/.
+	cp $(APPSRCDIR)/{INSTALL,ReadMe,ReleaseNotes} $(DEST)/.
 
 doc:
 	@echo "Skipping docs..."
-
+	
 clean:
 	-rm -rf $(DISTRO_DIR)
 
 ## -------------------------
 ## - adapters
 ## -------------------------
-cee:
+c:
 	mkdir -p $(DEST)/c
-	cp $(ADAPTSRCDIR)/c/{demo.c,eventdemo1.c,eventdemo2.c,Makefile,README} $(DEST)/c/.
+	cp $(ADAPTSRCDIR)/c/{demo.c,eventdemo1.c,eventdemo2.c,Makefile,ReadMe,ReleaseNotes} $(DEST)/c/.
 
 fortran:
 	mkdir -p $(DEST)/fortran
-	cp $(ADAPTSRCDIR)/fortran/{demo.f,eventdemo1.f,f2aqt.{h,m},f2aquaterm.m,Makefile,README} $(DEST)/fortran/.
+	cp $(ADAPTSRCDIR)/fortran/{demo.f,eventdemo1.f,f2aqt.{h,m},f2aquaterm.m,Makefile,ReadMe,ReleaseNotes} $(DEST)/fortran/.
 
 gnuplot:
 	mkdir -p $(DEST)/gnuplot
-	cp $(ADAPTSRCDIR)/gnuplot/{aquaTerm.trm,ReadMe.txt} $(DEST)/gnuplot/.
+	cp $(ADAPTSRCDIR)/gnuplot/{aquaTerm.trm,ReadMe,ReleaseNotes} $(DEST)/gnuplot/.
 
 pgplot:
 	mkdir -p $(DEST)/pgplot
-	cp $(ADAPTSRCDIR)/pgplot/{aqdriv.m,g77_gcc_AQT.conf,xlf_gcc_AQT.conf,README} $(DEST)/pgplot/.
+	cp $(ADAPTSRCDIR)/pgplot/{aqdriv.m,g77_gcc_AQT.conf,xlf_gcc_AQT.conf,ReadMe,ReleaseNotes} $(DEST)/pgplot/.
 
 plplot:
 	mkdir -p $(DEST)/plplot
-	cp $(ADAPTSRCDIR)/plplot/{aqtplplot.{h,m},README} $(DEST)/plplot/.
+	cp $(ADAPTSRCDIR)/plplot/{aqtplplot.{h,m},ReadMe,ReleaseNotes} $(DEST)/plplot/.
