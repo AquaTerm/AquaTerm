@@ -36,34 +36,37 @@ error handling callback function for the client.
 "*/
 
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
--(id)initWithHandler:(id)localHandler
+-(id)initWithServer:(id)localServer
 {
   if(self = [super init])
   {
     //[self setBuilder:[[AQTPlotBuilder alloc] init]];
     _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
+    _handlers = [[NSMutableDictionary alloc] initWithCapacity:256];
     _uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
     _procName = [[NSString stringWithString:[[NSProcessInfo processInfo] processName]] retain];
     _procId = [[NSProcessInfo processInfo] processIdentifier];
     NSLog(@"procUniqueId: %@\nprocName: %@\nprocId: %d", _uniqueId, _procName, _procId);
-    if(localHandler)
+    if(localServer)
     {
-      _handler = localHandler;
+      _server = localServer;
     }
     else
     {
       if([self _connectToServer])
       {
-        NS_DURING
-          _handler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
-          [_handler retain];
-          [_handler setProtocolForProxy:@protocol(AQTClientProtocol)];
+/*
+ NS_DURING
+          _selectedHandler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
+          [_selectedHandler retain];
+          [_selectedHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
         NS_HANDLER
           if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
             [self _serverError];
           else
             [localException raise];
         NS_ENDHANDLER
+*/
       }
       else
       {
@@ -79,7 +82,7 @@ error handling callback function for the client.
 /*" Initializes an instance and sets up a connection to the handler object via DO. Launches AquaTerm if necessary. "*/
 - (id)init
 {
-  return [self initWithHandler:nil];
+  return [self initWithServer:nil];
 }
 
 - (void)dealloc
@@ -90,11 +93,11 @@ error handling callback function for the client.
   NS_HANDLER
     NSLog(@"Discarding exception...");
   NS_ENDHANDLER
-  [_handler release];
   [_server release];
   [_uniqueId release];
   [_procName release];
   [_builders release];
+  [_handlers release];
   [super dealloc];
 }
 
@@ -103,13 +106,14 @@ error handling callback function for the client.
 {
   _errorHandler = fPtr;
 }
-
+/*
 - (void)setBuilder:(AQTPlotBuilder *)newBuilder
 {
   [newBuilder retain];
   [_selectedBuilder release];
   _selectedBuilder=newBuilder;
 }
+*/
 - (AQTPlotBuilder *)builder
 {
   return _selectedBuilder;
@@ -270,39 +274,54 @@ error handling callback function for the client.
 
 #pragma mark === Control operations ===
 /*" Creates a new builder instance, adds it to the list of builders and makes it the selected builder "*/
-- (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title // if title param is nil, title defaults to Figure <n>
+- (void)openPlotIndex:(int)refNum // size:(NSSize)canvasSize title:(NSString *)title // if title param is nil, title defaults to Figure <n>
 {
-  AQTPlotBuilder *newBuilder=[[AQTPlotBuilder alloc] init];
-  [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
-  _selectedBuilder = newBuilder;
-  [newBuilder release];
-  [_selectedBuilder setSize:canvasSize];
-  [_selectedBuilder setTitle:title?title:[NSString stringWithFormat:@"Figure %d", refNum]];
+  id newHandler;
+  AQTPlotBuilder *newBuilder;
   NS_DURING
-    [_handler selectView:refNum];
+    //[_selectedHandler selectView:refNum];
+    newHandler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
   NS_HANDLER
     if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
       [self _serverError];
     else
       [localException raise];
   NS_ENDHANDLER
+  if (newHandler)
+  {
+    [_handlers setObject:newHandler forKey:[NSString stringWithFormat:@"%d", refNum]];
+    [newHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
+    _selectedHandler = newHandler;
+
+    newBuilder = [[AQTPlotBuilder alloc] init];
+    [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
+    _selectedBuilder = newBuilder;
+    [newBuilder release];
+//    [_selectedBuilder setSize:canvasSize];
+//    [_selectedBuilder setTitle:title?title:[NSString stringWithFormat:@"Figure %d", refNum]];
+  }
 }
 
 /*" Get the builder instance for refNum and make it the selected builder. If no builder exists for refNum, the selected builder remain unchanged. Returns YES on success. "*/
 - (BOOL)selectPlot:(int)refNum
 {
-  AQTPlotBuilder *tmpBuilder = [_builders objectForKey:[NSString stringWithFormat:@"%d", refNum]];
-  if(tmpBuilder)
+  NSString *key = [NSString stringWithFormat:@"%d", refNum];
+  AQTPlotBuilder *tmpBuilder = [_builders objectForKey:key];
+  id tmpHandler = [_handlers objectForKey:key];
+  if(tmpBuilder && tmpHandler)
   {
     _selectedBuilder = tmpBuilder;
-    NS_DURING
-      [_handler selectView:refNum];
+    _selectedHandler = tmpHandler;
+/*
+ NS_DURING
+      [_selectedHandler selectView:refNum];
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
       else
         [localException raise];
     NS_ENDHANDLER
+*/
     return YES;
   }
   return NO;
@@ -328,7 +347,7 @@ error handling callback function for the client.
   if (_selectedBuilder && [_selectedBuilder modelIsDirty])
   {
     NS_DURING
-      [_handler setModel:[_selectedBuilder model]];
+      [_selectedHandler setModel:[_selectedBuilder model]];
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
@@ -336,16 +355,28 @@ error handling callback function for the client.
         [localException raise];
     NS_ENDHANDLER
   }
-  // remove this builder
+  // remove this builder & handler
   while (aKey = [enumKeys nextObject])
   {
     if ([_builders objectForKey:aKey] == _selectedBuilder)
     {
       [_builders removeObjectForKey:aKey];
+      [_handlers removeObjectForKey:aKey];
       break; // Found it.
     }
   }
   _selectedBuilder = nil;
+  _selectedHandler = nil;
+}
+
+- (void)setPlotSize:(NSSize)canvasSize
+{
+  [_selectedBuilder setSize:canvasSize];
+}
+
+- (void)setPlotTitle:(NSString *)title
+{
+  [_selectedBuilder setTitle:title?title:@"Untitled"];
 }
 
 /*" Hand a copy of the current plot to the viewer "*/
@@ -355,7 +386,7 @@ error handling callback function for the client.
   if (_selectedBuilder && [_selectedBuilder modelIsDirty])
   {
     NS_DURING
-      [_handler setModel:[_selectedBuilder model]];
+      [_selectedHandler setModel:[_selectedBuilder model]];
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
@@ -365,7 +396,7 @@ error handling callback function for the client.
   }
   else
   {
-    // [_handler setModel:[_selectedBuilder model]];
+    // [_selectedHandler setModel:[_selectedBuilder model]];
     NSLog(@"*** Warning -- Rendering non-dirty model ***");
   }
 }
@@ -377,13 +408,13 @@ error handling callback function for the client.
     [self render];
   }
   NS_DURING
-    [_handler beginMouse];
+    [_selectedHandler beginMouse];
     do
     {
       // Sleep this thread for .1 s at a time. FIXME: Will not work if non-DO client
       [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
-    } while (![_handler mouseIsDone]);
-    keyPressed = [_handler mouseDownInfo:mouseLoc];
+    } while (![_selectedHandler mouseIsDone]);
+    keyPressed = [_selectedHandler mouseDownInfo:mouseLoc];
   NS_HANDLER
     if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
       [self _serverError];
@@ -486,9 +517,9 @@ error handling callback function for the client.
     if([self _connectToServer])
     {
       NS_DURING
-        _handler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
-        [_handler retain];
-        [_handler setProtocolForProxy:@protocol(AQTClientProtocol)];
+        _selectedHandler = [_server addAQTClientWithId:_uniqueId name:_procName pid:_procId];
+        [_selectedHandler retain];
+        [_selectedHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
       NS_HANDLER
         if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
           [self _serverError];

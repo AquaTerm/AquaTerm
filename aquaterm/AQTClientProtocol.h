@@ -6,6 +6,7 @@
 -(NSDictionary *)status; // (id)?
 //-(BOOL)doCursorFromPoint:(NSPoint)startPoint withOptions:(NSDictionary *)cursorOptions;
 -(void)beginMouse;
+-(void)beginMouseWithOptions:(int)opt anchorPoint:(NSPoint)point;
 -(BOOL)mouseIsDone;
 -(char)mouseDownInfo:(inout NSPoint *)mouseLoc;
 -(void)close;

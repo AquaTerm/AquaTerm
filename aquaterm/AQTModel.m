@@ -27,6 +27,11 @@
   return self;
 }
 
+-(id)init
+{
+  return [self initWithSize:NSMakeSize(200,200)];
+}
+
 -(void)dealloc
 {
   [title release];

@@ -13,14 +13,20 @@
 @implementation AQTPlot
 -(id)initWithModel:(AQTModel *)aModel index:(int)index
 {
-  self = [super init];
-  if (self)
+  
+  if (self = [super init])
   {
     [self setModel:aModel];
     [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
-    viewIndex = index;
+//    viewIndex = index;
   }
   return self;
+}
+
+-(id)init
+{
+  AQTModel *aModel = [[[AQTModel alloc] init] autorelease];
+  return [self initWithModel:aModel index:99];
 }
 
 -(void)_aqtSetupView
@@ -56,10 +62,12 @@
   return viewOutlet;
 }
 
+/*
 -(int)viewIndex
 {
   return viewIndex;
 }
+*/
 
 -(AQTModel *)model
 {
@@ -78,9 +86,9 @@
   }
 }
 
-- (void)beginMouseInput
+- (void)beginMouse 
 {
-  _selectedPointIsValid = NO;
+  _mouseIsDone = NO;
   [[self viewOutlet] setMouseIsActive:YES];
 }
 
@@ -90,7 +98,7 @@
   NSLog(@"Got coord: %@ and key: %c", NSStringFromPoint(pos), aKey);
   _selectedPoint = pos;
   _keyPressed = aKey;
-  _selectedPointIsValid = YES;
+  _mouseIsDone = YES;
 }
 
 - (char)keyPressed
@@ -103,11 +111,58 @@
   return _selectedPoint;
 }
 
--  (BOOL) selectedPointIsValid
+-  (BOOL) mouseIsDone
 {
-  return _selectedPointIsValid;
+  return _mouseIsDone;
 }
 
+#pragma mark === From client handler ===
+ 
+/*" The following methods applies to the currently selected view "*/
+/*
+ -(void)setModel:(id)aModel
+{
+  AQTPlot *thePlot = [self _plotForView:currentView]; //[plotList objectForKey:key];
+
+  if (!thePlot)
+  {
+    NSString *key = [NSString stringWithFormat:@"%d", currentView];
+    thePlot = [[AQTPlot alloc] initWithModel:aModel index:currentView];
+    [plotList setObject:thePlot forKey:key];
+    [thePlot release];
+  }
+
+  [thePlot setModel:aModel];
+}
+*/
+-(NSDictionary *)status
+{
+  NSDictionary *tmpDict = [NSDictionary dictionaryWithObject:@"Status line" forKey:@"theKey"];
+  return tmpDict;
+}
+/*
+-(void)beginMouse
+{
+  [[self _plotForView:currentView] beginMouseInput];//FIXME: change method to beginMouse
+}
+
+-(BOOL)mouseIsDone
+{
+  return [[self _plotForView:currentView] selectedPointIsValid]; //FIXME: change method to mouseIsDone
+}
+*/
+-(char)mouseDownInfo:(inout NSPoint *)mouseLoc
+{
+  *mouseLoc = [self selectedPoint];
+  return [self keyPressed];
+}
+
+-(void)close
+{
+  NSLog(@"close");
+}
+
+#pragma mark === Menu actions ===
 
 - (IBAction)copy:(id)sender
 {

@@ -7,7 +7,7 @@
 //
 
 #import "AQTController.h"
-#import "AQTClientHandler.h"
+#import "AQTPlot.h"
 // Needed for testing only:
 #import "AQTAdapter.h"
 
@@ -21,7 +21,7 @@
 {
   if (self =  [super init])
   {
-    handlerList = [[NSMutableDictionary alloc] initWithCapacity:16];
+    handlerList = [[NSMutableDictionary alloc] initWithCapacity:256];
   }
   return self;
 }
@@ -55,18 +55,20 @@
 -(id)addAQTClientWithId:(NSString *)identifier name:(NSString *)name pid:(int)procId
 {
   id newHandler;
-  if ([handlerList objectForKey:identifier])
+/*
+ if ([handlerList objectForKey:identifier])
   {
     newHandler = nil; // handler already exists 
     NSLog(@"*** Error - handler already exists ***");
   }
   else
   {
-    newHandler = [[AQTClientHandler alloc] init];
-    [newHandler setOwner:self];
-    [handlerList setObject:newHandler forKey:identifier];
-    [newHandler release];
-  }
+*/
+    newHandler = [[AQTPlot alloc] init];
+    //[newHandler setOwner:self];
+//    [handlerList setObject:newHandler forKey:identifier];
+//    [newHandler release];
+//  }
   return newHandler;
 }
 
