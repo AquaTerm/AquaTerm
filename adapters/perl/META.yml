@@ -1,9 +1,0 @@
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Graphics-AquaTerm
-version:      0.01
-version_from: AquaTerm.pm
-installdirs:  site
-requires:
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.12
