@@ -1,0 +1,18 @@
+Finish printing code
+ 
+Shape up saving
+ - let the user decide on format (EPS/PDF) in save sheet
+ - should I also place tex snippet on pasteboard? (HIG?)
+
+Copying
+ - let user set preferences to copy as EPS or PDF
+
+Colormaps
+ - set from inspector panel
+ - set from client app too?
+
+General
+ - rewrite GPTXxxx classes and rename AQTXxxx
+
+Docs
+ - finish autodoc comments
