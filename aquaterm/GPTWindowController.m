@@ -28,11 +28,15 @@
 
  -(void)awakeFromNib
 {
+  NSSize tmpSize = [tempModel canvasSize];
   [viewOutlet setModel:tempModel];
   [viewOutlet setFrameOrigin:NSMakePoint(0.0, 0.0)];
   [viewOutlet setNeedsDisplay:YES];
   [[self window] setTitle:[tempModel title]];
-  [[self window] setContentSize:[tempModel canvasSize]];
+  [[self window] setContentSize:tmpSize];
+  [[self window] setAspectRatio:tmpSize];
+  [[self window] setMaxSize:NSMakeSize(tmpSize.width*2, tmpSize.height*2)];
+  [[self window] setMinSize:NSMakeSize(tmpSize.width/4, tmpSize.height/4)];
   [tempModel release];
   tempModel = nil;
 }
@@ -58,11 +62,15 @@
   
   if ([self isWindowLoaded])
   {
+    NSSize tmpSize = [newModel canvasSize];
     [viewOutlet setModel:newModel];
     [viewOutlet setFrameOrigin:NSMakePoint(0.0, 0.0)];
     [viewOutlet setNeedsDisplay:YES];    
     [[self window] setTitle:[newModel title]];
-    [[self window] setContentSize:[newModel canvasSize]];
+    [[self window] setContentSize:tmpSize];
+    [[self window] setAspectRatio:tmpSize];
+    [[self window] setMaxSize:NSMakeSize(tmpSize.width*2, tmpSize.height*2)];
+    [[self window] setMinSize:NSMakeSize(tmpSize.width/4, tmpSize.height/4)];
     
     if(![[self window] isVisible])
     {
