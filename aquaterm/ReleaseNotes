@@ -1,0 +1,33 @@
+AquaTerm 1.0a2
+
+AquaTerm 1.0a1
+  Breaking backwards compatibility (It could be fixed, but I don't have the time to do it...)
+  Complete rewrite with better possibilities for future optimization.
+  Supports mouse and key events (events in general actually) (#538268, #586499)
+  Respects window size when updating (#650938)
+  Make window front when updated (#651911)  
+  Added debug menu including "Refresh view", a test view and feedback options.
+
+AquaTerm 0.3.2
+  Bugfix: Help is now working
+  Window size settable from client
+  Resize respects window width/height ratio
+  Handles attributed strings
+  Splitting AQTProtocol, separating Foundation and AppKit dependencies. 
+    AQTProtocol.h provides backwards compatibility
+  Source included in distro, use 
+	pbxbuild -target AquaTerm clean
+	pbxbuild -target AquaTerm -buildstyle Deployment
+    to build the executable from the command line or use PB. 
+    To build the (somewhat outdated) docs you need autodoc.
+
+AquaTerm 0.3.1
+  Bugfix: Save as EPS/PDF (#605454)
+  Bugfix: Copy PDF and EPS to clipboard
+  Added icon
+
+AquaTerm 0.3.0
+  Save as EPS/PDF
+  Copy PDF and EPS to clipboard
+  Support for setting window title
+  Help menu links to homepage
