@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AQTGraphic.h"
 
-#define MAX_PATH_POINTS 256
+#define MAX_PATH_POINTS 64
 
 @interface AQTPath : AQTGraphic 
 {
