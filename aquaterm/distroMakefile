@@ -21,7 +21,7 @@ ADAPTSRCDIR=$(SRCROOT)/../adapters
 
 all:pre dmg post
 
-pkg: app lib headers
+pkg: app lib fwk headers
 	freeze -v $(APPSRCDIR)/installer/installer.packproj
 
 dmg: adapters info doc pkg
@@ -35,19 +35,26 @@ post:
 	ls -Rp $(DMG_ROOT) 
 
 app:
-	xcodebuild -target libaqt clean -buildstyle Deployment
+	xcodebuild -target AQTFwk clean -buildstyle Deployment
 ##	xcodebuild -target libaqt -buildstyle Deployment
 	xcodebuild -target AquaTerm clean -buildstyle Deployment
+## FIXME: Reverse this so no CPP options => .app is built	
 	xcodebuild -target AquaTerm -buildstyle Deployment GCC_PREPROCESSOR_DEFINITIONS="AQT_APP"
 	cp -RPf $(BUILD_DIR)/AquaTerm.app $(PKG_ROOT)/.
 
+fwk:
+	## mkdir -p $(PKG_ROOT)/framework
+	cp -RPf $(BUILD_DIR)/AquaTerm.framework $(PKG_ROOT)/.
+	
 lib:
-	mkdir -p $(PKG_ROOT)/lib
-	cp $(BUILD_DIR)/libaquaterm.$(VERSION).dylib $(PKG_ROOT)/lib/.
+	@echo "lib is just links to framework..."
+##	mkdir -p $(PKG_ROOT)/lib
+##	cp $(BUILD_DIR)/libaquaterm.$(VERSION).dylib $(PKG_ROOT)/lib/.
 
 headers:
-	mkdir -p $(PKG_ROOT)/include
-	cp $(APPSRCDIR)/{AQTAdapter,aquaterm}.h $(PKG_ROOT)/include/.
+	@echo "headers are just links to framework..."
+##	mkdir -p $(PKG_ROOT)/include
+##	cp $(APPSRCDIR)/{AQTAdapter,aquaterm}.h $(PKG_ROOT)/include/.
 
 adapters:c fortran gnuplot pgplot plplot
 

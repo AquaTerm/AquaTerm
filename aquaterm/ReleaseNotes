@@ -1,4 +1,5 @@
 AquaTerm 1.0.b3
+  Moving libaquaterm to a framework. Symlinking library and headers to framework. 
   Removing objects in destRect before adding an untransformed bitmap. (#1042636)
   Major improvements to font handling and drawing. Gnuplot 4.1 will support enhanced text.
   Added Show Available Fonts to Help menu.
