@@ -135,15 +135,4 @@
     [graphic updateColors:colorMap];
   }
 }
-
-// ---- Timing for adapter testing -----
--(double)timeTaken
-{
-  return timeTaken;
-}
-
--(void)setTimeTaken:(double)timer
-{
-  timeTaken = timer;
-}
 @end

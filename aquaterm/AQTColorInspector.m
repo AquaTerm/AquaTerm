@@ -73,9 +73,9 @@
     currentView = nil;
     [self setColormap:[[[AQTColorMap alloc] init] autorelease]];
   }
-  [infoText setStringValue:[NSString stringWithFormat:@"%d objects in %f seconds",
-    [[currentView model] count],
-    [[currentView model] timeTaken]]];
+//  [infoText setStringValue:[NSString stringWithFormat:@"%d objects in %f seconds",
+//    [[currentView model] count],
+//    [[currentView model] timeTaken]]];
   [self updatePopUp];
   [self updateVisibleState];
 }

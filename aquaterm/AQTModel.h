@@ -16,8 +16,6 @@
     NSMutableArray	*modelObjects;	/*" An array of AQTGraphic objects (leaf or collection) "*/
     AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors so that the (single) property inspector knows the colormap of each window (model) "*/
     NSString 		*title;			/*" Associate a title with the model. Default is 'Figure n'. "*/
-    // ---- Timing for adapter testing -----
-  	double			timeTaken;
 }
 -(id)initWithSize:(NSSize)canvasSize;
 -(int)count;
@@ -28,7 +26,4 @@
 -(AQTColorMap *)colormap;
 -(void)setTitle:(NSString *)newTitle;
 -(NSString *)title;
-// ---- Timing for adapter testing -----
--(double)timeTaken;
--(void)setTimeTaken:(double)timer;
 @end

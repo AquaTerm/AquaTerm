@@ -94,11 +94,13 @@
 {
   AQTGraphic *graphic;
   NSEnumerator *enumerator = [modelObjects objectEnumerator];
+  NSDate		*startTime=  [NSDate date];
 
   while ((graphic = [enumerator nextObject]))
   {
     [graphic renderInRect:boundsRect];
   }
+  NSLog(@"Render time: %f", -[startTime timeIntervalSinceNow]);
 }
 @end
 
