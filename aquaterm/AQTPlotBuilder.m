@@ -13,6 +13,8 @@
 #import "AQTPath.h"
 #import "AQTPatch.h"
 #import "AQTImage.h"
+#import "AQTColorMap.h"
+#import "AQTAdapter.h"
 
 @implementation AQTPlotBuilder
 
@@ -54,6 +56,7 @@
    {
       _model = [[AQTModel alloc] initWithSize:NSMakeSize(300,200)];
       [self _aqtPlotBuilderSetDefaultValues];
+      _colormap = [[AQTColorMap alloc] initWithColormapSize:AQT_COLORMAP_SIZE];
       _modelIsDirty = YES;
    }
    return self;
@@ -63,6 +66,7 @@
 {
    [_handler release];
    [_model release];
+   [_colormap release];
    [super dealloc];
 }
 
@@ -110,6 +114,26 @@
       [_model setColor:newColor];
       _modelIsDirty = YES;
    }
+}
+
+- (void)takeColorFromColormapEntry:(int)index
+{
+   [self setColor:[_colormap colorForIndex:index]];
+}
+
+- (void)takeBackgroundColorFromColormapEntry:(int)index
+{
+   [self setBackgroundColor:[_colormap colorForIndex:index]];   
+}
+
+- (void)setColor:(AQTColor)newColor forColormapEntry:(int)entryIndex
+{
+   [_colormap setColor:newColor forIndex:entryIndex];
+}
+
+- (AQTColor)colorForColormapEntry:(int)entryIndex
+{
+   return [_colormap colorForIndex:entryIndex];
 }
 
 - (NSString *)fontname

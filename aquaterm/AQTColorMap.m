@@ -11,10 +11,10 @@
 @implementation AQTColorMap
 -(id)init
 {
-    return [self initWithSize:1]; // Black
+    return [self initWithColormapSize:1]; // Black
 }
 
--(id)initWithSize:(int)mapsize
+-(id)initWithColormapSize:(int)mapsize
 {
   if (self = [super init])
   {

@@ -15,7 +15,7 @@
 // FIXME: establish some "optimal" value
 #define MAX_PATH_POINTS 256
 
-@class AQTModel;
+@class AQTModel, AQTColorMap;
 @interface AQTPlotBuilder : NSObject
 {
   AQTModel *_model;	/*" The graph currently being built "*/
@@ -32,6 +32,7 @@
   BOOL _acceptingEvents;
   NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
   id owner;
+  AQTColorMap *_colormap;
 }
 
 /*" Acessors "*/
@@ -45,6 +46,12 @@
 - (AQTColor)color;
 - (void)setColor:(AQTColor)newColor;
 - (void)setBackgroundColor:(AQTColor)newColor;
+
+- (void)takeColorFromColormapEntry:(int)index;
+- (void)takeBackgroundColorFromColormapEntry:(int)index;
+
+- (void)setColor:(AQTColor)newColor forColormapEntry:(int)entryIndex;
+- (AQTColor)colorForColormapEntry:(int)entryIndex;
 
   /*" Text handling "*/
 - (NSString *)fontname;

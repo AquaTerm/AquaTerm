@@ -60,7 +60,6 @@ Event handling of user input is provided through an optional callback function.
    if(self = [super init])
    {
       _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
-      _colormap = [[AQTColorMap alloc] initWithSize:AQT_COLORMAP_SIZE];
       if(localServer)
       {
          _server = localServer;
@@ -156,7 +155,7 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the colormap. "*/
 - (void)takeColorFromColormapEntry:(int)index
 {
-   [_selectedBuilder setColor:[_colormap colorForIndex:index]];
+   [_selectedBuilder takeColorFromColormapEntry:index];
 }
 
 /*" Set the background color, overriding any previous color, using explicit RGB components. "*/
@@ -172,7 +171,7 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Set the background color, overriding any previous color, using the color stored at the position given by index in the colormap. "*/
 - (void)takeBackgroundColorFromColormapEntry:(int)index
 {
-   [_selectedBuilder setBackgroundColor:[_colormap colorForIndex:index]];
+   [_selectedBuilder takeBackgroundColorFromColormapEntry:index];
 }
 
 /*" Get current RGB color components by reference. "*/
@@ -191,13 +190,13 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    tmpColor.red = r;
    tmpColor.green = g;
    tmpColor.blue = b;
-   [_colormap setColor:tmpColor forIndex:entryIndex];
+   [_selectedBuilder setColor:tmpColor forColormapEntry:entryIndex];
 }
 
 /*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
 - (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b
 {
-   AQTColor tmpColor = [_colormap colorForIndex:entryIndex];
+   AQTColor tmpColor = [_selectedBuilder colorForColormapEntry:entryIndex];
    *r = tmpColor.red;
    *g = tmpColor.green;
    *b = tmpColor.blue;

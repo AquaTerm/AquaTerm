@@ -16,7 +16,7 @@ typedef AQTColor *AQTColorPtr;
    AQTColorPtr colormap; // NB. Not an object but a pointer to a struct
    int size; 
 }
--(id)initWithSize:(int)size;
+-(id)initWithColormapSize:(int)size;
 -(void)setColor:(AQTColor)newColor forIndex:(int)index;
 -(AQTColor)colorForIndex:(int)index;
 @end
