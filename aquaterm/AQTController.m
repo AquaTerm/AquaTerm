@@ -47,20 +47,13 @@ extern void aqtLineDrawingTest(id sender);
   //
   // Set up a DO connection:
   //
-  // doConnection = [[NSConnection defaultConnection] retain];
   NSConnection * doConnection = [NSConnection defaultConnection];
-  //[doConnection setIndependentConversationQueueing:YES];	// FAQ: Needed to sync calls!!!!
   [doConnection setRootObject:self];
 
   if([doConnection registerName:@"aquatermServer"] == NO)
   {
     NSLog(@"Error registering \"aquatermServer\" with defaultConnection");
   }
-}
-
--(void)dealloc
-{
-  [super dealloc];
 }
 
 - (AQTAdapter *)sharedAdapter
@@ -142,7 +135,7 @@ extern void aqtLineDrawingTest(id sender);
 {
   id newPlot;
    newPlot = [[AQTPlot alloc] init];
-   [newPlot setClient:client];
+   // [newPlot setPlotKey:client];
    [newPlot setClientInfoName:name pid:procId];
    [handlerList addObject:newPlot];
    [newPlot release];
@@ -150,12 +143,13 @@ extern void aqtLineDrawingTest(id sender);
    return newPlot;
 }
 
--(BOOL)removeAQTClient:(id)client
+/*
+ -(BOOL)removeAQTClient:(id)client
 {
   [handlerList makeObjectsPerformSelector:@selector(invalidateClient:) withObject:client];
   return YES;
 }
-
+*/
 - (void)removePlot:(id)aPlot
 {
   [handlerList removeObject:aPlot];

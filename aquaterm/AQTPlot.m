@@ -10,9 +10,10 @@
 #import "AQTGraphic.h"
 #import "AQTModel.h"
 #import "AQTView.h"
-#import "AQTPlotController.h"
 #import "AQTGraphicDrawingMethods.h"
 #import "AQTFunctions.h"
+
+#import "AQTEventProtocol.h"
 
 #define TITLEBAR_HEIGHT 22.0
 
@@ -105,6 +106,14 @@
    return model;
 }
 
+/*
+ -(void)setPlotKey:(id)key
+{
+   [key retain];
+   [_plotKey release];
+   _plotKey = key;
+}
+*/
 - (BOOL)clientValidAndResponding
 {
    BOOL validAndResponding = NO;
@@ -129,7 +138,7 @@
 -(void)setModel:(AQTModel *)newModel
 {
    BOOL viewNeedResize = YES;
-   
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
    [newModel retain];
    if (model)
    {
@@ -155,9 +164,9 @@
 -(void)appendModel:(AQTModel *)newModel
 {
    BOOL backgroundDidChange; // FIXME
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    if (!model)
    {
-      NSLog(@"*** Error: No model ***");
       [self setModel:newModel];
       return;
    }
@@ -242,19 +251,19 @@
    NSLog(@"close");
 }
 
--(BOOL)invalidateClient:(id)aClient
+-(BOOL)invalidateClient //:(id)aClient
 {
    // NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);   
-   if (_client == aClient)
-   {
+//   if (_client == aClient)
+//   {
       // NSLog(@"invalidating %d", _client);
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];
       [[canvas window] setTitle:[model title]];
       return YES;
-   }
-   return NO;
+//   }
+//   return NO;
 }
 
 -(void)setClient:(id)client
@@ -262,6 +271,7 @@
    [client retain];
    if ([client isProxy])
    {
+      NSLog(@"Setting prot for client proxy");
       [client setProtocolForProxy:@protocol(AQTEventProtocol)];
    }
    [_client release];
@@ -281,10 +291,10 @@
    if(_acceptingEvents) // FIXME: redundant!?
    {
       NS_DURING
-         [_client processEvent:event];
+         [_client processEvent:event sender:self];
       NS_HANDLER
          if ([[localException name] isEqualToString:NSObjectInaccessibleException])
-            [self invalidateClient:_client]; // invalidate client
+            [self invalidateClient];//:_client]; // invalidate client
          else
             [localException raise];
       NS_ENDHANDLER
@@ -322,13 +332,16 @@
          [_client ping];
          // NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
       NS_HANDLER
-         [self invalidateClient:_client];
+         [self invalidateClient];//:_client];
          // FIXME: Tell controller to check all connections?
       NS_ENDHANDLER   
    } 
    if (_client)
    {
-      [sender orderOut:self];
+      if ([self acceptingEvents] == NO)
+      {
+         [sender orderOut:self];
+      }
       shouldClose = NO;
    }
    return shouldClose;

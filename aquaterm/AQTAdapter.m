@@ -49,21 +49,16 @@ Event handling of user input is provided through an optional callback function.
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
 -(id)initWithServer:(id)localServer
 {
-   if(self = [super init])
-   {
+   if(self = [super init]) {
       BOOL serverIsOK = YES;
       _clientManager = [AQTClientManager sharedManager];
       
-      if (localServer)
-      {
+      if (localServer) {
          [_clientManager setServer:localServer];
-      }
-      else
-      {
+      } else {
          serverIsOK = [_clientManager connectToServer];
       }
-      if (!serverIsOK)
-      {
+      if (!serverIsOK) {
          [self autorelease];
          self = nil;
       }
@@ -71,7 +66,6 @@ Event handling of user input is provided through an optional callback function.
                                                selector:@selector(connectionDidDie:)
                                                    name:NSConnectionDidDieNotification
                                                  object:nil];
-         
    }
    return self;
 }
@@ -130,16 +124,7 @@ _{43:%{x,y}:%key Error } "*/
 /*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
 - (void)openPlotWithIndex:(int)refNum
 {
-   // FIXME: Move this functionality to AQTClientManager
-   if ([self selectPlotWithIndex:refNum]) 
-   {
-      // already exists, just clear it
-      [self clearPlot];
-   }
-   else
-   {
-      _selectedBuilder = [_clientManager newPlotWithIndex:refNum];
-   }
+   _selectedBuilder = [_clientManager newPlotWithIndex:refNum];
 }
 
 /*" Get the plot referenced by refNum and make it the target for subsequent commands. If no plot exists for refNum, the currently targeted plot remain unchanged. Disables event handling for previously targeted plot. Returns YES on success. "*/
@@ -184,7 +169,7 @@ _{43:%{x,y}:%key Error } "*/
 /*" Clears the current plot and resets default values. To keep plot settings, use #eraseRect: instead. "*/
 - (void)clearPlot
 {
-      [_clientManager clearPlot];
+      _selectedBuilder = [_clientManager clearPlot];
 }
 
 /*" Closes the current plot but leaves viewer window on screen. Disables event handling. "*/
@@ -219,6 +204,8 @@ _{43:%{x,y}:%key Error } "*/
       isRunning = [event isEqualToString:@"0"]?YES:NO;
    } while (isRunning);
    [self setAcceptingEvents:NO];
+   if ([event length]==0) 
+      NSLog(@"Got nil event");
    return event;
 }
 

@@ -209,7 +209,8 @@
    [_model removeAllObjects];
 }
 
-- (void)clearAll 
+/*
+ - (void)clearAll 
 {
    // Disregard any preemptive use of this method
    if (_hasSize)
@@ -225,6 +226,7 @@
       [self _aqtPlotBuilderSetModelIsDirty:YES];
    }
 }
+*/
 //
 // AQTLabel
 //

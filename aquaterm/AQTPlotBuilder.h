@@ -79,5 +79,5 @@
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
 
   /*" Control operations "*/
-- (void)clearAll;
+//- (void)clearAll;
 @end

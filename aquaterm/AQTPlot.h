@@ -10,14 +10,16 @@
 #import <AppKit/AppKit.h>
 #import "AQTClientProtocol.h"
 
-@class AQTModel, AQTView, AQTPlotController;
+@class AQTModel, AQTView;
+@protocol AQTEventProtocol;
 @interface AQTPlot : NSObject <AQTClientProtocol>
 {
   IBOutlet AQTView *canvas;	/*" Points to the rendering view "*/
   AQTModel	*model;		/*" Holds the model for the view "*/
   BOOL _isWindowLoaded;
   BOOL _acceptingEvents;
-  AQTPlotController *_client;
+//  id _plotKey;
+  id <NSObject, AQTEventProtocol> _client;
   int _clientPID;
   NSString *_clientName;
   NSRect dirtyRect;
@@ -26,10 +28,11 @@
   IBOutlet NSPopUpButton *saveFormatPopUp;
 }
 - (id)canvas;
+//- (void)setPlotKey:(id)key;
 - (void)setClient:(id)client;
 - (void)setClientInfoName:(NSString *)name pid:(int)pid;
 - (BOOL)clientValidAndResponding;
-- (BOOL)invalidateClient:(id)aClient;
+- (BOOL)invalidateClient; //:(id)aClient;
 - (BOOL)acceptingEvents;
 
 - (void)processEvent:(NSString *)theEvent;
