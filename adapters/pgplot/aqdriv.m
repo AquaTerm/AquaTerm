@@ -45,6 +45,9 @@ void initAdapter(void)
   // Either first time or an error has occurred
   [arpool release]; // clean
   arpool = [[NSAutoreleasePool alloc] init];
+#ifdef LOGGING
+  [NSAutoreleasePool resetTotalAutoreleasedObjects];
+#endif  
   adapter = [[AQTAdapter alloc] init];
 }
 
@@ -245,15 +248,24 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=14, End picture ---------------------------------------------
 
     case 14:
-      NSLog(@"IFUNC=14, End picture (%f)", rbuf[0]);
-      if (rbuf[0] != 0.0)
-      {
-        // clear screen
-        NSLog(@"Clearing screen");
-        [adapter clearPlot];
-      }
-      // [adapter closePlot];
-      break;
+       NSLog(@"IFUNC=14, End picture (%f)", rbuf[0]);
+       if (rbuf[0] != 0.0)
+       {
+          // clear screen
+          NSLog(@"Clearing screen");
+          [adapter clearPlot];
+       }
+       // [adapter closePlot]
+       //
+       // Clear out the autoreleasepool at the end of every picture (move?)
+       //
+       LOG(@"Releasing arpool, freeing %d objects.",[NSAutoreleasePool totalAutoreleasedObjects]);
+       [arpool release];
+       arpool = [[NSAutoreleasePool alloc] init];
+#ifdef LOGGING
+       [NSAutoreleasePool resetTotalAutoreleasedObjects];
+#endif
+       break;
 
       //--- IFUNC=15, Select color index --------------------------------------
 
