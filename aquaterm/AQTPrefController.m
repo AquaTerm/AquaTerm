@@ -32,9 +32,7 @@
    [showProcessNameSwitch setIntValue:[preferences integerForKey:@"ShowProcessName"]];
    [showProcessIdSwitch setIntValue:[preferences integerForKey:@"ShowProcessId"]];
    
-   if([closeWindowSwitch intValue] == 0) {
-      [confirmCloseWindowSwitch setEnabled:NO];
-   }
+   [confirmCloseWindowSwitch setEnabled:([closeWindowSwitch intValue] == 0)?NO:YES];
    [self updateTitleExample:self];
    [prefWindow makeKeyAndOrderFront:self];
 }
