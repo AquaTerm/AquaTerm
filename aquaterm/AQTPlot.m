@@ -20,6 +20,7 @@
   {
     [self setModel:aModel];
     [self setClientInfoName:@"No connection" pid:-1];
+    [self setLastEvent:@"0"];
     [NSBundle loadNibNamed:@"AQTWindow.nib" owner:self];
   }
   return self;
@@ -63,6 +64,9 @@
 -(void)dealloc
 {
    NSLog(@"Over and out from AQTPlot!");
+  [model release];
+  [_clientName release];
+    [lastEvent release];
   [super dealloc];
 }
 
@@ -119,12 +123,28 @@
 
 -(void)setAcceptingEvents:(BOOL)flag
 {
+  [self setLastEvent:@"0"];
    _acceptingEvents = flag && (_client != nil);
-   if (_acceptingEvents == YES)
+/*
+ if (_acceptingEvents == YES)
    {
       [_client processEvent:@"Okey-dokey"];
    }
+*/
 }
+
+- (NSString *)lastEvent
+{
+  return lastEvent;
+}
+
+-(void)setLastEvent:(NSString *)event
+{
+  [event retain];
+  [lastEvent autorelease];	
+  lastEvent = event;		
+}
+
 
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey
 {
@@ -133,8 +153,9 @@
   _keyPressed = aKey;
   if (_acceptingEvents == YES)
   {
+    NSString *theEvent = [NSString stringWithFormat:@"Got coord: %@ and key: %c",NSStringFromPoint(pos), aKey];
      NS_DURING
-     [_client processEvent:[NSString stringWithFormat:@"Got coord: %@ and key: %c",NSStringFromPoint(pos), aKey]];
+     [_client processEvent:theEvent];
      NS_HANDLER
         NSLog([localException name]);
         if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
@@ -142,7 +163,7 @@
         else
            [localException raise];
      NS_ENDHANDLER
-     
+     [self setLastEvent:theEvent];
   }
 }
 

@@ -53,6 +53,7 @@ enum {
 
   /*" Interactions with user "*/
 - (void)setAcceptingEvents:(BOOL)flag;
+- (NSString *)lastEvent;
 
 
 /*" Plot related commands "*/

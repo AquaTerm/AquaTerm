@@ -27,6 +27,7 @@
   AQTAffineTransformStruct _transform;
   BOOL _acceptingEvents;
   NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
+  id owner;
 }
 
 /*" Acessors "*/
@@ -37,6 +38,7 @@
 - (void)setSize:(NSSize)canvasSize;
 - (void)setTitle:(NSString *)title;
 - (void)setHandler:(id)newHandler;
+- (void)setOwner:(id)object;
 
 
   /*" Color handling "*/
@@ -76,4 +78,5 @@
    /*" Interactions with user "*/
 - (void)setAcceptingEvents:(BOOL)flag;
 - (void)processEvent:(NSString *)event;
+- (NSString *)lastEvent;
 @end

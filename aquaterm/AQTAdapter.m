@@ -101,15 +101,16 @@ error handling callback function for the client.
    [_selectedBuilder setAcceptingEvents:flag];
 }
 
+/*" Optionally set an event handling routine"*/
+- (void)setEventHandler:(void (*)(NSString *event))fPtr
+{
+  _eventHandler = fPtr;
+}
+
 /*" Optionally set an error handling routine to override default behaviour "*/
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr
 {
   _errorHandler = fPtr;
-}
-/*" Optionally set an event handling routine"*/
-- (void)setEventHandler:(void (*)(NSString *event))fPtr
-{
-   _eventHandler = fPtr;
 }
 
 - (AQTPlotBuilder *)builder
@@ -297,6 +298,24 @@ error handling callback function for the client.
 
 
 #pragma mark === Control operations ===
+- (void)processEvent:(NSString *)event
+{
+   if (_eventHandler != nil)
+   {
+     NSLog(@"Passing to handler");
+     _eventHandler(event);
+   }
+  else
+  {
+    NSLog(@"No handler");
+  }
+}
+
+- (NSString *)lastEvent
+{
+  return [_selectedBuilder lastEvent];
+}
+
 /*" Creates a new builder instance, adds it to the list of builders and makes it the selected builder "*/
 - (void)openPlotIndex:(int)refNum 
 {
@@ -316,6 +335,7 @@ error handling callback function for the client.
    {
       [_builders setObject:newBuilder forKey:[NSString stringWithFormat:@"%d", refNum]];
       [newBuilder setHandler:newHandler];
+      [newBuilder setOwner:self];
       _selectedBuilder = newBuilder;
    }
    [newBuilder release];

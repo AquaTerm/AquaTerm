@@ -52,6 +52,11 @@
   _modelIsDirty = YES;
 }
 
+-(void)setOwner:(id)object
+{
+  owner = object;
+}
+
 - (AQTModel *)model
 {
   // FIXME: Flush buffers before returning the model
@@ -191,16 +196,27 @@
    NS_ENDHANDLER   
 }
 
+
 - (void)processEvent:(NSString *)event
 {
    NSLog(@"builder got event: %@", event);
-/*
- if (_eventHandler != nil)
-   {
-      _eventHandler(event);
-   }
-*/
+  [owner processEvent:event];
 }
+
+- (NSString *)lastEvent
+{
+  NS_DURING
+    return [[_handler lastEvent] autorelease];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      // [self _serverError]; Grab from AQTAdapterPrivateMethods
+      NSLog(@"Server error");
+    else
+      [localException raise];
+  NS_ENDHANDLER
+  return @"0";
+}
+
 
 //
 // AQTLabel

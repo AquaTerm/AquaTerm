@@ -22,6 +22,7 @@
   AQTPlotBuilder *_client;
   int _clientPID;
   NSString *_clientName;
+  NSString *lastEvent;
 }
 -(id)initWithModel:(AQTModel *)aModel; // FIXME: Good idea to init _with_ model?
 
@@ -34,5 +35,6 @@
 - (void)mouseDownAt:(NSPoint)pos key:(char)aKey;
 - (char)keyPressed;
 - (NSPoint)selectedPoint;
+- (void)setLastEvent:(NSString *)theEvent;
 
 @end
