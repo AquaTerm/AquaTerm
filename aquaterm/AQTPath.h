@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "AQTGraphic.h"
 
-@interface AQTPath : AQTGraphic
+@interface AQTPath : AQTGraphic /*" NSObject "*/
 {
     NSBezierPath *path;	/*" A collection of bezier paths sharing the same (style)properties "*/
   BOOL hasIndexedColor; /*" TRUE => fill and stroke in _fillColor; FALSE => stroke in _strokeColor "*/

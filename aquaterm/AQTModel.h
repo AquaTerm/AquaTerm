@@ -11,7 +11,7 @@
 
 @class AQTColorMap;
 
-@interface AQTModel : AQTGraphic 
+@interface AQTModel : AQTGraphic /*" NSObject "*/ 
 {
     NSMutableArray	*modelObjects;	/*" An array of GPTGraphic objects (leaf or collection) "*/
     AQTColorMap		*modelColorMap; /*" A model-wide mapping of colors so that the (single) property inspector knows the colormap of each window (model) "*/

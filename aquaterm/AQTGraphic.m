@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by ppe on Wed May 16 2001.
-//  Copyright (c) 2001 __CompanyName__. All rights reserved.
+//  Copyright (c) 2001, 2002 Aquaterm. All rights reserved.
 //
 
 #import "AQTGraphic.h"
@@ -59,11 +59,14 @@
   color = newColor;
 }
 
-    /**"
-    *** Gnuplot uses is a color index to map linestyles to a set of fixed
-    *** colors. The index is taken modulo max_number_of_colors.
-    *** Negative numbers have special meanings (-2 = axes, -1 = grid).
-    "**/
+//
+// I found the following commented out Mon Feb  4 01:28:48 CST 2002
+// The program seems to be working, therefore I am going to delete this as cruft
+// the next time I see it.
+//
+// Just thought I would make an explicit commit with this comment, in case
+// this code unexpectedly disappeared. <BS>
+//
 /* Not compliant with new color handling 
 -(void)setColorFromIndex:(int)theIndex
 {

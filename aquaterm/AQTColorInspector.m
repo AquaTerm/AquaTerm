@@ -12,6 +12,9 @@
 #import "GPTWindowController.h"
 
 @implementation AQTColorInspector
+    /**" 
+    *** AQTColorInspector is the controller class for the Color Inspector nib. 
+    "**/
 
 - (id)init
 {
@@ -70,6 +73,7 @@
   [self updateRampImage];
 }
 -(void)updateRampImage
+/*" display the current gradient in the inspector "*/
 {
   int x;
   // Get the RGB components for minColor
@@ -94,6 +98,7 @@
 }
 
 - (IBAction)applyPressed:(id)sender
+/*" create new AQTColorMap from the current settings, and update the active AQTModel "*/
 {
     AQTColorMap *tempColormap;
     NSDictionary *colorDICT;
@@ -137,9 +142,10 @@
     [inspectedModel updateColors:tempColormap];
     [tempColormap release];
 }
+
 -(void)mainWindowChanged:(NSNotification *)notification
 {	    
-  // NSLog(@"mainWindowChanged");
+  NSLog(@"mainWindowChanged");
   // Should read the colormap from the new model and
   // update inspector window accordingly
 }

@@ -10,34 +10,37 @@
 
 @interface AQTColorInspector : NSWindowController
 {
-    IBOutlet NSColorWell *axisColor;		// color for x,y[,z] axes, tickmarks and labels
-    IBOutlet NSColorWell *backgroundColor;	// backdrop color
-    IBOutlet NSColorWell *gridlineColor;	// color for gridlines
-    IBOutlet NSColorWell *lineColor1;
-    IBOutlet NSColorWell *lineColor2;
-    IBOutlet NSColorWell *lineColor3;
-    IBOutlet NSColorWell *lineColor4;
-    IBOutlet NSColorWell *lineColor5;
-    IBOutlet NSColorWell *lineColor6;
-    IBOutlet NSColorWell *lineColor7;
-    IBOutlet NSColorWell *lineColor8;
-    IBOutlet NSColorWell *lineColor9;
-    IBOutlet NSColorWell *maxColor;
-    IBOutlet NSColorWell *minColor;
-    IBOutlet NSImageView *surfaceRampImage;
-    IBOutlet NSColorWell *textColor;		// Not implemented, see axisColor
+    IBOutlet NSColorWell *axisColor;		/*" color for x,y[,z] axes, tickmarks and labels "*/
+    IBOutlet NSColorWell *backgroundColor;	/*" backdrop color "*/
+    IBOutlet NSColorWell *gridlineColor;	/*" color for gridlines "*/
+    IBOutlet NSColorWell *lineColor1;		/*" indexed color 1 "*/
+    IBOutlet NSColorWell *lineColor2;		/*" indexed color 2 "*/
+    IBOutlet NSColorWell *lineColor3;		/*" indexed color 3 "*/
+    IBOutlet NSColorWell *lineColor4;		/*" indexed color 4 "*/
+    IBOutlet NSColorWell *lineColor5;		/*" indexed color 5 "*/
+    IBOutlet NSColorWell *lineColor6;		/*" indexed color 6 "*/
+    IBOutlet NSColorWell *lineColor7;		/*" indexed color 7 "*/
+    IBOutlet NSColorWell *lineColor8;		/*" indexed color 8 "*/
+    IBOutlet NSColorWell *lineColor9;		/*" indexed color 9 "*/
+    IBOutlet NSColorWell *maxColor;		/*" gradient max color "*/
+    IBOutlet NSColorWell *minColor;		/*" gradient min color "*/
+    IBOutlet NSImageView *surfaceRampImage;	/*" shows the gradient to the user "*/
+    IBOutlet NSColorWell *textColor;		/*" Not implemented, see axisColor "*/
     
-    id theController; // sets itself at init
+    id theController; /*" sets itself at init "*/
 
     @private
-	NSImage *rampImage; 			// Preview of the continuos colormap ("coloraxis")
-    NSBitmapImageRep *bitmap;		// the raw bitmap that used in rampImage;
-    unsigned char *planes[3]; 		// the R, G and B planes for the raw bitmap (each is 1x64 pixels)
-
+    NSImage *rampImage; 		/*" Preview of the continuos colormap ("coloraxis") "*/
+    NSBitmapImageRep *bitmap;		/*" the raw bitmap that used in rampImage "*/
+    unsigned char *planes[3]; 		/*" the R, G and B planes for the raw bitmap (each is 1x64 pixels) "*/
 }
-- (void)updateRampImage;
+/*" IBActions "*/
+- (IBAction)applyPressed:(id)sender;
 - (IBAction)didSetMinColor:(id)sender;
 - (IBAction)didSetMaxColor:(id)sender;
-- (IBAction)applyPressed:(id)sender;
+
+/*" internal methods "*/
+- (void)updateRampImage;
 - (void)mainWindowChanged:(NSNotification *)notification;
+
 @end

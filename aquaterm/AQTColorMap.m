@@ -9,6 +9,9 @@
 #import "AQTColorMap.h"
 
 @implementation AQTColorMap
+    /**"
+    *** Mappings for colors both indexed and gradient for a particular AQTModel. 
+    "**/
 -(id)initWithColorDict:(NSDictionary *)indexColors
               rampFrom:(NSColor *)contColorMin
                     to:(NSColor *)contColorMax
@@ -55,7 +58,7 @@
         @"5", // lineColor6
         @"6", // lineColor7
         @"7", // lineColor8
-        @"8",
+        @"8", // lineColor9
         nil]
       ];
 
@@ -70,9 +73,8 @@
 }
 
 -(NSColor *)colorForFloat:(float)param
+/*" returns a color corresponding to a point on a gradient "*/
 {
-    // need to call [self interpolateColorFrom:to:by: ] (Just replace it! PP)
-    // but I am not quite sure how -- is c0 max or min? 
   float	r  = [minColor redComponent],
         g  = [minColor greenComponent],
         b  = [minColor blueComponent];
@@ -84,30 +86,17 @@
                                    green:g+zg*param
                                     blue:b+zb*param
                                    alpha:1.0];
-  
 }
 
 -(NSColor *)colorForIndex:(int)index
+    /**"
+    *** Gnuplot uses is a color index to map linestyles to a set of fixed
+    *** colors. The index is taken modulo max_number_of_colors.
+    *** Negative numbers have special meanings (-2 = axes, -1 = grid).
+    "**/
 {
-    // I am not completely sure about the ramifications of the modulo 9
-    // but that was how the old code worked. I assume it has something to
-    // do with gnuplot internals -- bobs
-    return [indexedColormap objectForKey:[NSString stringWithFormat:@"%d", index % 9]];
+    // magic number? perhaps thi should be made a #define
+    return [indexedColormap objectForKey:[NSString stringWithFormat:@"%d", index % 9]]; 
 }
-/*
--(NSColor *)interpolateColorFrom:(NSColor *)c0 to: (NSColor *)c1 by:(double)param
-{
-    float   r  = [c0 redComponent],
-            g  = [c0 greenComponent],
-            b  = [c0 blueComponent];
-    float   zr = -(r - [c1 redComponent]),
-            zg = -(g - [c1 greenComponent]),
-            zb = -(b - [c1 blueComponent]);
-    
-    return [NSColor colorWithCalibratedRed:r+zr*param 
-                                     green:g+zg*param 
-                                      blue:b+zb*param 
-                                     alpha:1.0];
-}
-*/
+
 @end

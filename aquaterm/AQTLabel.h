@@ -3,19 +3,19 @@
 //  AquaTerm
 //
 //  Created by ppe on Wed May 16 2001.
-//  Copyright (c) 2001 __CompanyName__. All rights reserved.
+//  Copyright (c) 2001, 2002 Aquaterm. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 #import "AQTGraphic.h"
 
-
+/*" Justification Constants "*/
 #define justifyLeft 0
 #define justifyCenter 1
 #define justifyRight 2
 
-@interface AQTLabel : AQTGraphic
+@interface AQTLabel : AQTGraphic /*" NSObject "*/
 {
     NSString *string;		/*" The text (label, legend etc.) "*/
     NSString *fontName;

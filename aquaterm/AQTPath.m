@@ -3,12 +3,11 @@
 //  AquaTerm
 //
 //  Created by ppe on Wed May 16 2001.
-//  Copyright (c) 2001 __CompanyName__. All rights reserved.
+//  Copyright (c) 2001, 2002 Aquaterm. All rights reserved.
 //
 
 #import "AQTPath.h"
 #import "AQTColorMap.h"
-// #import "GPTColorExtras.h"
 
 @implementation AQTPath
     /**"
@@ -30,17 +29,6 @@
     mappedColor = gray;
     colorIndex = cIndex;
     hasIndexedColor = icFlag;
-    
-/* Obsolete, send updateColor before 1st display instead
-    if (hasIndexedColor)
-    {
-      [self setColorFromIndex:colorIndex];	
-    }
-    else
-    {
-      [self setColor:[NSColor interpolateColorFrom:[NSColor yellowColor] to:[NSColor redColor] by:mappedColor]];	
-    }
-*/
   }
   return self; 
 }

@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by ppe on Wed May 16 2001.
-//  Copyright (c) 2001 __CompanyName__. All rights reserved.
+//  Copyright (c) 2001, 2002 Aquaterm. All rights reserved.
 //
 
 #import "AQTLabel.h"
@@ -30,12 +30,6 @@
     justification = justify;
     colorIndex=cIndex; 
   }
-  /*
-   // this metod is obsolete 
-  [self setColorFromIndex:cIndex];
-   // The color is set to clearColor in superclass and by issuing an extra updateColor:
-   // before first time display all objects will set their own color.
-  */
   return self; 
 }
 

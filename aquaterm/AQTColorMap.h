@@ -11,17 +11,16 @@
 @interface AQTColorMap : NSObject	
 {
     NSDictionary *indexedColormap;
-    NSColor *minColor; // for continous colormaps
-    NSColor *maxColor; // for continous colormaps
+    NSColor *minColor; /*" for continous colormaps "*/
+    NSColor *maxColor; /*" for continous colormaps "*/
 }
-// Designated initializer
+/*" Designated initializer "*/
 -(id)initWithColorDict:(NSDictionary *)indexColors
               rampFrom:(NSColor *)contColorMin
                     to:(NSColor *)contColorMax;
+
+/*" accessor methods "*/
 -(NSColor *)colorForFloat:(float)grey;
 -(NSColor *)colorForIndex:(int)index;
-
-// utility method
-// -(NSColor *)interpolateColorFrom:(NSColor *)c0 to: (NSColor *)c1 by:(double)param;
 
 @end

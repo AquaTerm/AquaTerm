@@ -8,26 +8,6 @@
 
 @implementation GPTView
 
-// Per, you know the following is unneccesary overriding of methods?
-/*
-- (id)initWithFrame:(NSRect)frameRect 
-{
-    // Recursively init superclasses...
-    
-    if (self = [super initWithFrame:frameRect])
-    {
-        // If all is well, init own objects...
-    }
-    // Return the initialized object...
-    return self;
-}
--(void)dealloc
-{
-    // Let superclasses do thier own work...
-    [super dealloc];
-}
-*/
-
 -(BOOL)isOpaque
 {
     return YES;
