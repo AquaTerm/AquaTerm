@@ -41,7 +41,9 @@
 {
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
-   NSDate *startTime=  [NSDate date];
+#ifdef TIMING
+   NSDate *startTime = [NSDate date];
+#endif
    //  NSRect debugRect;
    NSAffineTransform *localTransform = [NSAffineTransform transform];
    [localTransform scaleXBy:NSWidth(boundsRect)/canvasSize.width
@@ -61,7 +63,9 @@
    debugRect = [self bounds];
    [NSBezierPath strokeRect:debugRect];
 #endif
+#ifdef TIMING
    NSLog(@"Render time: %f for %d objects", -[startTime timeIntervalSinceNow], [modelObjects count]);
+#endif
 }
 @end
 
