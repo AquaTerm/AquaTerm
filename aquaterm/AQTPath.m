@@ -100,7 +100,7 @@
   return self;
 }
 
-- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase 
+- (void)setLinestylePattern:(const float *)newPattern count:(int)newCount phase:(float)newPhase 
 {
   // Create a local copy of the pattern.
    int i;
