@@ -22,8 +22,11 @@
         viewTitle = [[NSString stringWithString:title] retain];
         [[self window] setTitle:viewTitle];
         viewIndex = index;	
-        // [viewOutlet setControllerReference:self];	// Let the view have a ref to its controller (FAQ: is this kosher? NO)
-
+        // [viewOutlet setControllerReference:self];
+        // Let the view have a ref to its controller (FAQ: is this kosher? NO)
+        // I don't think there is anything wrong with it, if there is a reason
+        // for the view to contact the w-controller, but it could be done
+        // easilly in IB so why do it here? <BS>
     }
     return self;
 }
@@ -63,10 +66,10 @@
 
 -(void)setModel:(AQTModel *)newModel
 {
-    [model release];					// let go of old model 
-    model = [newModel retain];				// Make it point to new model (FIXME: multiplot requires care! OK)
-    // [viewOutlet setModelReference:model];		// Let the view have a ref to it as well (FAQ: is this kosher? NO!)
-    [viewOutlet setNeedsDisplay:YES];			// Tell view to update itself
+    [model release];			// let go of old model 
+    model = [newModel retain];		// Make it point to new model (FIXME: multiplot requires care! OK)
+    // [viewOutlet setModelReference:model];	// Let the view have a ref to it as well (FAQ: is this kosher? NO!)
+    [viewOutlet setNeedsDisplay:YES];	// Tell view to update itself
 }
 
 -(AQTModel *)model

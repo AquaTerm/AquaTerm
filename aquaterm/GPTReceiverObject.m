@@ -1,3 +1,7 @@
+//
+// GPTReceiverObject.m -- part of Aquaterm
+//
+
 #import "GPTReceiverObject.h"
 #import "GPTController.h"
 #import "AQTPath.h"

@@ -1,8 +1,15 @@
+//
+// GPTView.m -- part of Aquaterm
+//
+
 #import "GPTView.h"
 #import "AQTModel.h"
 #import "GPTWindowController.h"
 
 @implementation GPTView
+
+// Per, you know the following is unneccesary overriding of methods?
+/*
 - (id)initWithFrame:(NSRect)frameRect 
 {
     // Recursively init superclasses...
@@ -19,6 +26,7 @@
     // Let superclasses do thier own work...
     [super dealloc];
 }
+*/
 
 -(BOOL)isOpaque
 {
@@ -30,13 +38,13 @@
     //
     // Get the model associated with this view
     //
-    // AQTGraphic *modelReference = [[[self window] windowController] model];	// FAQ: Typecast to GPTWindowController to avoid warning?
     AQTGraphic *modelReference = [(GPTWindowController *)[[self window] windowController] model];
     NSRect theBounds = [self bounds];
     //
     // Erase background and draw a stylish line around the view 
     //
-    [[NSColor whiteColor] set];
+    [[NSColor whiteColor] set]; // this is the background color, yes?
+                                // shouldn't we get this value from color inspector pane as well?
     [[NSBezierPath bezierPathWithRect:theBounds] fill];
     [[NSColor blackColor] set];
     [[NSBezierPath bezierPathWithRect:theBounds] stroke];
@@ -46,12 +54,6 @@
     [modelReference renderInRect:theBounds];
 }
 @end
-
-
-
-
-
-
 
 
 
