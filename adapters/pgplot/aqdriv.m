@@ -10,7 +10,6 @@ static inline void NOOP_(id x, ...) {;}
 #define LOG  NOOP_
 #endif	/* LOGGING */
 
-static NSAutoreleasePool *arpool;    // Objective-C autorelease pool
 static id adapter;                   // Adapter object
 
 //
@@ -28,13 +27,8 @@ static id adapter;                   // Adapter object
 #define AQDRIV aqdriv
 #endif
 
-void initAdapter(void)
-{
-   // Either first time or an error has occurred
-   [arpool release]; // clean
-   arpool = [[NSAutoreleasePool alloc] init];
-   adapter = [[AQTAdapter alloc] init];
-}
+#define AQUA_XMAX 842.0
+#define AQUA_YMAX 595.0
 
 static int currentDevice = 0;
 static int deviceCount = 0;
@@ -64,7 +58,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       };
          break;
 
-         //--- IFUNC=2, Return physical min and max for plot device, and range of color indices -----------------------------------------
+         //--- IFUNC=2, Return physical min and max for plot device, and range of color indices -----
       case 2:
          LOG(@"IFUNC=2, Return physical min and max for plot device, and range of color indices");
          rbuf[0] = 0.0;
@@ -113,9 +107,9 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       case 6:
          LOG(@"IFUNC=6, Return default physical size of plot");
          rbuf[0] = 0.0;      // default x-coordinate of bottom left corner (must be zero)
-         rbuf[1] = 842.0;    // default x-coordinate of top right corner
+         rbuf[1] = AQUA_XMAX;    // default x-coordinate of top right corner
          rbuf[2] = 0.0;      // default y-coordinate of bottom left corner (must be zero)
-         rbuf[3] = 595.0;    // default y-coordinate of top right corner
+         rbuf[3] = AQUA_YMAX;    // default y-coordinate of top right corner
          *nbuf = 4;
          break;
 
@@ -145,12 +139,14 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
          *nbuf = 2;
          //
          if (!adapter)
-         {
-            initAdapter();
-         }
+	   {
+	     adapter = [[AQTAdapter alloc] init];
+	   }
          deviceCount++;
          currentDevice = deviceCount;
          [adapter openPlotWithIndex:currentDevice];
+         [adapter setPlotSize:NSMakeSize(AQUA_XMAX, AQUA_YMAX)];
+         [adapter setPlotTitle:[NSString stringWithFormat:@"Device %d", currentDevice]];
 
          rbuf[0] = (float)currentDevice; // The number used to select this device by IFUNC=8 (Select plot)
          rbuf[1] = 1.0;
@@ -165,33 +161,31 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
          //--- IFUNC=11, Begin picture -------------------------------------------
       case 11:
-      {
-         int i;
-         LOG(@"IFUNC=11, Begin picture");
-         [adapter clearPlot];
-         [adapter setColormapEntry:0 red:0.0 green:0.0 blue:0.0]; // Background color
-         [adapter setColormapEntry:1 red:1.0 green:1.0 blue:1.0];
-         [adapter setColormapEntry:2 red:1.0 green:0.0 blue:0.0];
-         [adapter setColormapEntry:3 red:0.0 green:1.0 blue:0.0];
-         [adapter setColormapEntry:4 red:0.0 green:0.0 blue:1.0];
-         [adapter setColormapEntry:5 red:0.0 green:1.0 blue:1.0];
-         [adapter setColormapEntry:6 red:1.0 green:0.0 blue:1.0];
-         [adapter setColormapEntry:7 red:1.0 green:1.0 blue:0.0];
-         [adapter setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
-         [adapter setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
-         [adapter setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
-         [adapter setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
-         [adapter setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
-         [adapter setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
-         [adapter setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
-         [adapter setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
-
-         [adapter takeBackgroundColorFromColormapEntry:0];
-         [adapter setLineCapStyle:AQTRoundLineCapStyle];
-         [adapter setPlotSize:NSMakeSize(rbuf[0], rbuf[1])];
-         [adapter setPlotTitle:[NSString stringWithFormat:@"Device %d", currentDevice]];
-      }
-         break;
+	{
+	  int i;
+	  LOG(@"IFUNC=11, Begin picture");
+	  [adapter setPlotSize:NSMakeSize(rbuf[0], rbuf[1])];
+	  [adapter clearPlot];
+	  [adapter setColormapEntry:0 red:0.0 green:0.0 blue:0.0]; // Background color
+	  [adapter setColormapEntry:1 red:1.0 green:1.0 blue:1.0];
+	  [adapter setColormapEntry:2 red:1.0 green:0.0 blue:0.0];
+	  [adapter setColormapEntry:3 red:0.0 green:1.0 blue:0.0];
+	  [adapter setColormapEntry:4 red:0.0 green:0.0 blue:1.0];
+	  [adapter setColormapEntry:5 red:0.0 green:1.0 blue:1.0];
+	  [adapter setColormapEntry:6 red:1.0 green:0.0 blue:1.0];
+	  [adapter setColormapEntry:7 red:1.0 green:1.0 blue:0.0];
+	  [adapter setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
+	  [adapter setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
+	  [adapter setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
+	  [adapter setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
+	  [adapter setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
+	  [adapter setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
+	  [adapter setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
+	  [adapter setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
+	  [adapter takeBackgroundColorFromColormapEntry:0];
+	  [adapter setLineCapStyle:AQTRoundLineCapStyle];
+	}
+	break;
 
          //--- IFUNC=12, Draw line -----------------------------------------------
       case 12:
