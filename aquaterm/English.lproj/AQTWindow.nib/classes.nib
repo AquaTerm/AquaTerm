@@ -5,7 +5,7 @@
         {
             CLASS = GPTWindowController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {viewOutlet = id; }; 
+            OUTLETS = {viewOutlet = AQTView; }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 
