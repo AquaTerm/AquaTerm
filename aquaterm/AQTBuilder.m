@@ -193,6 +193,7 @@ static inline void NOOP_(id x, ...) {;}
 // Bitmap and image handling
 - (oneway void) addBitmap:(bycopy NSData *)imageData size:(NSSize)bitmapSize bounds:(NSRect)bitmapBounds
 {
+  // Q: For some reason, just initing an image with the provided data causes a crash when printing.
   AQTImage *tempImage;
   NSBitmapImageRep *repDst = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
                                                                      pixelsWide:bitmapSize.width
@@ -206,6 +207,9 @@ static inline void NOOP_(id x, ...) {;}
                                                                    bitsPerPixel:0];
   NSImage *newImage = [[NSImage alloc] initWithSize:bitmapSize];
   NSImage *tiffImage = [[NSImage alloc] initWithData:imageData];
+  // The original image _must_ be flipped _here_
+  // Q: For some reason the subsequently generated image doesn't recognize the isFlipped flag
+  [tiffImage setFlipped:YES];
   [newImage addRepresentation:repDst];
   [newImage lockFocusOnRepresentation:repDst];
   [tiffImage compositeToPoint:NSMakePoint( 0.0, 0.0) operation:NSCompositeSourceOver];
