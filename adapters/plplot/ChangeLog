@@ -1,3 +1,23 @@
+2004-09-16 13:04  persquare
+
+	* ReadMe: Final changes for first beta release.
+
+2004-03-16 22:05  persquare
+
+	* ReleaseNotes: Visual appearance changes.
+
+2004-03-16 14:27  persquare
+
+	* ReadMe, ReleaseNotes: Cleaning.
+
+2004-03-16 14:00  persquare
+
+	* README: Cleaning.
+
+2003-12-29 23:17  persquare
+
+	* ChangeLog: Update.
+
 2003-12-29 23:14  persquare
 
 	* aqtplplot.m: Update to 1.0.a1.
@@ -17,7 +37,7 @@
 2003-09-30 18:01  persquare
 
 	* aqtplplot.m: Initial changes to get plplot working with the new
-	architecture.
+	  architecture.
 
 2003-02-09 16:08  persquare
 

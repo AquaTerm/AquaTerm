@@ -1,3 +1,64 @@
+2004-09-16 13:04  persquare
+
+	* ReleaseNotes: Final changes for first beta release.
+
+2004-05-22 17:36  persquare
+
+	* demo.f: Duh, fixing misuse of lines in demo.
+
+2004-03-16 22:19  persquare
+
+	* ReleaseNotes: Visual appearance changes.
+
+2004-03-16 15:27  persquare
+
+	* ReadMe: Minor addition.
+
+2004-03-16 14:26  persquare
+
+	* ReadMe, ReleaseNotes: Cleaning.
+
+2004-03-16 13:45  persquare
+
+	* README: Cleanup.
+
+2004-03-04 23:24  persquare
+
+	* Makefile: Add target clean.
+
+2004-03-01 16:09  persquare
+
+	* demo.f: Removing visible FIXME.
+
+2004-02-29 20:38  persquare
+
+	* demo.f: Fixes from Ed Zaron: Handle bitmaps properly.
+
+2004-02-29 20:36  persquare
+
+	* f2aquaterm.m: Change name of function call aqtGetCurrentColor
+	  into aqtGetColor to reflect change in C API.
+
+2004-02-23 21:30  persquare
+
+	* Makefile: Make a smarter Makefile.
+
+2004-02-09 23:28  persquare
+
+	* demo.f: Make sure there is enough space.
+
+2004-02-09 23:08  persquare
+
+	* demo.f: Fixes from J. Koski: Number to string conversion.
+
+2004-02-07 01:42  persquare
+
+	* Makefile: Making the Makefile a little more general.
+
+2003-12-29 23:15  persquare
+
+	* ChangeLog: Update.
+
 2003-12-29 22:55  persquare
 
 	* eventdemo1: Duh.
@@ -13,7 +74,7 @@
 2003-12-29 16:05  persquare
 
 	* Makefile, demo.f, demo_old.f, eventdemo1, eventdemo1.f, f2aqt.m,
-	f2aquaterm.m, test.f, tiny.f: Updating to AQT1.0.
+	  f2aquaterm.m, test.f, tiny.f: Updating to AQT1.0.
 
 2003-03-17 09:15  persquare
 
@@ -30,7 +91,7 @@
 2002-05-16 19:55  persquare
 
 	* f2aqt.h, f2aqt.m, test.f: Added nil-termination to strings.
-	Improved string handling. Added aqt_flush() function.
+	  Improved string handling. Added aqt_flush() function.
 
 2002-05-15 21:10  persquare
 
@@ -39,9 +100,9 @@
 2002-05-15 21:05  persquare
 
 	* f2aqt.h, f2aqt.m: Fixing string handling when passing from
-	Fortran to C (FORTRAN adds string length as _extra_ parameter when
-	calling C-function...). Path in aqt_imagefromfile still broken
-	(slash seem to need special care)
+	  Fortran to C (FORTRAN adds string length as _extra_ parameter
+	  when calling C-function...). Path in aqt_imagefromfile still
+	  broken (slash seem to need special care)
 
 2002-05-15 21:02  persquare
 
@@ -50,8 +111,8 @@
 2002-04-24 15:56  persquare
 
 	* README, example.f, f2aqt.h, f2aqt.m, test.f: Adding a FORTRAN
-	example based on a generic adapter. Up-to-date with AQTProtocol
-	v0.3. This is a first step towards a unified adapter strategy.
+	  example based on a generic adapter. Up-to-date with AQTProtocol
+	  v0.3. This is a first step towards a unified adapter strategy.
 
 2001-12-18 22:17  persquare
 
@@ -60,5 +121,5 @@
 2001-12-17 23:27  persquare
 
 	* README, example.f, f2aqt.m: A simple FORTRAN example, based on
-	aquaTerm.trm
+	  aquaTerm.trm
 

@@ -1,3 +1,80 @@
+2004-09-16 13:04  persquare
+
+	* ReadMe, ReleaseNotes: Final changes for first beta release.
+
+2004-06-09 11:49  persquare
+
+	* aquaTerm.trm: Fixing to pm3d colors by Petr Mikulik.
+
+2004-05-19 00:21  persquare
+
+	* ReadMe, ReleaseNotes: Updating status info.
+
+2004-05-19 00:19  persquare
+
+	* gnuplot_command_c.patch: Not needed anymore.
+
+2004-03-29 14:18  persquare
+
+	* aquaTerm.trm: Many minor fixes before comitting to gnuplot CVS.
+	  For now, the file will be maintained here and changes merged into
+	  gnuplot CVS.
+
+2004-03-16 22:19  persquare
+
+	* ReleaseNotes: Visual appearance changes.
+
+2004-03-16 15:27  persquare
+
+	* ReleaseNotes: Avoiding brackets.
+
+2004-03-16 15:13  persquare
+
+	* ReadMe, gnuplot_command_c.patch: Adding patch for command.c to
+	  fix memory problem.
+
+2004-03-16 14:26  persquare
+
+	* ReadMe, ReleaseNotes: Cleaning.
+
+2004-03-16 13:47  persquare
+
+	* README.txt: Cleanup.
+
+2004-03-15 17:02  persquare
+
+	* aquaTerm.trm: Fixing points to include a dot. Changing size of
+	  points to 1/3 smaller.
+
+2004-03-15 13:23  persquare
+
+	* aquaTerm.trm: Autoreleasepools should be handled in command() in
+	  gnuplot/src/command.c.  Leave a last line of defense in the
+	  driver.
+
+2004-03-14 21:28  persquare
+
+	* aquaTerm.trm: Fixing flickering when updating plot.
+
+2004-02-25 15:41  persquare
+
+	* aquaTerm.trm: Cleaning up pm3d.
+
+2004-02-25 15:15  persquare
+
+	* aquaTerm.trm: Process a lot more options. Currently supported
+	  options are: <n> title "theTitle" size <x> <y> fname "fontface"
+	  fsize <fontsize> Clean state variables.  General clean-up.
+
+2004-02-23 16:20  persquare
+
+	* aquaTerm.trm: Fixing window title, plot_point, boxfill and
+	  set_font.
+
+2003-12-29 23:16  persquare
+
+	* ChangeLog, README.txt: Update.
+
 2003-12-29 23:11  persquare
 
 	* aquaTerm.trm: Update to 1.0.a1.
@@ -13,7 +90,8 @@
 2003-08-20 17:07  persquare
 
 	* aquaTerm.trm: Line handling in drivers and adapter done. Added
-	pm3d to gnuplot. Moving "smartness" from drivers to builder class.
+	  pm3d to gnuplot. Moving "smartness" from drivers to builder
+	  class.
 
 2003-08-19 23:03  persquare
 
@@ -26,7 +104,7 @@
 2003-08-19 00:01  persquare
 
 	* aquaTerm.trm: Fixes wrt #import. Applied resolution increase from
-	bugfix branch. Compiles but broken.
+	  bugfix branch. Compiles but broken.
 
 2003-08-06 23:46  persquare
 
@@ -35,7 +113,7 @@
 2003-08-05 16:29  persquare
 
 	* aquaTerm.trm: Now using libaqt and revised AquaTerm. Needs hack
-	in gnuplot to work.
+	  in gnuplot to work.
 
 2003-02-09 16:08  persquare
 
@@ -52,36 +130,36 @@
 2002-09-02 13:45  persquare
 
 	* aquaTerm.trm: Fix for pointsize bug. Dots at (x,y) are
-	implemented as 1x1 square, needs better solution.
+	  implemented as 1x1 square, needs better solution.
 
 2002-08-04 16:37  persquare
 
 	* aquaTerm.trm: Added limit to buffer size to balance
-	message/drawing time
+	  message/drawing time
 
 2002-05-21 09:43  persquare
 
 	* aquaTerm.trm: Fixing bug in AQUA_suspend that broke subplot() in
-	octave
+	  octave
 
 2002-04-23 15:03  persquare
 
 	* aquaTerm.trm: Setting cyclic colormap on init (pm3d colors
-	handled in adapter), added version checking and info message.
-	Complies with 0.3.0.  Hidden line removal option seems to break
-	current buffering of lines. No buffering for surfaces (pm3d).
-	Changed -setFont: to -setTextfont: to avoid conflict. Cleaning up
-	code. Still needs some work.
+	  handled in adapter), added version checking and info message.
+	  Complies with 0.3.0.	Hidden line removal option seems to break
+	  current buffering of lines. No buffering for surfaces (pm3d).
+	  Changed -setFont: to -setTextfont: to avoid conflict. Cleaning up
+	  code. Still needs some work.
 
 2002-04-18 23:11  persquare
 
 	* aquaTerm.trm: Adding support for setting windowname.	Syntax: set
-	terminal aqua {<n>} {title "windowtitle"}
+	  terminal aqua {<n>} {title "windowtitle"}
 
 2002-04-18 14:22  persquare
 
 	* aquaTerm.trm: Updating to conform to AQTProtocol v0.3.0 in
-	preparation for 0.3.0 feature freeze
+	  preparation for 0.3.0 feature freeze
 
 2002-02-05 23:28  persquare
 
@@ -94,12 +172,12 @@
 2001-12-13 01:19  persquare
 
 	* aquaTerm.trm: major code clean-up, added font- and
-	defaulthandling
+	  defaulthandling
 
 2001-12-10 17:09  persquare
 
 	* aquaTerm.trm: Added -(void)clearRect: to remove graphics inside
-	rect
+	  rect
 
 2001-12-04 22:35  persquare
 
@@ -108,18 +186,18 @@
 2001-12-04 19:26  persquare
 
 	* aquaTerm.trm: Added exception handling to detect disconnected
-	server, some cleaning up
+	  server, some cleaning up
 
 2001-11-18 00:28  persquare
 
 	* aquaTerm.trm: Updated driver to conform to AQTProtocol, bugfixes
-	and cleanup
-
-2001-11-13 19:56  persquare
-
-	* aquaTerm.trm: Initial revision
+	  and cleanup
 
 2001-11-13 19:56  persquare
 
 	* aquaTerm.trm: Initial import
+
+2001-11-13 19:56  persquare
+
+	* aquaTerm.trm: Initial revision
 
