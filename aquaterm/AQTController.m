@@ -77,9 +77,16 @@ extern void aqtLineDrawingTest(id sender);
    cascadingPoint = [plotWindow cascadeTopLeftFromPoint:cascadingPoint];
 }
 
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+   // FIXME: Warn if active clients and refuse(?) if events are active
+   NSLog(@"Implement %@, %s:%d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
+   return NSTerminateNow;
+}
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-   // FIXME: inform clients
+   // FIXME: inform clients?
+   NSLog(@"Implement %@, %s:%d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 }
 
 #pragma mark === AQTConnectionProtocol ===
