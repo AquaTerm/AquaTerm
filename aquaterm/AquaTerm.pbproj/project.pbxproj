@@ -138,6 +138,7 @@
 				080E96DDFE201D6D7F000001,
 				29B97317FDCFA39411CA2CEA,
 				29B97315FDCFA39411CA2CEA,
+				F57C16A102506DE3010D3DE4,
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
 				F55D7FF10219BEF4014110D6,
@@ -594,6 +595,25 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F57C16A102506DE3010D3DE4 = {
+			children = (
+				F57C16A202506DE3010D3DE4,
+				F57C16A302506DE3010D3DE4,
+			);
+			isa = PBXGroup;
+			name = Dist;
+			refType = 4;
+		};
+		F57C16A202506DE3010D3DE4 = {
+			isa = PBXFileReference;
+			path = ReadMe.txt;
+			refType = 4;
+		};
+		F57C16A302506DE3010D3DE4 = {
+			isa = PBXFileReference;
+			path = ToDo;
+			refType = 4;
 		};
 		F59F5FC9021011D301A18598 = {
 			isa = PBXFileReference;
