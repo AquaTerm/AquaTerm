@@ -325,6 +325,7 @@
       NSMakePoint(NSMaxX(aRect), NSMinY(aRect)),
       NSMakePoint(NSMaxX(aRect), NSMaxY(aRect)),
       NSMakePoint(NSMinX(aRect), NSMaxY(aRect))};
+   [self eraseRect:aRect];
    [self addPolygonWithPoints:pointList pointCount:4];
 }
 //
