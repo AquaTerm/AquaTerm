@@ -11,6 +11,7 @@
 #import "AQTLabel.h"
 #import "AQTModel.h"
 #import "AQTPath.h"
+#import "AQTPatch.h"
 #import "AQTImage.h"
 //#import "AQTColorMap.h"
 
@@ -60,22 +61,24 @@
   isPrinting = flag;
 }
 
--(void)drawRect:(NSRect)aRect
+-(void)drawRect:(NSRect)aRect // FIXME: Consider dirty rect!!! 
 {
   AQTColor canvasColor = [model color]; 
-  NSRect theBounds = [self bounds];	// Depends on whether we're printing or drawing to screen
+  NSRect scaledBounds = [self bounds];	// Depends on whether we're printing or drawing to screen
+  [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone];
+  [[NSGraphicsContext currentContext] setShouldAntialias:YES];
   if (!isPrinting)
   {
     //
     // Erase by drawing background color
     //
     [[NSColor colorWithCalibratedRed:canvasColor.red green:canvasColor.green blue:canvasColor.blue alpha:1.0] set];
-    [[NSBezierPath bezierPathWithRect:theBounds] fill];
+    [[NSBezierPath bezierPathWithRect:scaledBounds] fill];
   }
   //
   // Tell the model to draw itself
   //
-  [model renderInRect:theBounds];
+  [model renderInRect:scaledBounds];
 }
 
 @end
@@ -83,9 +86,7 @@
 @implementation AQTGraphic (AQTGraphicDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-  // Not purely abstract, draw a filled box to indicate trouble;-)
-  [[NSColor redColor] set];
-  [NSBezierPath fillRect:boundsRect];
+  NSLog(@"Error: *** AQTGraphicDrawing ***");
 }
 
 -(void)_setCache:(id)object
@@ -111,18 +112,29 @@
   AQTGraphic *graphic;
   NSEnumerator *enumerator = [modelObjects objectEnumerator];
   NSDate		*startTime=  [NSDate date];
+  NSRect debugRect;
+  NSAffineTransform *localTransform = [NSAffineTransform transform];
+  [localTransform scaleXBy:NSWidth(boundsRect)/canvasSize.width
+                       yBy:NSHeight(boundsRect)/canvasSize.height];
+  
 
   while ((graphic = [enumerator nextObject]))
   {
     [graphic renderInRect:boundsRect];
 #ifdef DEBUG_BOUNDS
      [[NSColor yellowColor] set];
-     [NSBezierPath strokeRect:[graphic bounds]];
+     debugRect = [graphic bounds];
+     debugRect.origin = [localTransform transformPoint:debugRect.origin];
+     debugRect.size = [localTransform transformSize:debugRect.size];
+     [NSBezierPath strokeRect:debugRect];
 #endif
   }
 #ifdef DEBUG_BOUNDS
   [[NSColor redColor] set];
-  [NSBezierPath strokeRect:[self bounds]];
+  debugRect = [self bounds];
+  debugRect.origin = [localTransform transformPoint:debugRect.origin];
+  debugRect.size = [localTransform transformSize:debugRect.size];
+  [NSBezierPath strokeRect:debugRect];
 #endif
   NSLog(@"Render time: %f", -[startTime timeIntervalSinceNow]);
 }
@@ -165,10 +177,10 @@
 @end
 
 
+
 @implementation AQTPath (AQTPathDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-   NSBezierPath *scratch;// = [NSBezierPath bezierPath];
    NSAffineTransform *localTransform = [NSAffineTransform transform];
    float xScale = boundsRect.size.width/canvasSize.width;
    float yScale = boundsRect.size.height/canvasSize.height;
@@ -179,19 +191,42 @@
       return;
    if (![self _cache])
    {
-      scratch = [NSBezierPath bezierPath];
+      NSBezierPath *scratch = [NSBezierPath bezierPath];
       [scratch appendBezierPathWithPoints:path count:pointCount];
+      [scratch setLineJoinStyle:NSRoundLineJoinStyle];
       [self _setCache:scratch];
    }
    [localTransform scaleXBy:xScale yBy:yScale];
    [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-   if (isFilled)
-   {
-      [[localTransform transformBezierPath:_cache] fill];
-   }
    [[localTransform transformBezierPath:_cache] stroke];	// FAQ: Needed unless we holes in the surface?
 }
 @end
+
+@implementation AQTPatch (AQTPatchDrawing)
+-(void)renderInRect:(NSRect)boundsRect
+{
+  NSAffineTransform *localTransform = [NSAffineTransform transform];
+  float xScale = boundsRect.size.width/canvasSize.width;
+  float yScale = boundsRect.size.height/canvasSize.height;
+  //
+  // Get the transform due to view resizing
+  //
+  if (pointCount == 0)
+    return;
+  if (![self _cache])
+  {
+    NSBezierPath *scratch = [NSBezierPath bezierPath];
+    [scratch appendBezierPathWithPoints:path count:pointCount];
+    [scratch closePath];
+    [self _setCache:scratch];
+  }
+  [localTransform scaleXBy:xScale yBy:yScale];
+  [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
+  [[localTransform transformBezierPath:_cache] fill];
+//  [[localTransform transformBezierPath:_cache] stroke];	// FAQ: Needed unless we holes in the surface?
+}
+@end
+
 
 @implementation AQTImage (AQTImageDrawing)
 -(void)renderInRect:(NSRect)boundsRect
@@ -206,7 +241,28 @@
   [localTransform scaleXBy:xScale yBy:yScale];
   scaledBounds.size = [localTransform transformSize:scaledBounds.size];
   scaledBounds.origin = [localTransform transformPoint:scaledBounds.origin];
-  [image drawInRect:scaledBounds fromRect:NSMakeRect(0,0,[image size].width,[image size].height) operation:NSCompositeSourceOver fraction:1.0];
+  if (![self _cache])
+  {
+    // Install an NSImage in _cache
+    const unsigned char *theBytes = [bitmap bytes]; 
+    NSImage *tmpImage = [[NSImage alloc] initWithSize:bitmapSize];
+    NSBitmapImageRep *tmpBitmap =
+      [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&theBytes
+                                              pixelsWide:bitmapSize.width
+                                              pixelsHigh:bitmapSize.height
+                                           bitsPerSample:8
+                                         samplesPerPixel:3
+                                                hasAlpha:NO
+                                                isPlanar:NO
+                                          colorSpaceName:NSDeviceRGBColorSpace
+                                             bytesPerRow:6
+                                            bitsPerPixel:24];
+    [tmpImage addRepresentation:tmpBitmap];
+    [self _setCache:tmpImage];
+    [tmpImage release];
+    [tmpBitmap release];
+  }
+  [_cache drawInRect:scaledBounds fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height) operation:NSCompositeSourceOver fraction:1.0];
 }
 @end
 

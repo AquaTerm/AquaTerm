@@ -15,7 +15,8 @@
 {
    NSPoint path[MAX_PATH_POINTS];
    int pointCount;
-   BOOL isFilled;
+   float linewidth;
 }
--(id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount filled:(BOOL)fill color:(AQTColor)aColor;
+- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount color:(AQTColor)aColor;
+- (void)setLinewidth:(float)lw;
 @end

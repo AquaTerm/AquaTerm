@@ -55,7 +55,8 @@
   return [modelObjects count];
 }
 
--(NSRect)bounds
+/*
+-(NSRect)recomputeBounds
 {
   NSRect trackingRect = NSMakeRect(0,0,0,0);
   AQTGraphic *graphic;
@@ -67,7 +68,7 @@
   }
   return trackingRect;
 }
-
+*/
 /**"
 *** Add any subclass of AQTGraphic to the collection of objects.
 "**/
@@ -75,6 +76,7 @@
 {
   [graphic setCanvasSize:[self canvasSize]];
   [modelObjects addObject:graphic];
+  [self setBounds:NSUnionRect([self bounds], [graphic bounds])];
 }
 
 -(void)removeObject:(AQTGraphic *)graphic

@@ -16,6 +16,8 @@ typedef struct _AQTColor {
    float blue;
 } AQTColor;
 
+
+
 @interface AQTGraphic : NSObject <NSCoding>
 {
     NSSize canvasSize;
@@ -29,6 +31,7 @@ typedef struct _AQTColor {
 -(NSSize)canvasSize;
 -(void)setCanvasSize:(NSSize)cs;
 -(NSRect)bounds;
+-(void)setBounds:(NSRect)bounds;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)removeObject:(AQTGraphic *)graphic;
 -(void)removeObjectsInRect:(NSRect)targetRect;

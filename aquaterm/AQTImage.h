@@ -7,16 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
 
 #import "AQTGraphic.h"
 
 @interface AQTImage : AQTGraphic
 {
-  NSImage *image;
-  NSRect renderBounds;
+  NSData *bitmap;
+  NSSize bitmapSize;
+  //NSRect renderBounds;
 }
-- (id)initWithContentsOfFile:(NSString *)filename;
-- (id)initWithImage:(NSImage *)anImage;
--(void)setBounds:(NSRect)theBounds;
+- (id)initWithBitmap:(const char *)bytes size:(NSSize)size bounds:(NSRect)bounds;
+- (NSData *)bitmap;
 @end

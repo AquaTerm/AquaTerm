@@ -23,9 +23,9 @@
 {
     if (self = [super init])
     {
-       _color.red = .5;
-       _color.green = .5;
-       _color.blue = .5;
+       _color.red = .8;
+       _color.green = .8;
+       _color.blue = .8;
     }
     return self; 
 }
@@ -42,6 +42,7 @@
    [coder encodeValueOfObjCType:@encode(float) at:&_color.green];
    [coder encodeValueOfObjCType:@encode(float) at:&_color.blue];
   [coder encodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
+  [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
@@ -51,6 +52,7 @@
   [coder decodeValueOfObjCType:@encode(float) at:&_color.green];
   [coder decodeValueOfObjCType:@encode(float) at:&_color.blue];
   [coder decodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
+  [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
   return self;
 }
 
@@ -73,6 +75,7 @@
 //	Stubs, needs to be overridden by subclasses
 //
 -(NSRect)bounds {return  _bounds;}
+-(void)setBounds:(NSRect)bounds {_bounds = bounds;}
 -(void)addObject:(AQTGraphic *)graphic {;}
 -(void)removeObject:(AQTGraphic *)graphic {;}
 -(void)removeObjectsInRect:(NSRect)targetRect {;}
