@@ -295,5 +295,5 @@ pos = NSMakePoint(540.5, 75.5);
 [adapter addLabel:@"Baseline" position:NSMakePoint(460, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignBaseline)];
 
 [adapter renderPlot];
-
+[adapter closePlot];
 }

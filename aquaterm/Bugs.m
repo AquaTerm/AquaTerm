@@ -71,4 +71,5 @@ void aqtDebug(id sender)
   }
   
   [adapter renderPlot];
+  [adapter closePlot];
 }
