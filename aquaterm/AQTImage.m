@@ -48,6 +48,7 @@
   [coder encodeValueOfObjCType:@encode(NSSize) at:&bitmapSize];
   [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
   [coder encodeValueOfObjCType:@encode(AQTAffineTransformStruct) at:&transform];
+  [coder encodeValueOfObjCType:@encode(BOOL) at:&fitBounds];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
@@ -57,6 +58,7 @@
   [coder decodeValueOfObjCType:@encode(NSSize) at:&bitmapSize];
   [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
   [coder decodeValueOfObjCType:@encode(AQTAffineTransformStruct) at:&transform];
+  [coder decodeValueOfObjCType:@encode(BOOL) at:&fitBounds];
   return self;
 }
 
