@@ -207,6 +207,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
       [adapter openPlotIndex:currentPlot size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
       [adapter takeBackgroundColorFromColormapEntry:0];
+      [adapter setLineCapStyle:AQTRoundLineCapStyle];
     }
       break;
 
@@ -215,6 +216,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 12:
     {
       // FIXME: reduce amount of objects by coalescing lines starting at last endpoint
+      // FIXME: move behaviour to adapter
       static NSPoint lastPoint;
       NSPoint startPoint = NSMakePoint(rbuf[0], rbuf[1]);
       NSPoint endPoint = NSMakePoint(rbuf[2], rbuf[3]);
@@ -222,9 +224,9 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       LOG(@"IFUNC=12, Draw line");
       if (!NSEqualPoints(lastPoint, startPoint))
       {
-        [adapter addLineAtPoint:startPoint];
+        [adapter moveToPoint:startPoint];
       }
-      [adapter appendLineToPoint:endPoint];
+      [adapter addLineToPoint:endPoint];
       lastPoint = endPoint;
     }
       break;
@@ -370,20 +372,11 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 24: // FIXME: this is used for erasing, with color 0.
     {
-      NSPoint corners[4];
       LOG(@"IFUNC=24, Rectangle Fill");
-      //[adapter fillRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
-      if (TRUE /* tmpCol == 0 */) // FIXME: Always remove objects behind a filled rect, nicht wahr?
-      {
-        // First, remove objects _completely_ hidden behind rectangles drawn in background color...
-        LOG(@"Erasing Rect(%f, %f, %f, %f)",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1]);
-        [adapter eraseRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
-      }
-      corners[0]=NSMakePoint(rbuf[0], rbuf[1]);
-      corners[1]=NSMakePoint(rbuf[2], rbuf[1]);
-      corners[2]=NSMakePoint(rbuf[2], rbuf[3]);
-      corners[3]=NSMakePoint(rbuf[0], rbuf[3]);
-      [adapter addPolygonWithPoints:corners pointCount:4];
+      // First, remove objects _completely_ hidden behind rectangles drawn in background color...
+      LOG(@"Erasing Rect(%f, %f, %f, %f)",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1]);
+      [adapter eraseRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
+      [adapter addFilledRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
     }
       break;
 
