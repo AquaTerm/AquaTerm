@@ -121,6 +121,20 @@
    [_model setTitle:title];
 }
 
+- (void)setClipRect:(NSRect)clip
+{
+   [self _flushBuffers];
+   _clipRect = clip;
+   _isClipped = YES;
+}
+
+- (void)setDefaultClipRect
+{
+   [self _flushBuffers];
+   _clipRect = NSZeroRect;
+   _isClipped = NO;
+}
+
 - (AQTColor)color
 {
    return _color;
@@ -261,6 +275,7 @@
          NSLog(@"Error, not a string.");
       }
    }
+   [lb setClipRect:_clipRect];
    [lb setColor:_color];
    [lb setFontName:_fontName];
    [lb setFontSize:_fontSize];
@@ -315,8 +330,9 @@
    AQTPath *tmpPath;
    // Create a path
    tmpPath = [[AQTPath alloc] initWithPoints:points pointCount:pc];
-   
    // Copy current properties to path
+   [tmpPath setClipRect:_clipRect];
+   [tmpPath setIsClipped:_isClipped];
    [tmpPath setColor:_color];
    [tmpPath setLinewidth:_linewidth];
    [tmpPath setLineCapStyle:_capStyle];
@@ -368,6 +384,8 @@
 {
    AQTPath *tmpPath;
    tmpPath = [[AQTPath alloc] initWithPoints:points pointCount:pc];
+   [tmpPath setClipRect:_clipRect];
+   [tmpPath setIsClipped:_isClipped];
    [tmpPath setColor:_color];
    [tmpPath setLinewidth:0.25]; // FIXME: What to do about the see-through edges?
    //[tmpPath setLineCapStyle:_capStyle];
@@ -400,17 +418,28 @@
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
    AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
+   [tmpImage setClipRect:_clipRect];
+   [tmpImage setIsClipped:_isClipped];
    [_model addObject:tmpImage];
    [tmpImage release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 
+// FIXME: Deprecated form, rewrite AQTImage
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
 {
-   AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
+   // FIXME: Bounds either needs to be transformed bounds or NOT tested for in AQTDrawingMethods
+   AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:NSZeroRect];
    [tmpImage setTransform:_transform];
+   [tmpImage setClipRect:destBounds]; // Override _clipRect to restore old behaviour
+   [tmpImage setIsClipped:YES];
    [_model addObject:tmpImage];
    [tmpImage release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
+}
+
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize
+{
+   [self addTransformedImageWithBitmap:bitmap size:bitmapSize clipRect:_clipRect];
 }
 @end

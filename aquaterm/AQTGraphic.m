@@ -45,6 +45,8 @@
 {
   [coder encodeValueOfObjCType:@encode(AQTColor) at:&_color];
   [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
+  [coder encodeValueOfObjCType:@encode(NSRect) at:&_clipRect];
+  [coder encodeValueOfObjCType:@encode(BOOL) at:&_isClipped];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
@@ -52,12 +54,28 @@
   self = [super init];
   [coder decodeValueOfObjCType:@encode(AQTColor) at:&_color];
   [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
+  [coder decodeValueOfObjCType:@encode(NSRect) at:&_clipRect];
+  [coder decodeValueOfObjCType:@encode(BOOL) at:&_isClipped];
   return self;
 }
 
 -(AQTColor)color
 {
    return _color;
+}
+
+-(NSRect)clipRect
+{
+   return _clipRect;
+}
+-(void)setClipRect:(NSRect)newClipRect
+{
+   _clipRect = newClipRect;
+}
+
+-(void)setIsClipped:(BOOL)clipState
+{
+   _isClipped = clipState;
 }
 //
 //	Stubs, needs to be overridden by subclasses

@@ -41,6 +41,8 @@
   float _pattern[MAX_PATTERN_COUNT]; /*" Currently selected dash pattern "*/
   int _patternCount;   /*" Currently selected dash count "*/
   float _patternPhase; /*" Currently selected dash phase "*/
+  NSRect _clipRect;
+  BOOL _isClipped;
 }
 
 /*" Acessors "*/
@@ -48,6 +50,10 @@
 - (AQTModel *)model;
 - (void)setSize:(NSSize)canvasSize;
 - (void)setTitle:(NSString *)title;
+
+   /*" Clip rect, applies to all objects "*/
+- (void)setClipRect:(NSRect)clip;
+- (void)setDefaultClipRect;
 
   /*" Color handling "*/
 - (AQTColor)color;
@@ -86,6 +92,7 @@
 - (void)setImageTransform:(AQTAffineTransformStruct)trans;
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; // AQTImage
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize;
 
    /*" Misc. "*/
 - (void)removeAllParts;

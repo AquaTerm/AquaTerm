@@ -56,6 +56,10 @@ extern const int AQTAlignTop;
 
 /*" Plotting related commands "*/
 
+/*" Clip rect, applies to all objects "*/
+- (void)setClipRect:(NSRect)clip;
+- (void)setDefaultClipRect;
+
 /*" Colormap (utility) "*/
 - (int)colormapSize;
 - (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b;
@@ -94,5 +98,6 @@ extern const int AQTAlignTop;
 - (void)setImageTransformM11:(float)m11 m12:(float)m12 m21:(float)m21 m22:(float)m22 tX:(float)tX tY:(float)tY;
 - (void)resetImageTransform;
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; 
-- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds; 
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize;
 @end

@@ -210,7 +210,19 @@ _{43:%{x,y}:%key Error } "*/
 
 #pragma mark === Plotting commands ===
 
-/*" Return the number of color entries availabel in the currently active colormap. "*/
+/*" Set a clipping region (rectangular) to apply to all subsequent operations, until changed again by #setClipRect: or #setDefaultClipRect. "*/ 
+- (void)setClipRect:(NSRect)clip
+{
+   [_selectedBuilder setClipRect:clip];
+}
+
+/*" Restore clipping region to the deafult (object bounds), i.e. no clipping performed. "*/
+- (void)setDefaultClipRect
+{
+   [_selectedBuilder setDefaultClipRect];
+}
+
+/*" Return the number of color entries available in the currently active colormap. "*/
 - (int)colormapSize
 {
    int size = AQT_COLORMAP_SIZE; // Default size
@@ -439,10 +451,16 @@ Default is RoundLineCapStyle. "*/
    [_selectedBuilder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
 }
 
-/*" Add a bitmap image of size bitmapSize %honoring transform, transformed image is clipped to destBounds. Bitmap format is 24bits per pixel in sequence RGBRGB...  with 8 bits per color."*/
+/*" Deprecated, use #addTransformedImageWithBitmap:size: instead. Add a bitmap image of size bitmapSize %honoring transform, transformed image is clipped to destBounds. Bitmap format is 24bits per pixel in sequence RGBRGB...  with 8 bits per color."*/
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds
 {
    [_selectedBuilder addTransformedImageWithBitmap:bitmap size:bitmapSize clipRect:destBounds];
+}
+
+/*" Add a bitmap image of size bitmapSize %honoring transform, transformed image is clipped to current clipRect. Bitmap format is 24bits per pixel in sequence RGBRGB...  with 8 bits per color."*/
+- (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize
+{
+   [_selectedBuilder addTransformedImageWithBitmap:bitmap size:bitmapSize];
 }
 
 /*******************************************

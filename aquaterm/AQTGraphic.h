@@ -20,6 +20,8 @@ typedef struct _AQTColor {
 {
     AQTColor _color;
     NSRect _bounds;
+    NSRect _clipRect;
+    BOOL _isClipped;
     @protected
        id _cache;   
 }
@@ -27,6 +29,9 @@ typedef struct _AQTColor {
 /*" accessor methods "*/
 -(NSRect)bounds;
 -(void)setBounds:(NSRect)bounds;
+-(NSRect)clipRect;
+-(void)setClipRect:(NSRect)clipRect;
+-(void)setIsClipped:(BOOL)clipState;
 
 /*" color handling "*/
 -(AQTColor)color;
