@@ -20,6 +20,8 @@
    // FIXME: stuff @"42:Server error" in all event buffers/handlers ?
    [self logMessage:[NSString stringWithFormat:@"Handler error: %@", msg] logLevel:1];
    errorState = YES;
+   printf("AquaTerm warning: Connection to display was lost,\n");
+   printf("plot commands will be discarded until a new plot is started.\n");
 }
 
 - (void)clearErrorState

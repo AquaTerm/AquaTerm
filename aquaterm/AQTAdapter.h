@@ -14,11 +14,11 @@ extern const int AQTButtLineCapStyle;
 extern const int AQTRoundLineCapStyle;
 extern const int AQTSquareLineCapStyle;
 
-/*" Constants that specify horizontal alignment for labels. "*/
+/*" Constants that specify horizontal and vertical alignment for labels. See #addLabel:atPoint:angle:align: for definitions and use."*/
 extern const int AQTAlignLeft;
 extern const int AQTAlignCenter;
 extern const int AQTAlignRight;
-/*" Constants that specify vertical alignment for labels. "*/
+/* Constants that specify vertical alignment for labels. */
 extern const int AQTAlignMiddle;
 extern const int AQTAlignBaseline;
 extern const int AQTAlignBottom;

@@ -1,18 +1,17 @@
----
 AquaTerm 1.0.b1
-  Enable Page Setup again.
-  Fixing a problem with text alignment caused by leading spaces in the text.
-  Remember save destination folder and file type. (#872996)
   Adding user preferences.
+  Adding preference to constrain minimum line width used in plot to 0.25 pts.
   Adding window arranging (cascade/tile)
+  Enable Page Setup again.
+  Remember save destination folder and file type. (#872996)
+  Fixing a problem with text alignment caused by leading spaces in the text.
   Fixing a bug that made transparent lines appear between adjacent filled patches.
   Fixing a bug which caused AquaTerm to hang when simultaneously closing more than 4 windows.
   Fixing a bug where windows didn't resize after changing canvas size. (#965266)
   Providing a fix for broken dirty rect handling. (#965271)
   Fixing a bug where an invalid font-name request would crash AQT. (#1015888)
-  Removing a hardcoded servername. (#1019709)
   Fixing launching AquaTerm from client whithout setting AQUATERM_PATH (#1019712).
-  Adding preference to constrain minimum line width used in plot to 0.25 pts.
+  Removing a hardcoded servername. (#1019709)
 
 AquaTerm 1.0.a2
   Bugfixes
@@ -44,4 +43,3 @@ AquaTerm 0.3.0
   Copy PDF and EPS to clipboard.
   Support for setting window title.
   Help menu links to homepage.
-===

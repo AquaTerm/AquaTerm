@@ -150,7 +150,6 @@
 		29B97317FDCFA39411CA2CEA = {
 			children = (
 				F5FEAC2701A7219B0143D50D,
-				F54B0FE401FF3656014110A7,
 				29B97318FDCFA39411CA2CEA,
 				F51551CC01FE762E01000102,
 				F54B0FE601FF5CDC014110A7,
@@ -319,6 +318,52 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		CB58A1F406F9A53300AF8A5E = {
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				CB58A20206F9A62300AF8A5E,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB58A1FE06F9A60900AF8A5E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.html;
+			name = AQTAdapter.html;
+			path = Help/AQTAdapter.html;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		CB58A1FF06F9A60900AF8A5E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.html;
+			name = help.html;
+			path = Help/help.html;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		CB58A20006F9A60900AF8A5E = {
+			fileRef = CB58A1FE06F9A60900AF8A5E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB58A20106F9A60900AF8A5E = {
+			fileRef = CB58A1FF06F9A60900AF8A5E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		CB58A20206F9A62300AF8A5E = {
+			fileRef = CB58A1FF06F9A60900AF8A5E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		CB5B187104A9A49E00EBD329 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -386,9 +431,9 @@
 		CB7217FB06072ABA008DCEAD = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			lastKnownFileType = text.html;
-			name = help.html;
-			path = English.lproj/help.html;
+			lastKnownFileType = text;
+			name = help.html_old;
+			path = English.lproj/help.html_old;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -877,6 +922,7 @@
 				CBC4B43205E4C784001BE8D7,
 				CBC4B43B05E4C784001BE8D7,
 				CBC4B44505E4C784001BE8D7,
+				CB58A1F406F9A53300AF8A5E,
 			);
 			buildRules = (
 			);
@@ -978,13 +1024,14 @@
 				CBC4B43305E4C784001BE8D7,
 				CBC4B43405E4C784001BE8D7,
 				CBC4B43505E4C784001BE8D7,
-				CBC4B43605E4C784001BE8D7,
 				CBC4B43705E4C784001BE8D7,
 				CBC4B43805E4C784001BE8D7,
 				CBC4B43905E4C784001BE8D7,
 				CBC4B43A05E4C784001BE8D7,
 				CB72184906072CF6008DCEAD,
 				CB9B70CD065A0AD100563010,
+				CB58A20006F9A60900AF8A5E,
+				CB58A20106F9A60900AF8A5E,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1003,12 +1050,6 @@
 		};
 		CBC4B43505E4C784001BE8D7 = {
 			fileRef = F51551CC01FE762E01000102;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CBC4B43605E4C784001BE8D7 = {
-			fileRef = F54B0FE401FF3656014110A7;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1319,15 +1360,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F54B0FE401FF3656014110A7 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.html;
-			name = help.html;
-			path = English.lproj/help.html;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F54B0FE601FF5CDC014110A7 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.nib;
@@ -1423,6 +1455,8 @@
 		};
 		F57C16A102506DE3010D3DE4 = {
 			children = (
+				CB58A1FE06F9A60900AF8A5E,
+				CB58A1FF06F9A60900AF8A5E,
 				CBDC2B2906F06E98000F0A8D,
 				CB96E43F06634622001B32F9,
 				CB96E44006634622001B32F9,

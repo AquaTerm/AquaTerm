@@ -16,6 +16,7 @@ ADAPT_DEST=$(EXTRAS_DEST)/adapters
 ## Get the source directories
 ## --------------------------
 APPSRCDIR=$(SRCROOT)
+HELPDIR=$(SRCROOT)/Help
 ADAPTSRCDIR=$(SRCROOT)/../adapters
 
 all:pre dmg post
@@ -35,10 +36,10 @@ post:
 	ls -Rp $(DMG_ROOT) 
 
 app:
-##	xcodebuild -target libaqt clean
+	xcodebuild -target libaqt clean
 ##	xcodebuild -target libaqt -buildstyle Deployment
-##	xcodebuild -target AquaTerm clean
-##	xcodebuild -target AquaTerm -buildstyle Deployment GCC_PREPROCESSOR_DEFINITIONS="AQT_APP"
+	xcodebuild -target AquaTerm clean
+	xcodebuild -target AquaTerm -buildstyle Deployment GCC_PREPROCESSOR_DEFINITIONS="AQT_APP"
 	cp -RPf $(BUILD_DIR)/AquaTerm.app $(PKG_ROOT)/.
 
 lib:
@@ -52,10 +53,10 @@ headers:
 adapters:c fortran gnuplot pgplot plplot
 
 info:
-	cp $(APPSRCDIR)/{ReadMe,ReleaseNotes} $(DMG_ROOT)/.
+	cp $(APPSRCDIR)/{ReadMe.rtf,ReleaseNotes} $(DMG_ROOT)/.
 
 doc:
-	@echo "Skipping docs..."
+	cp $(HELPDIR)/AQTAdapter.html $(EXTRAS_DEST)/.
 
 help:
 	@echo "Skipping help..."
@@ -84,7 +85,8 @@ fortran:
 
 gnuplot:
 	mkdir -p $(ADAPT_DEST)/gnuplot
-	cp $(ADAPTSRCDIR)/gnuplot/{aquaTerm.trm,ReadMe,ReleaseNotes} $(ADAPT_DEST)/gnuplot/.
+	cp $(ADAPTSRCDIR)/gnuplot/{ReadMe,ReleaseNotes} $(ADAPT_DEST)/gnuplot/.
+##	cp $(ADAPTSRCDIR)/gnuplot/{aquaTerm.trm,ReadMe,ReleaseNotes} $(ADAPT_DEST)/gnuplot/.
 
 pgplot:
 	mkdir -p $(ADAPT_DEST)/pgplot

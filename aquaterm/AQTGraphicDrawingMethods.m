@@ -398,7 +398,6 @@ static float _aqtMinimumLinewidth;
    [scratch setLineJoinStyle:NSRoundLineJoinStyle];
    [scratch setLineCapStyle:lineCapStyle];
    [scratch setLineWidth:(lw<_aqtMinimumLinewidth)?_aqtMinimumLinewidth:lw];
-   //[scratch setLineWidth:[self isFilled]?1.0:linewidth]; // FIXME: this is a hack to avoid tiny gaps between filled patches
    if([self isFilled])
    {
       [scratch closePath];
