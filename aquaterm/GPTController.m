@@ -26,6 +26,9 @@
       builder = [[AQTBuilder alloc] init];
       [builder setRenderer:self];
       gptWindowControllers = [[NSMutableArray arrayWithCapacity:0] retain];
+      // Force (pre-)loading of window NIB-file.... 
+      [self setModel:nil forView:0];
+      [[[self controllerForView:0] window] close];
     }
     return self;
 }
@@ -63,6 +66,16 @@
     [super dealloc];
 }
 
+-(void)addWindowController:(GPTWindowController *)newWindowController
+{
+  [gptWindowControllers addObject:newWindowController];
+}
+
+-(NSArray *)windowControllers
+{
+  return [NSArray arrayWithArray:gptWindowControllers];
+}
+
 -(void)setFrontWindow:(NSWindow *)mainWindow
 {
     frontWindow = mainWindow;
@@ -95,23 +108,17 @@
 "**/
 -(void)setModel:(AQTModel *)aqtModel forView:(int)index
 {
-  GPTWindowController *theController;
+  GPTWindowController *theController= [self controllerForView:index];
   //
   // Get controller for view, create if neccessary
   //
-  theController = [self controllerForView:index];
   if (theController == nil)
   {
     theController = [[GPTWindowController allocWithZone:[self zone]] initWithIndex:index];
-    [gptWindowControllers addObject:theController];	// The windowController is added to the array, and thus retained
+    [self addWindowController:theController];	// The windowController is added to the array, and thus retained
     [theController release];			// By releasing here, every windowController is released when the main nib is deallocated
   }
   [theController setModel:aqtModel];    		// Then hand the model over to the corresponding controller
-  if (![[theController window] isVisible])
-  {
-    // The window was hidden (due to e.g. a close action)
-    [[theController window] orderFront:self];
-  }
 }
 
 /**"
@@ -123,18 +130,17 @@
   //
   // FIXME! should be a dictionary of some kind
   //
-  GPTWindowController *gptWindowController;
-  NSEnumerator *enumerator = [gptWindowControllers objectEnumerator];
-
-  while ((gptWindowController = [enumerator nextObject]))
+  GPTWindowController *wc;
+  NSEnumerator *enumerator = [[self windowControllers] objectEnumerator];
+  
+  while (wc = [enumerator nextObject])
   {
-    if ([gptWindowController viewIndex] == index)
+    if ([wc viewIndex] == index)
     {
-      return gptWindowController;
+      return wc;
     }
   }
-  return nil;
-
+  return (GPTWindowController *)nil;
 }
 
 

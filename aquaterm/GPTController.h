@@ -25,13 +25,19 @@
 
 -(id)init;
 -(void)awakeFromNib;
--(void)setModel:(AQTModel *)gptModel forView:(int)index;
+
+-(NSArray *)windowControllers;
+-(void)addWindowController:(GPTWindowController *)newWindowController;
 -(GPTWindowController *)controllerForView:(int)index;
+
+-(void)setModel:(AQTModel *)gptModel forView:(int)index;
+
 -(NSWindow *)frontWindow;
 -(void)setFrontWindow:(NSWindow *)mainWindow;
+
 -(IBAction)print:(id)sender; 
 -(IBAction)saveFigureAs:(id)sender;
 -(void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(NSPopUpButton *)formatPopUp;
-- (IBAction)copy:(id)sender;
+-(IBAction)copy:(id)sender;
 -(IBAction)help:(id)sender;
 @end

@@ -71,10 +71,20 @@
 
 -(void)setModel:(AQTModel *)newModel
 {
-    [model release];			// let go of old model 
-    model = [newModel retain];		// Make it point to new model (FIXME: multiplot requires care! OK)
-    // [viewOutlet setModelReference:model];	// Let the view have a ref to it as well (FAQ: is this kosher? NO!)
-    [viewOutlet setNeedsDisplay:YES];	// Tell view to update itself
+  [newModel retain];
+  [model release];			// let go of old model
+  model =  newModel;		// Make it point to new model (FIXME: multiplot requires care! OK)
+  
+    // Check if window is has been loaded
+    if ([self window])
+    {
+      if (![[self window] isVisible])
+      {
+        // The window was hidden (due to e.g. a close action)
+        [[self window] orderFront:self];
+      }      
+      [viewOutlet setNeedsDisplay:YES];	// Tell view to update itself
+    }
 }
 
 -(AQTModel *)model
