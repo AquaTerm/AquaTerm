@@ -1,9 +1,14 @@
 {
     IBClasses = (
         {
+            ACTIONS = {refreshView = id; }; 
             CLASS = AQTPlot; 
             LANGUAGE = ObjC; 
-            OUTLETS = {canvas = AQTView; }; 
+            OUTLETS = {
+                canvas = AQTView; 
+                extendSavePanelView = NSBox; 
+                saveFormatPopUp = NSPopUpButton; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = AQTView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
