@@ -76,8 +76,15 @@
    _isWindowLoaded = YES;
 }
 
+- (void)release
+{
+   NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
+   [super release];
+}
+
 -(void)dealloc
 {
+   NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    [model release];
    [_clientName release];
    [super dealloc];
@@ -217,7 +224,7 @@
 
    if (_client == aClient)
    {
-      NSLog(@"invalidating %@", [_client description]);
+      NSLog(@"invalidating %d", _client);
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];
@@ -230,7 +237,11 @@
 -(void)setClient:(id)client
 {
    [client retain];
-   [_client release];		
+   if ([client isProxy])
+   {
+      [client setProtocolForProxy:@protocol(AQTEventProtocol)];
+   }
+   [_client release];
    _client = client;		
 }
 
@@ -276,9 +287,22 @@
 
 - (BOOL)windowShouldClose:(id)sender
 {
-   // FIXME: check for presence of client, it may have been release w/o invalidating itself
+   BOOL shouldClose = YES;
+   // FIXME: Check for presence of client, it may have been release w/o invalidating itself
    // and this class will leak until app quits.
-   BOOL shouldClose = YES; 
+   // QUE?! If client goes away, retain count is automagically decreased???
+
+   // NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
+   if (_client)
+   {
+      NS_DURING
+         [_client ping];
+         // NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
+      NS_HANDLER
+         [self invalidateClient:_client];
+         // FIXME: Tell controller to check all connections?
+      NS_ENDHANDLER   
+   } 
    if (_client)
    {
       [sender orderOut:self];
@@ -289,8 +313,6 @@
 
 - (void)windowWillClose:(NSNotification *)notification
 {
-   // FIXME: check for presence of client, it may have been release w/o invalidating itself
-   // and this class will leak until app quits.
    [[NSApp delegate] removePlot:self];
 }
 

@@ -33,6 +33,10 @@
 - (void)setHandler:(id)newHandler
 {
    [newHandler retain];
+   if ([newHandler isProxy])
+   {
+      [newHandler setProtocolForProxy:@protocol(AQTClientProtocol)];
+   }
    [_handler release];
    _handler = newHandler;
 }
@@ -102,4 +106,8 @@
    [[AQTClientManager sharedManager] processEvent:event sender:self]; // FIXME: Needs autoreleasing here???
 }
 
+- (void)ping
+{
+   return;
+}
 @end
