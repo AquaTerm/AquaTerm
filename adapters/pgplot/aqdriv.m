@@ -167,7 +167,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       }
       deviceCount++;
       currentDevice = deviceCount;
-      [adapter openPlotWithIndex:currentDevice];// size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
+      [adapter openPlotWithIndex:currentDevice];
       
       rbuf[0] = (float)currentDevice; // The number used to select this device by IFUNC=8 (Select plot)
       rbuf[1] = 1.0;
@@ -193,12 +193,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     {
       int i;
       LOG(@"IFUNC=11, Begin picture");
-/*
- if (!adapter)
-      {
-        initAdapter();
-      }
- */
       [adapter clearPlot];
       [adapter setColormapEntry:0 red:0.0 green:0.0 blue:0.0]; // Background color
       [adapter setColormapEntry:1 red:1.0 green:1.0 blue:1.0]; 
@@ -217,7 +211,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       [adapter setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
       [adapter setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
 
-//      [adapter openPlotWithIndex:currentDevice size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
       [adapter takeBackgroundColorFromColormapEntry:0];
       [adapter setLineCapStyle:AQTRoundLineCapStyle];
       [adapter setPlotSize:NSMakeSize(rbuf[0], rbuf[1])];
@@ -274,8 +267,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 16:
       LOG(@"IFUNC=16, Flush buffer");
-      // FIXME: this could be devastating for complex plots, sanity check needed!
-      // FIXME: use a timer to "coalesce" actual rendering calls, just make sure graphics buffers are flushed
       [adapter renderPlot];
       break;
 
@@ -354,9 +345,10 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 20:
     {
-      static NSPoint vertices[64];
       static int vCount = 0;
       static int vMax = 0;
+      static int vStore = 0;
+      static NSPoint *vertices = nil;
       LOG(@"IFUNC=20, Polygon fill"); // FIXME
 
       if (vMax == 0)
@@ -364,17 +356,39 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
         // First call
         vMax = (int)rbuf[0];
         vCount = 0;
-        if (vMax > 64)
-          NSLog(@"**** Too many vertices in polygon (%d)", vMax);
+        if (vMax > vStore)
+        {
+           // Allocate memory
+           int tmpStoreSize = 2*vMax;
+           if (vertices)
+           {
+              free(vertices);
+           }
+           if (vertices = (NSPoint *)malloc(tmpStoreSize*sizeof(NSPoint)))
+           {
+              vStore = tmpStoreSize;
+              LOG(@"vStore is now: %d", vStore);
+           }
+           else
+           {
+              NSLog(@"Error allocating memory.");
+           }
+        }
       }
       else
       {
-        vertices[MIN(vCount, 63)] = NSMakePoint(rbuf[0], rbuf[1]);
+        if(vertices)
+        {
+           vertices[MIN(vCount, vStore-1)] = NSMakePoint(rbuf[0], rbuf[1]);
+        }
         vCount++;
         if (vCount == vMax)
         {
-          [adapter addPolygonWithPoints:vertices pointCount:MIN(vMax, 64)];
-          vMax = 0;
+           if(vertices)
+           {
+              [adapter addPolygonWithPoints:vertices pointCount:MIN(vMax, vStore)];
+           }
+           vMax = 0;
         }
       }
     }
@@ -434,6 +448,8 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        static BOOL useTransform = YES;
        float m11=rbuf[7], m12=rbuf[8], m21=rbuf[9], m22=rbuf[10], tx=rbuf[11], ty=rbuf[12];
        float detA = m11*m22-m12*m21;
+
+       LOG(@"IFUNC=26, Line of pixels");
 
        switch((int)rbuf[0])
        {
@@ -506,9 +522,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
           }
              break;
        }
-       
-
-      LOG(@"IFUNC=26, Line of pixels");
     }
       break;
 
