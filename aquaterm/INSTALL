@@ -3,10 +3,12 @@ To install at default locations:
 2) Copy libaquaterm.1.0.0.dylib (in ./lib) to /usr/local/lib/ 
 3) Create a link libaquaterm.dylib -> libaquaterm.1.0.0.dylib using the command 
 sudo ln -s /usr/local/lib/libaquaterm.1.0.0.dylib /usr/local/lib/libaquaterm.dylib
-4) Copy the contents of ./include to /usr/local/include/aquaterm
+4) Copy the contents of ./include to /usr/local/include/aquaterm, create the directory if necessary.
 
 This is the result:
 ---
+/Applications
+    AquaTerm.app
 /usr/local/
     include/aquaterm/
         aquaterm.h

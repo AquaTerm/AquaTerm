@@ -40,7 +40,7 @@ sub gen_preamble {
         "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
 <html>
 <head>
-   <title>AquaTerm 1.0.a2 help</title>
+   <title>AquaTerm 1.0.b1 help</title>
    <style type="text/css">
    body{background: #FFFFFF; color: #000000; font-family:verdana, arial, sans-serif;}
    #hdr{border:solid #FFFFFF; border-width:1px 0px 0px 0px; margin:1px 0 0 0; padding:16px;}
@@ -60,7 +60,7 @@ sub gen_page_heading {
 <!-- Header -->
 <div id="hdr">
 <h1>AquaTerm.app, your friendly plotting front-end</h1>
-This is the help file for AquaTerm 1.0.a2, which is simply a collection of info files from the release.<br>
+This is the help file for AquaTerm 1.0.b1. It is simply a collection of info files from the release.<br>
 For questions, please use the mailing lists at <a href="http://aquaterm.sf.net">the AquaTerm website</a>.
 <br>
 </div>
