@@ -12,6 +12,12 @@ AquaTerm register with the system and responds to a (small) set of remote messag
 All documentation is available at http://aquaterm.sourceforge.net
 
 * Major changes
+AquaTerm 0.3.2
+  Bugfix: Help was broken
+  Canvas size settable from client
+  Window respects canvas width/height ratio
+  Handles attributed strings
+
 AquaTerm 0.3.1
   Bugfix: Save as EPS/PDF (#605454)
   Bugfix: Copy PDF & EPS to clipboard
@@ -24,6 +30,10 @@ AquaTerm 0.3.0
   Help menu links to homepage
 
 * Adapter changes
+AquaTerm 0.3.2
+  PLPLOT
+    Added driver for PLPLOT contributed by Mark Franz
+
 AquaTerm 0.3.1
   Gnuplot
     Bugfix: Crash when using multiplot in octave/gnuplot (#558799)
@@ -53,7 +63,7 @@ AquaTerm 0.3.0
 * How to get the source for AquaTerm:
 
 The source for AquaTerm is available in the CVS repository at http://sourceforge.net/projects/aquaterm
-The source corresponding to this release is tagged: release-0_3_1
+The source corresponding to this release is tagged: release-0_3_2
 
 From the terminal use (press return when prompted for password):
 cvs -d:pserver:anonymous@cvs.aquaterm.sourceforge.net:/cvsroot/aquaterm login
@@ -64,7 +74,7 @@ cvs -z3 -d:pserver:anonymous@cvs.aquaterm.sourceforge.net:/cvsroot/aquaterm co a
 The classes with prefix GPT (Graph Plotting Terminal) are about to be replaced with new and improved classes prefixed AQT (AQuaTerm). See attic in the CVS for removed GPT classes. Feel free to contribute to the project!
 
 * Future ToDo's:
-
+- Refactor code: Separate AppKit/Foundation, move code common to all adapters to libaquaterm
 - Add user settings for such things as default font etc.
 - Save colormaps
 - Add adapters for more legacy apps…

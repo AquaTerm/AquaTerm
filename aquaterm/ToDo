@@ -1,3 +1,7 @@
+Factor out common ocde from the different adapters and provide as a library
+
+Separate Foundation & AppKit classes in adapters
+
 Finish printing code
  
 Shape up saving
