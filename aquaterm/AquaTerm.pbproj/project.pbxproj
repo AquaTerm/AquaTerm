@@ -383,34 +383,14 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		CB7217EF060729FF008DCEAD = {
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-				CB96E44D0663462E001B32F9,
-				CB96E44E0663462E001B32F9,
-				CB96E44506634629001B32F9,
-				CB96E44606634629001B32F9,
-				CB96E44706634629001B32F9,
-			);
-			isa = PBXCopyFilesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CB7217FB06072ABA008DCEAD = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = text.html;
 			name = help.html;
-			path = /Users/per/Documents/Source/aquaterm_help/build/help.html;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		CB7217FC06072ABA008DCEAD = {
-			fileRef = CB7217FB06072ABA008DCEAD;
-			isa = PBXBuildFile;
-			settings = {
-			};
+			path = English.lproj/help.html;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		CB72184806072CF6008DCEAD = {
 			fileEncoding = 30;
@@ -507,36 +487,6 @@
 			path = /Users/per/Documents/Source/aquaterm_help/build/releasenotes.html;
 			refType = 0;
 			sourceTree = "<absolute>";
-		};
-		CB96E44506634629001B32F9 = {
-			fileRef = CB96E43F06634622001B32F9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CB96E44606634629001B32F9 = {
-			fileRef = CB96E44006634622001B32F9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CB96E44706634629001B32F9 = {
-			fileRef = CB7217FB06072ABA008DCEAD;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CB96E44D0663462E001B32F9 = {
-			fileRef = CBD6C05D066284A70096ACB5;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CB96E44E0663462E001B32F9 = {
-			fileRef = CBD6C05E066284A70096ACB5;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		CB9B70CB065A0AD100563010 = {
 			children = (
@@ -940,7 +890,6 @@
 				CBC4B43205E4C784001BE8D7,
 				CBC4B43B05E4C784001BE8D7,
 				CBC4B44505E4C784001BE8D7,
-				CB7217EF060729FF008DCEAD,
 			);
 			buildRules = (
 			);
@@ -1047,7 +996,6 @@
 				CBC4B43805E4C784001BE8D7,
 				CBC4B43905E4C784001BE8D7,
 				CBC4B43A05E4C784001BE8D7,
-				CB7217FC06072ABA008DCEAD,
 				CB72184906072CF6008DCEAD,
 				CB9B70CD065A0AD100563010,
 			);
