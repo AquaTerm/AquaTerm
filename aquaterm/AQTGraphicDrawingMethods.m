@@ -135,17 +135,24 @@
    BOOL underlineState = NO;
    int newSubscriptState;
    int subscriptState = 0;
+   int firstChar = 0;
    float baselineOffset = 0.0;
    //
    // appendBezierPathWithGlyph needs a valid context...
    //
    [[AQTGraphic sharedScratchPad] lockFocus];
+   // 
+   // Remove leading spaces FIXME: trailing as well?, need better solution
+   // 
+   while (firstChar<strLen && [text characterAtIndex:firstChar] == ' ') {
+      firstChar++;
+   }
    //
    // Create glyphs and convert to path
    //
    [tmpPath moveToPoint:pos];
 
-   for(i=0; i<strLen; i++)
+   for(i=firstChar; i<strLen; i++)
    {
       NSGlyph theGlyph;
       NSSize offset;
@@ -169,7 +176,7 @@
             [tmpPath moveToPoint:pos];
          }
       }
-      
+
       // subscript
       newSubscriptState = [[attrDict valueForKey:NSSuperscriptAttributeName] intValue];
       newSubscriptState = newSubscriptState>1?1:newSubscriptState;
@@ -357,6 +364,11 @@
      [self setAQTColor];
      [_cache  fill];
    }
+#ifdef DEBUG_BOUNDS
+   [[NSColor yellowColor] set];
+   NSFrameRect([self bounds]);
+#endif
+   
 }
 @end
 
