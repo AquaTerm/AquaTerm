@@ -104,10 +104,31 @@
   }
   // Inform the delegate...
   pos = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  switch([theEvent type])
+  {
+    case NSLeftMouseDown:
+      NSLog(@"A");
+      break;
+    case NSRightMouseDown:
+      NSLog(@"X");
+      break;
+    default:
+      NSLog(@"Other key");
+      break;
+  }
   [[[self window] delegate] mouseDownAt:[localTransform transformPoint:pos]];
   //keyPressed = 'A';
 }
 
+-(void)keyDown:(NSEvent *)theEvent
+{
+  NSPoint pos;
+  NSLog([theEvent characters]);
+  NSLog(NSStringFromPoint([[self window] mouseLocationOutsideOfEventStream]));
+  pos = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+  NSLog(NSStringFromPoint(pos));
+  // Just crop it to be inside [self bounds];
+}
 
 -(void)drawRect:(NSRect)aRect // FIXME: Consider dirty rect!!! 
 {
