@@ -1,7 +1,12 @@
 ---
-AquaTerm 1.0a2
+AquaTerm 1.0.b1
+  Enable Page Setup again.
+  Fixing a problem with text alignment caused by leading spaces in the text.
 
-AquaTerm 1.0a1
+AquaTerm 1.0.a2
+  Bugfixes
+
+AquaTerm 1.0.a1
   Breaking backwards compatibility.
   Complete rewrite with better possibilities for future optimization.
   Supports mouse and key events (events in general actually). (#538268, #586499)
