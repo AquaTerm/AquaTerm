@@ -1,12 +1,12 @@
 {
     IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {copy = id; help = id; print = id; saveFigureAs = id; showInfo = id; }; 
-            CLASS = GPTController; 
+            ACTIONS = {copy = id; help = id; print = id; saveFigureAs = id; }; 
+            CLASS = AQTController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {showInfo = id; }; 
             CLASS = GPTInfoDelegate; 
