@@ -56,10 +56,10 @@ void plD_dispatch_init_aqt( PLDispatchTable *pdt )
 static int currentPlot = 0;
 static int maxWindows = 30;
 
-#define AQT_Max_X       7200.0
-#define AQT_Max_Y       7200.0
+#define AQT_Max_X       10.0 * 720.0
+#define AQT_Max_Y       10.0 * 720.0
 #define DPI             720.0
-#define SCALE			10.0	// DPI divided by actual screen resolution
+#define SCALE			0.1			// DPI divided by actual screen resolution
 
 //---------------------------------------------------------------------
 //   aqt_init()
@@ -97,7 +97,7 @@ void plD_init_aqt(PLStream *pls)
    //
    plP_setpxl(DPI/25.4, DPI/25.4);           /* Pixels/mm. */
    //
-   //  Set the bounds for plotting.  initially set it to be a 400 x 400 array
+   //  Set the bounds for plotting.  initially set it to be a AQT_Max_X x AQT_Max_Y array
    //
    plP_setphy((PLINT) 0, (PLINT) (AQT_Max_X), (PLINT) 0, (PLINT) (AQT_Max_Y));
 }
@@ -112,8 +112,8 @@ void plD_bop_aqt(PLStream *pls)
 {
    currentPlot = currentPlot>=maxWindows?0:currentPlot;
    [adapter openPlotWithIndex:currentPlot++];
-   [adapter setPlotSize:NSMakeSize(AQT_Max_X, AQT_Max_Y)];
-   [adapter setLinewidth:SCALE];
+   [adapter setPlotSize:NSMakeSize(AQT_Max_X*SCALE, AQT_Max_Y*SCALE)];
+   [adapter setLinewidth:1.0];
    [adapter setColorRed:(float)(pls->curcolor.r/255.)
    				  green:(float)(pls->curcolor.g/255.)
 				   blue:(float)(pls->curcolor.b/255.)];
@@ -129,8 +129,8 @@ void plD_bop_aqt(PLStream *pls)
 
 void plD_line_aqt(PLStream *pls, short x1a, short y1a, short x2a, short y2a)
 {
-   [adapter moveToPoint:NSMakePoint((float)x1a, (float)y1a)];
-   [adapter addLineToPoint:NSMakePoint((float)x2a, (float)y2a)];
+   [adapter moveToPoint:NSMakePoint((float)x1a*SCALE, (float)y1a*SCALE)];
+   [adapter addLineToPoint:NSMakePoint((float)x2a*SCALE, (float)y2a*SCALE)];
 }
 
 //---------------------------------------------------------------------
@@ -186,7 +186,7 @@ void plD_state_aqt(PLStream *pls, PLINT op)
    switch (op)
    {
       case PLSTATE_WIDTH:
-         [adapter setLinewidth:(float)pls->width*SCALE];
+         [adapter setLinewidth:(float)pls->width];
          break;
 
       case PLSTATE_COLOR0:
@@ -237,10 +237,10 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
       case PLESC_GRAPH:               // switch to graphics screen
          break;
       case PLESC_FILL:                // fill polygon	 
-         [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0], pls->dev_y[0])];
+         [adapter moveToVertexPoint:NSMakePoint(pls->dev_x[0]*SCALE, pls->dev_y[0]*SCALE)];
          for (i = 1; i < pls->dev_npts ; i++)
          {
-            [adapter addEdgeToVertexPoint:NSMakePoint(pls->dev_x[i], pls->dev_y[i])];
+            [adapter addEdgeToVertexPoint:NSMakePoint(pls->dev_x[i]*SCALE, pls->dev_y[i]*SCALE)];
          };
          break;
       case PLESC_DI:                  // handle DI command
@@ -289,7 +289,8 @@ void proc_str (PLStream *pls, EscText *args)
 
    //  Set the font height - the 1.2 factor was trial and error
 
-   ft_ht = 1.2*pls->chrht * DPI/25.4; /* ft_ht in points. ht is in mm */
+   ft_ht = 1.2*pls->chrht * SCALE*DPI/25.4; /* ft_ht in points. ht is in mm */
+
    //
    //  Now find the angle of the text relative to the screen...
    //
@@ -494,7 +495,7 @@ void proc_str (PLStream *pls, EscText *args)
                       range:NSMakeRange(i, 1)];
          }
       }
-      [adapter addLabel:s atPoint:NSMakePoint((float)args->x, (float)args->y) angle:alpha align:(jst | ref)]; 
+      [adapter addLabel:s atPoint:NSMakePoint((float)args->x*SCALE, (float)args->y*SCALE) angle:alpha align:(jst | ref)]; 
 
       [s release];
 
