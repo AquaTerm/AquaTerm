@@ -19,7 +19,7 @@ AQUATERM_REPORT_TIMING	set this to anything to log drawing time
 
 Clients
 -------
-AQUATERM_LOGLEVEL	set this in the range 1-4 to have increasing levels of logging. 
+AQUATERM_LOGLEVEL	set this in the range 0-4 to have increasing levels of logging, zero means no logging. 
 AQUATERM_PATH		set this to point to any non-standard location of AquaTerm.app e.g. /Users/you/source/build/AquaTerm.app
 GNUTERM			set this to "aqua" to make AquaTerm default output in Gnuplot
 PGPLOT_DEV		set this to "/AQT" to make AquaTerm default output in PGPLOT
