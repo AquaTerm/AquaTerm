@@ -1,31 +1,31 @@
 //
-//  GPTController.m
-//  AGPT3
+//  AQTController.m
+//  AquaTerm
 //
-//  Created by per on Sat Oct 06 2001.
-//  Copyright (c) 2001 __MyCompanyName__. All rights reserved.
+//  Created by Per Persson on Wed Jun 25 2003.
+//  Copyright (c) 2003 Aquaterm. All rights reserved.
 //
 
-#import "GPTController.h"
+#import "AQTController.h"
 #import "GPTWindowController.h"
 #import "AQTView.h"
 #import "AQTColorInspector.h"
-#import "AQTBuilder.h"
+#import "AQTClientHandler.h"
 #import "AQTModel.h"
 
-@implementation GPTController
+@implementation AQTController
 /**"
-*** GPTController is the main controller object which coordinates all the
-*** action and manages the DO connection object.
+*** AQTController is the main controller object which coordinates all the
+*** action and manages the main DO connection.
 "**/
 
 -(id)init
 {
   if (self =  [super init])
   {
-    builder = [[AQTBuilder alloc] init];
-    [builder setRenderer:self];
-    gptWindowControllers = [[NSMutableArray arrayWithCapacity:0] retain];
+//--->    builder = [[AQTBuilder alloc] init];
+//    [builder setRenderer:self];
+    gptWindowControllers = [[NSMutableArray arrayWithCapacity:16] retain];
   }
   return self;
 }
@@ -35,14 +35,13 @@
 *** via the distributed objects system and also adds itself to
 *** the list of observers for NSWindowDidBecomeMainNotification
 *** to keep track of the model to render when the user print.
-
 *** The name of the DO connection registered is 'aquatermServer'.
 "**/
 -(void)awakeFromNib
 {
   doConnection = [[NSConnection defaultConnection] retain];
   [doConnection setIndependentConversationQueueing:YES];	// FAQ: Needed to sync calls!!!!
-  [doConnection setRootObject:builder];
+  [doConnection setRootObject:self];
 
   if([doConnection registerName:@"aquatermServer"] == NO)
   {
@@ -67,10 +66,61 @@
 -(void)dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self ];
-  [builder release];
+  [clientList release];
+  [handlerList release];
   [gptWindowControllers release];
   [super dealloc];
 }
+//
+// Methods from AQTConnectionProtocol
+//
+-(id)addAQTClient:(id)aClient
+{
+  id h;
+  if (!clientList)
+  {
+    clientList = [[[NSMutableArray alloc] initWithCapacity:16] retain];
+    handlerList = [[[NSMutableArray alloc] initWithCapacity:16] retain];
+  }
+  if ([clientList containsObject:aClient])
+  {
+    h = [handlerList objectAtIndex:[clientList indexOfObject:aClient]];
+  }
+  else
+  {
+    NSLog(@"Adding client!");
+    [clientList addObject:aClient];
+    h = [[AQTClientHandler alloc] init];
+    [h setOwner:self];
+    [handlerList addObject:h];
+    [h release];
+  }
+  return h;
+}
+
+-(BOOL)removeAQTClient:(id)aClient
+{
+  AQTClientHandler *tmpHandler;
+  id tmpClient;
+  unsigned index = [clientList indexOfObject:aClient];
+  if (index == NSNotFound)
+  {
+    NSLog(@"Not found!");
+    return NO;
+  }
+  else
+  {
+    NSLog(@"Removing client!");
+    tmpHandler = [handlerList objectAtIndex:index];
+    tmpClient = [clientList objectAtIndex:index];
+    NSLog(@"handler rc: %d", [tmpHandler retainCount] );
+    [handlerList removeObjectAtIndex:index];
+    [clientList removeObject:aClient];
+  }
+  return YES;
+}
+
+
 
 -(void)setFrontWindow:(NSWindow *)mainWindow
 {
@@ -116,7 +166,7 @@
 {
   NSWindowController *controller = [[notification object] windowController];
   unsigned index;
-  
+
   if(controller && [controller isKindOfClass:[GPTWindowController class]])
   {
     index = [gptWindowControllers indexOfObjectIdenticalTo:controller];
@@ -177,7 +227,7 @@
 }
 
 /**"
-*** Called when user selects print…. Runs a print operation with the model
+*** Called when user selects print‚Ä¶. Runs a print operation with the model
 *** corresponding to the main window.
 "**/
 -(IBAction)print:(id)sender
@@ -275,7 +325,7 @@
   NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
   AQTView *printView;
   AQTModel *currentModel = [frontView model];
-  
+
   if (!frontWindow)
   {
     NSLog(@"copy selected without a window");
@@ -311,4 +361,5 @@
     [[NSWorkspace sharedWorkspace] openURL:helpURL];
   }
 }
+
 @end
