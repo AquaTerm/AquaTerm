@@ -12,6 +12,8 @@
 #import "AQTAdapter.h"
 #import "AQTPlotBuilder.h"
 
+#define TITLEBAR_HEIGHT 22.0
+
 @implementation AQTPlot
 -(id)init
 {
@@ -27,7 +29,20 @@
 
 -(void)_aqtSetupViewShouldResize:(BOOL)shouldResize
 {
-   NSSize tmpSize = [model canvasSize];
+   NSSize contentSize, windowSize, maxSize, minSize, ratio;
+   contentSize = [model canvasSize];
+   windowSize = contentSize;
+   windowSize.height += TITLEBAR_HEIGHT;
+   maxSize = NSMakeSize(2.0*contentSize.width, 2.0*contentSize.height + TITLEBAR_HEIGHT);
+   minSize = NSMakeSize(0.5*contentSize.width, 0.5*contentSize.height + TITLEBAR_HEIGHT);
+   ratio = windowSize;
+/* Fixing content size when resizing requires use of windowDidResize?
+   NSLog(@"contentSize:%@", NSStringFromSize(contentSize));
+   NSLog(@"windowSize:%@", NSStringFromSize(windowSize));
+   NSLog(@"maxSize:%@", NSStringFromSize(maxSize));
+   NSLog(@"minSize:%@", NSStringFromSize(minSize));
+   NSLog(@"ratio:%@", NSStringFromSize(ratio));
+*/
    [canvas setModel:model];
    [canvas setFrameOrigin:NSMakePoint(0.0, 0.0)];
    if (_clientPID != -1)
@@ -40,11 +55,11 @@
    }
    if (shouldResize)
    {
-      [[canvas window] setContentSize:tmpSize];
-      [[canvas window] setAspectRatio:tmpSize];
+      [[canvas window] setContentSize:contentSize];
+      [[canvas window] setAspectRatio:ratio];
    }
-   [[canvas window] setMaxSize:NSMakeSize(tmpSize.width*2, tmpSize.height*2)];
-   [[canvas window] setMinSize:NSMakeSize(tmpSize.width/4, tmpSize.height/4)];
+   [[canvas window] setMaxSize:maxSize];
+   [[canvas window] setMinSize:minSize];
    [canvas setNeedsDisplay:YES];
    [[canvas window] setIsVisible:YES];
 }
@@ -232,20 +247,18 @@
 - (IBAction)saveDocumentAs:(id)sender
 {
    NSSavePanel *savePanel = [NSSavePanel savePanel];
-   /*
     if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])
     {
        NSLog(@"Failed to load ExtendSavePanel.nib");
        return;
     }
     [savePanel setAccessoryView:extendSavePanelView];
-    */
    [savePanel beginSheetForDirectory:NSHomeDirectory()
-                                file:[[canvas window] title]
+                                file:[model title]
                       modalForWindow:[canvas window]
                        modalDelegate:self
                       didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:)
-                         contextInfo:nil //saveFormatPopup
+                         contextInfo:saveFormatPopUp
       ];
 }
 
@@ -260,7 +273,6 @@
       [printView setModel:model];
       //[printView setIsPrinting:YES];
       filename = [[theSheet filename] stringByDeletingPathExtension];
-      /*
        if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
        {
           data = [printView dataWithPDFInsideRect: [printView bounds]];
@@ -271,9 +283,6 @@
           data = [printView dataWithEPSInsideRect: [printView bounds]];
           [data writeToFile: [filename stringByAppendingPathExtension:@"eps"] atomically: NO];
        }
-       */
-      data = [printView dataWithPDFInsideRect: [printView bounds]];
-      [data writeToFile: [filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
 
       [printView release];
    }

@@ -21,6 +21,9 @@
   int _clientPID;
   NSString *_clientName;
   NSString *lastEvent;
+  // interface additions
+  IBOutlet NSBox *extendSavePanelView;
+  IBOutlet NSPopUpButton *saveFormatPopUp;
 }
 -(id)canvas;
 -(void)setModel:(AQTModel *)newModel;

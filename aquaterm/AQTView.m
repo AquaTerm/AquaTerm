@@ -162,6 +162,8 @@
    //
    [localTransform set];
    [model renderInRect:scaledBounds];
+//   NSLog(@"Window size:%@", NSStringFromSize([[self window] frame].size));
+//   NSLog(@"View size:%@", NSStringFromSize([self frame].size));
 }
 
 @end
