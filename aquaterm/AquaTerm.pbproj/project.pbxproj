@@ -219,6 +219,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "-DDEBUG_BOUNDS";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = AquaTerm;
 				SECTORDER_FLAGS = "";
@@ -471,8 +472,8 @@ http://aquaterm.sourceforge.net</string>
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = aqtplplot.m;
-			path = /Users/per/source/sci/adapters/plplot/aqtplplot.m;
-			refType = 0;
+			path = ../adapters/plplot/aqtplplot.m;
+			refType = 2;
 		};
 		CB71321105444AEC00D208BA = {
 			fileEncoding = 4;
@@ -1302,8 +1303,8 @@ http://aquaterm.sourceforge.net</string>
 				F55D241801C0F0F501A80104,
 				F55D241901C0F0F501A80104,
 				F55D241A01C0F0F501A80104,
-				F55D241C01C0F0F501A80104,
 				F55D241B01C0F0F501A80104,
+				F55D241C01C0F0F501A80104,
 				F5653B8001C4B8F201A80104,
 				F5653B8101C4B8F201A80104,
 				CBF3083404D51BCF00EBD329,
