@@ -1,0 +1,4 @@
+const char *					T_PTROBJ
+const void *					T_PTROBJ
+float *						T_PTROBJ
+void ( * func ) ( int ref, const char * event )	T_PTROBJ

@@ -1,0 +1,81 @@
+
+DESCRIPTION:
+
+  This module allows you to interface directly to the AquaTerm Graphics Program
+  from Perl. Almost all of the sub-routines listed in aquaterm/aquaterm.h are
+  supported.
+
+
+AN EXAMPLE PERL SCRIPT:
+
+  #!/usr/bin/perl -w
+  use strict;
+  use Graphics::AquaTerm ':all';
+  
+  aqtInit();
+  aqtOpenPlot(1);
+  aqtSetPlotSize(400, 300);
+  aqtSetPlotTitle("Graphics::Aquaterm");
+  aqtSetColor(0.1, 0.5, 0.9);
+  aqtSetBackgroundColor(1.0,1.0,0.5);
+  aqtSetLinewidth(3.0);
+  aqtMoveToVertex(100,100);
+  aqtAddEdgeToVertex(200,120);
+  aqtAddEdgeToVertex(180,200);
+  aqtRenderPlot();
+
+
+SUPPORTED FUNCTIONS (AND HOW TO CALL THEM):
+
+  aqtAddEdgeToVertex($x, $y)
+  aqtAddFilledRect($originX, $originY, $width, $height)
+  aqtAddImageWithBitmap($bitmap, $pixWide, $pixHigh, $destX, $destY, $destWidth, $destHeight)
+  aqtAddLabel($text, $x, $y, $angle, $align)
+  aqtAddLineTo($x, $y)
+  aqtAddPolygon(\@x, \@y)
+  aqtAddPolyline(\@x, \@y)
+  aqtAddTransformedImageWithBitmap($bitmap, $pixWide, $pixHigh, $clipX, $clipY, $clipWidth, $clipHeight)
+  aqtClearPlot()
+  aqtClosePlot()
+  $map_size = aqtColormapSize()
+  aqtEraseRect($originX, $originY, $width, $height)
+  ($r, $g, $b) = aqtGetBackgroundColor()
+  ($r, $g, $b) = aqtGetColor()
+  ($r, $g, $b) = aqtGetColormapEntry($entryIndex)
+  $event_string = aqtGetLastEvent()
+  $did_init = aqtInit()
+  aqtMoveTo($x, $y)
+  aqtMoveToVertex($x, $y)
+  aqtOpenPlot($refNum)
+  aqtRenderPlot()
+  aqtResetImageTransform()
+  $did_select = aqtSelectPlot($refNum)
+  aqtSetAcceptingEvents($flag)
+  aqtSetBackgroundColor($r, $g, $b)
+  aqtSetColor($r, $g, $b)
+  aqtSetColormapEntry($entryIndex, $r, $g, $b)
+  aqtSetFontname($newFontname)
+  aqtSetFontsize($newFontsize)
+  aqtSetImageTransform($m11, $m12, $m21, $m22, $tX, $tY)
+  aqtSetLineCapStyle($capStyle)
+  aqtSetLinewidth($newLinewidth)
+  aqtSetPlotSize($width, $height)
+  aqtSetPlotTitle($title)
+  aqtTakeBackgroundColorFromColormapEntry($index)
+  aqtTakeColorFromColormapEntry($index)
+  aqtTerminate()
+  $event_string = aqtWaitNextEvent()
+
+
+A NOTE ON DISPLAYING BITMAPS
+
+  The bitmap display routines convert character strings into color intensities, 
+  following the ASCII standard for what character corresponds to what value (or 
+  so I believe). Bitmaps are RGB true color, i.e. the string "rgb" would be 
+  displayed as a single point with color values [r,g,b]. While convenient for 
+  me to implement, this may not be that convenient to use, so suggestions for 
+  a better approach are welcomed.
+
+
+
+Hazen Babcock, hbabcockos1@mac.com

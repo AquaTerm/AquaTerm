@@ -1,0 +1,42 @@
+Graphics/AquaTerm version 0.01
+==============================
+
+This module allows you to interface directly to the Mac OS-X
+AquaTerm Graphics Program from Perl. Almost all of the 
+sub-routines listed in aquaterm/aquaterm.h are supported.
+
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+If you have an older version of AquaTerm, your system might
+complain that it can't find "aqtGetBackgroundColor". You can
+fix this by either 1) updating your version of AquaTerm or
+2) commenting out the following lines in AquaTerm.xs :
+
+void
+aqtGetBackgroundColor(OUTLIST float r, OUTLIST float g, OUTLIST float b)
+
+
+DEPENDENCIES
+
+This module requires the following :
+
+A version of AquaTerm more recent then Jan 22, 2005 (or see above 
+installation note). This is available from Sourceforge.
+
+http://aquaterm.sourceforge.net/
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2005 Hazen Babcock
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
