@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.18 2003/08/19 09:03:36 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.19 2003/08/19 21:03:53 persquare Exp $
  *
  */
 
@@ -86,8 +86,9 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #define AQUA_VCHAR (16*AQUA_SCALE_FACTOR)       /* default font is Times at 16 points */
 #define AQUA_HCHAR (AQUA_VCHAR*6/10)
 
-#define PM3D_COLORS 128
-#define CYCLIC_COLORS 4
+#define SPECIAL_COLORS 4
+#define CYCLIC_COLORS 8
+#define PM3D_COLORS (AQUA_COLORMAP_SIZE - CYCLIC_COLORS - SPECIAL_COLORS - 1)
 
 #define GOT_AQUA_PROTO
 #endif /* TERM_PROTO */
@@ -198,7 +199,20 @@ AQUA_init()
   //
   // Set up the basic indexed colormap for gnuplot
   //
-    [adapter setColorRed:1.0 green:0.0 blue:0.0]; // FIXME: Just setting fg color to red for now
+  //  Special colors
+  [adapter setColormapEntry:0 red:0.0 green:0.0 blue:0.0];
+  [adapter setColormapEntry:1 red:0.0 green:0.0 blue:0.0];
+  [adapter setColormapEntry:2 red:0.0 green:0.0 blue:0.0];
+  [adapter setColormapEntry:3 red:0.0 green:0.0 blue:0.0];
+  //  Cyclic colors
+  [adapter setColormapEntry:4 red:1.0 green:0.0 blue:0.0];
+  [adapter setColormapEntry:5 red:0.0 green:1.0 blue:0.0];
+  [adapter setColormapEntry:6 red:0.0 green:0.0 blue:1.0];
+  [adapter setColormapEntry:7 red:1.0 green:1.0 blue:0.0];
+  [adapter setColormapEntry:8 red:1.0 green:0.0 blue:1.0];
+  [adapter setColormapEntry:9 red:0.0 green:1.0 blue:1.0];
+  [adapter setColormapEntry:10 red:1.0 green:0.5 blue:0.5];
+  [adapter setColormapEntry:11 red:0.5 green:1.0 blue:0.5];
 }
 
 TERM_PUBLIC void
@@ -227,20 +241,27 @@ AQUA_graphics()
 TERM_PUBLIC void
 AQUA_move(unsigned int x, unsigned int y)
 {
-    [adapter addLineAtPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
+    [adapter moveToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
 }
 
 TERM_PUBLIC void
 AQUA_vector(unsigned int x, unsigned int y)
 {
-  [adapter appendLineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
+  [adapter addLineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
 }
 
 TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
   LOG(@"AQUA_linetype(%d)", linetype);
-  //[adapter setColor:cm[linetype%CYCLIC_COLORS]];
+  if (linetype<0)
+  {
+   NSLog(@"Linetype %d", linetype);
+  }
+  else
+  {
+    [adapter takeColorFromColormapEntry:(linetype%CYCLIC_COLORS)+SPECIAL_COLORS];
+  }
 }
 
 TERM_PUBLIC void
@@ -323,7 +344,10 @@ AQUA_resume(void) /* before subsequent plot of multiplot */
 TERM_PUBLIC void 
 AQUA_boxfill(int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height) /* clear part of multiplot */
 {
-  //[gnuTermAccess fillRect:NSMakeRect(x1/AQUA_SCALE_FACTOR,y1/AQUA_SCALE_FACTOR,width/AQUA_SCALE_FACTOR,height/AQUA_SCALE_FACTOR) style:style];
+    // FIXME: What does style imply?
+    NSRect scaledRect = NSMakeRect(x1/AQUA_SCALE_FACTOR, y1/AQUA_SCALE_FACTOR, width/AQUA_SCALE_FACTOR,     height/AQUA_SCALE_FACTOR);
+    [adapter eraseRect:scaledRect];
+    [adapter addFilledRect:scaledRect];
 }
   
 TERM_PUBLIC void 
