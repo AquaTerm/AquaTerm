@@ -22,6 +22,7 @@ static id adapter;                          // Adapter object
 
 /* declarations for functions local to aqt.c */
 
+void get_cursor(PLGraphicsIn *);
 void proc_str (PLStream *, EscText *);
 static void esc_purge(char *, const char *);
 
@@ -262,6 +263,10 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
       case PLESC_EH:                  // handle Window events
          break;
       case PLESC_GETC:                // get cursor position
+         plD_eop_aqt(pls);	// this is a hack to force AquaTerm to render the plot so
+                            // that the user actually has something to click on.
+                            // there may be a better way...
+         get_cursor((PLGraphicsIn*)ptr);
          break;
       case PLESC_SWIN:                // set window parameters
          break;
@@ -270,6 +275,38 @@ void plD_esc_aqt(PLStream *pls, PLINT op, void *ptr)
          break;
 
    }
+}
+
+//---------------------------------------------------------------------
+// get_cursor()
+//
+// returns the location of the next mouse click
+//---------------------------------------------------------------------
+
+void get_cursor(PLGraphicsIn *gin){
+	int x,y;
+    NSString *temp;
+
+	temp = [adapter waitNextEvent];
+	sscanf([temp cString],"1:{%d, %d}:1",&x, &y);	// is this really the best way to extract
+													// the positions from the string?
+
+	// multiple FIXMEs
+	// 1) should the returned coordinates be adjusted by scale?
+	// 2) should different coordinates be adjusted in different ways?
+	//     i.e. what is the difference between the absolute, relative and world
+	//     coordinates?
+	// 3) why are the world coordinates (wX, wY) set to zero between when this 
+	//     sub-routine is called and the values are returned to the program
+	//     that made the plplot call?	
+	// 4) should the structure members state, keysym and button be set to something?
+	// 5) how would I know which sub-window was clicked in? or does plplot handle that?
+	// 6) is the translated string structure member relevant?
+	
+	gin->pX = x;
+	gin->pY = y;
+	gin->dX = (PLFLT)x;
+	gin->dY = (PLFLT)y;
 }
 
 //---------------------------------------------------------------------
