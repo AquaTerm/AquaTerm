@@ -275,42 +275,57 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 17:
     {
-      NSString *event;
-      NSPoint pos;
-      char key;
-      LOG(@"IFUNC=17, Read cursor"); // FIXME
-      /*
-       Parameters passed to handler:
-       RBUF(1): initial x position of cursor.
-       RBUF(2): initial y position of cursor.
-       RBUF(3): x position of reference point.
-       RBUF(4): y position of reference point.
-       RBUF(5): mode = 0 (no feedback), 1 (rubber band), 2 (rubber rectangle), 3 (vertical range),
-       4 (horizontal range). 5 (horizontal line), 6 (vertical line), 7 (cross-hair).
+       NSArray *eventData;
+       NSString *event;
+       NSPoint pos;
+       char key;
+       LOG(@"IFUNC=17, Read cursor"); // FIXME
+       /*
+        Parameters passed to handler:
+        RBUF(1): initial x position of cursor.
+        RBUF(2): initial y position of cursor.
+        RBUF(3): x position of reference point.
+        RBUF(4): y position of reference point.
+        RBUF(5): mode = 0 (no feedback), 1 (rubber band), 2 (rubber rectangle), 3 (vertical range),
+        4 (horizontal range). 5 (horizontal line), 6 (vertical line), 7 (cross-hair).
 
-       Parameters returned by handler:
-       RBUF(1): x position of cursor.
-       RBUF(2): y position of cursor.
-       CHR(1:1): character typed by user.
-       */
+        Parameters returned by handler:
+        RBUF(1): x position of cursor.
+        RBUF(2): y position of cursor.
+        CHR(1:1): character typed by user.
+        */
 
-      // key = [adapter getMouseInput:&pos options:0];
-      //NSLog(@"Key %c at %@", key, NSStringFromPoint(pos));
-      [adapter setAcceptingEvents:YES];
-      do {
-        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
-        event = [adapter latestEvent];
-      }
-      while ([event isEqualToString:@"0"]);
-      [adapter setAcceptingEvents:NO];
-      NSLog(event);
-      // FIXME: Dissect the event here...      
-      rbuf[0] = pos.x;
-      rbuf[1] = pos.y;
-      chr[0] = key; // FIXME: Make this upper case.
+       [adapter setAcceptingEvents:YES];
+       do {
+          [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+          event = [adapter lastEvent];
+       }
+       while ([event isEqualToString:@"0"]);
+       [adapter setAcceptingEvents:NO];
+       NSLog(event);
+       // FIXME: Dissect the event here...
+       eventData = [event componentsSeparatedByString:@":"];
+       switch ([[eventData objectAtIndex:0] intValue])
+       {
+          case 1: // Mouse down
+             pos = NSPointFromString([eventData objectAtIndex:1]);
+             key = 'A';
+             break;
+          case 2: // Key down
+             pos = NSPointFromString([eventData objectAtIndex:1]);
+             key = [[eventData objectAtIndex:2] lossyCString][0];
+             NSLog(@"Key down:%c", key);
+             break;
+          default:
+             NSLog(@"Unknown event, discarding.");
+       }
+       
+       rbuf[0] = pos.x;
+       rbuf[1] = pos.y;
+       chr[0] = key; // FIXME: Make this upper case.
     }
-      break;
-
+    break;
+       
       //--- IFUNC=18, Erase alpha screen. -------------------------------------
       // (Not implemented: no alpha screen)
     case 18:
