@@ -17,6 +17,8 @@
   AQTModel	*model;		/*" Holds the model for the view "*/
   int 		viewIndex;	/*" The number by which the client refers to the model "*/
   BOOL _isWindowLoaded;
+  NSPoint _selectedPoint;
+  BOOL _selectedPointIsValid;
 
 }
 -(id)initWithModel:(AQTModel *)aModel index:(int)index;
@@ -24,4 +26,10 @@
 -(id)viewOutlet;
 -(int)viewIndex;
 -(void)setModel:(AQTModel *)newModel;
+
+- (void)beginMouseInput;
+- (void)mouseDownAt:(NSPoint)pos;
+- (NSPoint) selectedPoint;
+- (BOOL) selectedPointIsValid;
+
 @end

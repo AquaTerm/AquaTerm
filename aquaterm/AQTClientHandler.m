@@ -39,14 +39,20 @@
   currentView = aView;
 }
 
+-(AQTPlot *)_plotForView:(int)ref
+{
+  NSString *key = [NSString stringWithFormat:@"%d", ref];
+  return [plotList objectForKey:key]; 
+}
+
 /*" The following methods applies to the currently selected view "*/
 -(void)setModel:(id)aModel
 {
-  NSString *key = [NSString stringWithFormat:@"%d", currentView];
-  AQTPlot *thePlot = [plotList objectForKey:key]; 
+  AQTPlot *thePlot = [self _plotForView:currentView]; //[plotList objectForKey:key]; 
   
   if (!thePlot)
   {
+    NSString *key = [NSString stringWithFormat:@"%d", currentView];
     thePlot = [[AQTPlot alloc] initWithModel:aModel index:currentView];
     [plotList setObject:thePlot forKey:key];
     [thePlot release];
@@ -61,12 +67,29 @@
   return tmpDict;
 }
 
+-(void)beginMouse
+{
+ [[self _plotForView:currentView] beginMouseInput];//FIXME: change method to beginMouse
+}
+
+-(BOOL)mouseIsDone
+{
+  return [[self _plotForView:currentView] selectedPointIsValid]; //FIXME: change method to mouseIsDone
+}
+
+-(char)mouseDownInfo:(inout NSPoint *)mouseLoc
+{
+  *mouseLoc = [[self _plotForView:currentView] selectedPoint];
+  return 'A';
+}
+
+/*
 -(BOOL)doCursorFromPoint:(NSPoint)startPoint withOptions:(NSDictionary *)cursorOptions
 {
   NSLog(@"doCursorFromPoint:");
   return NO;
 }
-
+*/
 -(void)close
 {
   NSLog(@"close");

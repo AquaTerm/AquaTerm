@@ -78,6 +78,30 @@
   }
 }
 
+- (void)beginMouseInput
+{
+  _selectedPointIsValid = NO;
+  [[self viewOutlet] setMouseIsActive:YES];
+}
+
+- (void)mouseDownAt:(NSPoint)pos
+{
+  [[self viewOutlet] setMouseIsActive:NO];
+  NSLog(@"Got coord: %@", NSStringFromPoint(pos));
+  _selectedPoint = pos;
+  _selectedPointIsValid = YES;
+}
+
+- (NSPoint) selectedPoint
+{
+  return _selectedPoint;
+}
+
+-  (BOOL) selectedPointIsValid
+{
+  return _selectedPointIsValid;
+}
+
 
 - (IBAction)copy:(id)sender
 {
@@ -86,7 +110,7 @@
 
   printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
   [printView setModel:model];
-  [printView setIsPrinting:YES];
+  //[printView setIsPrinting:YES];
   [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];
 
   [pasteboard setData:[printView dataWithPDFInsideRect:[printView bounds]] forType:NSPDFPboardType];
@@ -96,7 +120,7 @@
 
 - (void)printOperationDidRun:(NSPrintOperation *)printOperation success:(BOOL)success  contextInfo:(AQTView *)printView
 {
-  [printView setIsPrinting:NO];
+  //[printView setIsPrinting:NO];
 }
 
 -(IBAction)printDocument:(id)sender
@@ -119,7 +143,7 @@
 
   printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
   [printView setModel:model];
-  [printView setIsPrinting:YES];
+  //[printView setIsPrinting:YES];
 
   printOp = [NSPrintOperation printOperationWithView:printView];
   (void)[printOp runOperationModalForWindow:[viewOutlet window]
@@ -159,7 +183,7 @@
   {
     printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
     [printView setModel:model];
-    [printView setIsPrinting:YES];
+    //[printView setIsPrinting:YES];
     filename = [[theSheet filename] stringByDeletingPathExtension];
 /*
  if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])

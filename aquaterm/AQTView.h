@@ -17,10 +17,15 @@
   isPrinting *might* not be necessary, use [NSGraphicsContext currentContextDrawingToScreen]
   problem is that saving should behave like printing
   */
-  BOOL isPrinting; 
+  //BOOL isPrinting;
+  BOOL _mouseIsActive;
+  NSCursor *crosshairCursor;  
 }
 - (void)setModel:(AQTModel *)newModel;
 - (AQTModel *)model;
-- (void)setIsPrinting:(BOOL)flag;
+//- (void)setIsPrinting:(BOOL)flag;
 - (BOOL)isPrinting;
+- (BOOL)mouseIsActive;
+- (void)setMouseIsActive:(BOOL)flag;
+
 @end
