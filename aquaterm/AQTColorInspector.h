@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class GPTWindowController;
+@class GPTWindowController, AQTColorMap;
 
 @interface AQTColorInspector : NSWindowController
 {
@@ -35,10 +35,12 @@
     NSImage *rampImage; 		/*" Preview of the continuos colormap ("coloraxis") "*/
     NSBitmapImageRep *bitmap;		/*" the raw bitmap that used in rampImage "*/
     unsigned char *planes[3]; 		/*" the R, G and B planes for the raw bitmap (each is 1x64 pixels) "*/
+    AQTColorMap *localColormap;
 }
 /*" Accessor methods "*/
 - (void)setFrontWindowController:(GPTWindowController *)newWindowController;
 - (GPTWindowController *)frontWindowController;
+- (void)setColormap:(AQTColorMap *)newColormap;
 /*" IBActions "*/
 - (IBAction)applyPressed:(id)sender;
 - (IBAction)didSetMinColor:(id)sender;
@@ -47,5 +49,6 @@
 /*" internal methods "*/
 - (void)updateRampImage;
 - (void)mainWindowChanged:(NSNotification *)notification;
+- (void)updateState;
 
 @end

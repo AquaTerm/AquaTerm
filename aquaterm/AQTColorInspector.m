@@ -13,32 +13,37 @@
 #import "GPTWindowController.h"
 
 @implementation AQTColorInspector
-    /**" 
-    *** AQTColorInspector is the controller class for the Color Inspector nib. 
-    "**/
+/**"
+*** AQTColorInspector is the controller class for the Color Inspector nib.
+"**/
 
 - (id)init
 {
+  AQTColorMap *tempColormap;
   NSWindow *frontWindow = [[[NSApplication sharedApplication] delegate] frontWindow];
   if (self = [super initWithWindowNibName:@"ColorInspector"])
   {
     // User could open inspector panel before opening a graph window
     if(frontWindow)
     {
-        [self setFrontWindowController:[frontWindow windowController]];
-        // we should set the colors of each of the color wells by 
-        // reading the colormap from the front window 
+      [self setFrontWindowController:[frontWindow windowController]];
+      tempColormap = [[[frontWindowController model] colormap] copy]; // Copy implicitly retains object
+      // we should set the colors of each of the color wells by
+      // reading the colormap from the front window
     }
     else
     {
       // FIXME: should read default colormap since there is no graph window open
+      tempColormap = [[AQTColorMap alloc] init]; 
     }
+      [self setColormap:tempColormap];
+      [tempColormap release];
     // Set up the rampImage
-    // This is somewhat primitive, but it does work! PP 
-    planes[0] = (unsigned char*)malloc(1 * 64); // red 
+    // This is somewhat primitive, but it does work! PP
+    planes[0] = (unsigned char*)malloc(1 * 64); // red
     planes[1] = (unsigned char*)malloc(1 * 64); // green
     planes[2] = (unsigned char*)malloc(1 * 64); // blue
-    
+
     rampImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 64)];
     [rampImage setFlipped:YES];	// Needed since colorscale runs in opposite direction
     bitmap = [[NSBitmapImageRep alloc]
@@ -75,6 +80,7 @@
     // -- probably not worth fixing, though because a better thing would be to load
     // the colors from the users defaults, and force them on the inspector here.
     [self updateRampImage];
+  [self updateState];
 }
 
 -(GPTWindowController *)frontWindowController
@@ -85,6 +91,7 @@
 
 - (void)setFrontWindowController:(GPTWindowController *)newWindowController
 {
+  AQTColorMap *tempColormap;
   // First check that it is an actual update
   if (newWindowController != frontWindowController)
   {
@@ -93,9 +100,36 @@
     {
       // FIXME: stubbing this for now (2002-02-04 PP)
       // Should read the colormap from the new model and
+      tempColormap = [[[frontWindowController model] colormap] copy]; // Copy implicitly retains object
+      [self setColormap:tempColormap];
+      [tempColormap release];
       // update inspector window accordingly
+      [self updateState];
     }
   }
+}
+
+-(void)setColormap:(AQTColorMap *)newColormap
+{
+  [newColormap retain];
+  [localColormap release];
+  localColormap = newColormap;
+}
+
+- (void)updateState
+{
+  [backgroundColor setColor:[localColormap colorForIndex: -4]];
+  [axisColor setColor:[localColormap colorForIndex: -2]];
+  [gridlineColor setColor:[localColormap colorForIndex: -1]];
+  [lineColor1 setColor:[localColormap colorForIndex: 0]];
+  [lineColor2 setColor:[localColormap colorForIndex: 1]];
+  [lineColor3 setColor:[localColormap colorForIndex: 2]];
+  [lineColor4 setColor:[localColormap colorForIndex: 3]];
+  [lineColor5 setColor:[localColormap colorForIndex: 4]];
+  [lineColor6 setColor:[localColormap colorForIndex: 5]];
+  [lineColor7 setColor:[localColormap colorForIndex: 6]];
+  [lineColor8 setColor:[localColormap colorForIndex: 7]];
+  [lineColor9 setColor:[localColormap colorForIndex: 8]];
 }
 
 - (IBAction)didSetMinColor:(id)sender
@@ -107,7 +141,7 @@
   [self updateRampImage];
 }
 -(void)updateRampImage
-/*" display the current gradient in the inspector "*/
+  /*" display the current gradient in the inspector "*/
 {
   int x;
   // Get the RGB components for minColor
@@ -132,46 +166,23 @@
 }
 
 - (IBAction)applyPressed:(id)sender
-/*" create new AQTColorMap from the current settings, and update the active AQTModel "*/
+  /*" create new AQTColorMap from the current settings, and update the active AQTModel "*/
 {
-    AQTColorMap *tempColormap;
-    NSDictionary *colorDICT;
+
+  // Get the state from the panel...
+  [localColormap setColor:[backgroundColor color] forIndex: -4];
+  [localColormap setColor:[axisColor color] forIndex: -2];
+  [localColormap setColor:[gridlineColor color] forIndex: -1];
+  [localColormap setColor:[lineColor1 color] forIndex:0];
+  [localColormap setColor:[lineColor2 color] forIndex:1];
+  [localColormap setColor:[lineColor3 color] forIndex:2];
+  [localColormap setColor:[lineColor4 color] forIndex:3];
+  [localColormap setColor:[lineColor5 color] forIndex:4];
+  [localColormap setColor:[lineColor6 color] forIndex:5];
+  [localColormap setColor:[lineColor7 color] forIndex:6];
+  [localColormap setColor:[lineColor8 color] forIndex:7];
+  [localColormap setColor:[lineColor9 color] forIndex:8];
     
-    // create a temporary colormap from the panel
-    colorDICT = [NSDictionary dictionaryWithObjects: [NSArray arrayWithObjects:
-                            [backgroundColor color], // -4
-                            [NSColor yellowColor], // -3 /* Reserved for now */
-                            [axisColor color], // -2
-                            [gridlineColor color], // -1
-                            [lineColor1 color], // 0
-                            [lineColor2 color], // 1
-                            [lineColor3 color], // 2
-                            [lineColor4 color], // 3
-                            [lineColor5 color], // 4
-                            [lineColor6 color], // 5
-                            [lineColor7 color], // 6
-                            [lineColor8 color], // 7
-                            [lineColor9 color], // 8
-                             nil]
-                forKeys: [NSArray arrayWithObjects:
-                            @"-4", // backgroundColor
-                            @"-3", // xor-color for markers /* Reserved use for now */
-                            @"-2", // axisColor
-                            @"-1", // gridlineColor
-                            @"0", // lineColor1
-                            @"1", // lineColor2
-                            @"2", // lineColor3
-                            @"3", // lineColor4
-                            @"4", // lineColor5
-                            @"5", // lineColor6
-                            @"6", // lineColor7
-                            @"7", // lineColor8
-                            @"8", // lineColor9
-                            nil] ];
-                            
-    tempColormap = [[AQTColorMap alloc] initWithColorDict:colorDICT
-                                                 rampFrom:[minColor color]
-                                                       to:[maxColor color]];
     if (!frontWindowController) {
         // could be one of two things, either there really is no window
         // or it just hasn't been properly set yet
@@ -181,13 +192,14 @@
             [self setFrontWindowController:[frontWindow windowController]];
         }
     }
-    [[frontWindowController model] updateColors:tempColormap];
+  [[frontWindowController model] updateColors:localColormap];
+  
+  
     [[frontWindowController viewOutlet] setNeedsDisplay:YES];
-    [tempColormap release];
 }
 
 -(void)mainWindowChanged:(NSNotification *)notification
-{	    
+{
   if([[[notification object] windowController] isKindOfClass:[GPTWindowController class]])
   {
     // Store a ref to the windowController rather than the model since we need access to the view as well. PP
