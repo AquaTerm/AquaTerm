@@ -22,6 +22,7 @@ typedef struct _AQTColor {
     NSRect _bounds;
     NSRect _clipRect;
     BOOL _isClipped;
+    BOOL _shouldShowBounds;
     @protected
        id _cache;   
 }

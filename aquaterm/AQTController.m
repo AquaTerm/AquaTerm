@@ -156,6 +156,17 @@ extern void aqtLineDrawingTest(id sender);
    }
    return terminateDecision;
 }
+
+
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
+{
+   // FIXME: Add debugging menu items here if built with DEBUG_XXX flags
+#ifdef DEBUG_BOUNDS
+   id menu = [[[NSApp mainMenu] itemWithTitle:@"Debug"] submenu];
+   [[menu insertItemWithTitle:@"Show bounds" action:@selector(toggleShowBounds:) keyEquivalent:@"" atIndex:1] setTarget:nil];
+#endif
+}
+
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
    // FIXME: inform clients?

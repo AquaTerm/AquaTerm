@@ -77,6 +77,16 @@
 {
    _isClipped = clipState;
 }
+
+- (BOOL)shouldShowBounds
+{
+   return _shouldShowBounds;
+}
+
+- (void)toggleShouldShowBounds
+{
+   _shouldShowBounds = !_shouldShowBounds;
+}
 //
 //	Stubs, needs to be overridden by subclasses
 //

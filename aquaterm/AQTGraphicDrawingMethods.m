@@ -158,17 +158,18 @@ static float _aqtMinimumLinewidth;
       [_cache  fill];
    }
 #ifdef DEBUG_BOUNDS
-   NSGraphicsContext *context = [NSGraphicsContext currentContext];
-   [context saveGraphicsState];
-   [[NSColor yellowColor] set];
-   NSFrameRect([self bounds]);
-   if (_isClipped) {
-      [[NSColor orangeColor] set];
-      NSFrameRect(_clipRect);
+   if (_shouldShowBounds) {
+      NSGraphicsContext *debugContext = [NSGraphicsContext currentContext];
+      [debugContext saveGraphicsState];
+      [[NSColor yellowColor] set];
+      NSFrameRect([self bounds]);
+      if (_isClipped) {
+         [[NSColor orangeColor] set];
+         NSFrameRect(_clipRect);
+      }
+      [debugContext restoreGraphicsState];
    }
-   [context restoreGraphicsState];
 #endif
-   
 }
 @end
 
@@ -220,15 +221,17 @@ static float _aqtMinimumLinewidth;
          [context restoreGraphicsState];
    }
 #ifdef DEBUG_BOUNDS
-   NSGraphicsContext *debugContext = [NSGraphicsContext currentContext];
-   [debugContext saveGraphicsState];
-   [[NSColor yellowColor] set];
-   NSFrameRect([self bounds]);
-   if (_isClipped) {
-      [[NSColor orangeColor] set];
-      NSFrameRect(_clipRect);
+   if (_shouldShowBounds) {
+      NSGraphicsContext *debugContext = [NSGraphicsContext currentContext];
+      [debugContext saveGraphicsState];
+      [[NSColor yellowColor] set];
+      NSFrameRect([self bounds]);
+      if (_isClipped) {
+         [[NSColor orangeColor] set];
+         NSFrameRect(_clipRect);
+      }
+      [debugContext restoreGraphicsState];
    }
-   [debugContext restoreGraphicsState];
 #endif
    
 }
@@ -308,15 +311,17 @@ static float _aqtMinimumLinewidth;
          [context restoreGraphicsState];
    }
 #ifdef DEBUG_BOUNDS
-   NSGraphicsContext *debugContext = [NSGraphicsContext currentContext];
-   [debugContext saveGraphicsState];
-   [[NSColor yellowColor] set];
-   NSFrameRect([self bounds]);
-   if (_isClipped) {
-      [[NSColor orangeColor] set];
-      NSFrameRect(_clipRect);
+   if (_shouldShowBounds) {
+      NSGraphicsContext *debugContext = [NSGraphicsContext currentContext];
+      [debugContext saveGraphicsState];
+      [[NSColor yellowColor] set];
+      NSFrameRect([self bounds]);
+      if (_isClipped) {
+         [[NSColor orangeColor] set];
+         NSFrameRect(_clipRect);
+      }
+      [debugContext restoreGraphicsState];
    }
-   [debugContext restoreGraphicsState];
 #endif
    
 }

@@ -354,6 +354,15 @@ static inline void NOOP_(id x, ...) {;}
 }
 
 #pragma mark === Menu actions ===
+#ifdef DEBUG_BOUNDS
+- (void)toggleShowBounds:(id)sender
+{
+   [model toggleShouldShowBounds];
+   [[model modelObjects] makeObjectsPerformSelector:@selector(toggleShouldShowBounds)];
+   [sender setState:[model shouldShowBounds]];
+   [canvas setNeedsDisplay:YES];
+}
+#endif
 
 - (IBAction)copy:(id)sender
 {
