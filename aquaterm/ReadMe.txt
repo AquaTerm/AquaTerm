@@ -3,16 +3,24 @@ This is an early release for testing purposes. Please provide feedback and featu
 *********************
 
 * How to use AquaTerm:
-AquaTerm is a graphics terminal that can be used to easily add aqua graphics to (primarily scientific) legacy applications written in C, FORTRAN or any other language that can send remote messages.
+AquaTerm is a graphics viewer that can be used to easily add aqua graphics to (primarily scientific) legacy applications written in C, FORTRAN or any other language that can call C or Objective-C library functions.
 
-AquaTerm register with the system and responds to a (small) set of remote messages, listed and explained in AQTBaseMethods.h, AQTExtendedMethods.h (AQTProtocol.h). 
+AquaTerm.app register with the system and responds to a (small) set of remote messages. The connection between the client and the server (AquaTerm.app) is handled by a shared lib (libaquaterm.dylib). The library exposes small and simple C and Objective-C interfaces (use either according to taste) which is tailored to suit procedural code. See AQTAdapter.h and aquaterm.h for details.     
 
 * Documentation
 
-All documentation is available at http://aquaterm.sourceforge.net
+The API is detailed in AQTAdapter.html which is generated from AQTAdapter.h using AutoDoc.
+Full documentation is available at http://aquaterm.sourceforge.net
 
 * AquaTerm changes
 ------------------
+AquaTerm 1.0a1
+  Complete rewrite with better possibilities for future optimization.
+  Supports mouse and key events (events in general actually) (#538268, #586499)
+  *** Not backwards compatible with old adapters *** (It could be fixed, but I don't have the time to do it...)
+  Respects window size when updating (#650938)
+  Make window front when updated (#651911)  
+
 AquaTerm 0.3.2
   Bugfix: Help is now working
   Window size settable from client
@@ -39,6 +47,15 @@ AquaTerm 0.3.0
 
 * Adapter changes
 -----------------
+AquaTerm 1.0a1
+  General
+    Moved all common code into libaquaterm.dylib, all adapters link with this.
+    Complete rewrite of common code, no reliance on AppKit (#605549)
+  Gnuplot
+    Increased resolution (#783895)
+  PGPLOT
+    Mouse/keyboard support
+
 AquaTerm 0.3.2
   PLPLOT
     Added driver for PLPLOT contributed by Mark Franz
@@ -81,18 +98,13 @@ cvs -d:pserver:anonymous@cvs.aquaterm.sourceforge.net:/cvsroot/aquaterm login
 cvs -z3 -d:pserver:anonymous@cvs.aquaterm.sourceforge.net:/cvsroot/aquaterm co aquaterm 
 cvs -z3 -d:pserver:anonymous@cvs.aquaterm.sourceforge.net:/cvsroot/aquaterm co adapters 
 
-* About the source:
-The classes with prefix GPT (Graph Plotting Terminal) are about to be replaced with new and improved classes prefixed AQT (AQuaTerm). See attic in the CVS for removed GPT classes. Feel free to contribute to the project!
-
 * Future ToDo's:
-- Refactor code: Separate AppKit/Foundation, move code common to all adapters to libaquaterm
 - Add user settings for such things as default font etc.
-- Save colormaps
 - Add adapters for more legacy apps…
 
 * Legalities
 
-Copyright (c) 2001-2002, Per Persson, AquaTerm project
+Copyright (c) 2001-2003, The AquaTerm project
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

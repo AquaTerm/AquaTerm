@@ -1,7 +1,3 @@
-Factor out common ocde from the different adapters and provide as a library
-
-Separate Foundation & AppKit classes in adapters
-
 Finish printing code
  
 Shape up saving
@@ -10,15 +6,8 @@ Shape up saving
 Copying
  - let user set preferences to copy as EPS or PDF
 
-Colormaps
- - set from inspector panel
- - set from client app
-
 Drag & Drop
- - should AquaTerm provide dnd?
-
-General
- - rewrite GPTXxxx classes and rename AQTXxxx
+ - should AquaTerm provide dnd? Yes, in a future release
 
 Docs
  - finish autodoc comments
