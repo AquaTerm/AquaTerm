@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>AquaTerm</string>
 	<key>CFBundleGetInfoString</key>
-	<string>AquaTerm v1.0.a1</string>
+	<string>AquaTerm v1.0.a2</string>
 	<key>CFBundleIconFile</key>
 	<string>AquaTerm.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,13 +17,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>AquaTerm v1.0.a1</string>
+	<string>AquaTerm v1.0.a2</string>
 	<key>CFBundleSignature</key>
 	<string>AqTS</string>
 	<key>CFBundleVersion</key>
 	<string>1.0.a2</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>©2001-2004, The AquaTerm Project  
+	<string>The AquaTerm Project  
 http://aquaterm.sourceforge.net</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu1</string>
