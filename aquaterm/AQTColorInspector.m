@@ -26,44 +26,24 @@
     // User could open inspector panel before opening a graph window
     if(frontWindow)
     {
+      // Read colormap from front window
       [self setFrontWindowController:[frontWindow windowController]];
       tempColormap = [[[frontWindowController model] colormap] copy]; // Copy implicitly retains object
-      // we should set the colors of each of the color wells by
-      // reading the colormap from the front window
     }
     else
     {
       // FIXME: should read default colormap since there is no graph window open
-      tempColormap = [[AQTColorMap alloc] init]; 
+      tempColormap = [[AQTColorMap alloc] init];
     }
-      [self setColormap:tempColormap];
-      [tempColormap release];
-    // Set up the rampImage
-    // This is somewhat primitive, but it does work! PP
-    planes[0] = (unsigned char*)malloc(1 * 64); // red
-    planes[1] = (unsigned char*)malloc(1 * 64); // green
-    planes[2] = (unsigned char*)malloc(1 * 64); // blue
-
-    rampImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 64)];
-    [rampImage setFlipped:YES];	// Needed since colorscale runs in opposite direction
-    bitmap = [[NSBitmapImageRep alloc]
-      initWithBitmapDataPlanes:planes
-                    pixelsWide:1 pixelsHigh:64 bitsPerSample:8
-               samplesPerPixel:3 hasAlpha:NO isPlanar:YES
-                colorSpaceName:NSCalibratedRGBColorSpace
-                   bytesPerRow:1 bitsPerPixel:8];
-    [rampImage addRepresentation:bitmap];
+    [self setColormap:tempColormap];
+    [tempColormap release];
   }
   return self;
 }
+
 -(void)dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
-  [rampImage release];
-  [bitmap release];
-  free(planes[0]);
-  free(planes[1]);
-  free(planes[2]);
 }
 
 
@@ -74,19 +54,8 @@
                                                name:NSWindowDidBecomeMainNotification
                                              object:nil];
 
-    // This is not possible to do in the init!
-    // FIXME: rather than just updating the ramp image, all colors should be updated
-    // also the ramp colors are not accurate for some reason.
-    // -- probably not worth fixing, though because a better thing would be to load
-    // the colors from the users defaults, and force them on the inspector here.
-    [self updateRampImage];
-  [self updateState];
-}
-
--(GPTWindowController *)frontWindowController
-{
-  // do we really need this method? who is going to call it?
-  return frontWindowController;
+  [self updatePopUp];
+  [self updateVisibleState];
 }
 
 - (void)setFrontWindowController:(GPTWindowController *)newWindowController
@@ -98,104 +67,109 @@
     frontWindowController = newWindowController;
     if (frontWindowController)
     {
-      // FIXME: stubbing this for now (2002-02-04 PP)
-      // Should read the colormap from the new model and
       tempColormap = [[[frontWindowController model] colormap] copy]; // Copy implicitly retains object
       [self setColormap:tempColormap];
       [tempColormap release];
-      // update inspector window accordingly
-      [self updateState];
+
+      [infoText setStringValue:[NSString stringWithFormat:@"%d objects in %f seconds", [[frontWindowController model] count], [[frontWindowController model] timeTaken]]];
+      [self updatePopUp];
+      [self updateVisibleState];
     }
   }
 }
+
+#define specialsCount 4
 
 -(void)setColormap:(AQTColorMap *)newColormap
 {
   [newColormap retain];
   [localColormap release];
   localColormap = newColormap;
+  colorCount = [[localColormap colorList] count] - specialsCount;
 }
 
-- (void)updateState
+- (void)updatePopUp
+{
+  int i, items = (colorCount-1)/8 + 1;
+  [rangePopUp removeAllItems];
+  for (i=0; i<items;i++)
+  {
+    [rangePopUp insertItemWithTitle:[NSString stringWithFormat:@"Color %d É %d", i*8+1, (i+1)*8] atIndex:i];
+  }
+  [rangePopUp setAutoenablesItems:YES];
+}
+
+- (void)updateVisibleState
 {
   [backgroundColor setColor:[localColormap colorForIndex: -4]];
   [axisColor setColor:[localColormap colorForIndex: -2]];
   [gridlineColor setColor:[localColormap colorForIndex: -1]];
-  [lineColor1 setColor:[localColormap colorForIndex: 0]];
-  [lineColor2 setColor:[localColormap colorForIndex: 1]];
-  [lineColor3 setColor:[localColormap colorForIndex: 2]];
-  [lineColor4 setColor:[localColormap colorForIndex: 3]];
-  [lineColor5 setColor:[localColormap colorForIndex: 4]];
-  [lineColor6 setColor:[localColormap colorForIndex: 5]];
-  [lineColor7 setColor:[localColormap colorForIndex: 6]];
-  [lineColor8 setColor:[localColormap colorForIndex: 7]];
-  [lineColor9 setColor:[localColormap colorForIndex: 8]];
+  [lineColor1 setColor:[localColormap colorForIndex: cRange + 0]];
+  [lineColor2 setColor:[localColormap colorForIndex: cRange + 1]];
+  [lineColor3 setColor:[localColormap colorForIndex: cRange + 2]];
+  [lineColor4 setColor:[localColormap colorForIndex: cRange + 3]];
+  [lineColor5 setColor:[localColormap colorForIndex: cRange + 4]];
+  [lineColor6 setColor:[localColormap colorForIndex: cRange + 5]];
+  [lineColor7 setColor:[localColormap colorForIndex: cRange + 6]];
+  [lineColor8 setColor:[localColormap colorForIndex: cRange + 7]];
+  [color1Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 1]];
+  [color2Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 2]];
+  [color3Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 3]];
+  [color4Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 4]];
+  [color5Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 5]];
+  [color6Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 6]];
+  [color7Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 7]];
+  [color8Label setStringValue:[NSString  stringWithFormat:@"Color %d", cRange + 8]];
 }
 
-- (IBAction)didSetMinColor:(id)sender
+- (IBAction)didSelectRange:(id)sender
 {
-  [self updateRampImage];
-}
-- (IBAction)didSetMaxColor:(id)sender
-{
-  [self updateRampImage];
-}
--(void)updateRampImage
-  /*" display the current gradient in the inspector "*/
-{
-  int x;
-  // Get the RGB components for minColor
-  float   r=[[minColor color] redComponent],
-          g=[[minColor color] greenComponent],
-          b=[[minColor color] blueComponent];
-  // Compute the RGB distance to maxColor
-  float   zr = [[maxColor color] redComponent]-r,
-          zg= [[maxColor color] greenComponent]-g,
-          zb= [[maxColor color] blueComponent]-b;
-  // Set the ramp!
-  for (x=0;x<64;x++)
+  int rangeBase = -1;
+  if ([sender indexOfSelectedItem] != -1)
   {
-    planes[0][x] = (unsigned char)(r*255 + (zr*255*x)/63);
-    planes[1][x] = (unsigned char)(g*255 + (zg*255*x)/63);
-    planes[2][x] = (unsigned char)(b*255 + (zb*255*x)/63);
+    rangeBase = [sender indexOfSelectedItem];
+    if (rangeBase != cRange)
+    {
+      [self updateColormap];
+      cRange = (rangeBase*8);
+      [self updateVisibleState];
+    }
   }
+}
 
-  [surfaceRampImage setImage:rampImage];	// Why is this neccessary?!
-  // Tell the view to update
-  [surfaceRampImage setNeedsDisplay:YES];
+-(void)updateColormap
+{
+  // Get the state from the panel...
+  [localColormap setColor:[backgroundColor color] forIndex: -4];
+  [localColormap setColor:[axisColor color] forIndex: -2];
+  [localColormap setColor:[gridlineColor color] forIndex: -1];
+  [localColormap setColor:[lineColor1 color] forIndex: cRange + 0];
+  [localColormap setColor:[lineColor2 color] forIndex: cRange + 1];
+  [localColormap setColor:[lineColor3 color] forIndex: cRange + 2];
+  [localColormap setColor:[lineColor4 color] forIndex: cRange + 3];
+  [localColormap setColor:[lineColor5 color] forIndex: cRange + 4];
+  [localColormap setColor:[lineColor6 color] forIndex: cRange + 5];
+  [localColormap setColor:[lineColor7 color] forIndex: cRange + 6];
+  [localColormap setColor:[lineColor8 color] forIndex: cRange + 7];
+  
 }
 
 - (IBAction)applyPressed:(id)sender
   /*" create new AQTColorMap from the current settings, and update the active AQTModel "*/
 {
+  [self updateColormap];
 
-  // Get the state from the panel...
-  [localColormap setColor:[backgroundColor color] forIndex: -4];
-  [localColormap setColor:[axisColor color] forIndex: -2];
-  [localColormap setColor:[gridlineColor color] forIndex: -1];
-  [localColormap setColor:[lineColor1 color] forIndex:0];
-  [localColormap setColor:[lineColor2 color] forIndex:1];
-  [localColormap setColor:[lineColor3 color] forIndex:2];
-  [localColormap setColor:[lineColor4 color] forIndex:3];
-  [localColormap setColor:[lineColor5 color] forIndex:4];
-  [localColormap setColor:[lineColor6 color] forIndex:5];
-  [localColormap setColor:[lineColor7 color] forIndex:6];
-  [localColormap setColor:[lineColor8 color] forIndex:7];
-  [localColormap setColor:[lineColor9 color] forIndex:8];
-    
-    if (!frontWindowController) {
-        // could be one of two things, either there really is no window
-        // or it just hasn't been properly set yet
-        NSWindow *frontWindow = [[[NSApplication sharedApplication] delegate] frontWindow];
-        if(frontWindow)
-        {
-            [self setFrontWindowController:[frontWindow windowController]];
-        }
+  if (!frontWindowController) {
+    // could be one of two things, either there really is no window
+    // or it just hasn't been properly set yet
+    NSWindow *frontWindow = [[[NSApplication sharedApplication] delegate] frontWindow];
+    if(frontWindow)
+    {
+      [self setFrontWindowController:[frontWindow windowController]];
     }
+  }
   [[frontWindowController model] updateColors:localColormap];
-  
-  
-    [[frontWindowController viewOutlet] setNeedsDisplay:YES];
+  [[frontWindowController viewOutlet] setNeedsDisplay:YES];
 }
 
 -(void)mainWindowChanged:(NSNotification *)notification

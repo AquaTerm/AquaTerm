@@ -23,32 +23,33 @@
     IBOutlet NSColorWell *lineColor6;		/*" indexed color 6 "*/
     IBOutlet NSColorWell *lineColor7;		/*" indexed color 7 "*/
     IBOutlet NSColorWell *lineColor8;		/*" indexed color 8 "*/
-    IBOutlet NSColorWell *lineColor9;		/*" indexed color 9 "*/
-    IBOutlet NSColorWell *maxColor;		/*" gradient max color "*/
-    IBOutlet NSColorWell *minColor;		/*" gradient min color "*/
-    IBOutlet NSImageView *surfaceRampImage;	/*" shows the gradient to the user "*/
-    IBOutlet NSColorWell *textColor;		/*" Not implemented, see axisColor "*/
+    IBOutlet NSTextField *color1Label;		/*" indexed color 1 "*/
+    IBOutlet NSTextField *color2Label;		/*" indexed color 2 "*/
+    IBOutlet NSTextField *color3Label;		/*" indexed color 3 "*/
+    IBOutlet NSTextField *color4Label;		/*" indexed color 4 "*/
+    IBOutlet NSTextField *color5Label;		/*" indexed color 5 "*/
+    IBOutlet NSTextField *color6Label;		/*" indexed color 6 "*/
+    IBOutlet NSTextField *color7Label;		/*" indexed color 7 "*/
+    IBOutlet NSTextField *color8Label;		/*" indexed color 8 "*/
+    IBOutlet NSPopUpButton *rangePopUp;
+    int cRange;
+    int colorCount;
+    IBOutlet NSTextField *infoText;		
     
     GPTWindowController *frontWindowController; 	/*" Keeps track of the windowController of the front window "*/
 
-    @private
-    NSImage *rampImage; 		/*" Preview of the continuos colormap ("coloraxis") "*/
-    NSBitmapImageRep *bitmap;		/*" the raw bitmap that used in rampImage "*/
-    unsigned char *planes[3]; 		/*" the R, G and B planes for the raw bitmap (each is 1x64 pixels) "*/
     AQTColorMap *localColormap;
 }
+
 /*" Accessor methods "*/
 - (void)setFrontWindowController:(GPTWindowController *)newWindowController;
-- (GPTWindowController *)frontWindowController;
 - (void)setColormap:(AQTColorMap *)newColormap;
 /*" IBActions "*/
 - (IBAction)applyPressed:(id)sender;
-- (IBAction)didSetMinColor:(id)sender;
-- (IBAction)didSetMaxColor:(id)sender;
-
+- (IBAction)didSelectRange:(id)sender;
 /*" internal methods "*/
-- (void)updateRampImage;
+- (void)updatePopUp;
 - (void)mainWindowChanged:(NSNotification *)notification;
-- (void)updateState;
-
+- (void)updateVisibleState;
+- (void)updateColormap;
 @end
