@@ -5,20 +5,16 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>Fwk</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
+	<string>AquaTerm</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.MySoftwareCompany.Fwk</string>
+	<string>net.sourceforge.AquaTerm_framework</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>AqTS</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0d1</string>
+	<string>1.0</string>
 </dict>
 </plist>
