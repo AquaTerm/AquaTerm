@@ -10,13 +10,11 @@
 
 @class AQTModel;
 
-typedef struct _AQTColor AQTColor;
-struct _AQTColor {
+typedef struct _AQTColor {
    float red;
    float green;
    float blue;
-};
-
+} AQTColor;
 
 @interface AQTGraphic : NSObject <NSCoding>
 {

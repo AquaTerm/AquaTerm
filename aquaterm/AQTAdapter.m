@@ -15,9 +15,8 @@
 #import "AQTGraphic.h"
 #import "AQTImage.h"
 #import "AQTPlotBuilder.h"
+#import "AQTColorMap.h"
 #import "AQTConnectionProtocol.h"
-
-static AQTColor colormap[AQT_COLORMAP_SIZE];  // FIXME: proper handling
 
 @implementation AQTAdapter
 /*" AQTAdapter is a class that provides an interface to the functionality of AquaTerm.
@@ -61,6 +60,7 @@ Event handling of user input is provided through an optional callback function.
    if(self = [super init])
    {
       _builders = [[NSMutableDictionary alloc] initWithCapacity:256];
+      _colormap = [[AQTColorMap alloc] initWithSize:AQT_COLORMAP_SIZE];
       if(localServer)
       {
          _server = localServer;
@@ -154,13 +154,10 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    [_selectedBuilder setColor:newColor];
 }
 
-/*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the current colormap. "*/
+/*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the colormap. "*/
 - (void)takeColorFromColormapEntry:(int)index
 {
-   if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
-   {
-      [_selectedBuilder setColor:colormap[index]];
-   }
+   [_selectedBuilder setColor:[_colormap colorForIndex:index]];
 }
 
 /*" Set the background color, overriding any previous color, using explicit RGB components. "*/
@@ -173,13 +170,10 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    [_selectedBuilder setBackgroundColor:newColor];
 }
 
-/*" Set the background color, overriding any previous color, using the color stored at the position given by index in the current colormap. "*/
+/*" Set the background color, overriding any previous color, using the color stored at the position given by index in the colormap. "*/
 - (void)takeBackgroundColorFromColormapEntry:(int)index
 {
-   if (index < AQT_COLORMAP_SIZE-1 && index >= 0)
-   {
-      [_selectedBuilder setBackgroundColor:colormap[index]];
-   }
+   [_selectedBuilder setBackgroundColor:[_colormap colorForIndex:index]];
 }
 
 /*" Get current RGB color components by reference. "*/
@@ -191,26 +185,23 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    *b = tmpColor.blue;
 }
 
-/*" Set an RGB entry in the current colormap at the position given by entryIndex. "*/
+/*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
 - (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b
 {
-   if (entryIndex < AQT_COLORMAP_SIZE-1 && entryIndex >= 0)
-   {
-      colormap[entryIndex].red = r;
-      colormap[entryIndex].green = g;
-      colormap[entryIndex].blue = b;
-   }
+   AQTColor tmpColor;
+   tmpColor.red = r;
+   tmpColor.green = g;
+   tmpColor.blue = b;
+   [_colormap setColor:tmpColor forIndex:entryIndex];
 }
 
-/*" Set an RGB entry in the current colormap at the position given by entryIndex. "*/
+/*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
 - (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b
 {
-   if (entryIndex < AQT_COLORMAP_SIZE-1 && entryIndex >= 0)
-   {
-      *r = colormap[entryIndex].red;
-      *g = colormap[entryIndex].green;
-      *b = colormap[entryIndex].blue;
-   }
+   AQTColor tmpColor = [_colormap colorForIndex:entryIndex];
+   *r = tmpColor.red;
+   *g = tmpColor.green;
+   *b = tmpColor.blue;
 }
 
 /*" Return the name of the font currently in use. "*/

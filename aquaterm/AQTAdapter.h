@@ -27,7 +27,7 @@ enum {
 
 
 @protocol AQTConnectionProtocol;
-@class AQTPlotBuilder;
+@class AQTPlotBuilder, AQTColorMap;
 @interface AQTAdapter : NSObject
 {
   /*" All instance variables are private. "*/
@@ -37,6 +37,7 @@ enum {
   BOOL _serverIsLocal;
   void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
   void (*_eventHandler)(NSString *event); /* A callback function optionally installed by the client */
+  AQTColorMap *_colormap;
   id _aqtReserved1;
   id _aqtReserved2;
 }

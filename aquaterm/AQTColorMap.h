@@ -3,18 +3,20 @@
 //  AquaTerm
 //
 //  Created by Bob Savage on Mon Jan 28 2002.
-//  Copyright (c) 2002 Aquaterm. All rights reserved.
+//  Copyright (c) 2002-2003 Aquaterm. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
+#import "AQTGraphic.h"
+
+typedef AQTColor *AQTColorPtr;
 
 @interface AQTColorMap : NSObject	
 {
-    NSMutableArray *indexedColormap;
+   AQTColorPtr colormap; // NB. Not an object but a pointer to a struct
+   int size; 
 }
+-(id)initWithSize:(int)size;
 -(void)setColor:(AQTColor)newColor forIndex:(int)index;
 -(AQTColor)colorForIndex:(int)index;
--(NSArray *)colorList;
--(void)setColorList:(NSArray *)colorList;
 @end
