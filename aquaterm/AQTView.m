@@ -97,7 +97,9 @@
 
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
+#ifdef DEBUG_BOUNDS
    NSLog(@"viewFrame: %@", NSStringFromRect([self bounds]));
+#endif
    [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:2];
 }   
 
@@ -136,7 +138,6 @@
    NSRect dirtyCanvasRect;
    NSAffineTransform *transform = [NSAffineTransform transform];
 
-   NSLog(@"dirtyRect: %@", NSStringFromRect(dirtyRect));
 
    [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone]; // FIXME: user prefs
    [[NSGraphicsContext currentContext] setShouldAntialias:YES]; // FIXME: user prefs
@@ -156,9 +157,12 @@
    dirtyCanvasRect.origin = [transform transformPoint:dirtyRect.origin];
    dirtyCanvasRect.size = [transform transformSize:dirtyRect.size];
 
-   NSLog(@"dirtyCanvasRect: %@", NSStringFromRect(dirtyCanvasRect));
-   
    [model renderInRect:dirtyCanvasRect]; // <--- expects aRect in canvas coords, _not_ view coords
+
+#ifdef DEBUG_BOUNDS
+   NSLog(@"dirtyRect: %@", NSStringFromRect(dirtyRect));
+   NSLog(@"dirtyCanvasRect: %@", NSStringFromRect(dirtyCanvasRect));
+#endif
 }
 @end
 

@@ -135,9 +135,10 @@
 
    addedBounds = [newModel updateBounds];
 
+#ifdef DEBUG_BOUNDS
    NSLog(@"oldBounds = %@", NSStringFromRect([model bounds]));
-
    NSLog(@"addedBounds = %@", NSStringFromRect(addedBounds));
+#endif
    
    [model addObjects:[newModel modelObjects]];
    [model setTitle:[newModel title]];
@@ -150,8 +151,10 @@
       float yScale = canvasSize.height/NSHeight(viewBounds);
       NSRect dirtyRect = NSMakeRect(newBounds.origin.x*xScale, newBounds.origin.y*yScale, newBounds.size.width*xScale, newBounds.size.height*yScale); 
       [self _aqtSetupViewShouldResize:NO];
-      NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
       [canvas setNeedsDisplayInRect:dirtyRect];
+#ifdef DEBUG_BOUNDS
+      NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
+#endif
    }
 }
 
