@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.12 2002/05/21 07:43:38 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.13 2002/08/04 14:37:20 persquare Exp $
  *
  */
 
@@ -164,6 +164,8 @@ static inline void NOOP_(id x, ...) {;}
 #define LOG  NOOP_
 #endif	/* LOGGING */
 
+#define BUFMAX 50
+
 static NSAutoreleasePool *arpool;   // our autorelease pool 
 static id gnuTermAccess;    // local object manages the D.O. connection
 static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of gnuTermAccess)
@@ -187,6 +189,7 @@ static t_sm_palette *aqua_palette = nil;
   double gray;
   int pm3dColor;
   float textAngle;
+  int bufCount;
 }
 -(id) server;
 -(NSMutableDictionary *)termInfo;
@@ -369,6 +372,7 @@ static t_sm_palette *aqua_palette = nil;
       [thePath setLineWidth:linewidth];
       [server addPolyline:thePath withIndexedColor:linetype];
       [thePath removeAllPoints];
+      bufCount = 0;
     }
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
@@ -376,16 +380,29 @@ static t_sm_palette *aqua_palette = nil;
       else
         [localException raise];
     NS_ENDHANDLER
-
 }
 
 -(void) moveToPoint:(NSPoint)point
 {
+
+  bufCount +=1;
+  if (bufCount > BUFMAX)
+  {
+    [self flushBuffers];
+  }
   [thePath moveToPoint:point];
 }
 
 -(void) lineToPoint:(NSPoint)point
 {
+  NSPoint trailPoint;
+  bufCount +=1;
+  if (bufCount > BUFMAX)
+  {
+    trailPoint = [thePath currentPoint];
+    [self flushBuffers];
+    [thePath moveToPoint:trailPoint];
+  }
   [thePath lineToPoint:point];
 }
 
