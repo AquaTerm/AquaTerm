@@ -49,6 +49,15 @@ aqtAddLabel(text, x, y, angle, align)
 	int	align
 
 void
+aqtAddShearedLabel(text, x, y, angle, shear, align)
+	char *	text
+	float	x
+	float	y
+	float	angle
+	float	shear
+	int	align
+
+void
 aqtAddLineTo(x, y)
 	float	x
 	float	y

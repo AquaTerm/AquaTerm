@@ -23,6 +23,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 	aqtAddFilledRect
 	aqtAddImageWithBitmap
 	aqtAddLabel
+	aqtAddShearedLabel
 	aqtAddLineTo
 	aqtAddPolygon
 	aqtAddPolyline
@@ -142,6 +143,7 @@ None by default.
   aqtAddFilledRect($originX, $originY, $width, $height)
   aqtAddImageWithBitmap($bitmap, $pixWide, $pixHigh, $destX, $destY, $destWidth, $destHeight)
   aqtAddLabel($text, $x, $y, $angle, $align)
+  aqtAddShearedLabel($text, $x, $y, $angle, $shear, $align)
   aqtAddLineTo($x, $y)
   aqtAddPolygon(\@x, \@y)
   aqtAddPolyline(\@x, \@y)
