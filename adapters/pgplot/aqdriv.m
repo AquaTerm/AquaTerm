@@ -34,7 +34,6 @@ static id adapter;                   // Adapter object
 void errorHandler(NSString *msg)
 {
   NSLog(msg);
-  //NSLog(@"rc = %d", [adapter retainCount]);
   [adapter autorelease]; // add adapter to the AutoReleasePool
   adapter = nil;
 }
@@ -148,7 +147,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=8, Select plot ----------------------------------------------
 
     case 8:
-      NSLog(@"IFUNC=8, Select plot: [%d %d]", (int)rbuf[0] /* plot id */, (int)rbuf[1] /* device id */);
+      LOG(@"IFUNC=8, Select plot: [%d %d]", (int)rbuf[0] /* plot id */, (int)rbuf[1] /* device id */);
       currentDevice = (int)rbuf[1];
       [adapter selectPlotWithIndex:currentDevice];
       break;
@@ -156,7 +155,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=9, Open workstation -----------------------------------------
 
     case 9:
-      NSLog(@"IFUNC=9, Open workstation Append:%@", (int)rbuf[2]?@"YES":@"NO" );
+      LOG(@"IFUNC=9, Open workstation Append:%@", (int)rbuf[2]?@"YES":@"NO" );
       //
       // Assign the returned device unit number and success indicator.
       // Assume failure to open until the workstation is open.
@@ -180,7 +179,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=10, Close workstation ---------------------------------------
 
     case 10:
-      NSLog(@"FUNC=10, Close workstation (currentDevice = %d)", currentDevice );
+      LOG(@"FUNC=10, Close workstation (currentDevice = %d)", currentDevice );
       [adapter closePlot];
 /*
  [adapter autorelease];
@@ -195,7 +194,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 11:
     {
       int i;
-      NSLog(@"IFUNC=11, Begin picture");
+      LOG(@"IFUNC=11, Begin picture");
 /*
  if (!adapter)
       {
@@ -248,11 +247,11 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=14, End picture ---------------------------------------------
 
     case 14:
-       NSLog(@"IFUNC=14, End picture (%f)", rbuf[0]);
+       LOG(@"IFUNC=14, End picture (%f)", rbuf[0]);
        if (rbuf[0] != 0.0)
        {
           // clear screen
-          NSLog(@"Clearing screen");
+          LOG(@"Clearing screen");
           [adapter clearPlot];
        }
        // [adapter closePlot]
@@ -260,8 +259,8 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        // Clear out the autoreleasepool at the end of every picture (move?)
        //
        LOG(@"Releasing arpool, freeing %d objects.",[NSAutoreleasePool totalAutoreleasedObjects]);
-       // [arpool release];
-       // arpool = [[NSAutoreleasePool alloc] init];
+        //[arpool release];
+        //arpool = [[NSAutoreleasePool alloc] init];
 #ifdef LOGGING
        [NSAutoreleasePool resetTotalAutoreleasedObjects];
 #endif
@@ -314,7 +313,6 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        }
        while ([event isEqualToString:@"0"]);
        [adapter setAcceptingEvents:NO];
-       NSLog(event);
        // Dissect the event here...
        eventData = [event componentsSeparatedByString:@":"];
        switch ([[eventData objectAtIndex:0] intValue])
@@ -442,8 +440,8 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
           processingBitmap = YES;
           bitmapSize = NSMakeSize((int)rbuf[1], (int)rbuf[2]);
           imageBounds = NSMakeRect(rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5]);
-          NSLog(@"bitmapsize: %@\nimageBounds: %@", NSStringFromSize(bitmapSize), NSStringFromRect(imageBounds));
-          NSLog(@"Matrix: %f, %f, %f, %f, %f, %f", rbuf[7], rbuf[8], rbuf[9], rbuf[10], rbuf[11], rbuf[12]); // FIXME
+          LOG(@"bitmapsize: %@\nimageBounds: %@", NSStringFromSize(bitmapSize), NSStringFromRect(imageBounds));
+          LOG(@"Matrix: %f, %f, %f, %f, %f, %f", rbuf[7], rbuf[8], rbuf[9], rbuf[10], rbuf[11], rbuf[12]); // FIXME
           [adapter setImageTransformM11:rbuf[7] m12:rbuf[8] m21:rbuf[9] m22:rbuf[10] tX:rbuf[11] tY:rbuf[12]];
           pixCount = 0;
           maxPixCount = 3*bitmapSize.width*bitmapSize.height*sizeof(unsigned char);
