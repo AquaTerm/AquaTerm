@@ -144,13 +144,6 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
    _errorHandler = fPtr;
 }
 
-/*
- - (AQTPlotBuilder *)builder
- {
-    return _selectedBuilder;
- }
- */
-
 /*" Set the current color, used for all subsequent items, using explicit RGB components. "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b
 {
@@ -427,7 +420,6 @@ _{@"NSUnderline" 0or1}
 {
    if (_selectedBuilder)
    {
-      // [_selectedBuilder eraseRect:NSMakeRect(0,0,1000,1000)]; // FIXME: !!!
       [_selectedBuilder clearAll];
       [_selectedBuilder render];
    }
@@ -435,11 +427,27 @@ _{@"NSUnderline" 0or1}
 
 /*" Closes the current plot but leaves viewer window on screen. Disables event handling. "*/
 - (void)closePlot
-// FIXME: The semantics have changed!!! This should CLOSE the connection
-// Maybe change name to avoid confusion with old meaning...
 {
-#if(1)
+#if(0)
    [self renderPlot]; // Debugging
+#else
+   if (_selectedBuilder)
+   {
+      NSArray *keys = [_builders allKeysForObject:_selectedBuilder];
+      NS_DURING
+         if ([_server removeAQTClient:_selectedBuilder] == NO)
+         {
+            NSLog(@"Couldn't remove remote client lock, leaking");
+         }
+      NS_HANDLER
+         NSLog(@"Discarding exception...");
+      NS_ENDHANDLER
+      if ([keys count]>0)
+      {
+         [_builders removeObjectForKey:[keys objectAtIndex:0]];
+      }
+      _selectedBuilder = nil; // FIXME: inserting a generic logging object here for debugging??
+   }
 #endif
 }
 
