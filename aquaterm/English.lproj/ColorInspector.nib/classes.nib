@@ -1,13 +1,13 @@
 {
     IBClasses = (
         {
-            ACTIONS = {applyPressed = id; }; 
+            ACTIONS = {applyPressed = id; didSetMaxColor = id; didSetMinColor = id; }; 
             CLASS = AQTColorInspector; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 axisColor = NSColorWell; 
                 backgroundColor = NSColorWell; 
-                borderColor = NSColorWell; 
+                gridlineColor = NSColorWell; 
                 lineColor1 = NSColorWell; 
                 lineColor2 = NSColorWell; 
                 lineColor3 = NSColorWell; 
@@ -16,10 +16,12 @@
                 lineColor6 = NSColorWell; 
                 lineColor7 = NSColorWell; 
                 lineColor8 = NSColorWell; 
+                lineColor9 = NSColorWell; 
                 maxColor = NSColorWell; 
                 minColor = NSColorWell; 
                 surfaceRampImage = NSImageView; 
                 textColor = NSColorWell; 
+                theController = id; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 

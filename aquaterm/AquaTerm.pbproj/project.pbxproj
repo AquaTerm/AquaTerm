@@ -272,7 +272,6 @@
 		29B97327FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				F5AB087E0175BC8B01EB16F3,
 				F5AB087F0175BC8B01EB16F3,
 				F5AB08840175BC8B01EB16F3,
 				F5AB08850175BC8B01EB16F3,
@@ -298,6 +297,7 @@
 				F5FEAC2901A7219B0143D50D,
 				F51551CD01FE762E01000102,
 				F54B0FE501FF3656014110A7,
+				F5B46F320209827F01A80104,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -306,7 +306,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				29B9732CFDCFA39411CA2CEA,
-				F5AB08880175BC8B01EB16F3,
 				F5AB08890175BC8B01EB16F3,
 				F5AB088D0175BC8B01EB16F3,
 				F5AB088E0175BC8B01EB16F3,
@@ -629,12 +628,6 @@
 			path = English.lproj/GPTWindow.nib;
 			refType = 4;
 		};
-		F5AB087E0175BC8B01EB16F3 = {
-			fileRef = F5AB086B0175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5AB087F0175BC8B01EB16F3 = {
 			fileRef = F5AB086D0175BC8B01EB16F3;
 			isa = PBXBuildFile;
@@ -661,12 +654,6 @@
 		};
 		F5AB08870175BC8B01EB16F3 = {
 			fileRef = F5AB087C0175BC8B01EB16F3;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5AB08880175BC8B01EB16F3 = {
-			fileRef = F5AB086C0175BC8B01EB16F3;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -740,6 +727,12 @@
 			name = Model;
 			path = "";
 			refType = 4;
+		};
+		F5B46F320209827F01A80104 = {
+			fileRef = F54B0FE601FF5CDC014110A7;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5C4C2DC0199DF380143D54F = {
 			fileRef = 29B97318FDCFA39411CA2CEA;

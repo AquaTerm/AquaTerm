@@ -72,13 +72,13 @@
 -(NSColor *)colorForFloat:(float)param
 {
     // need to call [self interpolateColorFrom:to:by: ] (Just replace it! PP)
-    // but I am not quite sure how -- is c0 max or min?
-  float   r  = [maxColor redComponent],
-  g  = [maxColor greenComponent],
-  b  = [maxColor blueComponent];
-  float   zr = -(r - [minColor redComponent]),
-    zg = -(g - [minColor greenComponent]),
-    zb = -(b - [minColor blueComponent]);
+    // but I am not quite sure how -- is c0 max or min? 
+  float	r  = [minColor redComponent],
+        g  = [minColor greenComponent],
+        b  = [minColor blueComponent];
+  float	zr = [maxColor redComponent] - r,
+        zg = [maxColor greenComponent] - g,
+        zb = [maxColor blueComponent] - b;
 
   return [NSColor colorWithCalibratedRed:r+zr*param
                                    green:g+zg*param

@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class GPTReceiverObject, GPTWindowController, GPTView, AQTModel;
+@class GPTReceiverObject, GPTWindowController, GPTView, AQTModel, AQTColorInspector;
 
 @interface GPTController : NSObject 
 {
@@ -17,6 +17,7 @@
 	NSWindow			*frontWindow;			/*" The main (frontmost) window of the app "*/
 	NSPopUpButton 		*saveFormatPopup;
     NSBox				*extendSavePanelView;
+    AQTColorInspector 	*inspector;
 }
 
 /* FAQ: since the window controller is made a delegate of the window (in the NIB) does that mean that it has "first access" to all window calls??? */
@@ -25,6 +26,7 @@
 -(void)awakeFromNib;
 -(void)setModel:(AQTModel *)gptModel forView:(unsigned)index;
 -(GPTWindowController *)controllerForView:(unsigned)index;
+-(NSWindow *)frontWindow;
 -(void)setFrontWindow:(NSWindow *)mainWindow;
 -(IBAction)print:(id)sender; 
 -(IBAction)saveFigureAs:(id)sender;

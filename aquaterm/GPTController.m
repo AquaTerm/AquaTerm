@@ -11,6 +11,8 @@
 #import "GPTReceiverObject.h"
 #import "GPTView.h"
 #import "AQTPrintView.h"
+#import "AQTColorInspector.h"
+
 
 @implementation GPTController
     /**"
@@ -79,7 +81,12 @@
         [[theController window] orderFront:self];
     } 
 }
-    /**" 
+-(NSWindow *)frontWindow
+{
+  return frontWindow;
+}
+
+/**" 
     *** Returns the windowController for terminal <n> or nil if
     *** it doesn't exist. 
     "**/
@@ -203,6 +210,16 @@
   [printView release];
 }
 
+-(IBAction)showInfo:(id)sender
+{
+  // make sure inspector panel is visible
+  // initialize if needed
+  if (!inspector)
+  {
+	inspector = [[AQTColorInspector allocWithZone:[self zone]] init];
+  }
+  [inspector showWindow:self]; 
+}
 
 -(IBAction)help:(id)sender
 {

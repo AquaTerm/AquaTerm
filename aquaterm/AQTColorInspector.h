@@ -10,9 +10,9 @@
 
 @interface AQTColorInspector : NSWindowController
 {
-    IBOutlet NSColorWell *axisColor;
-    IBOutlet NSColorWell *backgroundColor;
-    IBOutlet NSColorWell *gridlineColor;
+    IBOutlet NSColorWell *axisColor;		// color for x,y[,z] axes, tickmarks and labels
+    IBOutlet NSColorWell *backgroundColor;	// backdrop color
+    IBOutlet NSColorWell *gridlineColor;	// color for gridlines
     IBOutlet NSColorWell *lineColor1;
     IBOutlet NSColorWell *lineColor2;
     IBOutlet NSColorWell *lineColor3;
@@ -25,9 +25,19 @@
     IBOutlet NSColorWell *maxColor;
     IBOutlet NSColorWell *minColor;
     IBOutlet NSImageView *surfaceRampImage;
-    IBOutlet NSColorWell *textColor;
+    IBOutlet NSColorWell *textColor;		// Not implemented, see axisColor
     
     id theController; // sets itself at init
+
+    @private
+	NSImage *rampImage; 			// Preview of the continuos colormap ("coloraxis")
+    NSBitmapImageRep *bitmap;		// the raw bitmap that used in rampImage;
+    unsigned char *planes[3]; 		// the R, G and B planes for the raw bitmap (each is 1x64 pixels)
+
 }
+- (void)updateRampImage;
+- (IBAction)didSetMinColor:(id)sender;
+- (IBAction)didSetMaxColor:(id)sender;
 - (IBAction)applyPressed:(id)sender;
+- (void)mainWindowChanged:(NSNotification *)notification;
 @end

@@ -15,18 +15,82 @@
 
 - (id)init
 {
-    if (self = [super init]) {
-/*
-        // perhaps we don't need this
-        theController = [[NSApplication sharedApplication] delegate]; // don't retain
-                                                                // because it owns us
-*/    
-    // we should set the colors of each of the color wells by reading in prefs here
+  if (self = [super initWithWindowNibName:@"ColorInspector"]) {
+
+    // we should set the colors of each of the color wells by 
+    // a) reading from the front window if it exists or
+    // b) reading in the default colormap prefs
+
+    // Set up the rampImage
+    // This is somewhat primitive, but it does work! PP 
+    planes[0] = (unsigned char*)malloc(1 * 64); // red 
+    planes[1] = (unsigned char*)malloc(1 * 64); // green
+    planes[2] = (unsigned char*)malloc(1 * 64); // blue
     
-    // do we show our window here? or wait for a command to do so?
-    
-    }
-    return self;
+    rampImage = [[NSImage alloc] initWithSize:NSMakeSize(1, 64)];
+    [rampImage setFlipped:YES];	// Needed since colorscale runs in opposite direction
+    bitmap = [[NSBitmapImageRep alloc]
+      initWithBitmapDataPlanes:planes
+                    pixelsWide:1 pixelsHigh:64 bitsPerSample:8
+               samplesPerPixel:3 hasAlpha:NO isPlanar:YES
+                colorSpaceName:NSCalibratedRGBColorSpace
+                   bytesPerRow:1 bitsPerPixel:8];
+    [rampImage addRepresentation:bitmap];
+  }
+  return self;
+}
+-(void)dealloc
+{
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [rampImage release];
+  [bitmap release];
+  free(planes[0]);
+  free(planes[1]);
+  free(planes[2]);
+}
+
+
+-(void)awakeFromNib
+{
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(mainWindowChanged:)
+                                               name:NSWindowDidBecomeMainNotification
+                                             object:nil];
+
+    // This is not possible to do in the init!
+    [self updateRampImage];
+}
+
+- (IBAction)didSetMinColor:(id)sender
+{
+  [self updateRampImage];
+}
+- (IBAction)didSetMaxColor:(id)sender
+{
+  [self updateRampImage];
+}
+-(void)updateRampImage
+{
+  int x;
+  // Get the RGB components for minColor
+  float   r=[[minColor color] redComponent],
+          g=[[minColor color] greenComponent],
+          b=[[minColor color] blueComponent];
+  // Compute the RGB distance to maxColor
+  float   zr = [[maxColor color] redComponent]-r,
+          zg= [[maxColor color] greenComponent]-g,
+          zb= [[maxColor color] blueComponent]-b;
+  // Set the ramp!
+  for (x=0;x<64;x++)
+  {
+    planes[0][x] = (unsigned char)(r*255 + (zr*255*x)/63);
+    planes[1][x] = (unsigned char)(g*255 + (zg*255*x)/63);
+    planes[2][x] = (unsigned char)(b*255 + (zb*255*x)/63);
+  }
+
+  [surfaceRampImage setImage:rampImage];	// Why is this neccessary?!
+  // Tell the view to update
+  [surfaceRampImage setNeedsDisplay:YES];
 }
 
 - (IBAction)applyPressed:(id)sender
@@ -70,9 +134,14 @@
     tempColormap = [[AQTColorMap alloc] initWithColorDict:colorDICT
                                                  rampFrom:[minColor color]
                                                        to:[maxColor color]];
-
-    [inspectedModel updateColors:[tempColormap autorelease]];
+    [inspectedModel updateColors:tempColormap];
+    [tempColormap release];
 }
-
+-(void)mainWindowChanged:(NSNotification *)notification
+{	    
+  // NSLog(@"mainWindowChanged");
+  // Should read the colormap from the new model and
+  // update inspector window accordingly
+}
 @end
 
