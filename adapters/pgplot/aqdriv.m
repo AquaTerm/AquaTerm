@@ -39,13 +39,13 @@ void errorHandler(NSString *msg)
   adapter = nil;
 }
 
+
 void initAdapter(void)
 {
   // Either first time or an error has occurred
   [arpool release]; // clean
   arpool = [[NSAutoreleasePool alloc] init];
   adapter = [[AQTAdapter alloc] init];
-  // [adapter setErrorHandler:errMsg];
 }
 
 static int currentDevice = 0;
@@ -102,7 +102,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 4:
       LOG(@"IFUNC=4, Return misc device info");
       chr[0] = 'I'; // Interactive device
-      chr[1] = 'C'; // Cursor is not available
+      chr[1] = 'C'; // Cursor is available
       chr[2] = 'N'; // No dashed lines
       chr[3] = 'A'; // Area fill available
       chr[4] = 'T'; // Thick lines
@@ -275,6 +275,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
     case 17:
     {
+      NSString *event;
       NSPoint pos;
       char key;
       LOG(@"IFUNC=17, Read cursor"); // FIXME
@@ -293,8 +294,17 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        CHR(1:1): character typed by user.
        */
 
-      key = [adapter getMouseInput:&pos options:0];
-      NSLog(@"Key %c at %@", key, NSStringFromPoint(pos));
+      // key = [adapter getMouseInput:&pos options:0];
+      //NSLog(@"Key %c at %@", key, NSStringFromPoint(pos));
+      [adapter setAcceptingEvents:YES];
+      do {
+        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+        event = [adapter latestEvent];
+      }
+      while ([event isEqualToString:@"0"]);
+      [adapter setAcceptingEvents:NO];
+      NSLog(event);
+      // FIXME: Dissect the event here...      
       rbuf[0] = pos.x;
       rbuf[1] = pos.y;
       chr[0] = key; // FIXME: Make this upper case.
