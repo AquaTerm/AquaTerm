@@ -60,7 +60,7 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
         _bounds = AQTExpandRectWithPoint(_bounds, points[i]);
       }
       pointCount = pc;
-     [self setLinewidth:1.0];
+     [self setLinewidth:.2];
      [self setColor:aColor];
    }
    return self;

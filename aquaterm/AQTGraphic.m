@@ -23,9 +23,9 @@
 {
     if (self = [super init])
     {
-       _color.red = .8;
-       _color.green = .8;
-       _color.blue = .8;
+       _color.red = 1.;
+       _color.green = 1.;
+       _color.blue = 1.;
     }
     return self; 
 }
