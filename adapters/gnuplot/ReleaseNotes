@@ -1,6 +1,8 @@
 ---
 AquaTerm 1.0b1
-	This file is now part of gnuplot proper. Development will take place as part of aquaterm and improvements and bugfixes will merged into gnuplot sources.
+	This file is now part of gnuplot proper. Development will take place as part
+    of aquaterm and improvements and bugfixes will merged into gnuplot sources.
+    Fix for one-off error in pm3d color mapping (from Petr Mikulik).
 
 AquaTerm 1.0a2
     Process a lot more options. Currently supported options are:

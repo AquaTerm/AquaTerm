@@ -1,2 +1,6 @@
-*** Docs forthcoming ***
-Use mailing lists at http://aquaterm.sourceforge.net for now, sorry.
+PLPlot has not been updated for this release and may not be compatible with the current PLPlot 5.3.x series.
+The adapter has been updated to confirm to AquaTerm 1.x requirements and tested with AquaTerm 1.0.a1 and PLPlot 5.1.
+
+If you use PLPlot, please consider contributing to the effort by patching this adapter as needed.
+
+For info, use mailing lists at http://aquaterm.sourceforge.net

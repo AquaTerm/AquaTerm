@@ -1,7 +1,10 @@
 ---
-AquaTerm 1.0a2
+AquaTerm 1.0.b1
+    Correcting misuse of moveTo/addLineTo in demo.f
+    
+AquaTerm 1.0.a2
    
-AquaTerm 1.0a1
+AquaTerm 1.0.a1
     Moved all common code into libaquaterm.dylib, all adapters link with this.
     Complete rewrite of common code, no reliance on AppKit (#605549)
 

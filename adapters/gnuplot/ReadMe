@@ -1,6 +1,8 @@
-The adapter aquaterm.trm is now distributed as part of gnuplot version 4
+The adapter aquaterm.trm is now distributed as part of gnuplot version 4 and to avoid confusion, it is not distributed as part of AquaTerm anymore.
 
-Follow the normal instructions for compiling gnuplot 4.x.x, which are (-;  
+Get gnuplot from http://gnuplot.sourceforge.net
+
+Make sure yuo install AquaTerm first and then follow the normal instructions for compiling gnuplot 4.x.x, which are:  
 ./configure
 make
 make install
