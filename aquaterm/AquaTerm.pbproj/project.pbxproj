@@ -277,7 +277,6 @@ http://aquaterm.sourceforge.net</string>
 				F59F5FCB021011D301A18598,
 				F5E3AFAB026D80D2012F88DF,
 				CB5B187304A9A49E00EBD329,
-				CB5B1BEC04A9C1EC00EBD329,
 				CB5B1BF004A9C2E900EBD329,
 				CB5B1BF104A9C2E900EBD329,
 				CBF3083704D51BCF00EBD329,
@@ -312,7 +311,6 @@ http://aquaterm.sourceforge.net</string>
 				F59F5FCC021011D301A18598,
 				F5E3AFAC026D80D2012F88DF,
 				CB5B187404A9A49E00EBD329,
-				CB5B1BED04A9C1EC00EBD329,
 				CBF3083804D51BCF00EBD329,
 				CBF3084204D5209800EBD329,
 			);
@@ -421,18 +419,6 @@ http://aquaterm.sourceforge.net</string>
 			isa = PBXFileReference;
 			path = AQTClientHandler.m;
 			refType = 4;
-		};
-		CB5B1BEC04A9C1EC00EBD329 = {
-			fileRef = CB5B1BE504A9C0F900EBD329;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		CB5B1BED04A9C1EC00EBD329 = {
-			fileRef = CB5B1BE604A9C0F900EBD329;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		CB5B1BEE04A9C2E900EBD329 = {
 			fileEncoding = 30;
