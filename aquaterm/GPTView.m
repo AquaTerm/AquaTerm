@@ -43,8 +43,8 @@
     //
     // Erase background and draw a stylish line around the view 
     //
-    [[NSColor whiteColor] set]; // this is the background color, yes?
-                                // shouldn't we get this value from color inspector pane as well?
+    [[NSColor whiteColor] set]; // FIXME - the background color
+                                // we should get this value from color inspector pane
     [[NSBezierPath bezierPathWithRect:theBounds] fill];
     [[NSColor blackColor] set];
     [[NSBezierPath bezierPathWithRect:theBounds] stroke];
