@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.9 2002/04/18 12:22:16 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.10 2002/04/18 21:11:58 persquare Exp $
  *
  */
 
@@ -291,6 +291,7 @@ static t_sm_palette *aqua_palette = nil;
 -(void) openModel:(int)newFigure;
 -(void) closeModel;
 -(void) renderModel;
+-(void) setTitle:(NSString *)newTitle;
 @end 
 
 @implementation AQTAdapter
@@ -666,14 +667,31 @@ static t_sm_palette *aqua_palette = nil;
       [localException raise];
   NS_ENDHANDLER
 }
+
+-(void) setTitle:(NSString *)newTitle;
+{
+  NS_DURING
+    [server setTitle:newTitle];
+  NS_HANDLER
+    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
+      [self invalidateServer];
+    else
+      [localException raise];
+  NS_ENDHANDLER
+}
+
 @end /* AQTAdapter */
 //
 // ----------------------------------------------------------------
 // Gnuplot driver implementation
 // ----------------------------------------------------------------
 //
+
+static char AQUA_title[MAX_LINE_LEN + 1];
+
 enum AQUA_id {
   AQUA_DEFAULT,
+  AQUA_TITLE,
   AQUA_OTHER
 };
 
@@ -681,18 +699,20 @@ enum AQUA_id {
 static struct gen_table AQUA_opts[] =
 {
   { "d$efault", AQUA_DEFAULT },
+  { "ti$tle", AQUA_TITLE },
   { NULL, AQUA_OTHER }
 };
 
 //
 // AQUA_options is called 0 or more times before a call to AQUA_init occurs.
-// It is important that the option <n> is passed correctly to GNUTERMAPP
+// It is important that the option <n> is passed correctly to AquaTerm
 //
 TERM_PUBLIC void
 AQUA_options()
 {
   struct value a;
-
+  *AQUA_title = 0;
+    
   LOG(@"AQUA_options");
   while (!END_OF_COMMAND) 
   {
@@ -701,6 +721,15 @@ AQUA_options()
      case AQUA_DEFAULT:
       currentWindow = 0;
       c_token++;
+      break;
+     case AQUA_TITLE:
+      c_token++;
+      if (!isstring(c_token)) {
+          fprintf(stderr, "usage:  set term aqua title \"newtitle\"\n");
+      }
+      quote_str(AQUA_title, c_token, MAX_LINE_LEN + 1);
+            c_token++;
+
       break;
      case AQUA_OTHER:
       currentWindow = (int) real(const_express(&a));
@@ -756,6 +785,11 @@ TERM_PUBLIC void
 AQUA_graphics()
 {
     [gnuTermAccess openModel:currentWindow];
+    if(*AQUA_title)
+    {
+        [gnuTermAccess setTitle:[NSString stringWithCString:AQUA_title]];
+        *AQUA_title = 0;
+    }
 }
 
 TERM_PUBLIC void
@@ -934,10 +968,11 @@ START_HELP(aqua)
 "?aqua",
 "?Aqua",
 " Syntax:",
-"   set terminal aqua {<n>}",
+"   set terminal aqua {<n>} {title \"windowtitle\"}",
 "",
 " where <n> is the number of the window to display the plot in.",
-" Default window number is 0."
+" Default window number is 0, ",
+" default windowtitle is \"Figure <n>\"."
 END_HELP(aqua)
 #endif /* TERM_HELP */
 
