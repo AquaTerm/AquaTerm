@@ -201,7 +201,7 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
          else
             baseline = pos.y + glyphHeight * 0.7 + baselineOffset; 
          extendsRight = YES;
-         subPos = recurse(path, attrString, defaultFontName, defaultFontSize, i, attributedSublevel, NSMakePoint(pos.x, baseline), fontScale * 0.65);
+         subPos = recurse(path, attrString, defaultFontName, defaultFontSize, i, attributedSublevel, NSMakePoint(pos.x, baseline), fontScale * 0.75);
          maxRight = MAX(subPos.x, maxRight);
       }
    }

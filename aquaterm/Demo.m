@@ -300,6 +300,38 @@ pos = NSMakePoint(540.5, 75.5);
 [adapter addLabel:@"Middle" atPoint:NSMakePoint(410, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignMiddle)];
 [adapter addLabel:@"Baseline" atPoint:NSMakePoint(460, 45.5) angle:0.0 align:(AQTAlignLeft | AQTAlignBaseline)];
 
+// Equations
+{
+   NSMutableAttributedString *attrStr;
+   [adapter setFontname:@"Helvetica"];
+   [adapter setFontsize:12.0];
+   [adapter addLabel:@"Equation style" atPoint:NSMakePoint(260, 95) angle:0.0 align:AQTAlignCenter];
+
+   [adapter setFontname:@"Times-Roman"];
+   [adapter setFontsize:14.0];
+
+   attrStr = [[[NSMutableAttributedString alloc] initWithString:@"e-ip+1= 0"] autorelease];
+   [attrStr addAttribute:@"AQTFontname" value:@"Symbol" range:NSMakeRange(3,1)]; // Greek
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(1,3)]; // eponent
+   [attrStr addAttribute:@"AQTFontsize" value:[NSNumber numberWithFloat:6.0] range:NSMakeRange(7,1)]; // extra spacing
+   
+   [adapter addLabel:attrStr atPoint:NSMakePoint(260, 75) angle:0.0 align:AQTAlignCenter];
+
+   attrStr = [[[NSMutableAttributedString alloc] initWithString:@"mSke-wk2"] autorelease];
+   [attrStr addAttribute:@"AQTFontname" value:@"Symbol" range:NSMakeRange(0,2)];
+   [attrStr addAttribute:@"AQTFontsize" value:[NSNumber numberWithFloat:20.0] range:NSMakeRange(1,1)];
+   [attrStr addAttribute:@"AQTBaselineAdjust" value:[NSNumber numberWithFloat:-0.25] range:NSMakeRange(1,1)]; // Lower symbol 25%
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(2,1)];
+   [attrStr addAttribute:@"AQTFontname" value:@"Times-Roman" range:NSMakeRange(3,1)];
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(4,2)];
+   [attrStr addAttribute:@"AQTFontname" value:@"Symbol" range:NSMakeRange(5,1)];
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-2] range:NSMakeRange(6,1)];
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:2] range:NSMakeRange(7,1)];
+
+   [adapter addLabel:attrStr atPoint:NSMakePoint(260, 45) angle:0.0 align:AQTAlignCenter];
+
+}
+
 [adapter renderPlot];
 // [NSException raise:@"AQTFatalException" format:@"Testing"];
 
