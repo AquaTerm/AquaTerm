@@ -173,7 +173,10 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
          // check underlining
          if (underlining) {
             if (!newUnderlining) 
-               [path appendBezierPathWithRect:NSMakeRect(underlineLeftPoint.x, underlineLeftPoint.y-1.0, pos.x-underlineLeftPoint.x, 0.5)];
+               [path appendBezierPathWithRect:NSMakeRect(underlineLeftPoint.x, 
+                                                         underlineLeftPoint.y+[aFont underlinePosition],
+                                                         pos.x-underlineLeftPoint.x, 
+                                                         [aFont underlineThickness])];
          } else {
             if (newUnderlining)
                underlineLeftPoint = pos;
