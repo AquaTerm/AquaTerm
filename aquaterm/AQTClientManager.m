@@ -13,6 +13,32 @@
 #import "AQTConnectionProtocol.h"
 
 @implementation AQTClientManager
+- (void)_aqtServerError:(NSString *)msg
+{
+   if (_errorHandler)
+   {
+      _errorHandler(msg);
+   }
+   else
+   {
+      [self logMessage:[NSString stringWithFormat:@"Server error: %@", msg] logLevel:1];
+   }
+}
+
+- (void)_aqtHandlerError:(NSString *)msg
+{
+   // Do something!
+   // [self closePlot];
+   [self logMessage:[NSString stringWithFormat:@"Handler error: %@", msg] logLevel:1];
+   // Test for server prescence
+   NS_DURING
+      [_server ping];
+   NS_HANDLER
+      // Dang! Server is borken
+      [self _aqtServerError:[localException name]];
+   NS_ENDHANDLER
+}
+
 + (AQTClientManager *)sharedManager
 {
    static AQTClientManager *sharedManager = nil;
@@ -173,34 +199,6 @@
    {
       NSLog(msg);
    }
-}
-
-#pragma mark === Error handling methods ===
-
-- (void)_aqtServerError:(NSString *)msg
-{
-   if (_errorHandler)
-   {
-      _errorHandler(msg);
-   }
-   else
-   {
-      [self logMessage:[NSString stringWithFormat:@"Server error: %@", msg] logLevel:1];
-   }
-}
-
-- (void)_aqtHandlerError:(NSString *)msg
-{
-   // Do something!
-   // [self closePlot];
-   [self logMessage:[NSString stringWithFormat:@"Handler error: %@", msg] logLevel:1];
-   // Test for server prescence
-   NS_DURING
-      [_server ping]; 
-   NS_HANDLER
-      // Dang! Server is borken
-      [self _aqtServerError:[localException name]];
-   NS_ENDHANDLER
 }
 
 #pragma mark === Plot/builder methods ===
