@@ -1,6 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <AppKit/AppKit.h>
-#import "AQTProtocol.h"
+#import "AQTAdapter.h"
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
@@ -13,66 +12,14 @@ static inline void NOOP_(id x, ...) {;}
 
 #define BUFMAX 50
 
+typedef struct {
+  float r;
+  float g;
+  float b;
+} PGPColor;
+
 static NSAutoreleasePool *arpool;   // Objective-C autorelease pool
 static id adapter;        		    // Adapter object
-
-// ---- instead of including this as AQTAdapter.h we put it here
-// ----------------------------------------------------------------
-// --- Start of AQTAdapter interface
-// ----------------------------------------------------------------
-//
-// ----------------------------------------------------------------
-// --- AQTAdapter - A class to mediate between C-function calls
-// --- and AquaTerm Objective-C remote messages
-// ----------------------------------------------------------------
-//
-@interface AQTAdapter : NSObject
-{
-  @private
-  // --- remote connection
-  id aqtConnection;
-  // --- state vars
-  int currentColor;
-  float lineWidth;
-  int	polylineBufCount;
-  int	polygonBufCount;
-  // --- storage objects
-  NSBezierPath *polylineBuffer;
-  NSBezierPath *polygonBuffer;
-  NSBezierPath *polygon;
-  NSBitmapImageRep *image;
-  NSRect imageBounds;
-  float colorlist[256][3];
-}
-- (id)init;                 // init & dealloc are listed for completeness
-- (void)dealloc;
-- (id)aqtConnection;        // accessor method
-- (BOOL)connectToAquaTerm;	// convenience method
-                           //
-                           // Obj-C methods implementing the functionality defined in PGPLOT driver
-                           //
-- (void)openGraph:(int)n size:(NSSize)size;
-- (void)closeGraph;
-- (void)render;
-- (void)flushPolylineBuffer;
-- (void)flushPolygonBuffer;
-- (void)setColorIndex:(int)colorIndex;
-- (void)setLineWidth:(float)newLineWidth;
-- (void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint;
-- (void)dotAtPoint:(NSPoint)aPoint;
-- (void)fillRect:(NSRect)aRect;
-- (void)beginPolygon;
-- (void)addPolygonEdgeToPoint:(NSPoint)aPoint;
-- (void)fillPolygon;
-- (void)beginImageWithSize:(NSSize)imageSize  bounds:(NSRect)theBounds;
-- (void)writeImageBytes:(float *)data length:(int)len start:(int)start;
-- (void)closeImage;
-- (void)setColormapEntry:(int)i red:(float)r green:(float)g blue:(float)b;
-- (NSColor *)colormapEntry:(int)i;
-@end
-// ----------------------------------------------------------------
-// --- End of AQTAdapter interface
-// ----------------------------------------------------------------
 
 //
 // Allow aqdriv to be calleable by FORTRAN using the two commonest
@@ -99,9 +46,11 @@ static int currentPlot = 0;
 // ----------------------------------------------------------------
 void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 {
-  static int edgeCount = 0; // Keep track of polygon sides
-  static int pixPtr = 0;
-  int i;
+  //static int edgeCount = 0; // Keep track of polygon sides
+  //static int pixPtr = 0;
+  //int i;
+  static int tmpCol=11;
+  static PGPColor cm[256];
   //
   // Branch on the specified PGPLOT opcode.
   //
@@ -110,6 +59,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     /* --- IFUNC=1, Return device name ---------------------------------------*/
     case 1:
     {
+      int i;
       char *dev_name = "AQT (AqauTerm.app under Mac OS X)";
       LOG(@"IFUNC=1, Return device name");
       strncpy(chr, dev_name, len);
@@ -147,7 +97,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 4:
       LOG(@"IFUNC=4, Return misc device info");
       chr[0] = 'I'; // Interactive device
-      chr[1] = 'N'; // Cursor is not available
+      chr[1] = 'C'; // Cursor is not available
       chr[2] = 'N'; // No dashed lines
       chr[3] = 'A'; // Area fill available
       chr[4] = 'T'; // Thick lines
@@ -227,22 +177,64 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=11, Begin picture -------------------------------------------
 
     case 11:
+    {
+      int i;
       LOG(@"IFUNC=11, Begin picture");
-      [adapter openGraph:currentPlot size:NSMakeSize(rbuf[0], rbuf[1])];
+      //[adapter openGraph:currentPlot size:NSMakeSize(rbuf[0], rbuf[1])];
+      [adapter openPlotIndex:currentPlot size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
+      cm[0].r = 1.0; cm[0].g = 1.0; cm[0].b = 1.0;
+      cm[1].r = 0.0; cm[1].g = 0.0; cm[1].b = 0.0;
+      cm[2].r = 1.0; cm[2].g = 0.0; cm[2].b = 0.0;
+      cm[3].r = 0.0; cm[3].g = 1.0; cm[3].b = 0.0;
+      cm[4].r = 0.0; cm[4].g = 0.0; cm[4].b = 1.0;
+      cm[5].r = 0.0; cm[5].g = 1.0; cm[5].b = 1.0;
+      cm[6].r = 1.0; cm[6].g = 0.0; cm[6].b = 1.0;
+      cm[7].r = 1.0; cm[7].g = 1.0; cm[7].b = 0.0;
+/*
+      [self setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
+      [self setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
+      [self setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
+      [self setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
+      [self setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
+      [self setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
+      [self setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
+      [self setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
+ */     
+/*
+      for (i=2;i<255;i++)
+      {
+        cm[i].r=((float)i)/255.0;
+        cm[i].g=0.0;
+        cm[i].b=0.0;
+      }
+*/
+    }
       break;
 
       //--- IFUNC=12, Draw line -----------------------------------------------
 
     case 12:
-      LOG(@"IFUNC=12, Draw line");
-      [adapter lineFromPoint:NSMakePoint(rbuf[0], rbuf[1]) toPoint:NSMakePoint(rbuf[2], rbuf[3])];
-      break;
+    {
+      // FIXME: reduce amount of objects by coalescing lines starting at last endpoint
+      static NSPoint lastPoint;
+      NSPoint startPoint = NSMakePoint(rbuf[0], rbuf[1]);
+      NSPoint endPoint = NSMakePoint(rbuf[2], rbuf[3]);
+      
+      NSLog(@"IFUNC=12, Draw line");
+      if (!NSEqualPoints(lastPoint, startPoint))
+      {
+       [adapter addLineAtPoint:startPoint];
+      }        
+      [adapter appendLineToPoint:endPoint];
+      lastPoint = endPoint;
+    }
+    break;
 
       //--- IFUNC=13, Draw dot ------------------------------------------------
 
     case 13:
       LOG(@"IFUNC=13, Draw dot");
-      [adapter dotAtPoint:NSMakePoint(rbuf[0], rbuf[1])];
+      //[adapter dotAtPoint:NSMakePoint(rbuf[0], rbuf[1])];
       break;
 
       //--- IFUNC=14, End picture ---------------------------------------------
@@ -253,14 +245,16 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       {
         // clear screen
       }
-        [adapter closeGraph];
+        [adapter closePlot];
       break;
 
       //--- IFUNC=15, Select color index --------------------------------------
 
     case 15:
       LOG(@"IFUNC=15, Select color index %d", (int)rbuf[0]);
-      [adapter setColorIndex:rbuf[0]];
+      tmpCol = (int)rbuf[0];
+      //[adapter setColorIndex:rbuf[0]];
+      [adapter setColorRed:cm[tmpCol].r green:cm[tmpCol].g blue:cm[tmpCol].b];
       break;
 
       //--- IFUNC=16, Flush buffer. -------------------------------------------
@@ -268,13 +262,42 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 16:
       LOG(@"IFUNC=16, Flush buffer");
       // FIXME: this could be devastating for complex plots, sanity check needed!
+      // FIXME: use a timer to "coalesce" actual rendering calls, just make sure graphics buffers are flushed
       [adapter render];
       break;
 
       //--- IFUNC=17, Read cursor. --------------------------------------------
 
     case 17:
+    {
+      NSPoint pos;
+      char key;
       LOG(@"IFUNC=17, Read cursor");
+      /*
+       Parameters passed to handler:
+        RBUF(1): initial x position of cursor.
+        RBUF(2): initial y position of cursor.
+        RBUF(3): x position of reference point.
+        RBUF(4): y position of reference point.
+        RBUF(5): mode = 0 (no feedback), 1 (rubber band), 2 (rubber rectangle), 3 (vertical range),
+        4 (horizontal range). 5 (horizontal line), 6 (vertical line), 7 (cross-hair).
+
+        Parameters returned by handler:
+        RBUF(1): x position of cursor.
+        RBUF(2): y position of cursor.
+        CHR(1:1): character typed by user.
+       */
+
+      key = [adapter getMouseInput:&pos options:0];
+      NSLog(@"Key %c at %@", key, NSStringFromPoint(pos));
+      rbuf[0] = pos.x;
+      rbuf[1] = pos.y;
+      if (pos.x<10)
+        chr[0] = 'X';
+      else
+        chr[0] = key;
+      
+    }
       break;
 
       //--- IFUNC=18, Erase alpha screen. -------------------------------------
@@ -292,39 +315,54 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=20, Polygon fill. -------------------------------------------
 
     case 20:
-      //
-      // kludgy, improve later
-      //
+    {
+      static NSPoint vertices[64];
+      static int vCount = 0;
+      static int vMax = 0;
       LOG(@"IFUNC=20, Polygon fill");
-      if (edgeCount)
+
+      if (vMax == 0)
       {
-        // add edges to polygon
-        [adapter addPolygonEdgeToPoint:NSMakePoint(rbuf[0], rbuf[1])];
-        edgeCount--;
-        if (!edgeCount)
+        // First call
+        vMax = (int)rbuf[0];
+        vCount = 0;
+        if (vMax > 64)
+          NSLog(@"**** Too many vertices in polygon (%d)", vMax);
+      }
+      else
+      {
+        vertices[MIN(vCount, 63)] = NSMakePoint(rbuf[0], rbuf[1]);
+        vCount++;
+        if (vCount == vMax)
         {
-          [adapter fillPolygon];
+          [adapter addPolygonWithPoints:vertices pointCount:MIN(vMax, 64)];
+          vMax = 0;
         }
       }
-        else
-        {
-          edgeCount = rbuf[0];
-          [adapter beginPolygon];
-        }
-        break;
+    }
+      break;
 
       //--- IFUNC=21, Set color representation. -------------------------------
 
     case 21:
+    {
+      int index = (int)rbuf[0];
       LOG(@"IFUNC=21, Set color representation for index %d", (int)rbuf[0]);
-      [adapter setColormapEntry:(int)rbuf[0] red:rbuf[1] green:rbuf[2] blue:rbuf[3]];
-      break;
+      // [adapter setColormapEntry:(int)rbuf[0] red:rbuf[1] green:rbuf[2] blue:rbuf[3]];
+      if (index < 256)
+      {
+        cm[index].r = rbuf[1];
+        cm[index].g = rbuf[2];
+        cm[index].b = rbuf[3];
+      }
+    }
+    break;
 
       //--- IFUNC=22, Set line width. -----------------------------------------
 
     case 22:
       LOG(@"IFUNC=22, Set line width");
-      [adapter setLineWidth:rbuf[0]];    // rbuf[0] is in units of 0.005 inch
+      [adapter setLinewidth:(72.0*rbuf[0]*0.005)];    // rbuf[0] is in units of 0.005 inch
       break;
 
       //--- IFUNC=23, Escape --------------------------------------------------
@@ -335,10 +373,25 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
 
       //--- IFUNC=24, Rectangle Fill. -----------------------------------------
 
-    case 24:
+    case 24: // FIXME: this is used for erasing, with color 0.
+    {
+      NSPoint corners[4];
       LOG(@"IFUNC=24, Rectangle Fill");
-      [adapter fillRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
-      break;
+      //[adapter fillRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
+      //NSLog(@"Filling Rect(%f, %f, %f, %f) with indexed color %d",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1],tmpCol);
+      if (tmpCol == 0)
+      {
+        // First, remove objects _completely_ hidden behind rectangles drawn in background color...
+        NSLog(@"Erasing Rect(%f, %f, %f, %f)",rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1]);
+        [adapter eraseRect:NSMakeRect(rbuf[0], rbuf[1], rbuf[2]-rbuf[0], rbuf[3]-rbuf[1])];
+      }
+      corners[0]=NSMakePoint(rbuf[0], rbuf[1]);
+      corners[1]=NSMakePoint(rbuf[2], rbuf[1]);
+      corners[2]=NSMakePoint(rbuf[2], rbuf[3]);
+      corners[3]=NSMakePoint(rbuf[0], rbuf[3]);
+      [adapter addPolygonWithPoints:corners pointCount:4];
+    }
+    break;
 
       //--- IFUNC=25, ---------------------------------------------------------
       // (Not implemented: ignored)
@@ -347,29 +400,66 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       break;
 
       //--- IFUNC=26, Line of pixels ------------------------------------------
-
-    case 26:
-      LOG(@"IFUNC=26, Line of pixels");
+   case 26:
+    {
+      static BOOL processingBitmap = NO;
+      static unsigned char *pixPtr;
+      static unsigned char *dataPtr;
+      static int pixCount;
+      static int maxPixCount;
+      static NSSize bitmapSize;
+      static NSRect imageBounds;
+      
       switch((int)rbuf[0])
       {
         case 0:
-          LOG(@"Start. w=%f, h=%f", rbuf[1], rbuf[2]);
-          LOG(@"Bounds %f, %f, %f, %f", rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5]);
-          [adapter beginImageWithSize:NSMakeSize(rbuf[1], rbuf[2])
-                               bounds:NSMakeRect(rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5])];
+          // Set up memory storage and basic parameters
+          processingBitmap = YES;
+          bitmapSize = NSMakeSize((int)rbuf[1], (int)rbuf[2]);
+          imageBounds = NSMakeRect(rbuf[3], rbuf[5], rbuf[4]-rbuf[3], rbuf[6]-rbuf[5]);
+          NSLog(@"bitmapsize: %@\nimageBounds: %@", NSStringFromSize(bitmapSize), NSStringFromRect(imageBounds));
+          NSLog(@"Matrix: %f, %f, %f, %f, %f, %f", rbuf[7], rbuf[8], rbuf[9], rbuf[10], rbuf[11], rbuf[12]);
+          pixCount = 0;
+          maxPixCount = 3*bitmapSize.width*bitmapSize.height*sizeof(unsigned char);
+          pixPtr = (unsigned char *)malloc(maxPixCount);
+          dataPtr = pixPtr;
           break;
         case -1:
+          // End of data indicator
           LOG(@"End.");
-          [adapter closeImage];
-          pixPtr = 0;
+          [adapter addImageWithBitmap:pixPtr size:bitmapSize bounds:imageBounds];
+          processingBitmap = NO;
+          free(pixPtr);
           break;
         default:
-          LOG(@"Pixels... n=%f data=%f, %f, %f, ...", rbuf[0], rbuf[1], rbuf[2], rbuf[3]);
-          [adapter writeImageBytes:&rbuf[1] length:(int)rbuf[0] start:pixPtr];
-          pixPtr += (int)rbuf[0];
-          break;
-      }
+        {
+          // Write 3*n pixels to buffer
+          int i;
+          int n = (int)rbuf[0];
+          // NSLog(@"Pixels... n=%f data=%f, %f, %f, ...", rbuf[0], rbuf[1], rbuf[2], rbuf[3]);
+          for (i = 1; i<=n;i++)
+          {
+            unsigned char red = (unsigned char)(255*cm[(int)rbuf[i]].r);
+            unsigned char green = (unsigned char)(255*cm[(int)rbuf[i]].g);
+            unsigned char blue = (unsigned char)(255*cm[(int)rbuf[i]].b);
+            
+            *dataPtr = red;
+            dataPtr++;
+            *dataPtr = green;
+            dataPtr++;
+            *dataPtr = blue;
+            dataPtr++;
+            //NSLog(@"pixCount: %d", dataPtr-pixPtr);
+            //NSLog(@"Last rgb = (%u, %u, %u)", red, green, blue);
+          }
+        }
         break;
+      }
+      
+      
+      LOG(@"IFUNC=26, Line of pixels");
+    }
+      break;
 
       //--- IFUNC=27, World-coordinate scaling --------------------------------
 
@@ -385,12 +475,14 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       //--- IFUNC=29, Query color representation ------------------------------
     case 29:
     {
-      NSColor *color = [adapter colormapEntry:(int)rbuf[0]];
-      NSLog(@"IFUNC=29, Query color representation for index %d", (int)rbuf[0]);
-      rbuf[1] = [color redComponent];
-      rbuf[2] = [color greenComponent];
-      rbuf[3] = [color blueComponent];
+      int index = (int)rbuf[0];
+// NSColor *color = [adapter colormapEntry:(int)rbuf[0]];
+     // NSLog(@"IFUNC=29, Query color representation for index %d", (int)rbuf[0]);
+      rbuf[1] = cm[index].r; //[color redComponent];
+      rbuf[2] = cm[index].g;//[color greenComponent];
+      rbuf[3] = cm[index].b;//[color blueComponent];
       *nbuf = 4;
+
     }
       break;
 
@@ -409,343 +501,8 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
   };
   return;
 }
+
+
 // ----------------------------------------------------------------
 // --- End of PGPLOT function aqdriv()
-// ----------------------------------------------------------------
-
-//
-// The class NSBezierPath doesn't implement replacementObjectForPortCoder so
-// we add that behaviour as a category for NSBezierPath
-//
-@interface NSBezierPath (NSBezierPathDOCategory)
-- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder;
-@end
-
-@implementation NSBezierPath (NSBezierPathDOCategory)
-- (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder
-{
-  if ([portCoder isBycopy])
-    return self;
-  return [super replacementObjectForPortCoder:portCoder];
-}
-@end
-
-// ----------------------------------------------------------------
-// --- Start of AQTAdapter class
-// ----------------------------------------------------------------
-@implementation AQTAdapter
-- (id)init
-{
-  int i;
-  if (self = [super init])
-  {
-    // Init instance variables
-    polygon = [[NSBezierPath bezierPath] retain];
-    polylineBuffer = [[NSBezierPath bezierPath] retain];
-    polygonBuffer = [[NSBezierPath bezierPath] retain];
-
-    for (i=0;i<256;i++)
-    {
-      colorlist[i][0]=((float)i)/255.0;
-      colorlist[i][1]=0.0;
-      colorlist[i][2]=0.0;
-    }
-    //
-    // Try to get a local proxy of the object in AquaTerm that manages communication
-    //
-    if ([self connectToAquaTerm])
-    {
-      //
-      // This speeds up communication with the remote object, see
-      // http://developer.apple.com/techpubs/macosx/Cocoa/TasksAndConcepts/ProgrammingTopics/DistrObjects/
-      // Look under "Connections and Proxies"
-      //
-      [aqtConnection setProtocolForProxy:@protocol(AQTProtocol)];
-       // set default colormap [0-15]
-      [self setColormapEntry:0 red:1.0 green:1.0 blue:1.0];
-      [self setColormapEntry:1 red:0.0 green:0.0 blue:0.0];
-      [self setColormapEntry:2 red:1.0 green:0.0 blue:0.0];
-      [self setColormapEntry:3 red:0.0 green:1.0 blue:0.0];
-      [self setColormapEntry:4 red:0.0 green:0.0 blue:1.0];
-      [self setColormapEntry:5 red:0.0 green:1.0 blue:1.0];
-      [self setColormapEntry:6 red:1.0 green:0.0 blue:1.0];
-      [self setColormapEntry:7 red:1.0 green:1.0 blue:0.0];
-      [self setColormapEntry:8 red:1.0 green:0.5 blue:0.0];
-      [self setColormapEntry:9 red:0.5 green:1.0 blue:0.0];
-      [self setColormapEntry:10 red:0.0 green:1.0 blue:0.5];
-      [self setColormapEntry:11 red:0.0 green:0.5 blue:1.0];
-      [self setColormapEntry:12 red:0.5 green:0.0 blue:1.0];
-      [self setColormapEntry:13 red:1.0 green:0.0 blue:0.5];
-      [self setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
-      [self setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
-    }
-  }
-  return self;
-}
-
-- (void)dealloc
-{
-  [aqtConnection release];
-  [polygon release];
-  [polylineBuffer release];
-  [polygonBuffer release];
-  [super dealloc];
-}
-
-- (id)aqtConnection
-{
-  return aqtConnection;
-}
-
-- (BOOL)connectToAquaTerm
-{
-  BOOL didConnect = NO;
-  //
-  // Establish a connection to AquaTerm.
-  // First check if AquaTerm is already running, otherwise
-  // try to launch AquaTerm from standard locations.
-  //
-  aqtConnection = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-  if (aqtConnection) /* Server is running and ready to go */
-  {
-    [aqtConnection retain];
-    didConnect = YES;
-  }
-  else /* Server isn't running, we must fire it up */
-  {
-    //
-    // Try to launch AquaTerm
-    //
-    if ([[NSWorkspace sharedWorkspace] launchApplication:@"AquaTerm"] == NO)
-    {
-      printf("Failed to launch AquaTerm.\n");
-      printf("You must either put AquaTerm.app in \n");
-      printf("the /Applications or ~/Applications folder\n");
-    }
-    else
-    {
-      do { /* Wait for it to register with OS */
-        aqtConnection =[NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-      } while (!aqtConnection);  /* This could result in a hang if something goes wrong with registering! */
-      [aqtConnection retain];
-      didConnect = YES;
-   	}
-  }
-  LOG(@"didConnect=%d",didConnect);
-  return didConnect;
-}
-//
-// Adapter methods, this is where the translation takes place!
-//
-// The methods known by AquaTerm are defined in AQTProtocol.h
-// and the function calls known to the client are defined in C_API.h
-//
-- (void)setColorIndex:(int)colorIndex;
-{
-  //
-  // This requires flushing of any buffers
-  //
-  [self flushPolygonBuffer];
-  [self flushPolylineBuffer];
-  currentColor = (colorIndex == 0)?-4:colorIndex-1;
-}
-
-- (void)setLineWidth:(float)newLineWidth
-{
-  //
-  // This requires flushing of the polyline buffer
-  //
-  [self flushPolylineBuffer];
-  newLineWidth = newLineWidth*0.005*72;
-  // Limit thinnest line
-  lineWidth=newLineWidth<.5?.5:newLineWidth;
-}
-
-- (void)openGraph:(int)n size:(NSSize)size
-{
-  //
-  // Select a "model"
-  //
-  [aqtConnection openModel:n size:size];
-}
-
-- (void)closeGraph
-{
-  //
-  // Draw (render) the currently selected model
-  // This requires flushing of any buffers
-  //
-  [self flushPolygonBuffer];
-  [self flushPolylineBuffer];
-  [aqtConnection closeModel];
-}
-
-- (void)render
-{
-  //
-  // Draw (render) the currently selected model
-  // but leave it open for further drawing
-  // This requires flushing of any buffers
-  //
-  [self flushPolygonBuffer];
-  [self flushPolylineBuffer];
-  [aqtConnection render];
-}
-
-- (void)flushPolylineBuffer
-{
-  if (![polylineBuffer isEmpty])
-  {
-    [polylineBuffer setLineWidth:lineWidth];
-    [aqtConnection addPolyline:polylineBuffer withIndexedColor:currentColor];
-    [polylineBuffer removeAllPoints];
-    polylineBufCount = 0;
-  }
-}
-
-- (void)flushPolygonBuffer
-{
-  if (![polygonBuffer isEmpty])
-  {
-    // FIXME: setting linewidth here???? cf flushPolylineBuffer
-    [aqtConnection addPolygon:polygonBuffer withIndexedColor:currentColor];
-    [polygonBuffer removeAllPoints];
-    polygonBufCount = 0;
-  }
-}
-
-- (void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint
-{
-  [polylineBuffer moveToPoint:startpoint];
-  [polylineBuffer lineToPoint:endpoint];
-  polylineBufCount += 1;
-  if (polylineBufCount > BUFMAX)
-  {
-    [self flushPolylineBuffer];
-  }
-}
-
-- (void)dotAtPoint:(NSPoint)aPoint
-{
-  NSRect cRect;
-  NSBezierPath *thePath;
-
-  cRect.origin = NSMakePoint(aPoint.x - lineWidth, aPoint.y - lineWidth);
-  cRect.size = NSMakeSize(2*lineWidth, 2*lineWidth);
-  thePath = [NSBezierPath bezierPathWithOvalInRect:cRect];
-  // [aqtConnection addPolygon:thePath withIndexedColor:currentColor];
-  [polygonBuffer appendBezierPath:thePath];
-  polygonBufCount +=1;
-  if (polygonBufCount > BUFMAX)
-  {
-    [self flushPolygonBuffer];
-  }
-}
-
-- (void) fillRect:(NSRect)aRect
-{
-  NSBezierPath *thePath = [NSBezierPath bezierPathWithRect:aRect];
-  //
-  // close up the path and send the polygon to AquaTerm
-  //
-  [thePath closePath];
-  // [aqtConnection addPolygon:thePath withIndexedColor:currentColor];
-  [polygonBuffer appendBezierPath:thePath];
-  polygonBufCount +=4;
-  if (polygonBufCount > BUFMAX)
-  {
-    [self flushPolygonBuffer];
-  }  
-}
-//
-// --- PGPLOT uses a sequence of calls to build a polygon
-//
-- (void)beginPolygon
-{
-  [polygon removeAllPoints];
-}
-
-- (void)addPolygonEdgeToPoint:(NSPoint)aPoint
-{
-  if ([polygon isEmpty])
-  {
-    [polygon moveToPoint:aPoint];
-  }
-  else
-  {
-    [polygon lineToPoint:aPoint];
-  }
-  polygonBufCount +=1;
-}
-
-- (void)fillPolygon
-{
-  [polygon closePath];
-  // [aqtConnection addPolygon:polygon withIndexedColor:currentColor];
-  [polygonBuffer appendBezierPath:polygon];
-  if (polygonBufCount > BUFMAX)
-  {
-    [self flushPolygonBuffer];
-  }  
-}
-//
-// --- PGPLOT uses a sequence of calls to build an image
-//
-- (void)beginImageWithSize:(NSSize)imageSize bounds:(NSRect)theBounds
-{
-  image = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
-                                                  pixelsWide:imageSize.width
-                                                  pixelsHigh:imageSize.height
-                                               bitsPerSample:8
-                                             samplesPerPixel:3
-                                                    hasAlpha:NO
-                                                    isPlanar:YES
-                                              colorSpaceName:NSCalibratedRGBColorSpace
-                                                 bytesPerRow:0
-                                                bitsPerPixel:0];
-  imageBounds = theBounds;
-}
-
-- (void)writeImageBytes:(float *)data length:(int)len start:(int)start
-{
-  int i;
-  unsigned char *dataPlanes[5];
-  unsigned char *imageData;
-
-  [image getBitmapDataPlanes:dataPlanes];
-  for(i=0;i<len;i++)
-  {
-    *(dataPlanes[0]+start+i) = (unsigned char)(255*colorlist[(int)data[i]][0]);
-    *(dataPlanes[1]+start+i) = (unsigned char)(255*colorlist[(int)data[i]][1]);
-    *(dataPlanes[2]+start+i) = (unsigned char)(255*colorlist[(int)data[i]][2]);
-  }
-}
-
-- (void)closeImage
-{
-  [aqtConnection addBitmap:[image TIFFRepresentation] size:NSMakeSize([image pixelsWide],[image pixelsHigh]) bounds:imageBounds];
-  [image release];
-}
-//
-// FIXME: For now, we keep a local colormap. AQT does _not_ restore colormap for subsequent plots
-// FIXME: this too would benefit from being buffered
-//
--(void)setColormapEntry:(int)i red:(float)r green:(float)g blue:(float)b
-{
-  NSColor *tempColor = [NSColor colorWithCalibratedRed:r green:g blue:b alpha:1.0];
-  [aqtConnection setColor:tempColor forIndex:(i == 0)?-4:i-1];
-  // Set r,g and b values of the i:th color in local colormap
-  colorlist[i][0]=r;
-  colorlist[i][1]=g;
-  colorlist[i][2]=b;
-
-}
--(NSColor *)colormapEntry:(int)i
-{
-  // return an NSColor object with r,g and b values of the i:th color in local colormap
-  return [NSColor colorWithCalibratedRed:colorlist[i][0] green:colorlist[i][1] blue:colorlist[i][2] alpha:1.0];
-}
-@end
-// ----------------------------------------------------------------
-// --- End of AQTAdapter class
 // ----------------------------------------------------------------
