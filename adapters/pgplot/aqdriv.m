@@ -150,7 +150,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
     case 8:
       NSLog(@"IFUNC=8, Select plot: [%d %d]", (int)rbuf[0] /* plot id */, (int)rbuf[1] /* device id */);
       currentDevice = (int)rbuf[1];
-      [adapter selectPlot:currentDevice];
+      [adapter selectPlotWithIndex:currentDevice];
       break;
 
       //--- IFUNC=9, Open workstation -----------------------------------------
@@ -170,7 +170,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       }
       deviceCount++;
       currentDevice = deviceCount;
-      [adapter openPlotIndex:currentDevice];// size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
+      [adapter openPlotWithIndex:currentDevice];// size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
       
       rbuf[0] = (float)currentDevice; // The number used to select this device by IFUNC=8 (Select plot)
       rbuf[1] = 1.0;
@@ -220,7 +220,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       [adapter setColormapEntry:14 red:0.33 green:0.33 blue:0.33];
       [adapter setColormapEntry:15 red:0.67 green:0.67 blue:0.67];
 
-//      [adapter openPlotIndex:currentDevice size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
+//      [adapter openPlotWithIndex:currentDevice size:NSMakeSize(rbuf[0], rbuf[1]) title:nil];
       [adapter takeBackgroundColorFromColormapEntry:0];
       [adapter setLineCapStyle:AQTRoundLineCapStyle];
       [adapter setPlotSize:NSMakeSize(rbuf[0], rbuf[1])];
@@ -260,8 +260,8 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
        // Clear out the autoreleasepool at the end of every picture (move?)
        //
        LOG(@"Releasing arpool, freeing %d objects.",[NSAutoreleasePool totalAutoreleasedObjects]);
-       [arpool release];
-       arpool = [[NSAutoreleasePool alloc] init];
+       // [arpool release];
+       // arpool = [[NSAutoreleasePool alloc] init];
 #ifdef LOGGING
        [NSAutoreleasePool resetTotalAutoreleasedObjects];
 #endif
@@ -280,7 +280,7 @@ void AQDRIV(int *ifunc, float rbuf[], int *nbuf, char *chr, int *lchr, int len)
       LOG(@"IFUNC=16, Flush buffer");
       // FIXME: this could be devastating for complex plots, sanity check needed!
       // FIXME: use a timer to "coalesce" actual rendering calls, just make sure graphics buffers are flushed
-      [adapter render];
+      [adapter renderPlot];
       break;
 
       //--- IFUNC=17, Read cursor. --------------------------------------------
