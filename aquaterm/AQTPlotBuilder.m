@@ -54,10 +54,11 @@
 {
    if(self = [super init])
    {
-      _model = [[AQTModel alloc] initWithSize:NSMakeSize(300,200)];
+      _model = [[AQTModel alloc] initWithSize:NSZeroSize]; 
       [self _aqtPlotBuilderSetDefaultValues];
       _colormap = [[AQTColorMap alloc] initWithColormapSize:AQT_COLORMAP_SIZE];
-      _modelIsDirty = YES;
+      _modelIsDirty = NO;
+      _shouldAppend = NO;
    }
    return self;
 }
@@ -182,8 +183,12 @@
 
 - (void)eraseRect:(NSRect)aRect
 {
+#if 0
+   NSLog(@"*** -eraseRect: disabled ***"); // FIXME: move to server
+#else
    [_model removeObjectsInRect:aRect];
    _modelIsDirty = YES; // FIXME: This may not always be true.
+#endif
 }
 
 - (void)render
@@ -192,7 +197,20 @@
    {
       [self _flushBuffers];
       NS_DURING
-         [_handler setModel:_model];
+         if (_shouldAppend == YES)
+         {
+            [_handler appendPlot:_model];
+            [_model removeAllModelObjects];
+         }
+         else
+         {
+            [_handler setPlot:_model];
+            [_model removeAllModelObjects];
+            if(NSEqualSizes([_model canvasSize], NSZeroSize) == NO)
+            {
+               _shouldAppend = YES;
+            }
+         }
       NS_HANDLER
          if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
             // [self _serverError]; // FIXME: Grab from AQTAdapterPrivateMethods
@@ -213,12 +231,13 @@
    _model = newModel;
    [self _aqtPlotBuilderSetDefaultValues];
    _modelIsDirty = YES;
+   _shouldAppend = NO;
+   [self render];
 }
 
 
 - (void)setAcceptingEvents:(BOOL)flag
 {
-//   _acceptingEvents = flag;
    NS_DURING
       [_handler setAcceptingEvents:flag];
    NS_HANDLER

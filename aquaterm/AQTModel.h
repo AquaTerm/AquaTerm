@@ -19,7 +19,10 @@
 -(NSSize)size;
 -(int)count;
 -(void)addObject:(AQTGraphic *)graphic;
+-(void)addObjects:(NSArray *)objects;
+-(NSArray *)modelObjects;
 -(void)removeObjectsInRect:(NSRect)targetRect;
+-(void)removeAllModelObjects;
 -(void)setTitle:(NSString *)newTitle;
 -(NSString *)title;
 @end

@@ -19,6 +19,11 @@
    NSLog(@"Error: *** AQTGraphicDrawing ***");
 }
 
+-(NSRect)updateBounds
+{
+   return _bounds; // Default is to do nothing.
+}
+
 -(void)_setCache:(id)object
 {
    [object retain];
@@ -37,23 +42,42 @@
 *** Tell every object in the collection to draw itself.
 "**/
 @implementation AQTModel (AQTModelDrawing)
--(void)renderInRect:(NSRect)boundsRect
+-(NSRect)updateBounds
+{
+   NSRect tmpRect = NSZeroRect;
+   AQTGraphic *graphic;
+   NSEnumerator *enumerator = [modelObjects objectEnumerator];
+   while ((graphic = [enumerator nextObject]))
+   {
+      NSRect graphRect = [graphic updateBounds];
+      if (NSWidth(graphRect) < 0.0001 || NSHeight(graphRect) < 0.0001)
+      {
+         NSLog(@"**** Zero/neg W/H! : %@", [graphic description]);
+      }
+      tmpRect = NSUnionRect(tmpRect, graphRect);
+   }
+   [self setBounds:tmpRect];
+   return tmpRect;
+}
+
+-(void)renderInRect:(NSRect)dirtyRect
 {
    AQTGraphic *graphic;
    NSEnumerator *enumerator = [modelObjects objectEnumerator];
 #ifdef TIMING
    NSDate *startTime = [NSDate date];
 #endif
-   //  NSRect debugRect;
-   NSAffineTransform *localTransform = [NSAffineTransform transform];
-   [localTransform scaleXBy:NSWidth(boundsRect)/canvasSize.width
-                        yBy:NSHeight(boundsRect)/canvasSize.height];
+   NSRect debugRect;
+
+   // Model object is responsible for background...
+   [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
+   NSRectFill(dirtyRect);
 
    while ((graphic = [enumerator nextObject]))
    {
-      [graphic renderInRect:boundsRect];
+      [graphic renderInRect:dirtyRect];
 #ifdef DEBUG_BOUNDS
-      [[NSColor yellowColor] set];
+      [[NSColor greenColor] set];
       debugRect = [graphic bounds];
       [NSBezierPath strokeRect:debugRect];
 #endif
@@ -70,44 +94,73 @@
 @end
 
 @implementation AQTLabel (AQTLabelDrawing)
+-(void)_aqtLabelUpdateCache
+{
+   int i = 0;
+   NSRange fullRange, effRange;
+
+   [_cache release];
+   _cache = [[NSMutableAttributedString alloc] initWithAttributedString:string];
+   fullRange = NSMakeRange (0, [(NSAttributedString *)_cache length]);
+   [_cache addAttribute:NSFontAttributeName
+                  value:[NSFont fontWithName:fontName size:fontSize]
+                  range:fullRange];
+   [_cache addAttribute:NSForegroundColorAttributeName
+                  value:[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0]
+                  range:fullRange];
+   //
+   // Fix sub/superscript appearance
+   //
+   while(i < fullRange.length)
+   {
+      id attrValue = [_cache attribute:NSSuperscriptAttributeName
+                               atIndex:i
+                 longestEffectiveRange:&effRange
+                               inRange:fullRange];
+      if (attrValue)
+      {
+         float subcriptLevel = [attrValue floatValue];
+         [_cache addAttribute:NSFontAttributeName
+                        value:[NSFont fontWithName:fontName size:fontSize*0.75]
+                        range:effRange];
+         [_cache addAttribute:NSBaselineOffsetAttributeName
+                        value:[NSNumber numberWithFloat:-subcriptLevel*fontSize*0.1]
+                        range:effRange];
+
+      }
+      i += effRange.length;
+   }   
+}
+
+-(NSRect)updateBounds
+{
+    NSAffineTransform *tempTrans = [NSAffineTransform transform];
+    NSRect tempBounds;
+    NSSize tempSize;
+    NSPoint tempJust;
+
+    if (![self _cache])
+    {
+       [self _aqtLabelUpdateCache];
+    }
+    
+    [tempTrans rotateByDegrees:angle];
+    tempSize = [(NSAttributedString *)[self _cache] size];
+    tempJust = [tempTrans  transformPoint:NSMakePoint(-justification*tempSize.width/2, -tempSize.height/2)];
+    tempBounds.size = [tempTrans transformSize:[(NSAttributedString *)[self _cache] size]];
+
+    tempBounds.origin.x = position.x+tempJust.x;
+    tempBounds.origin.y = position.y+tempJust.y;
+    [self setBounds:tempBounds];
+    return tempBounds;
+}
+
 -(void)renderInRect:(NSRect)boundsRect
 {
    NSSize boundingBox;
    if (![self _cache])
    {
-      int i = 0;
-      NSRange fullRange, effRange;
-
-      _cache = [[NSMutableAttributedString alloc] initWithAttributedString:string];
-      fullRange = NSMakeRange (0, [(NSAttributedString *)_cache length]);
-      [_cache addAttribute:NSFontAttributeName
-                     value:[NSFont fontWithName:fontName size:fontSize]
-                     range:fullRange];
-      [_cache addAttribute:NSForegroundColorAttributeName
-                     value:[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0]
-                     range:fullRange];
-      //
-      // Fix sub/superscript appearance
-      //
-      while(i < fullRange.length)
-      {
-         id attrValue = [_cache attribute:NSSuperscriptAttributeName
-                                  atIndex:i
-                    longestEffectiveRange:&effRange
-                                  inRange:fullRange];
-         if (attrValue)
-         {
-            float subcriptLevel = [attrValue floatValue];
-            [_cache addAttribute:NSFontAttributeName
-                           value:[NSFont fontWithName:fontName size:fontSize*0.75]
-                           range:effRange];
-            [_cache addAttribute:NSBaselineOffsetAttributeName
-                           value:[NSNumber numberWithFloat:-subcriptLevel*fontSize*0.1]
-                           range:effRange];
-
-         }
-         i += effRange.length;
-      }
+      [self _aqtLabelUpdateCache];
    }
    boundingBox = [_cache size];
    //NSLog([tmpString description]);
@@ -131,40 +184,82 @@
 
 
 @implementation AQTPath (AQTPathDrawing)
--(void)renderInRect:(NSRect)boundsRect
+-(void)_aqtPathUpdateCache
 {
-   if (pointCount == 0)
-      return;
+   NSBezierPath *scratch = [NSBezierPath bezierPath];
+   [scratch appendBezierPathWithPoints:path count:pointCount];
+   [scratch setLineJoinStyle:NSRoundLineJoinStyle];
+   [scratch setLineCapStyle:lineCapStyle];
+   [scratch setLineWidth:linewidth];
+   [self _setCache:scratch];
+}
+
+-(NSRect)updateBounds
+{
+   NSRect tmpBounds;
    if (![self _cache])
    {
-      NSBezierPath *scratch = [NSBezierPath bezierPath];
-      [scratch appendBezierPathWithPoints:path count:pointCount];
-      [scratch setLineJoinStyle:NSRoundLineJoinStyle];
-      [scratch setLineCapStyle:lineCapStyle];
-      [scratch setLineWidth:linewidth];
-      [self _setCache:scratch];
+      [self _aqtPathUpdateCache];
    }
-   [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-   [_cache stroke];
+   
+   tmpBounds = NSInsetRect([[self _cache] bounds], -.001, -.001);
+   [self  setBounds:tmpBounds];
+   return tmpBounds;
+}
+   
+-(void)renderInRect:(NSRect)boundsRect
+{
+   if (NSIntersectsRect(boundsRect, [self bounds]))
+   {
+      if (pointCount == 0)
+         return;
+      if (![self _cache])
+      {
+         [self _aqtPathUpdateCache];
+      }
+      [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
+      [_cache stroke];
+   }
 }
 @end
 
 @implementation AQTPatch (AQTPatchDrawing)
--(void)renderInRect:(NSRect)boundsRect
+-(void)_aqtPatchUpdateCache
 {
-   if (pointCount == 0)
-      return;
+   NSBezierPath *scratch = [NSBezierPath bezierPath];
+   [scratch appendBezierPathWithPoints:path count:pointCount];
+   [scratch setLineWidth:linewidth];
+   [scratch closePath];
+   [self _setCache:scratch];   
+}
+
+-(NSRect)updateBounds
+{
+   NSRect tmpBounds;
    if (![self _cache])
    {
-      NSBezierPath *scratch = [NSBezierPath bezierPath];
-      [scratch appendBezierPathWithPoints:path count:pointCount];
-      [scratch setLineWidth:linewidth];
-      [scratch closePath];
-      [self _setCache:scratch];
+      [self _aqtPatchUpdateCache];
    }
-   [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-   // [_cache stroke];	// FIXME: Needed unless we holes in the surface?
-   [_cache fill];
+
+   tmpBounds = NSInsetRect([[self _cache] bounds], -.001, -.001);
+   [self  setBounds:tmpBounds];
+   return tmpBounds;
+}
+
+-(void)renderInRect:(NSRect)boundsRect
+{
+   if (NSIntersectsRect(boundsRect, [self bounds]))
+   {
+      if (pointCount == 0)
+         return;
+      if (![self _cache])
+      {
+         [self _aqtPatchUpdateCache];
+      }
+      [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
+      // [_cache stroke];	// FIXME: Needed unless we holes in the surface?
+      [_cache fill];
+   }
 }
 @end
 

@@ -25,7 +25,8 @@
   IBOutlet NSPopUpButton *saveFormatPopUp;
 }
 -(id)canvas;
--(void)setModel:(AQTModel *)newModel;
+-(void)setPlot:(AQTModel *)newModel;
+-(void)appendPlot:(AQTModel *)newModel;
 -(void)setClient:(id)client;
 -(void)setClientInfoName:(NSString *)name pid:(int)pid;
 -(BOOL)invalidateClient:(id)aClient;

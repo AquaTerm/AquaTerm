@@ -27,6 +27,7 @@
   NSPoint _path[MAX_PATH_POINTS];	/*" A cache for coalescing connected line segments into a single path "*/
   int _pointCount;	/*" The current number of points in _path"*/
   BOOL _modelIsDirty;	/*" A flag indicating that AquaTerm has not been updated with the latest info "*/
+  BOOL _shouldAppend;
   AQTAffineTransformStruct _transform;
   NSDistantObject <AQTClientProtocol> *_handler; 	/*" The handler object in AquaTerm responsible for communication "*/
   id owner;

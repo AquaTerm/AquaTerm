@@ -7,42 +7,6 @@
 //
 
 #import "AQTPath.h"
-
-NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
-{
-  float minX = NSMinX(aRect);
-  float maxX = NSMaxX(aRect);
-  float minY = NSMinY(aRect);
-  float maxY = NSMaxY(aRect);
-  // NSRect may be zeroRect => make aPoint the origin
-  if(NSEqualRects(aRect, NSZeroRect))
-  {
-    return NSMakeRect(aPoint.x, aPoint.y, 0.0, 0.0);
-  }
-  if (NSPointInRect(aPoint, aRect))
-  {
-    return aRect;
-  }
-  // We know aPoint lies outside aRect
-  if (aPoint.x < minX)
-  {
-    minX = aPoint.x;
-  }
-  else if(aPoint.x > maxX)
-  {
-    maxX = aPoint.x;
-  }
-  if (aPoint.y < minY)
-  {
-    minY = aPoint.y;
-  }
-  else if(aPoint.y > maxY)
-  {
-    maxY = aPoint.y;
-  }
-  return NSMakeRect(minX, minY, maxX-minX, maxY-minY);
-}
-
 @implementation AQTPath
 
 /*" A private method to provide storage for an NSPointArray "*/
@@ -78,10 +42,10 @@ NSRect AQTExpandRectWithPoint(NSRect aRect, NSPoint aPoint)
   if (self = [super init])
   {
      pc = [self _aqtSetupPathStoreForPointCount:pc];
+     // FIXME: memcpy
      for (i = 0; i < pc; i++)
      {
         path[i] = points[i];
-        _bounds = AQTExpandRectWithPoint(_bounds, points[i]);
      }
      pointCount = pc;
      [self setLinewidth:.2];

@@ -13,5 +13,7 @@
 @interface AQTGraphic (AQTGraphicDrawingMethods)
 -(id)_cache;
 -(void)_setCache:(id)object;
--(void)renderInRect:(NSRect)boundsRect;
+-(NSRect)updateBounds;
+-(void)renderInRect:(NSRect)boundsRect; // <--- canvas coords
 @end
+

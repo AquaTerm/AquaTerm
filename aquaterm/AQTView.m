@@ -10,12 +10,6 @@
 #import "AQTGraphic.h"
 #import "AQTModel.h"
 
-// #define AQT_MIN_FONTSIZE 9.0
-
-//#define MAX(a, b) ((a)>(b)?(a):(b))
-
-
-
 @implementation AQTView
 -(void)awakeFromNib
 {
@@ -53,15 +47,8 @@
 
 -(BOOL)isPrinting
 {
-   return ![NSGraphicsContext currentContextDrawingToScreen]; //isPrinting;
+   return ![NSGraphicsContext currentContextDrawingToScreen]; 
 }
-
-/*
- -(void)setIsPrinting:(BOOL)flag
- {
-    isPrinting = flag;
- }
- */
 
 - (BOOL)isProcessingEvents
 {
@@ -105,12 +92,13 @@
 
 -(void)mouseDown:(NSEvent *)theEvent
 {
-      [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:1];
+   [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:1];
 }
 
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
-      [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:2];
+   NSLog(@"viewFrame: %@", NSStringFromRect([self bounds]));
+   [self _aqtHandleMouseDownAtLocation:[theEvent locationInWindow] button:2];
 }   
 
 
@@ -141,32 +129,37 @@
    }
 }
 
--(void)drawRect:(NSRect)aRect // FIXME: Consider dirty rect!!!
+-(void)drawRect:(NSRect)dirtyRect // <--- argument _always_ in view coords
 {
-   AQTColor canvasColor = [model color];
-   NSRect scaledBounds = [self bounds];	// Depends on whether we're printing or drawing to screen
-   NSAffineTransform *localTransform = [NSAffineTransform transform];
-   [localTransform scaleXBy:NSWidth(scaledBounds)/[model canvasSize].width
-                        yBy:NSHeight(scaledBounds)/[model canvasSize].height];
+   NSRect viewBounds = [self bounds];
+   NSSize canvasSize = [model canvasSize];
+   NSRect dirtyCanvasRect;
+   NSAffineTransform *transform = [NSAffineTransform transform];
+
+   NSLog(@"dirtyRect: %@", NSStringFromRect(dirtyRect));
+
    [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone]; // FIXME: user prefs
    [[NSGraphicsContext currentContext] setShouldAntialias:YES]; // FIXME: user prefs
-   if (![self isPrinting])
-   {
-      //
-      // Erase by drawing background color
-      //
-      [[NSColor colorWithCalibratedRed:canvasColor.red green:canvasColor.green blue:canvasColor.blue alpha:1.0] set];
-      [[NSBezierPath bezierPathWithRect:scaledBounds] fill];
-   }
-   //
-   // Tell the model to draw itself
-   //
-   [localTransform set];
-   [model renderInRect:scaledBounds];
-//   NSLog(@"Window size:%@", NSStringFromSize([[self window] frame].size));
-//   NSLog(@"View size:%@", NSStringFromSize([self frame].size));
-}
+   NSRectClip(dirtyRect);
 
+   // Dirty rect in view coords, clipping rect is set.
+   // Need to i) set transform for subsequent operations
+   // and ii) transform dirty rect to canvas coords.
+
+   // (i) view transform
+   [transform scaleXBy:viewBounds.size.width/canvasSize.width
+               yBy:viewBounds.size.height/canvasSize.height];
+   [transform concat];
+
+   // (ii) dirty rect transform
+   [transform invert];
+   dirtyCanvasRect.origin = [transform transformPoint:dirtyRect.origin];
+   dirtyCanvasRect.size = [transform transformSize:dirtyRect.size];
+
+   NSLog(@"dirtyCanvasRect: %@", NSStringFromRect(dirtyCanvasRect));
+   
+   [model renderInRect:dirtyCanvasRect]; // <--- expects aRect in canvas coords, _not_ view coords
+}
 @end
 
 

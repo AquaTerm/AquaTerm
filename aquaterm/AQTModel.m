@@ -69,20 +69,6 @@
   return [modelObjects count];
 }
 
-/*
--(NSRect)recomputeBounds
-{
-  NSRect trackingRect = NSMakeRect(0,0,0,0);
-  AQTGraphic *graphic;
-  NSEnumerator *enumerator = [modelObjects objectEnumerator];
-
-  while ((graphic = [enumerator nextObject]))
-  {
-    trackingRect = NSUnionRect(trackingRect, [graphic bounds]);
-  }
-  return trackingRect;
-}
-*/
 /**"
 *** Add any subclass of AQTGraphic to the collection of objects.
 "**/
@@ -92,6 +78,18 @@
   [modelObjects addObject:graphic];
   [self setBounds:NSUnionRect([self bounds], [graphic bounds])];
 }
+
+-(void)addObjects:(NSArray *)objects
+{
+   [modelObjects addObjectsFromArray:objects];
+   // [self updateBounds]; // FIXME: stupid
+}
+
+-(NSArray *)modelObjects
+{
+   return modelObjects;
+}
+
 
 -(void)removeObjectsInRect:(NSRect)targetRect
 {
@@ -139,6 +137,10 @@
 #endif
 }
 
+-(void)removeAllModelObjects
+{
+   [modelObjects removeAllObjects];
+}
 -(void)setTitle:(NSString *)newTitle
 {
   [newTitle retain];

@@ -1,5 +1,6 @@
 @protocol AQTClientProtocol
-- (void)setModel:(bycopy id)aModel; // (id)?
+- (void)setPlot:(bycopy id)aPlot; // (id)?
+- (void)appendPlot:(bycopy id)aPlot;
 - (void)setAcceptingEvents:(BOOL)flag;
 - (void)close;
 @end

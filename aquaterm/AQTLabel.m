@@ -8,11 +8,6 @@
 
 #import "AQTLabel.h"
 
-/*" Justification Constants "*/
-#define justifyLeft 0
-#define justifyCenter 1
-#define justifyRight 2
-
 @implementation AQTLabel
     /**"
     *** A leaf object class representing an actual item in the plot. 
@@ -92,27 +87,5 @@
   [coder decodeValueOfObjCType:@encode(float) at:&angle];
   [coder decodeValueOfObjCType:@encode(int) at:&justification];
   return self;
-}
-
-// FIXME: bounds disabled
--(NSRect)bounds
-{
-  return NSMakeRect(20,20,20,20);
-/*
- NSAffineTransform *tempTrans = [NSAffineTransform transform];
-  NSRect tempBounds;
-  NSPoint tempJust;
-
-  [tempTrans rotateByDegrees:angle];
-
-  tempBounds.size = [string size];
-  tempJust = [tempTrans  transformPoint:NSMakePoint(-justification*tempBounds.size.width/2, -tempBounds.size.height/2)];
-  tempBounds.size = [tempTrans transformSize:[string size]];
-
-  tempBounds.origin.x = position.x+tempJust.x;
-  tempBounds.origin.y = position.y+tempJust.y;
-  return tempBounds;
- */
-  
 }
 @end

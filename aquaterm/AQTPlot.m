@@ -11,6 +11,7 @@
 #import "AQTView.h"
 #import "AQTAdapter.h"
 #import "AQTPlotBuilder.h"
+#import "AQTGraphicDrawingMethods.h"
 
 #define TITLEBAR_HEIGHT 22.0
 
@@ -54,15 +55,18 @@
    }
    if (shouldResize)
    {
+      NSRect contentFrame = NSZeroRect;
+      contentFrame.size = contentSize;
       [[canvas window] setContentSize:contentSize];
-      [[canvas window] setAspectRatio:ratio];
+      [canvas setFrame:contentFrame];
+      //[[canvas window] setAspectRatio:ratio];
    }
    [[canvas window] setMaxSize:maxSize];
    [[canvas window] setMinSize:minSize];
    [canvas setIsProcessingEvents:_acceptingEvents];
    [[canvas window] setIsVisible:YES];
    [[canvas window] orderFront:self];
-   [canvas setNeedsDisplay:YES];
+   // [canvas setNeedsDisplay:YES];
 }
 
 -(void)awakeFromNib
@@ -92,13 +96,14 @@
    return model;
 }
 
--(void)setModel:(AQTModel *)newModel
+-(void)setPlot:(AQTModel *)newModel
 {
    BOOL viewNeedResize = YES;
    
    [newModel retain];
    if (model)
    {
+      // Respect the windowsize set by user
       NSSize oldSize = [model canvasSize];
       NSSize newSize = [newModel canvasSize];
       if (fabs(oldSize.height/oldSize.width - newSize.height/newSize.width) < 0.001)
@@ -108,12 +113,48 @@
    }
    [model release];		// let go of any temporary model not used (unlikely)
    model = newModel;		// Make it point to new model
+   [model updateBounds];
 
    if (_isWindowLoaded)
    {
       [self _aqtSetupViewShouldResize:viewNeedResize];
+      [canvas setNeedsDisplay:YES];
    }
 }
+
+-(void)appendPlot:(AQTModel *)newModel
+{
+   NSRect addedBounds;
+   NSSize canvasSize = [model canvasSize];
+   if (!model)
+   {
+      NSLog(@"*** Error: No model ***");
+      [self setPlot:newModel];
+      return;
+   }
+
+   addedBounds = [newModel updateBounds];
+
+   NSLog(@"oldBounds = %@", NSStringFromRect([model bounds]));
+
+   NSLog(@"addedBounds = %@", NSStringFromRect(addedBounds));
+   
+   [model addObjects:[newModel modelObjects]];
+   [model setTitle:[newModel title]];
+   [model setColor:[newModel color]];
+   if (_isWindowLoaded)
+   {
+      NSRect newBounds = [newModel bounds];
+      NSRect viewBounds = [canvas bounds];
+      float xScale = canvasSize.width/NSWidth(viewBounds);
+      float yScale = canvasSize.height/NSHeight(viewBounds);
+      NSRect dirtyRect = NSMakeRect(newBounds.origin.x*xScale, newBounds.origin.y*yScale, newBounds.size.width*xScale, newBounds.size.height*yScale); 
+      [self _aqtSetupViewShouldResize:NO];
+      NSLog(@"dirtyRect = %@", NSStringFromRect(dirtyRect));
+      [canvas setNeedsDisplayInRect:dirtyRect];
+   }
+}
+
 
 -(BOOL)invalidateClient:(id)aClient
 {
@@ -201,7 +242,6 @@
 
    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
    [printView setModel:model];
-   //[printView setIsPrinting:YES];
    [pasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, NSPostScriptPboardType, nil] owner:nil];
 
    [pasteboard setData:[printView dataWithPDFInsideRect:[printView bounds]] forType:NSPDFPboardType];
@@ -211,13 +251,12 @@
 
 - (void)printOperationDidRun:(NSPrintOperation *)printOperation success:(BOOL)success  contextInfo:(AQTView *)printView
 {
-   //[printView setIsPrinting:NO];
 }
 
 -(IBAction)printDocument:(id)sender
 {
    AQTView *printView;
-   NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; // [self printInfo];
+   NSPrintInfo *printInfo = [NSPrintInfo sharedPrintInfo]; 
    NSSize paperSize = [printInfo paperSize];
    NSPrintOperation *printOp;
 
@@ -234,12 +273,11 @@
 
    printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, paperSize.width, paperSize.height)];
    [printView setModel:model];
-   //[printView setIsPrinting:YES];
 
    printOp = [NSPrintOperation printOperationWithView:printView];
    (void)[printOp runOperationModalForWindow:[canvas window]
                                     delegate:self
-                              didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
+                              didRunSelector:nil // @selector(printOperationDidRun:success:contextInfo:)
                                  contextInfo:printView];
    [printView release];
 }
@@ -271,7 +309,6 @@
    {
       printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
       [printView setModel:model];
-      //[printView setIsPrinting:YES];
       filename = [[theSheet filename] stringByDeletingPathExtension];
        if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"])
        {
