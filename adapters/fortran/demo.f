@@ -13,7 +13,7 @@ C
       integer i
       character*64 strBuf
 C     output strings
-      character numstr1*1,numstr13*13,numstr30*30
+      character numstr1*1,numstr13*13,numstr48*48
       real xPtr, yPtr, x, y, f, lw, r
       dimension xPtr(128) 
       dimension yPtr(128) 
@@ -65,9 +65,9 @@ C     Set color explicitly
       call aqtSetFontsize(12.0)
       iwidth=width
       iheight=height
-      write(numstr30,140)iwidth,iheight
+      write(numstr48,140)iwidth,iheight
  140  format('Testview ',I3,'x',I3,' pt')
-      call aqtAddLabel(numstr30, 4.0, 412.0, 0.0, 0)
+      call aqtAddLabel(numstr48, 4.0, 412.0, 0.0, 0)
 C     Frame plot
       call aqtMoveTo(20., 20.)
       call aqtAddLineTo(600.,20.)
@@ -77,9 +77,9 @@ C     Frame plot
       call aqtAddLabel('Frame 600x400 pt', 24., 30., 0.0, 0)
 C     Colormap
 C     write Custom colormap string
-      write(numstr30,120)
- 120  format('Custom colormap (showing 8 out of 256 entries)')
-      call aqtAddLabel(numstr30, 30., 390., 0.0, 0)
+      write(numstr48,120)
+ 120  format('Custom colormap (showing 8 of 256 entries)')
+      call aqtAddLabel(numstr48, 30., 390., 0.0, 0)
 C     Display the colormap, but first create a background for the white box...
       call aqtSetColor(0.8, 0.8, 0.8)
 
