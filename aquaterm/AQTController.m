@@ -8,9 +8,18 @@
 
 #import "AQTController.h"
 #import "AQTPlot.h"
+#import <Message/NSMailDelivery.h>
 // Needed for testing only:
 #import "AQTAdapter.h"
-//#import "NSDebug.h"
+
+extern void aqtTestview(id sender);
+
+@implementation NSString (AQTRFC2396Support)
+- (NSString *)stringByAddingPercentEscapes
+{
+  return [(NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)self, NULL, NULL, CFStringConvertNSStringEncodingToEncoding(NSASCIIStringEncoding)) autorelease];
+}
+@end
 
 @implementation AQTController
 /**"
@@ -49,6 +58,16 @@
 {
   //[handlerList release];
   [super dealloc];
+}
+
+- (AQTAdapter *)sharedAdapter
+{
+  static AQTAdapter *adapter;
+  if (adapter == nil)
+  {
+    adapter = [[AQTAdapter alloc] initWithServer:self];
+  }
+  return adapter;
 }
 
 #pragma mark === AQTConnectionProtocol ===
@@ -241,15 +260,35 @@ void customEventHandler(int index, NSString *event)
 }
 -(IBAction)mailBug:(id)sender;
 {
-   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:persquare@users.sourceforge.net?subject=AquaTerm%20bugreport"]];
+  BOOL messageSent = NO;
+  NSString *msg = @"Complex text\nwith breaks...";
+  NSString *address = @"persquare@users.sourceforge.net";
+  NSString *subject = @"AquaTerm bugreport";
+  if([NSMailDelivery hasDeliveryClassBeenConfigured])
+  {
+    messageSent = [NSMailDelivery deliverMessage:[msg stringByAddingPercentEscapes]
+                                         subject:[subject stringByAddingPercentEscapes]
+                                              to:[address stringByAddingPercentEscapes]];
+  }
+  if(messageSent == NO)
+  {
+    NSString *mailto = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", address, subject, msg];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapes]]];
+  }
 }
+
 -(IBAction)mailFeedback:(id)sender;
 {
-   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:persquare@users.sourceforge.net?subject=AquaTerm%20feedback"]];
-
+  NSString *msg = @"Complex text\nwith breaks...";
+  NSString *address = @"persquare@users.sourceforge.net";
+  NSString *subject = @"AquaTerm feedback";
+  NSString *mailto = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", address, subject, msg];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapes]]];
 }
+
 -(IBAction)testview:(id)sender;
 {
+  aqtTestview(self);
 }
 -(IBAction)stringDrawingTest:(id)sender;
 {

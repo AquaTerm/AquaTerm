@@ -6,7 +6,6 @@
 //  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
 //
 
-
 #import "AQTGraphicDrawingMethods.h"
 
 #import "AQTLabel.h"

@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "AQTConnectionProtocol.h"
 
+@class AQTAdapter;
 @interface AQTController : NSObject <AQTConnectionProtocol>
 {
   NSMutableArray	*handlerList;		/*" Array of client handlers "*/
@@ -17,7 +18,10 @@
   NSConnection		*doConnection;
 }
 
+- (AQTAdapter *)sharedAdapter;
 - (void)removePlot:(id)aPlot;
+
+
 
 -(IBAction)showHelp:(id)sender;
 -(IBAction)debug:(id)sender;
