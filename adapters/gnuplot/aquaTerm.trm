@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.23 2003/12/29 22:11:53 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.24 2004/02/23 15:20:17 persquare Exp $
  *
  */
 
@@ -117,7 +117,6 @@ static NSAutoreleasePool *arpool;
 static AQTAdapter *adapter;    
 static int currentWindow = 0;		// the only option to set (could be set _before_ instatiation of adapter)
 static char AQUA_title[MAX_LINE_LEN + 1];
-static t_sm_palette *aqua_palette = nil;
 //
 // ----------------------------------------------------------------
 // Gnuplot driver implementation
@@ -130,6 +129,10 @@ enum AQUA_id {
   AQUA_OTHER
 };
 
+/* 
+   Eventually the options should be:
+   <n> title "title" font "face,size" size "<x>,<y>" 
+*/
 static struct gen_table AQUA_opts[] =
 {
   { "d$efault", AQUA_DEFAULT },
@@ -145,12 +148,12 @@ TERM_PUBLIC void
 AQUA_options()
 {
   struct value a;
-  *AQUA_title = 0;
+  *AQUA_title = '\0';
     
   LOG(@"AQUA_options");
   while (!END_OF_COMMAND) 
   {
-    switch(lookup_table(&AQUA_opts[0],c_token)) 
+    switch(lookup_table(&AQUA_opts[0], c_token)) 
     {
      case AQUA_DEFAULT:
       currentWindow = 0;
@@ -161,9 +164,8 @@ AQUA_options()
       if (!isstring(c_token)) {
           fprintf(stderr, "usage:  set term aqua title \"newtitle\"\n");
       }
-      quote_str(AQUA_title, c_token, MAX_LINE_LEN + 1);
-            c_token++;
-
+      quote_str(AQUA_title, c_token, MAX_LINE_LEN);
+      c_token++;
       break;
      case AQUA_OTHER:
       currentWindow = (int) real(const_express(&a));
@@ -203,9 +205,9 @@ AQUA_init()
 TERM_PUBLIC void
 AQUA_reset()
 {
-   NSLog(@"AQUA_reset");
-//  [arpool release];
-//  arpool = [[NSAutoreleasePool alloc] init]; 
+  //   NSLog(@"AQUA_reset");
+  //  [arpool release];
+  //  arpool = [[NSAutoreleasePool alloc] init]; 
 }
 
 TERM_PUBLIC void
@@ -224,14 +226,12 @@ AQUA_graphics()
 //  innerPool = [[NSAutoreleasePool alloc] init]; 
   LOG(@"Post: (arpool + innerpool, innerpool) =(%d, %d)",[NSAutoreleasePool autoreleasedObjectCount], 
 	[NSAutoreleasePool topAutoreleasePoolCount]);
-  if(*AQUA_title)
-  {
-     // title = [NSString stringWithCString:AQUA_title]; <-- FIXME: broken!
-     *AQUA_title = 0;
-  }
+
+  title = (*AQUA_title=='\0')?[NSString stringWithFormat:@"Figure %d", currentWindow]:[NSString stringWithCString:AQUA_title];
   [adapter openPlotWithIndex:currentWindow];
   [adapter setPlotSize:NSMakeSize(term->xmax/AQUA_SCALE_FACTOR, term->ymax/AQUA_SCALE_FACTOR)];
-  [adapter setPlotTitle:[NSString stringWithFormat:@"Figure %d", currentWindow]];
+  [adapter setPlotTitle:title];
+  *AQUA_title = '\0';
   //
   // Set up the basic indexed colormap for gnuplot
   //
@@ -283,6 +283,7 @@ static int textJustify = 0;
 TERM_PUBLIC void
 AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
+  NSLog(@"put:%s",str);
   if (!strlen(str))
     return;
   [adapter  addLabel:[NSString stringWithCString: str] 
@@ -301,7 +302,7 @@ AQUA_justify_text (enum JUSTIFY mode)
 TERM_PUBLIC int
 AQUA_text_angle (int angle)
 {
-//NSLog(@"Angle %d", angle);
+  LOG(@"Angle %d", angle);
   textAngle = (float)angle;
   return (TRUE);
 }
@@ -309,12 +310,30 @@ AQUA_text_angle (int angle)
 TERM_PUBLIC int 
 AQUA_set_font(const char *font) /* "font,size" */
 {
- NSArray *parts = [[NSString stringWithCString:font] componentsSeparatedByString:@","];
- float fontSize = [[parts objectAtIndex:1] floatValue];
- NSLog([NSString stringWithCString:font]);
- [adapter setFontname:[parts objectAtIndex:0]];
- [adapter setFontsize:fontSize];
-
+  NSString *fontFace = @"Times-Roman";                                                              
+  float fontSize = 16.0;                                                                            
+  if (strlen(font)==0)
+    {
+      // Reset defaults
+      NSLog(@"reset");                                                                              
+    }
+  else
+    {
+      NSArray *parts = [[NSString stringWithCString:font] componentsSeparatedByString:@","];            
+      if ([parts count] < 2)
+	{
+	  NSLog(@"Error: %@", [NSString stringWithCString:font]);                                    
+	}
+      else
+	{
+	  fontSize = [[parts objectAtIndex:1] floatValue];                                           
+	  fontFace = [parts objectAtIndex:0];                                                        
+	}
+    }
+  
+  NSLog(@"Setting:(%@,%f)", fontFace, fontSize);                                                    
+  [adapter setFontname:fontFace];
+  [adapter setFontsize:fontSize];                                                                   
   // FIXME: Does gnuplot process these values?
   term->v_char = (unsigned int) (fontSize*AQUA_SCALE_FACTOR);
   term->h_char = (unsigned int) (fontSize*AQUA_SCALE_FACTOR*0.6); 
@@ -331,22 +350,14 @@ AQUA_set_pointsize(double size) /* notification of set pointsize */
 TERM_PUBLIC void 
 AQUA_point(unsigned int x, unsigned int y, int number)
 {
-  // Avoid changing lw unless necessary
-/*
-  if ([gnuTermAccess linewidth] != 1.0)
-  {
-    double tmplw = [gnuTermAccess linewidth];
-    [gnuTermAccess setLinewidth:1.0];
-    [gnuTermAccess moveToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR-.5, y/AQUA_SCALE_FACTOR)];
-    [gnuTermAccess lineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR +.5, y/AQUA_SCALE_FACTOR)];
-    [gnuTermAccess setLinewidth: tmplw];
-  }
-  else
-  {
-    [gnuTermAccess moveToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR-.5, y/AQUA_SCALE_FACTOR)];
-    [gnuTermAccess lineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR +.5, y/AQUA_SCALE_FACTOR)];
-  }
-*/
+  // The default dot-routine doesn't work with AQT
+  if (number<0)
+    {
+      [adapter setLinewidth:1.0];
+      [adapter moveToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR, y/AQUA_SCALE_FACTOR)];
+      [adapter addLineToPoint:NSMakePoint(x/AQUA_SCALE_FACTOR+1.0, y/AQUA_SCALE_FACTOR)];
+      return;
+    }
   do_point(x, y, number);
 }
 
@@ -364,10 +375,53 @@ AQUA_resume(void) /* before subsequent plot of multiplot */
 TERM_PUBLIC void 
 AQUA_boxfill(int style, unsigned int x1, unsigned int y1, unsigned int width, unsigned int height) /* clear part of multiplot */
 {
-    // FIXME: What does style imply?
-    NSRect scaledRect = NSMakeRect(x1/AQUA_SCALE_FACTOR, y1/AQUA_SCALE_FACTOR, width/AQUA_SCALE_FACTOR,     height/AQUA_SCALE_FACTOR);
-    [adapter eraseRect:scaledRect];
-    [adapter addFilledRect:scaledRect];
+  float r,g,b;
+  // FIXME: What does style imply?
+  LOG(@"\nstyle=%d\nstyle & 0xf = %d\nfillpar=%d\n", style, style & 0xf, style >> 4);
+  
+  // Save current color
+  [adapter getColorRed:&r green:&g blue:&b];
+
+#if USE_ULIG_FILLEDBOXES
+  /* fillpar:
+   * - solid   : 0 - 100
+   * - pattern : 0 - 100
+   */
+  int fillpar = style >> 4;
+  
+  style &= 0xf;
+  
+  switch (style) 
+    {
+    case 0: /* fill with background color */
+      {
+	float rb, gb, bb;
+	[adapter getBackgroundColorRed:&rb green:&gb blue:&bb];
+	[adapter setColorRed:rb green:gb blue:bb];  
+      }
+      break;
+    case FS_SOLID: /* solid fill */
+      {
+	// Alpha channel?
+	float density = (float)fillpar*0.01;
+	[adapter setColorRed:r green:g*density blue:b*density];
+      }
+      break;
+    case FS_PATTERN: /* pattern fill */
+      // Colors?
+      [adapter takeColorFromColormapEntry:(fillpar%CYCLIC_COLORS)+SPECIAL_COLORS];
+      break;
+  default:
+    break;
+    }
+#else
+  // FIXME: Actions here???
+#endif
+  NSRect scaledRect = NSMakeRect(x1/AQUA_SCALE_FACTOR, y1/AQUA_SCALE_FACTOR, width/AQUA_SCALE_FACTOR, height/AQUA_SCALE_FACTOR);
+  [adapter eraseRect:scaledRect];  
+  [adapter addFilledRect:scaledRect];
+  // Restore color
+  [adapter setColorRed:r green:g blue:b];
 }
   
 TERM_PUBLIC void 
