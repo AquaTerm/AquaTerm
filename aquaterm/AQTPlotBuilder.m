@@ -208,12 +208,14 @@
          if (_shouldAppend == YES)
          {
             [_handler appendPlot:_model];
-            [_model removeAllModelObjects];
+            if([_handler isProxy])
+               [_model removeAllModelObjects];
          }
          else
          {
             [_handler setPlot:_model];
-            [_model removeAllModelObjects];
+            if([_handler isProxy])
+               [_model removeAllModelObjects];
             if(NSEqualSizes([_model canvasSize], NSZeroSize) == NO)
             {
                _shouldAppend = YES;
@@ -292,7 +294,6 @@
    [lb setFontName:_fontName];
    [lb setFontSize:_fontSize];
    [_model addObject:lb];
-   //  NSLog([lb description]);
    [lb release];
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
