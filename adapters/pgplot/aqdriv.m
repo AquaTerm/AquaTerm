@@ -56,6 +56,8 @@ static id adapter;        		    // Adapter object
 - (void)setColorIndex:(int)colorIndex;
 - (void)setLineWidth:(float)newLineWidth;
 - (void)lineFromPoint:(NSPoint)startpoint toPoint:(NSPoint)endpoint;
+- (void)dotAtPoint:(NSPoint)aPoint;
+- (void)fillRect:(NSRect)aRect;
 - (void)beginPolygon;
 - (void)addPolygonEdgeToPoint:(NSPoint)aPoint;
 - (void)fillPolygon;
@@ -237,6 +239,7 @@ break;
 
   case 13:
     LOG(@"IFUNC=13, Draw dot");
+    [adapter dotAtPoint:NSMakePoint(rbuf[0], rbuf[1])];
 break;
 
 //--- IFUNC=14, End picture ---------------------------------------------
@@ -601,6 +604,18 @@ break;
   //
   // [thePath setLineWidth:lineWidth];
   // [aqtConnection addPolyline:thePath withIndexedColor:currentColor];
+}
+
+- (void)dotAtPoint:(NSPoint)aPoint
+{
+   NSRect cRect;
+   NSBezierPath *thePath;
+   
+   cRect.origin = NSMakePoint(aPoint.x - lineWidth, aPoint.y - lineWidth);
+   cRect.size = NSMakeSize(2*lineWidth, 2*lineWidth); 
+   thePath = [NSBezierPath bezierPathWithOvalInRect:cRect];
+   // [aqtConnection addPolygon:thePath withIndexedColor:currentColor];
+   [polygonBuffer appendBezierPath:thePath];
 }
 
 - (void) fillRect:(NSRect)aRect
