@@ -65,8 +65,12 @@
 {
   AQTColor canvasColor = [model color]; 
   NSRect scaledBounds = [self bounds];	// Depends on whether we're printing or drawing to screen
-  [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone];
-  [[NSGraphicsContext currentContext] setShouldAntialias:YES];
+  NSAffineTransform *localTransform = [NSAffineTransform transform];
+//  [localTransform translateXBy:.5 yBy:.5];
+  [localTransform scaleXBy:NSWidth(scaledBounds)/[model canvasSize].width
+                       yBy:NSHeight(scaledBounds)/[model canvasSize].height];
+  [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone]; // FIXME: user prefs
+  [[NSGraphicsContext currentContext] setShouldAntialias:YES]; // FIXME: user prefs
   if (!isPrinting)
   {
     //
@@ -78,6 +82,7 @@
   //
   // Tell the model to draw itself
   //
+  [localTransform set];
   [model renderInRect:scaledBounds];
 }
 
@@ -111,29 +116,24 @@
 {
   AQTGraphic *graphic;
   NSEnumerator *enumerator = [modelObjects objectEnumerator];
-  NSDate		*startTime=  [NSDate date];
+  NSDate *startTime=  [NSDate date];
   NSRect debugRect;
   NSAffineTransform *localTransform = [NSAffineTransform transform];
   [localTransform scaleXBy:NSWidth(boundsRect)/canvasSize.width
                        yBy:NSHeight(boundsRect)/canvasSize.height];
   
-
   while ((graphic = [enumerator nextObject]))
   {
-    [graphic renderInRect:boundsRect];
+     [graphic renderInRect:boundsRect];
 #ifdef DEBUG_BOUNDS
      [[NSColor yellowColor] set];
      debugRect = [graphic bounds];
-     debugRect.origin = [localTransform transformPoint:debugRect.origin];
-     debugRect.size = [localTransform transformSize:debugRect.size];
      [NSBezierPath strokeRect:debugRect];
 #endif
   }
 #ifdef DEBUG_BOUNDS
   [[NSColor redColor] set];
   debugRect = [self bounds];
-  debugRect.origin = [localTransform transformPoint:debugRect.origin];
-  debugRect.size = [localTransform transformSize:debugRect.size];
   [NSBezierPath strokeRect:debugRect];
 #endif
   NSLog(@"Render time: %f", -[startTime timeIntervalSinceNow]);
@@ -144,8 +144,6 @@
 -(void)renderInRect:(NSRect)boundsRect
 {
   NSMutableAttributedString *tmpString = [[NSMutableAttributedString alloc] initWithAttributedString:string];
-  NSAffineTransform *transf = [NSAffineTransform transform];
-  NSGraphicsContext *context = [NSGraphicsContext currentContext];
   NSSize boundingBox;
   int i, l = [tmpString length];
   float xScale = boundsRect.size.width/canvasSize.width; // get scale changes wrt max size
@@ -161,17 +159,25 @@
                       value:[NSFont fontWithName:[tmpFont fontName] size:MAX([tmpFont pointSize]*fontScale, AQT_MIN_FONTSIZE)] 				 					  range:NSMakeRange(i,1)];
   }
   boundingBox = [tmpString size];
+if (fabsf(angle)>1)
+{
+  NSAffineTransform *transf = [NSAffineTransform transform];
+  NSGraphicsContext *context = [NSGraphicsContext currentContext];
   //
   // Position local coordinate system and apply justification
   //
-  [transf translateXBy:xScale*position.x yBy:yScale*position.y];	// get translated origin
+  [transf translateXBy:position.x yBy:position.y];	// get translated origin
   [transf rotateByDegrees:angle];
   [transf translateXBy:-justification*boundingBox.width/2 yBy:-boundingBox.height/2];
   [context saveGraphicsState];
   [transf concat];
   [tmpString drawAtPoint:NSMakePoint(0,0)];
   [context restoreGraphicsState];
-
+}
+else
+{
+   [tmpString drawAtPoint:position];
+}
   [tmpString release];
 }
 @end
@@ -181,12 +187,6 @@
 @implementation AQTPath (AQTPathDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-   NSAffineTransform *localTransform = [NSAffineTransform transform];
-   float xScale = boundsRect.size.width/canvasSize.width;
-   float yScale = boundsRect.size.height/canvasSize.height;
-   //
-   // Get the transform due to view resizing
-   //
    if (pointCount == 0)
       return;
    if (![self _cache])
@@ -194,36 +194,30 @@
       NSBezierPath *scratch = [NSBezierPath bezierPath];
       [scratch appendBezierPathWithPoints:path count:pointCount];
       [scratch setLineJoinStyle:NSRoundLineJoinStyle];
+      [scratch setLineWidth:linewidth];
       [self _setCache:scratch];
    }
-   [localTransform scaleXBy:xScale yBy:yScale];
    [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-   [[localTransform transformBezierPath:_cache] stroke];	// FAQ: Needed unless we holes in the surface?
+   [_cache stroke];
 }
 @end
 
 @implementation AQTPatch (AQTPatchDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-  NSAffineTransform *localTransform = [NSAffineTransform transform];
-  float xScale = boundsRect.size.width/canvasSize.width;
-  float yScale = boundsRect.size.height/canvasSize.height;
-  //
-  // Get the transform due to view resizing
-  //
   if (pointCount == 0)
     return;
   if (![self _cache])
   {
     NSBezierPath *scratch = [NSBezierPath bezierPath];
     [scratch appendBezierPathWithPoints:path count:pointCount];
+    [scratch setLineWidth:linewidth];
     [scratch closePath];
     [self _setCache:scratch];
   }
-  [localTransform scaleXBy:xScale yBy:yScale];
   [[NSColor colorWithCalibratedRed:_color.red green:_color.green blue:_color.blue alpha:1.0] set];
-  [[localTransform transformBezierPath:_cache] fill];
-//  [[localTransform transformBezierPath:_cache] stroke];	// FAQ: Needed unless we holes in the surface?
+// [_cache stroke];	// FIXME: Needed unless we holes in the surface?
+  [_cache fill];
 }
 @end
 
@@ -231,16 +225,6 @@
 @implementation AQTImage (AQTImageDrawing)
 -(void)renderInRect:(NSRect)boundsRect
 {
-  NSAffineTransform *localTransform = [NSAffineTransform transform];
-  NSRect scaledBounds = [self bounds];
-  float xScale = boundsRect.size.width/canvasSize.width;
-  float yScale = boundsRect.size.height/canvasSize.height;
-  //
-  // Get the transform due to view resizing
-  //
-  [localTransform scaleXBy:xScale yBy:yScale];
-  scaledBounds.size = [localTransform transformSize:scaledBounds.size];
-  scaledBounds.origin = [localTransform transformPoint:scaledBounds.origin];
   if (![self _cache])
   {
     // Install an NSImage in _cache
@@ -262,7 +246,10 @@
     [tmpImage release];
     [tmpBitmap release];
   }
-  [_cache drawInRect:scaledBounds fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height) operation:NSCompositeSourceOver fraction:1.0];
+   [_cache drawInRect:_bounds
+             fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
+            operation:NSCompositeSourceOver
+             fraction:1.0];
 }
 @end
 
