@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.2 2001/11/17 23:28:22 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.3 2001/12/04 18:26:00 persquare Exp $
  *
  */
 
@@ -48,7 +48,7 @@ register_term(aqua)
 
 #ifdef TERM_PROTO
 /*
- * 2001-08-18	PP
+ * 2001-08-18 PP
  * src/tables.h defines S_OUTPUT which is also defined in
  * /System/Library/Frameworks/CoreServices.framework/Frameworks/OT.framework/Headers/OpenTransportProtocol.h:736: 
  * included from Foundation/NSFoundation.h
@@ -57,9 +57,11 @@ register_term(aqua)
  */ 
 #import <Foundation/NSConnection.h>
 #import <Foundation/NSDistantObject.h>
+#import <Foundation/NSDictionary.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSPortCoder.h>
 #import <Foundation/NSNotification.h>
+#import <Foundation/NSException.h>
 #import <AppKit/NSWorkspace.h>
 #import <AppKit/NSBezierPath.h>
 #import <stdarg.h>
@@ -67,13 +69,11 @@ register_term(aqua)
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
 
-
 #ifdef LOGGING
 #define LOG  NSLog
 #else
 #define LOG  NOOP_
 #endif
-
 
 /* Required entries */
 TERM_PUBLIC void AQUA_options __PROTO((void));
@@ -98,18 +98,18 @@ TERM_PUBLIC void AQUA_resume __PROTO((void));  /* before subsequent plot of mult
 TERM_PUBLIC void AQUA_linewidth __PROTO((double linewidth));
 TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 #ifdef PM3D
-	TERM_PUBLIC int AQUA_make_palette __PROTO((t_sm_palette *palette));
-	TERM_PUBLIC void AQUA_set_color __PROTO((double gray));
-	TERM_PUBLIC void AQUA_filled_polygon __PROTO((int points, gpiPoint *corners));
+  TERM_PUBLIC int AQUA_make_palette __PROTO((t_sm_palette *palette));
+  TERM_PUBLIC void AQUA_set_color __PROTO((double gray));
+  TERM_PUBLIC void AQUA_filled_polygon __PROTO((int points, gpiPoint *corners));
 #endif
 /* End of entries */
 
 
-#define AQUA_XMAX (11.69*72)	/* = 842, paper width times screen resolution */
-#define AQUA_YMAX (8.26*72)		/* = 595, paper height times screen resolution */
-#define AQUA_VTIC 8			
+#define AQUA_XMAX (11.69*72)  /* = 842, paper width times screen resolution */
+#define AQUA_YMAX (8.26*72)   /* = 595, paper height times screen resolution */
+#define AQUA_VTIC 8     
 #define AQUA_HTIC 8
-#define AQUA_VCHAR 16			/* default font is Times at 16 points */
+#define AQUA_VCHAR 16     /* default font is Times at 16 points */
 #define AQUA_HCHAR (AQUA_VCHAR*6/10)
 
 /*
@@ -126,6 +126,12 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
  */
 @protocol AQTProtocol
 //
+// Returns key/value coded objects such as a version
+// number string for AquaTerm in the form #.#.#
+// Parameters like AQUA_XMAX should also be passed here
+//
+- (bycopy NSDictionary *) getAquaTermInfo;
+//
 // Render the current model, argument is normally YES unless
 // this is part of a multiplot operation with subsequent 
 // drawing to the same model
@@ -139,13 +145,13 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 // colors 0 and upwards are taken modulo N (i.e cyclic)
 //
 - (oneway void) addString:(bycopy NSString *)text 
-                     atPoint:(bycopy NSPoint)point 
-                     withJustification:(bycopy int)justification 
-                     withIndexedColor:(bycopy int)colorIndex;
+           atPoint:(bycopy NSPoint)point 
+           withJustification:(bycopy int)justification 
+           withIndexedColor:(bycopy int)colorIndex;
 //
 // Set the font for the subsequent strings added to the model
 // (mimics fontWithName: size: method in NSFont)
-//                  
+//          
 - (oneway void) setFontWithName:(bycopy NSString *)fontName size:(bycopy float)fontSize;
 //
 // Add graphic elements to the model. A "polyline" refers to any 
@@ -174,124 +180,49 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 
 #ifdef TERM_BODY
 
-
-static NSAutoreleasePool *arpool;       // our autorelease pool 
-static id gnuTermAccess;                // local object manages the D.O. connection
+static NSAutoreleasePool *arpool;   // our autorelease pool 
+static id gnuTermAccess;        		// local (and private) object manages the D.O. connection
+static int currentWindow = 0;				// the only option to set
+// FIXME: stuff below goes into gnuTermAccess object
 static NSBezierPath *thePath;
 static int currentJustificationMode;
 static int currentLinetype;
 static double currentGray; 
-static int currentWindow = 0;
 
 
 @implementation NSBezierPath (NSBezierPathDOCategory)
 - (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder 
 {
-	if ([portCoder isBycopy]) 
-		return self;
-	return [super replacementObjectForPortCoder:portCoder];
+  if ([portCoder isBycopy]) 
+    return self;
+  return [super replacementObjectForPortCoder:portCoder];
 }
 @end
 
-
-/*
- * Interface for ObjC NSConnection code
- */ 
+//
+// Private Obj-C class GnuTermDriver
+//
 @interface GnuTermDriver:NSObject 
 {
   @private
-    NSDistantObject *server;
+  NSDistantObject *server;
 }
-/*
- * Minimal set of methods
- */
-- (id)init;
-/*
- * Accessors etc.
- */
- -(NSDistantObject *)server;
-/*
- * Rest of methods
- */ 
-- (void)senderIsInvalid:(NSNotification *)notification;
+-(id)init;
+-(void)dealloc;
+-(id)server;
+-(void)invalidateServer;
+-(BOOL)connectToServer; 
 @end
-/*
- * The actual instances of the methods
- */
+
 @implementation GnuTermDriver
 - (id)init
 {
-	BOOL defaultApp = YES;
-	NSString *appString;
-    NSConnection *myConnection;
-	/*
-	 * Establish a connection to graphics terminal (server)
-	 * First check if a  server is registered already
-	 * If not, check if environment variable GNUTERM is set
-	 * and try to launch that application
-	 * Finally default to looking for a hardcoded app in 
-	 * standard locations.
-	 *
-	 */
-    server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-    if (server) /* Server is running ready to go */
-    {		
-    	[server retain];
+	self = [super init];
+	if ([self connectToServer])
+	{
+		[server setProtocolForProxy:@protocol(AQTProtocol)];
 	}
-    else /* Server isn't running, we must fire it up */
-    {
-		if (getenv("GNUTERMAPP") == (char *)NULL)
-		{
-    		appString = [NSString stringWithString:@"AquaTerm"];
-		}
-		else
-		{
-			appString = [NSString stringWithCString:getenv("GNUTERMAPP")];
-    		defaultApp = NO;
-		}
-		/* Try to launch application */
-        if ([[NSWorkspace sharedWorkspace] launchApplication:appString] == NO) 
-        {
-	    	printf("Failed to launch gnuplot server.\n");
-	    	if (defaultApp)
-	    	{
-	    		printf("You must either put the server application in \n");
-	    		printf("the /Applications folder, ~/Applications folder\n");
-	    		printf("or set the environment variable GNUTERMAPP to the\n");
-	    		printf("full path of the server application, e.g.\n");
-	    		printf("setenv GNUTERMAPP \"/some/strange/location/MyServer.app\"\n");
-	    	}
-	    	else
-	    	{
-	    		printf("Check environment variable GNUTERMAPP for errors\n");
-	    	}
-	    	/*
-	    	 * FIXME: Gnuplot should default to something here...
-	    	 */
-        }
-        else 
-        {
-	    /* Wait for it to register Server methods with OS */
-	    	do {
-	      		server =[NSConnection
-			 	rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
-	    	} while (!server);	/* This could result in a hang... */
-    		[server retain];
-		}
-    }
-    /* 
-     * By limiting ourselves to known protocol
-     * we speed up the messaging 
-     */
-    [server setProtocolForProxy:@protocol(AQTProtocol)];
-
-    /* If the server dies we want to know about it (FIXME: Does this work correctly) */
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-    										 selector:@selector(senderIsInvalid:) 
-    											 name:NSConnectionDidDieNotification  
-    										   object:nil
-    										   ]; 
-	return self;
+  return self;
 }
 
 -(void)dealloc
@@ -300,119 +231,163 @@ static int currentWindow = 0;
   [super dealloc];
 }
 
+-(void)invalidateServer
+{
+	[server release];
+	server = nil;
+	currentWindow = 0;
+	printf("Lost connection to server,\nuse \"set term aqua <n>\" to reconnect.");
+}
+
+-(BOOL)connectToServer
+{
+  BOOL defaultApp = YES;
+  BOOL didConnect = NO;
+  NSString *appString;
+  /*
+   * Establish a connection to graphics terminal (server)
+   * First check if a  server is registered already
+   * If not, check if environment variable GNUTERMAPP is set
+   * and try to launch that application
+   * Finally default to looking for a hardcoded app in 
+   * standard locations.
+   */
+  server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+  if (server) /* Server is running ready to go */
+  {   
+    [server retain];
+    didConnect = YES;
+  }
+  else /* Server isn't running, we must fire it up */
+  {
+    if (getenv("GNUTERMAPP") == (char *)NULL)
+    {
+      appString = [NSString stringWithString:@"AquaTerm"];
+    }
+    else
+    {
+      appString = [NSString stringWithCString:getenv("GNUTERMAPP")];
+      defaultApp = NO;
+    }
+    /* Try to launch application */
+    if ([[NSWorkspace sharedWorkspace] launchApplication:appString] == NO) 
+    {
+      printf("Failed to launch gnuplot server.\n");
+      if (defaultApp)
+      {
+        printf("You must either put the server application in \n");
+        printf("the /Applications folder, ~/Applications folder\n");
+        printf("or set the environment variable GNUTERMAPP to the\n");
+        printf("full path of the server application, e.g.\n");
+        printf("setenv GNUTERMAPP \"/some/strange/location/MyServer.app\"\n");
+      }
+      else
+      {
+        printf("Check environment variable GNUTERMAPP for errors\n");
+      }
+    }
+    else 
+    {
+      do { /* Wait for it to register Server methods with OS */
+        server =[NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
+      } while (!server);  /* This could result in a hang... */
+      [server retain];
+      didConnect = YES;
+   	}
+  }
+  return didConnect;
+}
+
 -(NSDistantObject *)server
 {
-    return server;
+  return server;
 }
-
-- (void) senderIsInvalid: (NSNotification *) notification
-{
-	LOG(@"Lost connection to server...\nMessage: %@\n", [notification object]);
-    //[server invalidate];
-    server = nil;
-}
-
 @end
 
 
 enum AQUA_id {
-    AQUA_DEFAULT,
-    /* AQUA_TITLE, */
-    AQUA_OTHER
+  AQUA_DEFAULT,
+  AQUA_OTHER
 };
 
 
 static struct gen_table AQUA_opts[] =
 {
-    { "d$efault", AQUA_DEFAULT },
-    /* { "ti$tle", AQUA_TITLE }, */
-    { NULL, AQUA_OTHER }
+  { "d$efault", AQUA_DEFAULT },
+  { NULL, AQUA_OTHER }
 };
-
-/* static char AQUA_title[MAX_LINE_LEN + 1]; */
-
 
    /**"
    *** AQUA_options is called 0 or more times before a call to AQUA_init occurs.
    *** It is important that the option <n> is passed correctly to GNUTERMAPP
-   *** A particularly tricky situation is when option <n> is passed before the first
-   *** operation resulting in a call to AQUA_init.
    "**/
 TERM_PUBLIC void
 AQUA_options()
 {
-    struct value a;
+  struct value a;
 
-    LOG(@"AQUA_options");    
-
-    while (!END_OF_COMMAND) 
+  LOG(@"AQUA_options");
+  while (!END_OF_COMMAND) 
+  {
+    switch(lookup_table(&AQUA_opts[0],c_token)) 
     {
-      switch(lookup_table(&AQUA_opts[0],c_token)) 
-      {
-         case AQUA_DEFAULT:
-            /*
-                something...
-            */
-            currentWindow = 0;
-            if (gnuTermAccess)
-            {
-                // set the window number
-               [[gnuTermAccess server]  selectModel:currentWindow];
-
-            }            
-            c_token++;
-            break;
-/*
-         case AQUA_TITLE:
-            c_token++;
-            if (!isstring(c_token)) 
-            { 
-               fprintf(stderr, "usage:  set term aqua title \"newtitle\"\n"); 
-            }
-            quote_str(AQUA_title, c_token, MAX_LINE_LEN + 1);
-            break;
-*/
-         case AQUA_OTHER:
-            currentWindow = (int) real(const_express(&a));
-            /* Make sure we have a connection before passing a message */
-            if (gnuTermAccess)
-            {
-                // set the window number
-               [[gnuTermAccess server]  selectModel:currentWindow];
-
-            }
-            break;	
-        default:            
-            /*
-                something...
-            */
-            break;
-      }
+     case AQUA_DEFAULT:
+      currentWindow = 0;
+      c_token++;
+      break;
+     case AQUA_OTHER:
+      currentWindow = (int) real(const_express(&a));
+      break;  
+    default:      
+      break;
     }
+  }
 }
 
 
 TERM_PUBLIC void
 AQUA_init()
 {
-    LOG(@"Aqua Init");
-    /*
-        * Init is called when plotting after 'set term aqua'
-        * Make sure we don't leak mem by allocating every time
-        */
-    if (arpool == NULL)
-    {
-        arpool = [[NSAutoreleasePool alloc] init]; 
-        gnuTermAccess = [[GnuTermDriver alloc] init]; 
-        thePath = [[NSBezierPath alloc] init];
-        currentJustificationMode = 0;
-        currentLinetype = 0;
-        currentGray = 0.0;
-    }
-    term->xmax = AQUA_XMAX;
-    term->ymax = AQUA_YMAX;
-    // This could have been changed beforehand
-    [[gnuTermAccess server]  selectModel:currentWindow];
+	NSDictionary *termInfo;
+  LOG(@"Aqua Init");
+  if (arpool == NULL)   /* Make sure we don't leak mem by allocating every time */
+  {
+    arpool = [[NSAutoreleasePool alloc] init]; 
+    gnuTermAccess = [[GnuTermDriver alloc] init]; 
+    thePath = [[NSBezierPath alloc] init];
+    currentJustificationMode = 0;
+    currentLinetype = 0;
+    currentGray = 0.0;
+  }
+  if (![gnuTermAccess server])	/* server could be invalid (=nil) for several reasons */
+  {
+  	if ([gnuTermAccess connectToServer])
+  	{
+  		[[gnuTermAccess server] setProtocolForProxy:@protocol(AQTProtocol)];
+		}
+  }
+  NS_DURING	/* try */
+		if ([[gnuTermAccess server] respondsToSelector:@selector(getAquaTermInfo)]) /* test protocol */ 
+		{
+			// protocol version > 0.1.0
+			termInfo = [[gnuTermAccess server] getAquaTermInfo];
+			term->xmax =[[termInfo objectForKey:@"AQTXMax"] unsignedIntValue]; 
+			term->ymax =[[termInfo objectForKey:@"AQTYMax"] unsignedIntValue]; 
+		}
+		else
+		{
+			// protocol version = 0.1.0
+			term->xmax = AQUA_XMAX;
+			term->ymax = AQUA_YMAX;
+			NSLog(@"Warning - the graphics server is old, please update it!");
+		}
+		[[gnuTermAccess server]  selectModel:currentWindow];
+	NS_HANDLER 
+		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+			[gnuTermAccess invalidateServer];
+		else
+			[localException raise];
+	NS_ENDHANDLER
 }
 
 TERM_PUBLIC void
@@ -424,14 +399,19 @@ AQUA_reset()
 TERM_PUBLIC void
 AQUA_text()
 {
-    if ([thePath isEmpty] == NO)
-    {
-        // This happens if a (stroked) path hasn't been sent
-        // PM3D patches are _always_ sent immediately
-        [[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-        [thePath removeAllPoints];                                 
-    }
-    [[gnuTermAccess server] renderInViewShouldRelease:YES]; // Draw!
+	NS_DURING
+		if ([thePath isEmpty] == NO)
+		{
+			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
+			[thePath removeAllPoints];                   
+		}
+		[[gnuTermAccess server] renderInViewShouldRelease:YES]; // Draw!
+	NS_HANDLER
+		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+			[gnuTermAccess invalidateServer];
+		else
+			[localException raise];
+	NS_ENDHANDLER
 }
 
 
@@ -443,134 +423,168 @@ AQUA_graphics()
 TERM_PUBLIC void
 AQUA_move(unsigned int x, unsigned int y)
 {
-    [thePath moveToPoint:NSMakePoint(x, y)];
+  [thePath moveToPoint:NSMakePoint(x, y)];
 }
 
 
 TERM_PUBLIC void
 AQUA_vector(unsigned int x, unsigned int y)
 {
-    [thePath lineToPoint:NSMakePoint(x, y)];
+  [thePath lineToPoint:NSMakePoint(x, y)];
 }
 
 
 TERM_PUBLIC void
 AQUA_linetype(int linetype)
 {
-    /*
-     * Change linetype
-     */
-    if ([thePath isEmpty] == NO)
-    {
-        // This happens if a (stroked) path hasn't been sent
-        // PM3D patches are _always_ sent immediately
-        [[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-        [thePath removeAllPoints];                                 
-    }
-    currentLinetype = linetype;   
+  if ([thePath isEmpty] == NO)
+  {
+		NS_DURING
+			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
+			[thePath removeAllPoints];                   
+		NS_HANDLER
+			if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+				[gnuTermAccess invalidateServer];
+			else
+				[localException raise];
+		NS_ENDHANDLER
+  }
+  currentLinetype = linetype;   
 }
 
 TERM_PUBLIC void
 AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 {
-    if (!strlen(str))
-		return;
-    [[gnuTermAccess server] addString:[NSString stringWithCString:str] 
-                            atPoint:NSMakePoint(x, y)
-                       		withJustification:currentJustificationMode
-                      	    withIndexedColor:currentLinetype];    
+  if (!strlen(str))
+    return;
+  NS_DURING
+		[[gnuTermAccess server] addString:[NSString stringWithCString:str] 
+															atPoint:NSMakePoint(x, y)
+										withJustification:currentJustificationMode
+										 withIndexedColor:currentLinetype];    
+	NS_HANDLER
+		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+			[gnuTermAccess invalidateServer];
+		else
+			[localException raise];
+	NS_ENDHANDLER
 }
 
 TERM_PUBLIC int 
 AQUA_justify_text (enum JUSTIFY mode)
 {
-    currentJustificationMode = mode;
-	return (TRUE);
+  currentJustificationMode = mode;
+  return (TRUE);
 }
 
 TERM_PUBLIC int 
-AQUA_set_font(const char *font)	/* "font,size" */
+AQUA_set_font(const char *font) /* "font,size" */
 {
-	// [NSString stringWithCString:font]
-	[[gnuTermAccess server] setFontWithName:@"Times-Roman" size:16.0];
-	return (TRUE);
+	NS_DURING
+  	[[gnuTermAccess server] setFontWithName:@"Times-Roman" size:16.0];
+  NS_HANDLER
+		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+			[gnuTermAccess invalidateServer];
+		else
+			[localException raise];
+	NS_ENDHANDLER
+  
+  return (TRUE);
 }
 
 TERM_PUBLIC void 
 AQUA_set_pointsize(double size) /* notification of set pointsize */
 {
-	LOG(@"    AQUA_set_pointsize(%f)",size);
+  LOG(@"    AQUA_set_pointsize(%f)",size);
 }
 
 TERM_PUBLIC void 
-AQUA_suspend(void)	/* after one plot of multiplot */
+AQUA_suspend(void)  /* after one plot of multiplot */
 {
-	LOG(@"    AQUA_suspend");
-	if ([thePath isEmpty] == NO)
-	{
-		// This happens if a (stroked) path hasn't been sent
-		// PM3D patches are _always_ sent immediately
-		[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-		[thePath removeAllPoints];                                 
-	}
-	[[gnuTermAccess server] renderInViewShouldRelease:NO];
+  LOG(@"    AQUA_suspend");
+	NS_DURING
+  	if ([thePath isEmpty] == NO)
+  	{
+			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
+			[thePath removeAllPoints];                   
+		}
+		[[gnuTermAccess server] renderInViewShouldRelease:NO];
+	NS_HANDLER
+		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+			[gnuTermAccess invalidateServer];
+		else
+			[localException raise];
+	NS_ENDHANDLER
 }
  
 TERM_PUBLIC void 
-AQUA_resume(void)	/* before subsequent plot of multiplot */
+AQUA_resume(void) /* before subsequent plot of multiplot */
 {
-	LOG(@"    AQUA_resume");
+  LOG(@"    AQUA_resume");
 }
   
 TERM_PUBLIC void 
 AQUA_linewidth(double linewidth)
 {
-	LOG(@"      AQUA_linewidth(%f)",linewidth);
-    [thePath setLineWidth:linewidth];
+  LOG(@"    AQUA_linewidth(%f)",linewidth);
+  [thePath setLineWidth:linewidth];
 }
 
 TERM_PUBLIC void 
 AQUA_pointsize(double pointsize)
 {
-	LOG(@"      AQUA_pointsize(%f)",pointsize);
+  LOG(@"    AQUA_pointsize(%f)",pointsize);
 }
 
 #ifdef PM3D
-	TERM_PUBLIC int 
-	AQUA_make_palette(t_sm_palette *palette)
-	{
-		/* We handle the palette in the server */
-		return(0);
-	}
+  TERM_PUBLIC int 
+  AQUA_make_palette(t_sm_palette *palette)
+  {
+    /* We handle the palette in the server */
+    return(0);
+  }
 
-	TERM_PUBLIC void 
-	AQUA_set_color(double gray)
-	{
-                
-		LOG(@"[pm3d] AQUA_set_color(%f)", gray);
-		if ([thePath isEmpty] == NO)
-		{
-			// This happens if a (stroked) path hasn't been sent before drawing PM3D patches
-			[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
-			[thePath removeAllPoints];                                 
-		}
-		currentGray = gray;
-	}
+  TERM_PUBLIC void 
+  AQUA_set_color(double gray)
+  {
+        
+    LOG(@"[pm3d] AQUA_set_color(%f)", gray);
+    if ([thePath isEmpty] == NO)
+    {
+      // This happens if a (stroked) path hasn't been sent before drawing PM3D patches
+      NS_DURING
+      	[[gnuTermAccess server] addPolyline:thePath withIndexedColor:currentLinetype];    
+      NS_HANDLER
+			if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+				[gnuTermAccess invalidateServer];
+			else
+				[localException raise];
+			NS_ENDHANDLER
+      [thePath removeAllPoints];                   
+    }
+    currentGray = gray;
+  }
 
-	TERM_PUBLIC void 
-	AQUA_filled_polygon(int points, gpiPoint *corners)
-	{
-		int i;
-		
-        [thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
-		for (i=1;i<points;i++)
-		{
-           [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
-		}
-		[thePath closePath];
-        [[gnuTermAccess server] addPolygon:thePath withColor:currentGray];
-        [thePath removeAllPoints];                                 
-	}
+  TERM_PUBLIC void 
+  AQUA_filled_polygon(int points, gpiPoint *corners)
+  {
+    int i;
+		NS_DURING    
+			[thePath moveToPoint:NSMakePoint(corners[0].x, corners[0].y)];
+			for (i=1;i<points;i++)
+			{
+				 [thePath lineToPoint:NSMakePoint(corners[i].x, corners[i].y)];
+			}
+			[thePath closePath];
+			[[gnuTermAccess server] addPolygon:thePath withColor:currentGray];
+			[thePath removeAllPoints];                   
+		NS_HANDLER
+			if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
+				[gnuTermAccess invalidateServer];
+			else
+				[localException raise];
+		NS_ENDHANDLER
+  }
 #endif
 
 
@@ -580,24 +594,24 @@ AQUA_pointsize(double pointsize)
 
 
 TERM_TABLE_START(aqua_driver)
-    "aqua",
-    "Interface to aqua under MacOS X",
-    AQUA_XMAX, AQUA_YMAX, AQUA_VCHAR, AQUA_HCHAR, AQUA_VTIC, AQUA_HTIC, 
-    AQUA_options, AQUA_init, AQUA_reset,
-    AQUA_text, null_scale, AQUA_graphics, AQUA_move, AQUA_vector,
-    AQUA_linetype, AQUA_put_text, 
-    /* optionals */
-    null_text_angle,
-    AQUA_justify_text, do_point, do_arrow, AQUA_set_font,
-    AQUA_pointsize, TERM_CAN_MULTIPLOT,
-    AQUA_suspend, AQUA_resume,
-    0 /* AQUA_boxfill */, AQUA_linewidth
-	, 0, 0, 0, 0, 0
+  "aqua",
+  "Interface to graphics terminal server for Mac OS X",
+  AQUA_XMAX, AQUA_YMAX, AQUA_VCHAR, AQUA_HCHAR, AQUA_VTIC, AQUA_HTIC, 
+  AQUA_options, AQUA_init, AQUA_reset,
+  AQUA_text, null_scale, AQUA_graphics, AQUA_move, AQUA_vector,
+  AQUA_linetype, AQUA_put_text, 
+  /* optionals */
+  null_text_angle,
+  AQUA_justify_text, do_point, do_arrow, AQUA_set_font,
+  AQUA_pointsize, TERM_CAN_MULTIPLOT,
+  AQUA_suspend, AQUA_resume,
+  0 /* AQUA_boxfill */, AQUA_linewidth
+  , 0, 0, 0, 0, 0
 #ifdef PM3D
-    , AQUA_make_palette,
-    0 /* AQUA_previous_palette */,
-    AQUA_set_color,
-    AQUA_filled_polygon
+  , AQUA_make_palette,
+  0 /* AQUA_previous_palette */,
+  AQUA_set_color,
+  AQUA_filled_polygon
 #endif
 TERM_TABLE_END(aqua_driver)
 
@@ -620,7 +634,7 @@ START_HELP(aqua)
 "?aqua",
 "?Aqua",
 " Syntax:",
-"       set terminal aqua {<n>}",
+"   set terminal aqua {<n>}",
 "",
 " where <n> is the number of the window to display the plot in.",
 " Default window number is 0."
