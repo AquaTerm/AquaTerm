@@ -6,8 +6,9 @@
 //  Copyright (c) 2003 AquaTerm. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-//#import "AQTGraphic.h"
+#import <Foundation/NSString.h>
+#import <Foundation/NSGeometry.h>
+#import <Foundation/NSDistantObject.h>
 
 @class AQTPlotBuilder;
 @protocol AQTConnectionProtocol, AQTClientProtocol;
