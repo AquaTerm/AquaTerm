@@ -101,9 +101,9 @@
   NSRect testRect;
   int i;
   int  objectCount = [modelObjects count];
-
+#ifdef TIMING
   NSDate *startTime=  [NSDate date];
-
+#endif
   targetRect = NSInsetRect(targetRect, -0.5, -0.5); // Try to be smart...
 
   if(objectCount == 0)
@@ -134,7 +134,9 @@
       }
     }
   }
+#ifdef TIMING
   NSLog(@"Time taken: %f", -[startTime timeIntervalSinceNow]);
+#endif
 }
 
 -(void)setTitle:(NSString *)newTitle

@@ -25,7 +25,7 @@
    return self;
 }
 
--(void)_aqtSetupView
+-(void)_aqtSetupViewShouldResize:(BOOL)shouldResize
 {
    NSSize tmpSize = [model canvasSize];
    [canvas setModel:model];
@@ -38,8 +38,11 @@
    {
       [[canvas window] setTitle:[model title]];
    }
-   [[canvas window] setContentSize:tmpSize];
-   [[canvas window] setAspectRatio:tmpSize];
+   if (shouldResize)
+   {
+      [[canvas window] setContentSize:tmpSize];
+      [[canvas window] setAspectRatio:tmpSize];
+   }
    [[canvas window] setMaxSize:NSMakeSize(tmpSize.width*2, tmpSize.height*2)];
    [[canvas window] setMinSize:NSMakeSize(tmpSize.width/4, tmpSize.height/4)];
    [canvas setNeedsDisplay:YES];
@@ -50,14 +53,13 @@
 {
    if (model)
    {
-      [self _aqtSetupView];
+      [self _aqtSetupViewShouldResize:YES];
    }
    _isWindowLoaded = YES;
 }
 
 -(void)dealloc
 {
-   NSLog(@"Over and out from AQTPlot!");
    [model release];
    [_clientName release];
    [lastEvent release];
@@ -77,13 +79,24 @@
 
 -(void)setModel:(AQTModel *)newModel
 {
+   BOOL viewNeedResize = YES;
+   
    [newModel retain];
+   if (model)
+   {
+      NSSize oldSize = [model canvasSize];
+      NSSize newSize = [newModel canvasSize];
+      if (fabs(oldSize.height/oldSize.width - newSize.height/newSize.width) < 0.001)
+      {
+         viewNeedResize = NO;
+      }
+   }
    [model release];		// let go of any temporary model not used (unlikely)
    model = newModel;		// Make it point to new model
 
    if (_isWindowLoaded)
    {
-      [self _aqtSetupView];
+      [self _aqtSetupViewShouldResize:viewNeedResize];
    }
 }
 
@@ -91,7 +104,7 @@
 {
    if (_client == aClient)
    {
-      NSLog(@"Invalidating client");
+      // NSLog(@"Invalidating client");
       [self setAcceptingEvents:NO];
       [self setClient:nil];
       [self setClientInfoName:@"No connection" pid:-1];
@@ -139,7 +152,7 @@
       NS_DURING
          [_client processEvent:event];
       NS_HANDLER
-         NSLog([localException name]);
+         // NSLog([localException name]);
          if ([[localException name] isEqualToString:@"NSObjectInaccessibleException"])
             [self invalidateClient:_client]; // invalidate client
          else
@@ -219,7 +232,6 @@
 - (IBAction)saveDocumentAs:(id)sender
 {
    NSSavePanel *savePanel = [NSSavePanel savePanel];
-   NSLog(@"Hello from save");
    /*
     if (![NSBundle loadNibNamed:@"ExtendSavePanel" owner:self])
     {

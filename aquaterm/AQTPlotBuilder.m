@@ -61,7 +61,6 @@
 
 - (void)dealloc
 {
-   NSLog(@"Builder says bye bye!");
    [_handler release];
    [_model release];
    [super dealloc];
@@ -210,7 +209,6 @@
 
 - (void)processEvent:(NSString *)event
 {
-   NSLog(@"builder got event: %@", event);
    [owner processEvent:event]; // FIXME: Needs autoreleasing here???
 }
 
@@ -296,7 +294,7 @@
    _pointCount++;
    if (_pointCount == MAX_PATH_POINTS)
    {
-      NSLog(@"---- Reaching path limit (%d) ----", MAX_PATH_POINTS);
+      // NSLog(@"---- Reaching path limit (%d) ----", MAX_PATH_POINTS);
       // Split the line
       [self addPolylineWithPoints:_path pointCount:_pointCount];
       _pointCount = 0;

@@ -21,7 +21,7 @@
          while (--timer && !didConnect)
          {
             // sleep 1s
-            NSLog(@"Waiting...");
+            NSLog(@"Waiting... %d", timer);
             [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
             // check for server connection
             _server = [NSConnection rootProxyForConnectionWithRegisteredName:@"aquatermServer" host:nil];
@@ -33,7 +33,7 @@
       {
          if ([_server conformsToProtocol:@protocol(AQTConnectionProtocol)])
          {
-            NSLog(@"Conforming!");
+            // NSLog(@"Conforming!");
             [_server retain];
             [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
             didConnect = YES;

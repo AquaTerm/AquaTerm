@@ -87,7 +87,6 @@ Event handling of user input is provided through an optional callback function.
 
 - (void)dealloc
 {
-   NSLog(@"byebye from adapter");
    // Must come before others, see AQTPlotBuilder
    NS_DURING
       NSEnumerator *enumObjects = [_builders objectEnumerator];
@@ -342,13 +341,14 @@ _{@"NSUnderline" 0or1}
 {
    if (_eventHandler != nil)
    {
-      NSLog(@"Passing to handler");
       _eventHandler(event);
    }
-   else
+/*
+ else
    {
-      NSLog(@"No handler");
+      NSLog(@"No event handler installed.");
    }
+*/
 }
 
 /*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
