@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.14 2002/09/02 11:45:04 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.15 2002/09/02 14:25:51 persquare Exp $
  *
  */
 
@@ -209,6 +209,7 @@ static t_sm_palette *aqua_palette = nil;
 -(void) setTextfont:(const char *)font;
 -(void) fillRect:(NSRect)rect style:(int)style;
 -(void) setLinewidth:(double)linewidth;
+-(double) linewidth;
 -(void) setColor:(NSColor *)color forIndex:(int)index; 
 -(void) setFillColor:(double)gray;
 -(void) setPolygonUsing:(int)count corners:(gpiPoint *)corners;
@@ -510,6 +511,11 @@ static t_sm_palette *aqua_palette = nil;
   }
 }
 
+- (double) linewidth
+{
+  return linewidth;
+}
+
 -(void) setFillColor:(double)newGray
 {
   int newFillColor = (int)(PM3D_COLORS*newGray+.5);
@@ -785,8 +791,20 @@ AQUA_set_pointsize(double size) /* notification of set pointsize */
 TERM_PUBLIC void 
 AQUA_point(unsigned int x, unsigned int y, int number)
 {
-  [gnuTermAccess moveToPoint:NSMakePoint(x, y)];
-  [gnuTermAccess lineToPoint:NSMakePoint(x+1, y+1)];  
+  // Avoid changing lw unless necessary
+  if ([gnuTermAccess linewidth] != 1.0)
+  {
+    double tmplw = [gnuTermAccess linewidth];
+    [gnuTermAccess setLinewidth:1.0];
+    [gnuTermAccess moveToPoint:NSMakePoint(x-.5, y)];
+    [gnuTermAccess lineToPoint:NSMakePoint(x+.5, y)];
+    [gnuTermAccess setLinewidth: tmplw];
+  }
+  else
+  {
+    [gnuTermAccess moveToPoint:NSMakePoint(x-.5, y)];
+    [gnuTermAccess lineToPoint:NSMakePoint(x+.5, y)];
+  }
   do_point(x, y, number);
 }
 
