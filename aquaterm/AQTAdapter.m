@@ -10,12 +10,15 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #import "AQTAdapter.h"
+#import "AQTPlotBuilder.h"
+/*
 #import "AQTGraphic.h"
 #import "AQTModel.h"
 #import "AQTLabel.h"
 #import "AQTPath.h"
 #import "AQTPatch.h"
 #import "AQTImage.h"
+*/
 #import "AQTConnectionProtocol.h"
 #import "AQTClientProtocol.h"
 
@@ -29,6 +32,7 @@
 /*" AQTAdapter is a class that provides an interface to the functionality of AquaTerm.
 As such, it bridges the gap between client's procedural calls requesting operations
 such as drawing a line or placing a label and the object-oriented graph being built.
+The actual assembling of the graph is performed by an instance of class AQTPlotBuilder.
 
 It seemlessly provides a connection to the viewer (AquaTerm.app) without any work on behalf of the client. 
 
@@ -41,22 +45,11 @@ error handling callback function for the client.
 {
   if(self = [super init])
   {
-    AQTModel *nilModel = [[AQTModel alloc] initWithSize:NSMakeSize(300,200)];
-    [self setModel:nilModel];
-    [nilModel release];
-    _modelIsDirty = NO;
+    _builder = [[AQTPlotBuilder alloc] init];
     _uniqueId = [[NSString stringWithString:[[NSProcessInfo processInfo] globallyUniqueString]] retain];
     _procName = [[NSString stringWithString:[[NSProcessInfo processInfo] processName]] retain];
     _procId = [[NSProcessInfo processInfo] processIdentifier];
     NSLog(@"procUniqueId: %@\nprocName: %@\nprocId: %d", _uniqueId, _procName, _procId);
-    // Default values:
-
-    _color.red = 0.0;
-    _color.green = 0.0;
-    _color.blue = 0.0;
-    _fontname = @"Times-Roman";
-    _fontsize = 18.0;
-    _linewidth = .2;
     if(localHandler)
     {
       _handler = localHandler;
@@ -99,16 +92,13 @@ error handling callback function for the client.
   NS_DURING
     [_server removeAQTClientWithId:_uniqueId]; // Where to place this???
   NS_HANDLER
-//    if ([[localException name] isEqualToString:@"NSInvalidSendPortException"] ||Ê[[localException name] isEqualToString:NSObjectInaccessibleException])
-      NSLog(@"NOOP");
-//    else
-//      [localException raise];
+      NSLog(@"Discarding exception...");
   NS_ENDHANDLER
   [_handler release];
   [_server release];
   [_uniqueId release];
   [_procName release];
-  [_model release];
+  [_builder release];
   [super dealloc];
 }
 
@@ -116,17 +106,6 @@ error handling callback function for the client.
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr
 {
   _errorHandler = fPtr;
-}
-- (void)setModel:(AQTModel *)newModel
-{
-  [newModel retain];
-  [_model release];
-  _model = newModel;
-}
-
-- (AQTModel *)model
-{
-  return _model;
 }
 
 /*
@@ -136,9 +115,7 @@ error handling callback function for the client.
 */
 - (void)setColorRed:(float)r green:(float)g blue:(float)b
 {
-  _color.red = r;
-  _color.green = g;
-  _color.blue = b;
+  [_builder setColorRed:r green:g blue:b];
 }
 /*
 - (void)setColor:(AQTColor)newColor
@@ -146,116 +123,73 @@ error handling callback function for the client.
   _color = newColor;
 }
 */
+
+// FIXME: key-value coding for accessors?
 - (NSString *)fontname
 {
-  return _fontname;
+  return [_builder fontname];
 }
 
 - (void)setFontname:(NSString *)newFontname
 {
-  if (_fontname != newFontname)
-  {
-    NSString *oldValue = _fontname;
-    _fontname = [newFontname retain];
-    [oldValue release];
-  }
+  [_builder setFontname:newFontname];
 }
 
 - (float)fontsize
 {
-  return _fontsize;
+  return [_builder fontsize];
 }
 
 - (void)setFontsize:(float)newFontsize
 {
-  _fontsize = newFontsize;
+  [_builder setFontsize:newFontsize];
 }
 
 - (float)linewidth
 {
-  return _linewidth;
+  return [_builder linewidth];
 }
 
 - (void)setLinewidth:(float)newLinewidth
 {
-  _linewidth = newLinewidth;
+  [_builder setLinewidth:newLinewidth];
 }
 - (void)eraseRect:(NSRect)aRect
 {
-  [[self model] removeObjectsInRect:aRect];
+  [_builder eraseRect:aRect];
 }
 
-//
-// AQTLabel
-//
 - (void)addLabel:(NSString *)text position:(NSPoint)pos angle:(float)angle justification:(int)just
 {
-  AQTLabel *lb = [[AQTLabel alloc] initWithAttributedString:[[[NSAttributedString  alloc] initWithString:text] autorelease]
-                                                   position:pos
-                                                      angle:angle
-                                              justification:just];
-  [[self model] addObject:lb];
-  [lb release];
-  _modelIsDirty = YES;
+  [_builder addLabel:text position:pos angle:angle justification:just];
 }
-//
-// AQTPath
-//
+
 - (void)addLineAtPoint:(NSPoint)point
 {
-  if (_pointCount > 1)
-  {
-    AQTPath *tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount color:_color];
-    [tmpPath setLinewidth:_linewidth];
-    [[self model] addObject:tmpPath];
-    [tmpPath release];
-  }
-  _path[0]=point;
-  _pointCount = 1;
-  _modelIsDirty = YES;
+  [_builder addLineAtPoint:point];
 }
 
 - (void)appendLineToPoint:(NSPoint)point
 {
-  _path[_pointCount]=point;
-  _pointCount++;
-  if (_pointCount == MAX_PATH_POINTS)
-  {
-    [self addLineAtPoint:point];
-  }
-  _modelIsDirty = YES;
+  [_builder appendLineToPoint:point];
 }
-//
-// AQTPatch
-//
+
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
 {
-  AQTPatch *tmpPatch;
-  if (pc > MAX_PATH_POINTS)
-    NSLog(@"Path too long (%d)", pc);	// FIXME: take action here!
-  tmpPatch = [[AQTPatch alloc] initWithPoints:points pointCount:pc color:_color];
-  [[self model] addObject:tmpPatch];
-  [tmpPatch release];
-  _modelIsDirty = YES;
-
+  [_builder addPolygonWithPoints:points pointCount:pc];
 }
-//
-// AQTImage
-//
+
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
-  AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
-  [[self model] addObject:tmpImage];
-  [tmpImage release];
-  _modelIsDirty = YES;
-
+  [_builder addImageWithBitmap:bitmap size:bitmapSize bounds:destBounds];
 }
 //
 // Control operations
 //
 - (void)openPlotIndex:(int)refNum size:(NSSize)canvasSize title:(NSString *)title // if title param is nil, title defaults to Figure <n>
 {
-  AQTModel *newModel = [[AQTModel alloc] initWithSize:canvasSize];
+/* FIXME
+ AQTModel *newModel = [[AQTModel alloc] initWithSize:canvasSize];
   [self setModel:newModel];
   [newModel release];
   _modelRefNumber = refNum;
@@ -269,6 +203,7 @@ error handling callback function for the client.
     [[self model] setTitle:[NSString stringWithFormat:@"Figure %d", refNum]];
     NSLog(@"Using default title");
   }
+  */
   NS_DURING
     [_handler selectView:refNum];
   NS_HANDLER
@@ -283,39 +218,39 @@ error handling callback function for the client.
 {
   // FIXME: Check if model is dirty and that buffers are flushed,
   // don't set model unless necessary -- just release the local
-  if (_modelIsDirty)
+  if ([_builder modelIsDirty])
   {
     NS_DURING
-      [_handler setModel:_model];	// the renderer will retain this object
+      [_handler setModel:[_builder model]];	// the renderer will retain this object
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
       else
         [localException raise];
     NS_ENDHANDLER
-    _modelIsDirty = NO;
+  //  _modelIsDirty = NO;
   }
 }
 - (void)render //(push [partial] model to renderer)
 {
   // FIXME: if model hasn't changed, don't update!!!
+    if ([_builder modelIsDirty])
+    {
   NS_DURING
-    if (_modelIsDirty)
-    {
-      [_handler setModel:_model];	// the renderer will retain this object
-      _modelIsDirty = NO;
-    }
-    else
-    {
-      [_handler setModel:_model];	// the renderer will retain this object
-      NSLog(@"*** Error -- trying to render non-dirty model ***");
-    }
+      [_handler setModel:[_builder model]];	// the renderer will retain this object
     NS_HANDLER
       if ([[localException name] isEqualToString:@"NSInvalidSendPortException"])
         [self _serverError];
       else
         [localException raise];
     NS_ENDHANDLER
+      //_modelIsDirty = NO;
+    }
+    else
+    {
+      //[_handler setModel:_model];	// the renderer will retain this object
+      NSLog(@"*** Error -- trying to render non-dirty model ***");
+    }
 }
 - (char)getMouseInput:(NSPoint *)mouseLoc options:(unsigned)options
 {
