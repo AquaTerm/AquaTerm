@@ -184,6 +184,8 @@
 {
    AQTModel *newModel = [[AQTModel alloc] initWithSize:[_model size]];
    [newModel setTitle:[_model title]];
+   [_model release];
+   _model = newModel;
    [self _aqtPlotBuilderSetDefaultValues];
    _modelIsDirty = YES;
 }
