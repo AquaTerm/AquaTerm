@@ -41,6 +41,7 @@
   /*" Line handling "*/
 - (float)linewidth;
 - (void)setLinewidth:(float)newLinewidth;
+- (BOOL)_flushLineSegmentBuffer;
 - (void)addLineAtPoint:(NSPoint)point;  // AQTPath
 - (void)appendLineToPoint:(NSPoint)point;  // AQTPath
 - (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc; // AQTPatch

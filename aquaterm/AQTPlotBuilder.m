@@ -50,6 +50,9 @@
 
 - (AQTModel *)model
 {
+  // FIXME: Flush buffers before returning the model
+  [self _flushLineSegmentBuffer];
+  _modelIsDirty = NO;
   return _model;
 }
 - (BOOL)modelIsDirty
@@ -72,10 +75,14 @@
  }
  */
 - (void)setColorRed:(float)r green:(float)g blue:(float)b
-{
-  _color.red = r;
-  _color.green = g;
-  _color.blue = b;
+{  
+  if ((r != _color.red) || (g != _color.green) || (b != _color.blue))
+  {
+    _modelIsDirty = [self _flushLineSegmentBuffer] || _modelIsDirty;
+    _color.red = r;
+    _color.green = g;
+    _color.blue = b;
+  }
 }
 /*
  - (void)setColor:(AQTColor)newColor
@@ -115,11 +122,16 @@
 
 - (void)setLinewidth:(float)newLinewidth
 {
-  _linewidth = newLinewidth;
-}
+  if (newLinewidth != _linewidth)
+  {
+    _modelIsDirty = [self _flushLineSegmentBuffer] || _modelIsDirty;
+    _linewidth = newLinewidth;
+  }
+}	
 - (void)eraseRect:(NSRect)aRect
 {
-  [[self model] removeObjectsInRect:aRect];
+  [_model removeObjectsInRect:aRect];
+  _modelIsDirty = YES; // FIXME: This may not always be true.
 }
 
 //
@@ -131,21 +143,33 @@
                                                    position:pos
                                                       angle:angle
                                               justification:just];
-  [[self model] addObject:lb];
+  [_model addObject:lb];
   [lb release];
   _modelIsDirty = YES;
 }
 //
 // AQTPath
 //
-- (void)addLineAtPoint:(NSPoint)point
+- (BOOL)_flushLineSegmentBuffer
 {
+  BOOL didFlush = NO;
   if (_pointCount > 1)
   {
     AQTPath *tmpPath = [[AQTPath alloc] initWithPoints:_path pointCount:_pointCount color:_color];
     [tmpPath setLinewidth:_linewidth];
-    [[self model] addObject:tmpPath];
+    [_model addObject:tmpPath];
     [tmpPath release];
+    didFlush = YES;
+  }
+  _pointCount = 0;
+  return didFlush;
+}
+
+- (void)addLineAtPoint:(NSPoint)point
+{
+  if (_pointCount > 1)
+  {
+    [self _flushLineSegmentBuffer];
   }
   _path[0]=point;
   _pointCount = 1;
@@ -171,7 +195,7 @@
   if (pc > MAX_PATH_POINTS)
     NSLog(@"Path too long (%d)", pc);	// FIXME: take action here!
   tmpPatch = [[AQTPatch alloc] initWithPoints:points pointCount:pc color:_color];
-  [[self model] addObject:tmpPatch];
+  [_model addObject:tmpPatch];
   [tmpPatch release];
   _modelIsDirty = YES;
 
@@ -182,7 +206,7 @@
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds
 {
   AQTImage *tmpImage = [[AQTImage alloc] initWithBitmap:bitmap size:bitmapSize bounds:destBounds];
-  [[self model] addObject:tmpImage];
+  [_model addObject:tmpImage];
   [tmpImage release];
   _modelIsDirty = YES;
 
