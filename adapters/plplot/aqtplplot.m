@@ -168,7 +168,10 @@ void plD_polyline_aqt(PLStream *pls, short *xa, short *ya, PLINT npts)
 
 void plD_eop_aqt(PLStream *pls)
 {
-   [adapter takeBackgroundColorFromColormapEntry:0];   
+   //  Make sure the background color is up to date
+   [adapter setBackgroundColorRed:(float)(plsc->cmap0[0].r/255.0) 
+	                    green:(float)(plsc->cmap0[0].g/255.0)
+	                     blue:(float)(plsc->cmap0[0].b/255.0)];  
    [adapter renderPlot];
 }
 
@@ -208,12 +211,6 @@ void plD_state_aqt(PLStream *pls, PLINT op)
 
       case PLSTATE_CMAP0:
          colorChange = TRUE;
-         //
-         //  Make sure the background color is set to the current color map
-         //
-		[adapter setBackgroundColorRed:(float)(plsc->cmap0[0].r/255.0)
-		 						 green:(float)(plsc->cmap0[0].g/255.0)
-		 						  blue:(float)(plsc->cmap0[0].b/255.0)];
          break;
 
       case PLSTATE_CMAP1:
