@@ -83,7 +83,9 @@ int main(void)
   // Draw the polygon (no fill)
   aqtUseColor(1);
   aqtAddPolygon(x, y, 16, 0);
-
+  
+  aqtAddImageFromFile("/Library/User Pictures/Animals/Orangutan.tif", 400.0, 400.0, 200.0, 160.0);
+    
   // Close current graph => render it in window
   aqtCloseGraph();
 
