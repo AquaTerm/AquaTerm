@@ -119,15 +119,16 @@
 - (IBAction)setFontAction:(id)sender
 {
     NSString *fontNameString = [NSString stringWithString:[fontFieldOutlet stringValue]];
-    [server setFontWithName:fontNameString size:18.0];
+    [server setFontWithName:fontNameString size:36.0];
 }
 
 - (IBAction)addTextAction:(id)sender
 {
-  NSPoint aPoint= NSMakePoint(AQUA_XMAX*randomNumber(), AQUA_YMAX*randomNumber());
+  NSPoint aPoint= NSMakePoint(AQUA_XMAX/2, AQUA_YMAX/2);
   [server addString:@"Hello world!" 
           atPoint:aPoint 
-          withJustification:justifyLeft 
+          withJustification:justifyLeft
+          atAngle:360*randomNumber() 
           withIndexedColor:(int)(8*randomNumber()) /* {0,1,...,7} */];
           
   [server renderInViewShouldRelease:NO];

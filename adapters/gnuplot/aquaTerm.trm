@@ -1,5 +1,5 @@
 /* -*- objc -*-
- * $Id: aquaTerm.trm,v 1.3 2001/12/04 18:26:00 persquare Exp $
+ * $Id: aquaTerm.trm,v 1.4 2001/12/04 21:35:49 persquare Exp $
  *
  */
 
@@ -87,7 +87,7 @@ TERM_PUBLIC void AQUA_linetype __PROTO((int linetype));
 TERM_PUBLIC void AQUA_put_text __PROTO((unsigned int x, unsigned int y,const char *str));
 
 /* Optional entries */
-// TERM_PUBLIC int AQUA_text_angle __PROTO((int));
+TERM_PUBLIC int AQUA_text_angle __PROTO((int));
 TERM_PUBLIC int AQUA_justify_text __PROTO((enum JUSTIFY));
 TERM_PUBLIC int AQUA_set_font __PROTO((const char *font));  /* "font,size" */
 TERM_PUBLIC void AQUA_set_pointsize __PROTO((double size)); /* notification of set pointsize */
@@ -145,9 +145,10 @@ TERM_PUBLIC void AQUA_pointsize __PROTO((double pointsize));
 // colors 0 and upwards are taken modulo N (i.e cyclic)
 //
 - (oneway void) addString:(bycopy NSString *)text 
-           atPoint:(bycopy NSPoint)point 
-           withJustification:(bycopy int)justification 
-           withIndexedColor:(bycopy int)colorIndex;
+                  atPoint:(bycopy NSPoint)point 
+        withJustification:(bycopy int)justification 
+		              atAngle:(bycopy float)angle
+         withIndexedColor:(bycopy int)colorIndex;
 //
 // Set the font for the subsequent strings added to the model
 // (mimics fontWithName: size: method in NSFont)
@@ -188,7 +189,7 @@ static NSBezierPath *thePath;
 static int currentJustificationMode;
 static int currentLinetype;
 static double currentGray; 
-
+static float currentAngle;
 
 @implementation NSBezierPath (NSBezierPathDOCategory)
 - (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder 
@@ -358,6 +359,7 @@ AQUA_init()
     currentJustificationMode = 0;
     currentLinetype = 0;
     currentGray = 0.0;
+    currentAngle = 0.0;
   }
   if (![gnuTermAccess server])	/* server could be invalid (=nil) for several reasons */
   {
@@ -461,6 +463,7 @@ AQUA_put_text(unsigned int x, unsigned int y, const char *str)
 		[[gnuTermAccess server] addString:[NSString stringWithCString:str] 
 															atPoint:NSMakePoint(x, y)
 										withJustification:currentJustificationMode
+										          atAngle:currentAngle
 										 withIndexedColor:currentLinetype];    
 	NS_HANDLER
 		if ([[localException name] isEqualToString:@"NSInvalidSendPortException"]) 
@@ -476,6 +479,21 @@ AQUA_justify_text (enum JUSTIFY mode)
   currentJustificationMode = mode;
   return (TRUE);
 }
+
+TERM_PUBLIC int
+AQUA_text_angle (int angle)
+{
+  if (angle==0)
+  {
+ 		currentAngle = 0.0;      
+  }
+  else
+  {
+    currentAngle = 90.0;   
+  }
+  return (TRUE);
+}
+
 
 TERM_PUBLIC int 
 AQUA_set_font(const char *font) /* "font,size" */
@@ -601,7 +619,7 @@ TERM_TABLE_START(aqua_driver)
   AQUA_text, null_scale, AQUA_graphics, AQUA_move, AQUA_vector,
   AQUA_linetype, AQUA_put_text, 
   /* optionals */
-  null_text_angle,
+  AQUA_text_angle,
   AQUA_justify_text, do_point, do_arrow, AQUA_set_font,
   AQUA_pointsize, TERM_CAN_MULTIPLOT,
   AQUA_suspend, AQUA_resume,
