@@ -1,5 +1,10 @@
 ***** IMPORTANT *****
-This is an early release for testing purposes. Please provide feedback and feature requests!
+This is an early release for testing purposes. 
+Please provide feedback and feature requests!
+
+N.B. This is an alpha release which means that the API _may_ still change (slightly). 
+This release is _not_ for everyday use, it is meant for testing _only_. 
+You have been warned ;-)  
 *********************
 
 * How to use AquaTerm:
