@@ -240,9 +240,37 @@ extern void aqtLineDrawingTest(id sender);
   }
 }
 
+#define NSAppKitVersionNumber10_0 577
+#define NSAppKitVersionNumber10_1 620
+#define NSAppKitVersionNumber10_2 663
+
+-(NSString *)_aqtSystemConfigString
+{
+//   APPKIT_EXTERN double NSAppKitVersionNumber;
+   NSString *version = @"";   
+   NSString *location = [[NSBundle mainBundle] bundlePath];
+   
+   // Get a system version or system info for >= 10.3
+   if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_0) {
+      /* On a 10.0.x or earlier system */
+      version = @"10.0";
+   } else if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_1) {
+      /* On a 10.1 - 10.1.x system */
+      version = @"10.1";
+   } else if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_2) {
+      /* On a 10.2 - 10.2.x system */
+      version = @"10.2";
+   } else {
+      /* 10.3 or later system */
+      version = @"10.3";
+   }
+   
+   return [NSString stringWithFormat:@"Mac OS X %@\nInstall location: %@", version, location];
+}
+
 -(NSString *)_aqtBugMsg
 {
-    return @"Bug report for AquaTerm 1.0.b2\n\n\
+    NSString *bugString = @"Bug report for AquaTerm 1.0.b3\n\n\
 Description:\n-----------------------\n\n\
 *\tPlease replace this item with a detailed description of the \n\
 \tproblem.  Suggestions or general comments are also welcome.\n\n\
@@ -252,11 +280,11 @@ Repeat-By:\n-----------------------\n\n\
 Fix:\n-----------------------\n\n\
 *\tIf possible, replace this item with a description of how to\n\
 \tfix the problem (if you don't have a fix for the problem, don't\n\
-\tinclude this section, but please do submit your report anyway).\n\n";
-/*  
+\tinclude this section, but please do submit your report anyway).\n\n\
 Configuration (please do not edit this section):\n\
 -----------------------------------------------\n";
-*/
+   
+   return [NSString stringWithFormat:@"%@%@\n\n", bugString, [self _aqtSystemConfigString]];
 }
 
 -(IBAction)mailBug:(id)sender;
@@ -270,7 +298,7 @@ Configuration (please do not edit this section):\n\
 
 -(NSString *)_aqtMailMsg
 {
-    return @"Feedback report for AquaTerm 1.0.b2\n\n\
+    return @"Feedback report for AquaTerm 1.0.b3\n\n\
 Feedback:\n-----------------------\n\n\
 *\tPlease replace this item with suggestions or general comments.\n\n";
 }
