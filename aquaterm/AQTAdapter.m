@@ -54,6 +54,11 @@ Event handling of user input is provided through an optional callback function.
 !{gcc main.m -o aqtex -I/Users/per/include -L/Users/per/lib -laqt -framework Foundation}
 "*/
 
+-(void)_aqtNoSelectedBuilder
+{
+   NSLog(@"Error: no valid plot selected.");
+}
+
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
 -(id)initWithServer:(id)localServer
 {
@@ -205,7 +210,12 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Return the name of the font currently in use. "*/
 - (NSString *)fontname
 {
-   return [_selectedBuilder fontname];
+   if (_selectedBuilder)
+   {
+      return [_selectedBuilder fontname];
+   }
+   [self _aqtNoSelectedBuilder];
+   return @"DummyFont";
 }
 
 /*" Set the font to be used. Applies to all future operations. Default is Times-Roman."*/
@@ -217,7 +227,12 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Return the size of the font currently in use. "*/
 - (float)fontsize
 {
-   return [_selectedBuilder fontsize];
+   if (_selectedBuilder)
+   {
+      return [_selectedBuilder fontsize];
+   }
+   [self _aqtNoSelectedBuilder];
+   return 14.0;
 }
 
 /*" Set the font size in points. Applies to all future operations. Default is 14pt. "*/
@@ -229,7 +244,12 @@ _{2:%{x,y}:%key KeyDownEvent } "*/
 /*" Return the current linewidth (in points)."*/
 - (float)linewidth
 {
-   return [_selectedBuilder linewidth];
+   if (_selectedBuilder)
+   {
+      return [_selectedBuilder linewidth];
+   }
+   [self _aqtNoSelectedBuilder];
+   return 1.0;
 }
 
 /*" Set the current linewidth (in points), used for all subsequent lines. Any line currently being built by #moveToPoint:/#addLineToPoint will be considered finished since any coalesced sequence of line segments must share the same linewidth.  Default linewidth is 1pt."*/
@@ -353,7 +373,12 @@ _{@"NSUnderline" 0or1}
 /*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
 - (NSString *)lastEvent
 {
-   return [_selectedBuilder lastEvent];
+   if (_selectedBuilder)
+   {
+      return [_selectedBuilder lastEvent];
+   }
+   [self _aqtNoSelectedBuilder];
+   return @"DummyEvent";
 }
 
 /* Creates a new builder instance, adds it to the list of builders and makes it the selected builder. If the referenced builder exists, it is selected and cleared. */
@@ -456,7 +481,14 @@ _{@"NSUnderline" 0or1}
 /*" Render the current plot in the viewer. "*/
 - (void)renderPlot
 {
-   [_selectedBuilder render];
+   if(_selectedBuilder)
+   {
+      [_selectedBuilder render];
+   }
+   else
+   {
+      [self _aqtNoSelectedBuilder];
+   }
 }
 @end
 
