@@ -190,6 +190,7 @@ _{43:%{x,y}:%key Error } "*/
 /*" Reads the last event logged by the viewer. Will always return NoEvent unless #setAcceptingEvents: is called with a YES argument."*/
 - (NSString *)lastEvent
 {
+   [[NSRunLoop currentRunLoop] runMode:NSConnectionReplyMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
    return [_clientManager lastEvent]; 
 }
 
