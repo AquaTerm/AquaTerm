@@ -1,16 +1,17 @@
 ifndef $(BUILD_DIR)
-BUILD_DIR=$(OBJROOT)
+#BUILD_DIR=$(OBJROOT)
+BUILD_DIR=$(BUILT_PRODUCTS_DIR)
 endif
 
-PACKAGE=AquaTerm
+PACKAGE=AquaTerm
 VERSION=1.0.0
-RELEASENAME=AquaTerm1.0.b3
-## RELEASENAME=$(PACKAGE)$(VERSION)
+##RELEASENAME=AquaTerm1.0.b3
+RELEASENAME=$(PACKAGE)$(VERSION)
 
 ## Stage the release files
 ## -----------------------
-PKG_ROOT=$(BUILD_DIR)/pkg_root
-DMG_ROOT=$(BUILD_DIR)/dmg_root
+PKG_ROOT=$(SYMROOT)/pkg_root
+DMG_ROOT=$(SYMROOT)/dmg_root
 EXTRAS_DEST="$(DMG_ROOT)/Developer Extras"
 ADAPT_DEST=$(EXTRAS_DEST)/adapters
 ## Get the source directories
@@ -26,8 +27,11 @@ pkg: app lib fwk headers
 
 dmg: adapters info doc pkg
 	hdiutil create -volname AquaTerm -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
-	
+
 pre: clean
+	@echo "SYMROOT is " $(SYMROOT) ", cleaning out..."
+	rm -rf $(SYMROOT)
+	@echo "BUILD_DIR is " $(BUILD_DIR)
 	mkdir -p $(PKG_ROOT)
 	mkdir -p $(DMG_ROOT)
 
@@ -35,44 +39,31 @@ post:
 	ls -Rp $(DMG_ROOT) 
 
 app:
-	xcodebuild -target AQTFwk clean -buildstyle Deployment
-##	xcodebuild -target libaqt -buildstyle Deployment
-	xcodebuild -target AquaTerm clean -buildstyle Deployment
-## FIXME: Reverse this so no CPP options => .app is built	
-	xcodebuild -target AquaTerm -buildstyle Deployment GCC_PREPROCESSOR_DEFINITIONS="AQT_APP"
+	xcodebuild -target AQTFwk clean -configuration Deployment
+	xcodebuild -target AquaTerm clean -configuration Deployment
+	xcodebuild -target AquaTerm -configuration Deployment
 	cp -RPf $(BUILD_DIR)/AquaTerm.app $(PKG_ROOT)/.
 
 fwk:
-	## mkdir -p $(PKG_ROOT)/framework
 	cp -RPf $(BUILD_DIR)/AquaTerm.framework $(PKG_ROOT)/.
-	
+
 lib:
 	@echo "lib is just links to framework..."
-##	mkdir -p $(PKG_ROOT)/lib
-##	cp $(BUILD_DIR)/libaquaterm.$(VERSION).dylib $(PKG_ROOT)/lib/.
 
 headers:
 	@echo "headers are just links to framework..."
-##	mkdir -p $(PKG_ROOT)/include
-##	cp $(APPSRCDIR)/{AQTAdapter,aquaterm}.h $(PKG_ROOT)/include/.
 
-adapters:c fortran gnuplot pgplot plplot
+adapters:c fortran gnuplot pgplot plplot python perl
 
 info:
 	cp $(APPSRCDIR)/{ReadMe.rtf,ReleaseNotes} $(DMG_ROOT)/.
 
 doc:
-	cp $(HELPDIR)/AQTAdapter.html $(EXTRAS_DEST)/.
+	cp -RPf $(HELPDIR)/{AQTAdapter.html,DevDocs.rtfd} $(EXTRAS_DEST)/.
 
 help:
 	@echo "Skipping help..."
-#	-rm -rf $(BUILD_DIR)/help
-#	mkdir -p $(BUILD_DIR)/help
-#	./makeHelp c fortran gnuplot pgplot plplot
-#	cp $(APPSRCDIR)/*.css $(BUILD_DIR)/help/.
-#	open $(BUILD_DIR)/help/help.html 
-#	cp -R $(BUILD_DIR)/help $(DEST)/.
-	
+
 clean:
 	-rm -rf $(PKG_ROOT)
 	-rm -rf $(DMG_ROOT)
@@ -99,4 +90,13 @@ pgplot:
 
 plplot:
 	mkdir -p $(ADAPT_DEST)/plplot
-	cp $(ADAPTSRCDIR)/plplot/{aqtplplot.{h,m},ReadMe,ReleaseNotes} $(ADAPT_DEST)/plplot/.
+	cp $(ADAPTSRCDIR)/plplot/{ReadMe,ReleaseNotes} $(ADAPT_DEST)/plplot/.
+
+python:
+	mkdir -p $(ADAPT_DEST)/python
+	cp $(ADAPTSRCDIR)/python/{demo.py,ReadMe,ReleaseNotes} $(ADAPT_DEST)/python/.
+
+perl:
+	mkdir -p $(ADAPT_DEST)/perl
+	cp $(ADAPTSRCDIR)/perl/{AquaTerm.pm,AquaTerm.xs,Changes,HOW_TO_USE,MANIFEST,Makefile.PL,README,ppport.h,typemap} $(ADAPT_DEST)/perl/.
+
