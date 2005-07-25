@@ -1,0 +1,382 @@
+// !$*UTF8*$!
+{
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Development;
+		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA /* Development */;
+		activeExecutable = CB699C6708953A9400C4B248 /* AquaTerm */;
+		activeTarget = CBC4B42705E4C784001BE8D7 /* AquaTerm */;
+		codeSenseManager = CB699C9208953AAD00C4B248 /* Code sense */;
+		executables = (
+			CB699C6708953A9400C4B248 /* AquaTerm */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					584,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					200,
+					404,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 143998248;
+			PBXWorkspaceStateSaveDate = 143998248;
+		};
+		perUserProjectItems = {
+			CB699C9808953B5400C4B248 = CB699C9808953B5400C4B248 /* PBXTextBookmark */;
+			CB699C9A08953B5400C4B248 = CB699C9A08953B5400C4B248 /* PBXTextBookmark */;
+			CB699CA608953D2200C4B248 = CB699CA608953D2200C4B248 /* PBXTextBookmark */;
+			CB699CA808953D2200C4B248 = CB699CA808953D2200C4B248 /* PBXTextBookmark */;
+			CB699CA908953D2200C4B248 = CB699CA908953D2200C4B248 /* PBXTextBookmark */;
+			CB699CAB08953D2200C4B248 = CB699CAB08953D2200C4B248 /* PBXTextBookmark */;
+			CB699CAD08953D2200C4B248 = CB699CAD08953D2200C4B248 /* PBXTextBookmark */;
+			CB699CBD08953D8E00C4B248 /* PBXTextBookmark */ = CB699CBD08953D8E00C4B248 /* PBXTextBookmark */;
+			CB699CBE08953D8E00C4B248 /* PBXTextBookmark */ = CB699CBE08953D8E00C4B248 /* PBXTextBookmark */;
+			CB699CBF08953D8E00C4B248 /* PBXTextBookmark */ = CB699CBF08953D8E00C4B248 /* PBXTextBookmark */;
+			CB699CC008953D8E00C4B248 /* PBXTextBookmark */ = CB699CC008953D8E00C4B248 /* PBXTextBookmark */;
+			CB699CC108953D8E00C4B248 /* PBXTextBookmark */ = CB699CC108953D8E00C4B248 /* PBXTextBookmark */;
+			CB699CC508953DE300C4B248 /* PBXTextBookmark */ = CB699CC508953DE300C4B248 /* PBXTextBookmark */;
+			CB699CC608953DE300C4B248 /* PBXTextBookmark */ = CB699CC608953DE300C4B248 /* PBXTextBookmark */;
+			CB699CC708953DE300C4B248 /* PBXTextBookmark */ = CB699CC708953DE300C4B248 /* PBXTextBookmark */;
+			CB699CC808953DE300C4B248 /* PBXTextBookmark */ = CB699CC808953DE300C4B248 /* PBXTextBookmark */;
+		};
+		sourceControlManager = CB699C9108953AAD00C4B248 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	CB0C496E065ABF7C00AC22F7 /* INSTALL */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 546}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 66}, {776, 480}}";
+		};
+	};
+	CB58A1FE06F9A60900AF8A5E /* AQTAdapter.html */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 12306}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 1296}, {776, 480}}";
+		};
+	};
+	CB58A1FF06F9A60900AF8A5E /* help.html */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 1694}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {776, 480}}";
+		};
+	};
+	CB5B187204A9A49E00EBD329 /* AQTController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {927, 6034}}";
+			sepNavSelRange = "{8177, 67}";
+			sepNavVisRect = "{{0, 3718}, {927, 83}}";
+		};
+	};
+	CB699C6708953A9400C4B248 /* AquaTerm */ = {
+		isa = PBXExecutable;
+		activeArgIndex = 2147483647;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		configStateDict = {
+		};
+		cppStopOnCatchEnabled = 0;
+		cppStopOnThrowEnabled = 0;
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = AquaTerm;
+		sourceDirectories = (
+		);
+	};
+	CB699C9108953AAD00C4B248 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+		scmType = "";
+	};
+	CB699C9208953AAD00C4B248 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	CB699C9808953B5400C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */;
+		name = "AquaTerm.app-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1099;
+		vrLoc = 0;
+	};
+	CB699C9A08953B5400C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */;
+		name = "AquaTerm.app-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1099;
+		vrLoc = 0;
+	};
+	CB699CA608953D2200C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB699CA708953D2200C4B248 /* AquaTermFwk-Info.plist */;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CA708953D2200C4B248 /* AquaTermFwk-Info.plist */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text.xml;
+		name = "AquaTermFwk-Info.plist";
+		path = "/Volumes/Ior/Source/aquaterm/AquaTermFwk-Info.plist";
+		sourceTree = "<absolute>";
+	};
+	CB699CA808953D2200C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */;
+		name = "AquaTerm.framework-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CA908953D2200C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB699CAA08953D2200C4B248 /* AquaTermFwk-Info.plist */;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CAA08953D2200C4B248 /* AquaTermFwk-Info.plist */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text.xml;
+		name = "AquaTermFwk-Info.plist";
+		path = "/Volumes/Ior/Source/aquaterm/AquaTermFwk-Info.plist";
+		sourceTree = "<absolute>";
+	};
+	CB699CAB08953D2200C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB699CAC08953D2200C4B248 /* AquaTermFwk-Info.plist */;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CAC08953D2200C4B248 /* AquaTermFwk-Info.plist */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text.xml;
+		name = "AquaTermFwk-Info.plist";
+		path = "/Volumes/Ior/Source/aquaterm/AquaTermFwk-Info.plist";
+		sourceTree = "<absolute>";
+	};
+	CB699CAD08953D2200C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */;
+		name = "AquaTerm.framework-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CBD08953D8E00C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */;
+		name = "AquaTerm.app-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1099;
+		vrLoc = 0;
+	};
+	CB699CBE08953D8E00C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */;
+		name = "AquaTerm.framework-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CBF08953D8E00C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */;
+		name = "AquaTerm.framework-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CC008953D8E00C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */;
+		name = "AquaTerm.app-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1099;
+		vrLoc = 0;
+	};
+	CB699CC108953D8E00C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */;
+		name = "AquaTerm.framework-Info.plist: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 625;
+		vrLoc = 0;
+	};
+	CB699CC508953DE300C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = F5E3AFAA026D80D2012F88DF /* AQTView.m */;
+		name = "[[[self window] delegate] processEvent:eventString];";
+		rLen = 59;
+		rLoc = 4077;
+		rType = 0;
+		vrLen = 246;
+		vrLoc = 3898;
+	};
+	CB699CC608953DE300C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: cannot find method `-cascadeWindowOrderFront:'; return type `id' assumed";
+		fRef = CB5B187204A9A49E00EBD329 /* AQTController.m */;
+		rLen = 1;
+		rLoc = 264;
+		rType = 1;
+	};
+	CB699CC708953DE300C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = F5E3AFAA026D80D2012F88DF /* AQTView.m */;
+		name = "[[[self window] delegate] processEvent:eventString];";
+		rLen = 59;
+		rLoc = 4077;
+		rType = 0;
+		vrLen = 246;
+		vrLoc = 3898;
+	};
+	CB699CC808953DE300C4B248 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CB5B187204A9A49E00EBD329 /* AQTController.m */;
+		name = "[[handlerList objectAtIndex:i] cascadeWindowOrderFront:YES];";
+		rLen = 67;
+		rLoc = 8177;
+		rType = 0;
+		vrLen = 252;
+		vrLoc = 8000;
+	};
+	CB72184806072CF6008DCEAD /* ReleaseNotes */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 938}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {776, 480}}";
+		};
+	};
+	CB91251207CB3BDE001D5EAF /* AQTFwk */ = {
+		activeExec = 0;
+	};
+	CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 480}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {776, 480}}";
+		};
+	};
+	CBAA608105E7AFA7009B33CD /* Distro */ = {
+		activeExec = 0;
+	};
+	CBC4B42705E4C784001BE8D7 /* AquaTerm */ = {
+		activeExec = 0;
+		executables = (
+			CB699C6708953A9400C4B248 /* AquaTerm */,
+		);
+	};
+	CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 504}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {776, 480}}";
+		};
+	};
+	F57C16A202506DE3010D3DE4 /* ReadMe */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 480}}";
+			sepNavSelRange = "{909, 0}";
+			sepNavVisRect = "{{0, 0}, {776, 480}}";
+		};
+	};
+	F57C16A302506DE3010D3DE4 /* ToDo */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 480}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {776, 480}}";
+		};
+	};
+	F5DB1B640219BFD2014110D6 /* Docs */ = {
+		activeExec = 0;
+	};
+	F5E3AFAA026D80D2012F88DF /* AQTView.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 2786}}";
+			sepNavSelRange = "{2877, 120}";
+			sepNavVisRect = "{{0, 1377}, {776, 480}}";
+		};
+	};
+}
