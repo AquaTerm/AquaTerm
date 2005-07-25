@@ -1,5 +1,6 @@
 ---
-AquaTerm 1.0a2
+AquaTerm 1.0
+   The driver is now part of PLplot, see ReadMe for details.
    
 AquaTerm 1.0a1
     Moved all common code into libaquaterm.dylib, all adapters link with this.
