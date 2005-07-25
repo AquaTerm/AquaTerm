@@ -1,0 +1,44 @@
+This driver has become part of the PLplot project and you should use the driver
+that comes with PLplot as this version of the driver is no longer being actively 
+supported.
+
+
+To install this driver (only known to work with plplot-5.3.1)
+----
+You should be able to get plplot-5.3.1 up and running using:
+
+GNU automake 1.8.5
+GNU Autoconf 2.59
+GNU libtool 1.5.10
+ 
+In the top plplot directory issue the following commands :
+----
+patch -p1 < path/to/plplot531.patch
+ 
+cp path/to/aqtplplot.{h,m} drivers/aqt.{h,c}
+ 
+cf/bootstrap
+ 
+./configure --enable-aqt --disable-dyndrivers --disable-f77 
+--disable-python --disable-java --disable-static --disable-cxx 
+--disable-octave
+ 
+make LIBS="-Wl,-framework -Wl,Foundation"
+ 
+make check
+
+make install
+----
+Examples :
+
+You can check that things are working correctly by running the demos in /examples/c. Example x21c requires Qhull (www.qhull.org) to generate some of its plots. Qhull needs to be installed prior to configuring & compiling plplot.
+
+----
+Notes :
+ 
+The libtool bug (feature?) to drop unknown linker flags is worked 
+around by adding the flags as extra libraries (1st make statement 
+above).
+ 
+The strictly necessary part of configure is:
+./configure --enable-aqt --disable-dyndrivers
