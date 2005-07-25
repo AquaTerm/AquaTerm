@@ -1,0 +1,295 @@
+{\rtf1\mac\ansicpg10000\cocoartf102
+{\fonttbl\f0\fswiss\fcharset77 Optima-Bold;\f1\fswiss\fcharset77 Optima-Regular;\f2\fswiss\fcharset77 Optima-Italic;
+\f3\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red202\green17\blue20;\red0\green0\blue0;}
+\paperw11904\paperh16835\margl1440\margr1440\vieww16020\viewh10180\viewkind0
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b\fs28 \cf0 \CocoaLigature0 Developer documentation
+\f1\b0\fs24 \
+This document provides some basic information on the internals of AquaTerm and libaquaterm and some info on how to add to or change them. \
+Refer to Figure 1 for a schematic view of relations.\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \CocoaLigature1 {{\NeXTGraphic Pasted Graphic.tiff \width15380 \height10460
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \CocoaLigature0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 \
+
+\f0\b\fs28 1, libaquaterm
+\f1\b0\fs24 \
+\
+On the client side, all functionality is provided by libaquaterm. One very important aspect of libaquaterm is that it does not rely on AppKit classes, only Foundation classes. The only publicly available class is AQTAdapter and an additional C API that wraps the methods in AQTAdapter. \
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b \cf0 AQTAdapter
+\f1\b0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 AQTAdapter provides an interface to the functionality of AquaTerm. As such, it bridges the gap between the client's procedural calls, requesting operations such as drawing a line or placing a label, and the object-oriented graph being built.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 An instance of AQTAdapter is the 
+\f2\i only
+\f1\i0  object used to interact with AquaTerm. The exception to the rule is the C API described in aquaterm.h. The two are mutually exclusive for client use.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 \
+The class AQTAdapter is (despite its name) a "facade", hiding the internals from the calling code and relies on AQTClientController and AQTPlotBuilder to perform all work. The actual assembling of the graph is performed by an instance of class AQTPlotBuilder and AQTClientController handles all control operations such as keeping track of which instance of AQTPlotBuilder is associated with the current plot and establish and maintain communication with the viewer (AquaTerm.app) without any work on behalf of the client.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 AQTAdapter also provides some utility functionality such an indexed colormap (which is not part of the graph created).\
+\
+
+\f0\b AQTClientController <AQTEventProtocol>
+\f1\b0 \
+This is the main controller class present in libaquaterm, a shared instance is used (and instantiated) by AQTAdapter. \
+\
+When the client opens a new plot, the request is forwarded from AQTAdapter to AQTClientController which sends a message to AquaTerm (after launching it if it is not running) requesting a new plot. AquaTerm instantiates an object of class AQTPlot and replies with a reference to the newly instantiated AQTPlot object. AQTClientController then instantiates a corresponding AQTPlotBuilder and returns a reference to AQTAdapter which will forward all drawing related messages to it. Thus, there is a one-to-one relationship between AQTPlotBuilder (in libaquaterm) and AQTPlot (in AquaTerm).\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 It also implements the methods in protocol AQTEventProtocol in order to receive event from a plot window, see AQTEventProtocol.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 \
+
+\f0\b AQTPlotBuilder
+\f1\b0 \
+This is the class that performs all assembling of plots in the form of an AQTModel. AQTAdapter has a reference to the currently selected builder and forwards all drawing related messages to it. \
+\
+
+\f0\b AQTGraphic
+\f1\b0 \
+This is the base class of all objects comprising a plot. All objects inherit bounds and color from AQTGraphic as well as an untyped instance variable named _cache used by the category AQTGraphicDrawingMethods. (NOTE: clip rect and transform too in the future. )\
+\
+
+\f0\b AQTModel : AQTGraphic\
+
+\f1\b0 This is a container class that keeps a list of all objects in a plot. It also keeps the canvas size of the model and the background color.\
+\
+
+\f0\b AQTLabel : AQTGraphic\
+
+\f1\b0 This is a class representing a piece of text and associated information such as position on canvas, base font etc. The text may be either an NSString or an NSAttributedString, with the former providing faster rendering speed and the latter complex styling including  nested sub- and superscripts, per character font changes etc.\
+\
+
+\f0\b AQTImage : AQTGraphic\
+
+\f1\b0 This class holds a bitmapped image together with layout information, including a transformation matrix and clipping rect.\
+\
+
+\f0\b AQTPath : AQTGraphic\
+
+\f1\b0 This class represents a path, possibly made up of a large number of segments and a fill option.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b\fs28 \cf0 2, AquaTerm\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0 \cf0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\fs24 \cf0 AquaTerm is pretty much a standard Cocoa application, in fact, in the future I'd like to make it a NSDocument based application with AQTPlot a subclass of NSDocument. \
+\
+Almost all action is performed by the methods in category AQTGraphicDrawingMethods which extends the model objects with drawing capabilities. \
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b \cf0 AQTController < AQTConnectionProtocol >\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0 \cf0 This is the main controller class in AquaTerm. It is responsible for creating plot object on request by the client controller (by implementing the methods in AQTConnectionProtocol) and manages the open plots.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b \cf0 AQTPlot <AQTClientProtocol>\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0 \cf0 Keeps and manages a model and and a view. Also sends event from the view back to the AQTClientController via  AQTClientProtocol methods.\
+Models are transfered from the client to AQTPlot when the following messages are sent to AQTAdapter: -renderPlot, -closePlot, and -eraseRect: where the first two also causes a view update. After the (partial) plot has been transfered, the model objects are removed from AQTPlotBuilder in order to avoid sending any object twice since there is a small overhead to each transfer. An empty model (e.g. one which has no objects) will not be transfered. This has the consequence  that subsequent -renderPlot messages will 
+\f2\i not
+\f1\i0  cause a view update (redraw) unless some new graph object has been added.\
+\
+Note that if the client and the server side both runs in the same process space (see e.g. -showAvailableFonts: in AQTController) there is no transferring of models whatsoever, AQTPlot then has a direct reference to the original model.\
+ \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b \cf0 AQTView : NSView
+\f1\b0 \
+A pretty ordinary subclass of NSView, where the -drawRect: calls upon the graph objects to render themselves by sending a -renderInRect: message to the top object in the graph (always an AQTModel object).\
+\
+
+\f0\b Categories
+\f1\b0 \
+
+\f0\b AQTGraphicDrawingMethods\
+
+\f1\b0 For each subclass of AQTGraphic there are two methods implemented here: -updateBounds and -renderInRect: which should be pretty self explanatory.\
+\
+Currently all subclasses of AQTGraphic places an AppKit object (NSBezierPath, NSImage) in _cache and rely on that object to do the actual drawing.\
+\
+When the graph is built by libaquaterm, the actual bounds are not always possible to compute and in that case -updateBounds must recompute them before drawing (caching).\
+\
+
+\f0\b AQTStringDrawingAdditions
+\f1\b0 \
+These are categories that adds the method -aqtBezierPathInFont
+\f3\fs20 :
+\f1\fs24  to NSString and NSAttributedString. It returns an NSBezierPath outlining the string. In the case of an attributed string is parses a number of special attributes, see file for details.\
+\
+
+\f0\b Protocols\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0 \cf0 To be documented.
+\f0\b \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 \
+Functions\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0 \cf0 A number of utility functions and macros, mostly related to geometric types are in AQTFunctions.m\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b\fs28 \cf0 3, Events\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0\fs24 \cf0 To be documented.
+\f0\b\fs28 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 \
+4, Error handling\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0\fs24 \cf0 To be documented.\
+
+\f0\b\fs28 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 5, Examples\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0 \cf0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b\fs24 \cf0 Hello World
+\f1\b0\fs28 \
+\
+\pard\tx480\tx960\tx1440\tx1920\tx2400\tx2880\tx3360\tx3840\tx4320\tx4800\tx5280\tx5760\tx6240\tx6720\tx7200\tx7680\tx8160\tx8640\tx9120\tx9600\tx10080\tx10560\tx11040\tx11520\tx12000\tx12480\tx12960\tx13440\tx13920\tx14400\tx14880\tx15360\tx15840\tx16320\tx16800\tx17280\tx17760\tx18240\tx18720\tx19200\tx19680\tx20160\tx20640\tx21120\tx21600\tx22080\tx22560\tx23040\tx23520\tx24000\tx24480\tx24960\tx25440\tx25920\tx26400\tx26880\tx27360\tx27840\tx28320\tx28800\tx29280\tx29760\tx30240\tx30720\tx31200\tx31680\tx32160\tx32640\tx33120\tx33600\tx34080\tx34560\tx35040\tx35520\tx36000\tx36480\tx36960\tx37440\tx37920\tx38400\tx38880\tx39360\tx39840\tx40320\tx40800\tx41280\tx41760\tx42240\tx42720\tx43200\tx43680\tx44160\tx44640\tx45120\tx45600\tx46080\tx46560\tx47040\tx47520\tx48000\li560\ql\qnatural
+
+\f3\fs20 \cf0 Example: aqt_hello.m\
+\
+#import <Foundation/Foundation.h>\
+#import <aquaterm/AQTAdapter.h>\
+\
+   int main(void)\
+   \{\
+      NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];\
+      AQTAdapter *adapter = [[AQTAdapter alloc] init];\
+      [adapter openPlotWithIndex:1];\
+      [adapter setPlotSize:NSMakeSize(600,400)];\
+      [adapter addLabel:@"HelloAquaTerm!" position:NSMakePoint(300, 200) angle:0.0 align:1];\
+      [adapter renderPlot];\
+      [adapter release];\
+      [pool release];\
+      return 0;\
+   \}\
+\}\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 \
+Compile using \
+\pard\tx480\tx960\tx1440\tx1920\tx2400\tx2880\tx3360\tx3840\tx4320\tx4800\tx5280\tx5760\tx6240\tx6720\tx7200\tx7680\tx8160\tx8640\tx9120\tx9600\tx10080\tx10560\tx11040\tx11520\tx12000\tx12480\tx12960\tx13440\tx13920\tx14400\tx14880\tx15360\tx15840\tx16320\tx16800\tx17280\tx17760\tx18240\tx18720\tx19200\tx19680\tx20160\tx20640\tx21120\tx21600\tx22080\tx22560\tx23040\tx23520\tx24000\tx24480\tx24960\tx25440\tx25920\tx26400\tx26880\tx27360\tx27840\tx28320\tx28800\tx29280\tx29760\tx30240\tx30720\tx31200\tx31680\tx32160\tx32640\tx33120\tx33600\tx34080\tx34560\tx35040\tx35520\tx36000\tx36480\tx36960\tx37440\tx37920\tx38400\tx38880\tx39360\tx39840\tx40320\tx40800\tx41280\tx41760\tx42240\tx42720\tx43200\tx43680\tx44160\tx44640\tx45120\tx45600\tx46080\tx46560\tx47040\tx47520\tx48000\li560\ql\qnatural
+\cf2 gcc aqt_hello.m -o aqt_hello -laquaterm -framework Foundation\cf0 \
+\pard\tx480\tx960\tx1440\tx1920\tx2400\tx2880\tx3360\tx3840\tx4320\tx4800\tx5280\tx5760\tx6240\tx6720\tx7200\tx7680\tx8160\tx8640\tx9120\tx9600\tx10080\tx10560\tx11040\tx11520\tx12000\tx12480\tx12960\tx13440\tx13920\tx14400\tx14880\tx15360\tx15840\tx16320\tx16800\tx17280\tx17760\tx18240\tx18720\tx19200\tx19680\tx20160\tx20640\tx21120\tx21600\tx22080\tx22560\tx23040\tx23520\tx24000\tx24480\tx24960\tx25440\tx25920\tx26400\tx26880\tx27360\tx27840\tx28320\tx28800\tx29280\tx29760\tx30240\tx30720\tx31200\tx31680\tx32160\tx32640\tx33120\tx33600\tx34080\tx34560\tx35040\tx35520\tx36000\tx36480\tx36960\tx37440\tx37920\tx38400\tx38880\tx39360\tx39840\tx40320\tx40800\tx41280\tx41760\tx42240\tx42720\tx43200\tx43680\tx44160\tx44640\tx45120\tx45600\tx46080\tx46560\tx47040\tx47520\tx48000\ql\qnatural
+\cf0 or, if you prefer handling the file as a C file\
+\pard\tx480\tx960\tx1440\tx1920\tx2400\tx2880\tx3360\tx3840\tx4320\tx4800\tx5280\tx5760\tx6240\tx6720\tx7200\tx7680\tx8160\tx8640\tx9120\tx9600\tx10080\tx10560\tx11040\tx11520\tx12000\tx12480\tx12960\tx13440\tx13920\tx14400\tx14880\tx15360\tx15840\tx16320\tx16800\tx17280\tx17760\tx18240\tx18720\tx19200\tx19680\tx20160\tx20640\tx21120\tx21600\tx22080\tx22560\tx23040\tx23520\tx24000\tx24480\tx24960\tx25440\tx25920\tx26400\tx26880\tx27360\tx27840\tx28320\tx28800\tx29280\tx29760\tx30240\tx30720\tx31200\tx31680\tx32160\tx32640\tx33120\tx33600\tx34080\tx34560\tx35040\tx35520\tx36000\tx36480\tx36960\tx37440\tx37920\tx38400\tx38880\tx39360\tx39840\tx40320\tx40800\tx41280\tx41760\tx42240\tx42720\tx43200\tx43680\tx44160\tx44640\tx45120\tx45600\tx46080\tx46560\tx47040\tx47520\tx48000\li560\ql\qnatural
+\cf2 gcc -ObjC aqt_hello.c -o aqt_hello -lobjc -laquaterm -framework Foundation\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b \cf0 Adding a new property\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0 \cf0 Next I'll try to outline the steps necessary to add a new property (e.g. clipRect or transform). \
+\
+First the API additions to AQTAdapter must be specified, take care to follow the add/set naming conventions. \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural
+\cf0 Then the properties need to be defined in AQTGraphic for a general property (preferred) or in a specific subclass, as is currently the case with transforms which applies to images only. 
+\f2\i Side note - transforms could be beneficial to most objects, particularly AQTLabels, and should move from AQTImage to AQTGraphic in the future.
+\f1\i0   Don't forget to add encoding/decoding of the new property to -encodeWithCoder: and -intWithCoder:, otherwise the property will be lost when transfered to AquaTerm.\
+\
+Next, support for the new property must be added to AQTPlotBuilder.\
+\
+Finally, add code to AQTGraphicDrawingAdditions that makes use of the new property. \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b \cf0 \
+Adding a new subclass of AQTGraphic
+\f1\b0\fs28 \
+
+\fs24 To add a new subclass of AQTGraphic (e.g. AQTBezierPath) define a set of API additions to AQTAdapter, take care to follow the add/set naming conventions. Generally , you need to create a new subclass of AQTGraphic, but the example AQTBezierPath is better subclassed from AQTPath.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+\cf0 Next, add support for the class to AQTPlotBuilder.\
+\
+Finally, add a category to AQTGraphicDrawingAdditions that makes renders the new kind of object. \
+\
+The following is an example of how AQTBezierPath could look:\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f3\fs20 \cf0  \
+\pard\tx480\tx960\tx1440\tx1920\tx2400\tx2880\tx3360\tx3840\tx4320\tx4800\tx5280\tx5760\tx6240\tx6720\tx7200\tx7680\tx8160\tx8640\tx9120\tx9600\tx10080\tx10560\tx11040\tx11520\tx12000\tx12480\tx12960\tx13440\tx13920\tx14400\tx14880\tx15360\tx15840\tx16320\tx16800\tx17280\tx17760\tx18240\tx18720\tx19200\tx19680\tx20160\tx20640\tx21120\tx21600\tx22080\tx22560\tx23040\tx23520\tx24000\tx24480\tx24960\tx25440\tx25920\tx26400\tx26880\tx27360\tx27840\tx28320\tx28800\tx29280\tx29760\tx30240\tx30720\tx31200\tx31680\tx32160\tx32640\tx33120\tx33600\tx34080\tx34560\tx35040\tx35520\tx36000\tx36480\tx36960\tx37440\tx37920\tx38400\tx38880\tx39360\tx39840\tx40320\tx40800\tx41280\tx41760\tx42240\tx42720\tx43200\tx43680\tx44160\tx44640\tx45120\tx45600\tx46080\tx46560\tx47040\tx47520\tx48000\li560\ql\qnatural
+\cf3 @interface AQTBezierPath : AQTPath \
+\{\
+\}\
+- (id)initWithStartPoint:(NSPoint)p1 controlPoint1:(NSPoint)c1 controlPoint2:(NSPoint)c2 endPoint:(NSPoint)p2;\
+@end\
+\pard\tx565\tx1133\tx1700\tx2266\tx2833\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\fs24 \cf0 \
+	
+\f3\fs20 \
+\pard\tx480\tx960\tx1440\tx1920\tx2400\tx2880\tx3360\tx3840\tx4320\tx4800\tx5280\tx5760\tx6240\tx6720\tx7200\tx7680\tx8160\tx8640\tx9120\tx9600\tx10080\tx10560\tx11040\tx11520\tx12000\tx12480\tx12960\tx13440\tx13920\tx14400\tx14880\tx15360\tx15840\tx16320\tx16800\tx17280\tx17760\tx18240\tx18720\tx19200\tx19680\tx20160\tx20640\tx21120\tx21600\tx22080\tx22560\tx23040\tx23520\tx24000\tx24480\tx24960\tx25440\tx25920\tx26400\tx26880\tx27360\tx27840\tx28320\tx28800\tx29280\tx29760\tx30240\tx30720\tx31200\tx31680\tx32160\tx32640\tx33120\tx33600\tx34080\tx34560\tx35040\tx35520\tx36000\tx36480\tx36960\tx37440\tx37920\tx38400\tx38880\tx39360\tx39840\tx40320\tx40800\tx41280\tx41760\tx42240\tx42720\tx43200\tx43680\tx44160\tx44640\tx45120\tx45600\tx46080\tx46560\tx47040\tx47520\tx48000\li560\ql\qnatural
+\cf3 @implementation AQTBezierPath\
+- (id)initWithStartPoint:(NSPoint)p1 controlPoint1:(NSPoint)c1 controlPoint2:(NSPoint)c2 endPoint:(NSPoint)p2\
+\{\
+	NSPoint points[4];\
+	points[0]=p1;\
+	points[1]=c1;\
+	points[2]=c2;\
+	points[3]=p2;\
+   self = [super initWithPoints:points pointCount:4];	\
+	return self;\
+\}\
+@end\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\fs24 \cf0 \
+To render such an object, a category implementing -updateBounds and -renderInRect: must be added to AQTGraphicDrawingAdditions.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b\fs28 \cf0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\fs24 \cf0 Adding a new driver
+\f1\b0\fs28 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural
+
+\fs24 \cf0 This is clearly the most demanding task of all, but starting by reading the demo code and the present gnuplot and PGPLOT drivers is the best way to go.\
+\
+Recently a driver for SuperMongo was added, and this link <http://sourceforge.net/mailarchive/forum.php?thread_id=5700439&forum_id=3090> to the list archives is IMHO a good example of how to add a driver.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f0\b\fs28 \cf0 Revision history\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\ql\qnatural
+
+\f1\b0\fs24 \cf0 First revison 2004-12-11. Hopefully this information can be extracted automagically from source file comments in the future.
+\f0\b\fs28 \
+}
