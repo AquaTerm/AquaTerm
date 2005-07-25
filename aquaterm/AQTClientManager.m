@@ -215,7 +215,7 @@
 
 - (AQTPlotBuilder *)newPlotWithIndex:(int)refNum
 {
-   AQTPlotBuilder *newBuilder;
+   AQTPlotBuilder *newBuilder = nil;
    NSNumber *key = [NSNumber numberWithInt:refNum];;
    id <AQTClientProtocol> newPlot;
 

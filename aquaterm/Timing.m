@@ -21,7 +21,7 @@
 #import <AppKit/AppKit.h>
 #import "AQTController.h"
 #endif
-#import <aquaterm/AQTAdapter.h>
+#import <AquaTerm/AQTAdapter.h>
 
 #ifdef AQT_STANDALONE
 void aqtStringDrawingTest(AQTAdapter *adapter);

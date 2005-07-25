@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>AquaTerm</string>
 	<key>CFBundleIdentifier</key>
-	<string>net.sourceforge.AquaTerm_framework</string>
+	<string>net.sourceforge.AquaTerm_Framework</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

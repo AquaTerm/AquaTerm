@@ -21,7 +21,7 @@
 #import <AppKit/AppKit.h>
 #import "AQTController.h"
 #endif
-#import <aquaterm/AQTAdapter.h>
+#import <AquaTerm/AQTAdapter.h>
 
 // Testing the use of a callback function to handle errors in the server
 static void customEventHandler(int index, NSString *event)

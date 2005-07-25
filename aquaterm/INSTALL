@@ -1,3 +1,5 @@
+If you are building from source, perform the following steps to install AquaTerm after building.
+
 To install at default locations:
 1) Drag AquaTerm.app to /Applications
 2) Drag AquaTerm.framework to /Library/Frameworks
