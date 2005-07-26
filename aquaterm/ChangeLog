@@ -1,3 +1,89 @@
+2005-07-26 00:04  persquare
+
+	* Help/DevDocs.rtfd/: Pasted Graphic.tiff, TXT.rtf: Some developer
+	  documentation.
+
+2005-07-25 21:11  persquare
+
+	* distroMakefile: Cleaning and updating to XCode 2.
+
+2005-07-25 21:02  persquare
+
+	* English.lproj/Credits.rtf: RTF broken by FileMerge.
+
+2005-07-25 21:00  persquare
+
+	* Help/DevDocs.rtfd/: .typeAttributes.dict, Pasted Graphic.tiff,
+	  TXT.rtf: Some developer documentation.
+
+2005-07-25 20:17  persquare
+
+	* ReadMe.rtf: RTF broken?
+
+2005-07-25 18:13  persquare
+
+	* AQTClientManager.m, AQTPlotBuilder.m, AquaTerm.app-Info.plist,
+	  AquaTerm.framework-Info.plist, Bugs.m, Demo.m, INSTALL,
+	  ReadMe.rtf, ReleaseNotes, Timing.m,
+	  English.lproj/MainMenu1.nib/info.nib,
+	  English.lproj/MainMenu1.nib/objects.nib,
+	  English.lproj/Credits.rtf, installer/installer.packproj: Minor
+	  changes pending 1.0.0 release.
+
+2005-07-25 17:49  persquare
+
+	* AquaTerm.xcodeproj/: project.pbxproj, per.mode1, per.pbxuser:
+	  Creating project file for 10.4.
+
+2005-03-23 20:33  persquare
+
+	* AquaTerm.framework-Info.plist, Fwk-Info.plist: Changing name of
+	  framework info file.
+
+2005-03-23 20:29  persquare
+
+	* AquaTerm.pbproj/project.pbxproj: Bring up-to-date.
+
+2005-03-23 20:29  persquare
+
+	* Bugs.m, Demo.m, Timing.m: Changing the default to be AquaTerm.app
+	  and using -DAQT_STANDALONE to build stand-alone example
+	  executables.
+
+2005-03-23 20:22  persquare
+
+	* AQTController.m, AQTModelAdditions.h, AQTModelAdditions.m: Minor
+	  clean-ups.
+
+2005-03-09 04:41  hbabcock
+
+	* Demo.m: fixed gcc compilation instructions to work with current
+	  configuration of aquaterm
+
+2005-03-08 04:08  hbabcock
+
+	* INSTALL: updated install instructions to reflect AquaTerm
+	  transition from library to framework
+
+2005-02-22 13:21  persquare
+
+	* installer/: installer.packproj, postflight, preflight: Moving
+	  libaquaterm to AquaTerm.framework with symlinks in /usr/local for
+	  compatibility.
+
+2005-02-22 13:20  persquare
+
+	* AquaTerm.pbproj/project.pbxproj, distroMakefile, ReleaseNotes:
+	  Moving libaquaterm to AquaTerm.framework.
+
+2005-02-22 10:59  persquare
+
+	* AQTPath.m: Fix inconsistency.
+
+2005-02-17 13:51  persquare
+
+	* ChangeLog, INSTALL, ReleaseNotes: Bring up-to-date.
+
 2005-02-17 13:49  persquare
 
 	* Demo.m: Demo unicode handling.
@@ -1696,32 +1782,8 @@
 
 2002-10-12 19:52  persquare
 
-	* AquaTerm.pbproj/bsavage.pbxuser, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/ppe.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/GPTInfoWindow.nib/classes.nib,
-	  English.lproj/GPTInfoWindow.nib/info.nib,
-	  English.lproj/GPTInfoWindow.nib/objects.nib,
-	  English.lproj/GPTInfoWindow~.nib/classes.nib,
-	  English.lproj/GPTInfoWindow~.nib/info.nib,
-	  English.lproj/GPTInfoWindow~.nib/objects.nib,
-	  English.lproj/GPTWindow.nib/classes.nib,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
-	  English.lproj/GPTWindow~.nib/classes.nib,
-	  English.lproj/GPTWindow~.nib/info.nib,
-	  English.lproj/GPTWindow~.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/classes.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib,
-	  English.lproj/MainMenu2~.nib/classes.nib,
-	  English.lproj/MainMenu2~.nib/info.nib,
-	  English.lproj/MainMenu2~.nib/objects.nib,
-	  English.lproj/MainMenu~.nib/classes.nib,
-	  English.lproj/MainMenu~.nib/info.nib,
-	  English.lproj/MainMenu~.nib/objects.nib,
-	  English.lproj/Untitled.nib/classes.nib,
-	  English.lproj/Untitled.nib/info.nib,
-	  English.lproj/Untitled.nib/objects.nib: Cleanup, I hope...
+	* AquaTerm.pbproj/: bsavage.pbxuser, per.pbxuser, ppe.pbxuser,
+	  project.pbxproj: Cleanup, I hope...
 
 2002-10-12 17:01  persquare
 
@@ -2143,9 +2205,8 @@
 	  GPTLabel.m, GPTModel.h, GPTModel.m, GPTPath.h, GPTPath.m,
 	  GPTReceiverObject.h, GPTReceiverObject.m, GPTWindowController.h,
 	  GPTWindowController.m, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/GPTWindow.nib/objects.nib: Added -(void)clearRect:
-	  to remove graphics inside rect
+	  AquaTerm.pbproj/project.pbxproj: Added -(void)clearRect: to
+	  remove graphics inside rect
 
 2001-12-07 11:01  persquare
 
@@ -2157,9 +2218,7 @@
 	* AQTProtocol.h, GPTLabel.h, GPTLabel.m, GPTReceiverObject.m,
 	  AquaTerm.pbproj/ppe.pbxuser,
 	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib: Added text rotation
+	  English.lproj/MainMenu1.nib/objects.nib: Added text rotation
 	  capabilities
 
 2001-12-04 19:12  persquare
@@ -2174,8 +2233,6 @@
 	* GPTController.m, GPTReceiverObject.m, GPTWindowController.m,
 	  AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj,
 	  English.lproj/Credits.rtf, English.lproj/InfoPlist.strings,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
 	  English.lproj/MainMenu1.nib/info.nib,
 	  English.lproj/MainMenu1.nib/objects.nib: Fixed window display
 	  bug, added version info, cosmetic fixes
@@ -2210,33 +2267,9 @@
 	  Docs/GPTWindowController.html, Docs/GPTWindowController.rtf,
 	  Docs/gptProtocol.html, Docs/gptProtocol.rtf,
 	  English.lproj/InfoPlist.strings,
-	  English.lproj/GPTInfoWindow.nib/classes.nib,
-	  English.lproj/GPTInfoWindow.nib/info.nib,
-	  English.lproj/GPTInfoWindow.nib/objects.nib,
-	  English.lproj/GPTInfoWindow~.nib/classes.nib,
-	  English.lproj/GPTInfoWindow~.nib/info.nib,
-	  English.lproj/GPTInfoWindow~.nib/objects.nib,
-	  English.lproj/GPTWindow.nib/classes.nib,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
-	  English.lproj/GPTWindow~.nib/classes.nib,
-	  English.lproj/GPTWindow~.nib/info.nib,
-	  English.lproj/GPTWindow~.nib/objects.nib,
 	  English.lproj/MainMenu1.nib/classes.nib,
 	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/classes.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib,
-	  English.lproj/MainMenu2~.nib/classes.nib,
-	  English.lproj/MainMenu2~.nib/info.nib,
-	  English.lproj/MainMenu2~.nib/objects.nib,
-	  English.lproj/MainMenu~.nib/classes.nib,
-	  English.lproj/MainMenu~.nib/info.nib,
-	  English.lproj/MainMenu~.nib/objects.nib,
-	  English.lproj/Untitled.nib/classes.nib,
-	  English.lproj/Untitled.nib/info.nib,
-	  English.lproj/Untitled.nib/objects.nib: Initial import
+	  English.lproj/MainMenu1.nib/objects.nib: Initial import
 
 2001-11-13 14:08  persquare
 
@@ -2261,31 +2294,7 @@
 	  Docs/GPTWindowController.html, Docs/GPTWindowController.rtf,
 	  Docs/gptProtocol.html, Docs/gptProtocol.rtf,
 	  English.lproj/InfoPlist.strings,
-	  English.lproj/GPTInfoWindow.nib/classes.nib,
-	  English.lproj/GPTInfoWindow.nib/info.nib,
-	  English.lproj/GPTInfoWindow.nib/objects.nib,
-	  English.lproj/GPTInfoWindow~.nib/classes.nib,
-	  English.lproj/GPTInfoWindow~.nib/info.nib,
-	  English.lproj/GPTInfoWindow~.nib/objects.nib,
-	  English.lproj/GPTWindow.nib/classes.nib,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
-	  English.lproj/GPTWindow~.nib/classes.nib,
-	  English.lproj/GPTWindow~.nib/info.nib,
-	  English.lproj/GPTWindow~.nib/objects.nib,
 	  English.lproj/MainMenu1.nib/classes.nib,
 	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/classes.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib,
-	  English.lproj/MainMenu2~.nib/classes.nib,
-	  English.lproj/MainMenu2~.nib/info.nib,
-	  English.lproj/MainMenu2~.nib/objects.nib,
-	  English.lproj/MainMenu~.nib/classes.nib,
-	  English.lproj/MainMenu~.nib/info.nib,
-	  English.lproj/MainMenu~.nib/objects.nib,
-	  English.lproj/Untitled.nib/classes.nib,
-	  English.lproj/Untitled.nib/info.nib,
-	  English.lproj/Untitled.nib/objects.nib: Initial revision
+	  English.lproj/MainMenu1.nib/objects.nib: Initial revision
 

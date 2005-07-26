@@ -26,7 +26,7 @@ Event handling of user input is provided through an optional callback function.
 #Example: HelloAquaTerm.c
 !{
 #import <Foundation/Foundation.h>
-#import <aquaterm/AQTAdapter.h>
+#import <AquaTerm/AQTAdapter.h>
 
    int main(void)
    {
@@ -34,16 +34,15 @@ Event handling of user input is provided through an optional callback function.
       AQTAdapter *adapter = [[AQTAdapter alloc] init];
       [adapter openPlotWithIndex:1];
       [adapter setPlotSize:NSMakeSize(600,400)];
-      [adapter addLabel:@"HelloAquaTerm!" position:NSMakePoint(300, 200) angle:0.0 align:1];
+      [adapter addLabel:@"HelloAquaTerm!" atPoint:NSMakePoint(300, 200) angle:0.0 align:1];
       [adapter renderPlot];
       [adapter release];
       [pool release];
       return 0;
    }
 }
-
-!{gcc -ObjC main.c -o aqtex -lobjc -laquaterm -framework Foundation}
-!{gcc main.m -o aqtex -laquaterm -framework Foundation}
+!{gcc -ObjC main.c -o aqtex -lobjc -framework AquaTerm -framework Foundation}
+!{gcc main.m -o aqtex -framework AquaTerm -framework Foundation}
 "*/
 
 /*" This is the designated initalizer, allowing for the default handler (an object vended by AquaTerm via OS X's distributed objects mechanism) to be replaced by a local instance. In most cases #init should be used, which calls #initWithHandler: with a nil argument."*/
