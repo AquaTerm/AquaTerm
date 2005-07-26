@@ -353,9 +353,12 @@ extern void aqtLineDrawingTest(id sender);
    } else if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_2) {
       /* On a 10.2 - 10.2.x system */
       version = @"10.2";
-   } else {
-      /* 10.3 or later system */
+   } else if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_2) {
+      /* 10.3 system */
       version = @"10.3";
+   } else {
+      /* 10.4 or later system */
+      version = @"10.4";
    }
    
    return [NSString stringWithFormat:@"Mac OS X %@\nInstall location: %@", version, location];
@@ -363,7 +366,7 @@ extern void aqtLineDrawingTest(id sender);
 
 -(NSString *)_aqtBugMsg
 {
-    NSString *bugString = @"Bug report for AquaTerm 1.0.b3\n\n\
+    NSString *bugString = @"Bug report for AquaTerm 1.0.0\n\n\
 Description:\n-----------------------\n\n\
 *\tPlease replace this item with a detailed description of the \n\
 \tproblem.  Suggestions or general comments are also welcome.\n\n\
@@ -391,7 +394,7 @@ Configuration (please do not edit this section):\n\
 
 -(NSString *)_aqtMailMsg
 {
-    return @"Feedback report for AquaTerm 1.0.b3\n\n\
+    return @"Feedback report for AquaTerm 1.0.0\n\n\
 Feedback:\n-----------------------\n\n\
 *\tPlease replace this item with suggestions or general comments.\n\n";
 }
