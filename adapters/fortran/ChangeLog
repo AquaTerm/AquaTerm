@@ -1,3 +1,12 @@
+2005-07-26 00:33  persquare
+
+	* demo_old.f, f2aqt.h, f2aqt.m, test.f, tiny.f: Removing ancient
+	  examples.
+
+2004-09-29 16:02  persquare
+
+	* ChangeLog: Bump to 1.0.b2
+
 2004-09-16 13:04  persquare
 
 	* ReleaseNotes: Final changes for first beta release.

@@ -1,3 +1,11 @@
+2005-07-26 00:39  persquare
+
+	* aquaTerm.trm: Lives in gnuplot nowadays.
+
+2004-09-29 16:02  persquare
+
+	* ChangeLog: Bump to 1.0.b2
+
 2004-09-16 13:04  persquare
 
 	* ReadMe, ReleaseNotes: Final changes for first beta release.

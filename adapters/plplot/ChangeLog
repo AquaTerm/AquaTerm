@@ -1,3 +1,98 @@
+2005-07-26 00:34  persquare
+
+	* aqtplplot.h, aqtplplot.m, plplot531.patch, ReleaseNotes: PLplot
+	  driver lives in PLplot sources nowadays.
+
+2005-07-25 13:02  persquare
+
+	* ReadMe: Reinstating file.
+
+2005-07-25 12:56  persquare
+
+	* Readme: Removing blocking file.
+
+2005-07-25 12:52  persquare
+
+	* ReadMe: Removing blocking file.
+
+2005-05-01 02:09  hbabcock
+
+	* Readme: Updated plplot readme to reflect the fact that the driver
+	  is now part of the plplot project
+
+2005-01-18 03:45  hbabcock
+
+	* aqtplplot.m: cleaned up mouse event handling somewhat
+
+2005-01-16 02:46  hbabcock
+
+	* aqtplplot.m: Added basic mouse event handling functionality to
+	  the adapter. The user can now click on the plot and the position
+	  of the click will be returned to PLplot
+
+2005-01-03 03:37  hbabcock
+
+	* aqtplplot.m: modified driver to support page configuration. i.e.
+	  the user can now specify how big the graph size will be (in
+	  pixels). tweaked implementation of SCALE so that it is not
+	  assumed to be 10 (or 0.1) by other constants in the driver.
+
+2004-11-26 18:02  hbabcock
+
+	* aqtplplot.m: improved implementation of SCALE so that
+	  saved/printed Aquaterm plots are not 10x too large
+
+2004-11-26 04:06  hbabcock
+
+	* aqtplplot.m: Scale parameter added back in to take advantage of
+	  the higher screen resolution offered by Quartz; example/c/x10c
+	  works properly with this change
+
+2004-11-22 03:00  hbabcock
+
+	* aqtplplot.m: modified proc_str to improve text placement
+
+2004-11-22 01:40  hbabcock
+
+	* aqtplplot.m: cleaned up so more debris associated with color
+	  handling
+
+2004-11-22 00:56  hbabcock
+
+	* aqtplplot.m: changed set_color to use the current plot color
+	  _directly_ rather then pulling it from the color table
+
+2004-11-22 00:43  hbabcock
+
+	* aqtplplot.m: removed unused .h files; removed scale factor so
+	  that plplot/example/c/x10c works properly
+
+2004-11-21 23:05  persquare
+
+	* aqtplplot.m: Fixing some debris from the new color handling code.
+
+2004-11-21 22:43  hbabcock
+
+	* ReadMe, Readme, plplot531.patch: Added plplot installation
+	  instructions and the plplot531.patch
+
+2004-11-21 02:35  hbabcock
+
+	* aqtplplot.m: Changed how aqtplplot.m handles color; It now
+	  accesses the current color table(s) kept by plplot rather then
+	  using saved copies of its own; A new function called set_color
+	  was added to implement this
+
+2004-11-21 00:06  hbabcock
+
+	* aqtplplot.m: divides coordinates in moveToVertexPoint and
+	  addEdgeToVertexPoint by SCALE; proc_str and esc_purge
+	  declarations added
+
+2004-09-29 16:02  persquare
+
+	* ChangeLog: Bump to 1.0.b2
+
 2004-09-16 13:04  persquare
 
 	* ReadMe: Final changes for first beta release.

@@ -1,0 +1,26 @@
+2005-03-24 02:06  hbabcock
+
+	* AquaTerm.xs, AquaTerm.pm: Added aqtAddShearedLabel function to
+	  perl driver
+
+2005-03-07 01:13  hbabcock
+
+	* AquaTerm.pm, AquaTerm.xs, HOW_TO_USE, Changes: updated driver to
+	  support new AquaTerm functions
+
+2005-01-25 03:52  hbabcock
+
+	* README: minor changes made to perl driver README file
+
+2005-01-25 03:37  hbabcock
+
+	* MANIFEST, META.yml, Makefile.old, const-c.inc, const-xs.inc:
+	  removed some files extraneous files related to the perl adapter
+
+2005-01-23 18:35  hbabcock
+
+	* AquaTerm.pm, AquaTerm.xs, Changes, HOW_TO_USE, MANIFEST,
+	  META.yml, Makefile.PL, Makefile.old, README, const-c.inc,
+	  const-xs.inc, ppport.h, typemap: Added Perl driver & related
+	  documentation
+
