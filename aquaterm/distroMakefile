@@ -78,7 +78,7 @@ c:
 
 fortran:
 	mkdir -p $(ADAPT_DEST)/fortran
-	cp $(ADAPTSRCDIR)/fortran/{demo.f,eventdemo1.f,f2aqt.{h,m},f2aquaterm.m,Makefile,ReadMe,ReleaseNotes} $(ADAPT_DEST)/fortran/.
+	cp $(ADAPTSRCDIR)/fortran/{demo.f,eventdemo1.f,f2aquaterm.m,Makefile,ReadMe,ReleaseNotes} $(ADAPT_DEST)/fortran/.
 
 gnuplot:
 	mkdir -p $(ADAPT_DEST)/gnuplot
