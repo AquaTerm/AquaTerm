@@ -1,16 +1,15 @@
 #!/bin/sh
+
 ## Symlinks to framework in /usr/local/lib
-if ![ -e /usr/local/lib ]; then
-    mkdir /usr/local/lib
+if [ ! -e /usr/local/lib ]; then
+    mkdir -p /usr/local/lib
 fi
 ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm /usr/local/lib/libaquaterm.dylib
 ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm /usr/local/lib/libaquaterm.1.0.0.dylib
 ## Symlinks to framework in /usr/local/include/aquaterm
-if ![ -e /usr/local/include/aquaterm ]; then
-    mkdir /usr/local/include/aquaterm
+if [ ! -e /usr/local/include/aquaterm ]; then
+    mkdir -p /usr/local/include/aquaterm
 fi
 ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/Headers/* /usr/local/include/aquaterm/.
-#if  ln -s /usr/local/lib/libaquaterm.1.0.0.dylib /usr/local/lib/libaquaterm.dylib ; then
-#    echo "linked OK"
-#fi
+
 exit 0
