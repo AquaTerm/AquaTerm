@@ -171,7 +171,7 @@
 
 - (void)takeBackgroundColorFromColormapEntry:(int)index
 {
-   [self setBackgroundColor:[_colormap colorForIndex:index]];   
+   [self setBackgroundColor:[_colormap colorForIndex:index]];
 }
 
 - (int)colormapSize
@@ -240,6 +240,7 @@
 
 - (void)setLineCapStyle:(int)capStyle
 {
+   [self _flushBuffers];
    _capStyle = capStyle;
 }
 
