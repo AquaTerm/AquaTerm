@@ -208,6 +208,10 @@ static float _aqtMinimumLinewidth;
    if([self isFilled]) {
       [scratch closePath];
    }
+   if(EQ(path[0].x, path[pointCount-1].x) && EQ(path[0].y, path[pointCount-1].y)) {
+      // This looks like a closed path..., make it so.
+      [scratch closePath];      
+   }
    [self _setCache:scratch];
 }
 
