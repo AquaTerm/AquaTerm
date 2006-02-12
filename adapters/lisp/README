@@ -1,0 +1,36 @@
+
+This module provides a lisp wrapper for the AquaTerm Graphics Terminal. It uses
+UFFI, which should hopefully make it portable to most flavors of Lisp. However,
+it has only been tested with SBCL 0.9.5.
+
+Hazen 1/06
+
+Installation (SBCL):
+1) Install AquaTerm.
+2) tar together the files in the lisp directory:
+	tar -cvf cl-aqt.tar ./lisp
+3) gzip the tar file:
+	gzip cl-aqt.tar
+4) start your lisp implementation
+5) load asdf-install:
+   	(require :asdf-install)
+6) install cl-aqt:
+	(asdf-install:install "cl-aqt.tar.gz")
+
+You now should be able to load this package with (require :cl-aqt)
+
+Notes:
+1. In general the AquaTerm library function name is mapped to the lisp 
+wrapper function name as for example "aquaInit" -> "aqua-init", and all
+functions except for "aqtSetEventHandler" are available.
+
+2. Many of the functions need to be passed variables of the appropriate type 
+(float, fixnum, unsigned-byte). This is probably the first thing to check if
+you have trouble with a function once you get the package installed.
+
+3. There are some simple test functions that are tacked onto the end of the
+package, which should provide some idea of how to use the package.
+
+4. The macro with-aqt-plot wraps plotting inside of calls to set-up and close
+a plot (see for example the test-bmp function).
+
