@@ -2,13 +2,11 @@
 ;;; cl-aqt installer
 ;;;
 
-(in-package #:cl-user)
-
-(defpackage #:cl-aqt-system
+(defpackage #:cl-aqt.system
   (:use #:cl
         #:asdf))
 
-(in-package #:cl-aqt-system)
+(in-package #:cl-aqt.system)
 
 (defsystem #:cl-aqt
   :name "cl-aqt"
