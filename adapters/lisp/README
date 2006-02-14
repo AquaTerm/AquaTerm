@@ -3,18 +3,21 @@ This module provides a lisp wrapper for the AquaTerm Graphics Terminal. It uses
 UFFI, which should hopefully make it portable to most flavors of Lisp. However,
 it has only been tested with SBCL 0.9.5.
 
-Hazen 1/06
+Hazen 2/06
 
 Installation (SBCL):
 1) Install AquaTerm.
-2) tar together the files in the lisp directory:
-	tar -cvf cl-aqt.tar ./lisp
-3) gzip the tar file:
+2) cd to adapters/lisp directory.
+3) make a directory called cl-aqt-0.0.1
+4) copy cl-aqt.lisp and cl-aqt.asd into this directory
+5) tar together the files in the cl-aqt-0.0.1 directory:
+	tar -cvf cl-aqt.tar cl-aqt-0.0.1/*
+6) gzip the tar file:
 	gzip cl-aqt.tar
-4) start your lisp implementation
-5) load asdf-install:
+7) start your lisp implementation
+8) load asdf-install:
    	(require :asdf-install)
-6) install cl-aqt:
+9) install cl-aqt:
 	(asdf-install:install "cl-aqt.tar.gz")
 
 You now should be able to load this package with (require :cl-aqt)
