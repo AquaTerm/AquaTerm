@@ -2,7 +2,7 @@
 ;;;; Wrapper for the aquaterm graphics terminal. Uses UFFI
 ;;;; to interface to the C sub-routines defined in aquaterm.h 
 ;;;;
-;;;; hazen 1/05
+;;;; hazen 1/06
 ;;;;
 
 ; loads uffi
@@ -58,8 +58,6 @@
 	   :with-aqt-plot))
 
 (in-package :cl-aqt)
-
-;(load-foreign-library #p"libmysqlclient.so" :module "mysql" :supporting-libraries '("c")) 
 
 ;; this is called during compilation to load libaquaterm
 
