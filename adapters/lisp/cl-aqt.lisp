@@ -5,10 +5,6 @@
 ;;;; hazen 1/06
 ;;;;
 
-; loads uffi
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (require :uffi))
-
 (defpackage :cl-aqt
   (:use :common-lisp
 	:uffi)
