@@ -5,7 +5,7 @@ if [ ! -e /usr/local/lib ]; then
     mkdir -p /usr/local/lib
 fi
 ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm /usr/local/lib/libaquaterm.dylib
-ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm /usr/local/lib/libaquaterm.1.0.0.dylib
+ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm /usr/local/lib/libaquaterm.1.0.1.dylib
 ## Symlinks to framework in /usr/local/include/aquaterm
 if [ ! -e /usr/local/include/aquaterm ]; then
     mkdir -p /usr/local/include/aquaterm

@@ -1,3 +1,11 @@
+AquaTerm 1.0.1
+  AquaTerm is now a universal binary.
+  Added Lisp bindings contributed by Hazen Babcock. 
+
+AquaTerm 1.0-update1
+  Fixed bug in installer script that sometimes failed to provide links from 
+  /usr/local/lib to AquaTerm.framework 
+
 AquaTerm 1.0
   Skipping 1.0.b3 release, moving to stable release :-)
   Known issues:

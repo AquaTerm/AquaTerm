@@ -21,7 +21,7 @@ This is the result:
         aquaterm.h -> /Library/...../aquaterm.h
         AQTAdapter.h -> /Library/...../AQTAdapter.h
     lib/
-        libaquaterm.1.0.0.dylib -> /Library/...../A/AquaTerm
+        libaquaterm.1.0.1.dylib -> /Library/...../A/AquaTerm
         libaquaterm.dylib -> /Library/...../A/AquaTerm
 ===
 Run the makefiles in C/ and fortran/
