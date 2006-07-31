@@ -25,7 +25,9 @@ pkg: app lib fwk headers
 	freeze -v $(APPSRCDIR)/installer/installer.packproj
 
 dmg: adapters info doc pkg
-	hdiutil create -volname AquaTerm -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
+	#hdiutil create -volname AquaTerm -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
+	#hdiutil create -volname $(RELEASENAME) -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
+	dropdmg -v $(RELEASENAME) -b $(RELEASENAME) -o $(BUILD_DIR) $(DMG_ROOT)
 
 pre: clean
 	@echo "SYMROOT is " $(SYMROOT) ", cleaning out..."
