@@ -38,7 +38,7 @@
    // It ain't dirty until the fat lady has a size
    _modelIsDirty = isDirty && _hasSize;
 #ifdef DEBUG
-   if (_modelIsDirty && NSEqualSizes(NSZeroSize, [_model size]))
+   if (_modelIsDirty && NSEqualSizes(NSZeroSize, [_model canvasSize]))
    {
       [NSException raise:@"AQTDebugException" format:NSStringFromSelector(_cmd)];
    }
