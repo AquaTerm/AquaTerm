@@ -12,11 +12,45 @@
 #import "AQTGraphicDrawingMethods.h"
 
 @implementation AQTView
+
+-(void)setCrosshairCursorColor
+{
+  NSString *cursorImageName;
+  int cursorIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"CrosshairCursorColor"];
+  NSLog(@"cursorIndex = %d", cursorIndex);
+  switch (cursorIndex) {
+    case 0: 
+      cursorImageName = @"crossRed";
+      break;
+    case 1:
+      cursorImageName = @"crossYellow";
+      break;
+    case 2:
+      cursorImageName = @"crossBlue";
+      break;
+    case 3:
+      cursorImageName = @"crossGreen";
+      break;
+    case 4:
+      cursorImageName = @"crossBlack";
+      break;
+    case 5:
+      cursorImageName = @"crossWhite";
+      break;
+    default:
+      NSLog(@"Using default cursor");
+      cursorImageName = @"crossRed";
+      break;
+  }
+  NSImage *curImg = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:cursorImageName ofType:@"tiff"]];
+  [crosshairCursor autorelease];
+  crosshairCursor = [[NSCursor alloc] initWithImage:curImg hotSpot:NSMakePoint(7,7)];
+  [curImg release];
+}
+
 -(void)awakeFromNib
 {
-   NSImage *curImg = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Cross" ofType:@"tiff"]];
-   crosshairCursor = [[NSCursor alloc] initWithImage:curImg hotSpot:NSMakePoint(7,7)];
-   [curImg release];
+   [self setCrosshairCursorColor];
    [self setIsProcessingEvents:NO];   
 }
 
@@ -62,6 +96,7 @@
    {
       // Change in state
       _isProcessingEvents = flag;
+      [self setCrosshairCursorColor];
       [[self window] invalidateCursorRectsForView:self];
    }
 }

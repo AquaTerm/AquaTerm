@@ -44,6 +44,7 @@ extern void aqtLineDrawingTest(id sender);
          [NSNumber numberWithInt:1], 
          [NSNumber numberWithInt:1],
          [NSNumber numberWithInt:0], 
+         [NSNumber numberWithInt:0], 
          [NSNumber numberWithInt:1], 
          nil]
       forKeys:[NSArray arrayWithObjects:
@@ -55,6 +56,7 @@ extern void aqtLineDrawingTest(id sender);
          @"ShouldConvertSymbolFont",
          @"ShouldAntialiasDrawing", 
          @"ImageInterpolationLevel",
+         @"CrosshairCursorColor",
          @"CloseWindowWhenClosingPlot",
          @"ConfirmCloseWindowWhenClosingPlot",
          nil]];

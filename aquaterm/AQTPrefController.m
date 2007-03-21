@@ -26,6 +26,7 @@
 - (void)showPrefs {
    float lw = [preferences floatForKey:@"MinimumLinewidth"];
    [imageInterpolateLevel selectItemAtIndex:[preferences integerForKey:@"ImageInterpolationLevel"]];
+   [crosshairCursorColor selectItemAtIndex:[preferences integerForKey:@"CrosshairCursorColor"]];
    [shouldAntialiasSwitch setIntValue:[preferences integerForKey:@"ShouldAntialiasDrawing"]];
    [minimumLinewidthSlider setFloatValue:lw];
    [linewidthDisplay setStringValue:(lw < 0.04)?@"off":[NSString stringWithFormat:@"%4.2f", lw]];
@@ -59,6 +60,7 @@
 - (IBAction)OKButtonPressed:(id)sender
 {
    [preferences setInteger:[imageInterpolateLevel indexOfSelectedItem] forKey:@"ImageInterpolationLevel"];
+   [preferences setInteger:[crosshairCursorColor indexOfSelectedItem] forKey:@"CrosshairCursorColor"];
    [preferences setInteger:[shouldAntialiasSwitch intValue] forKey:@"ShouldAntialiasDrawing"];
    [preferences setFloat:[minimumLinewidthSlider floatValue] forKey:@"MinimumLinewidth"];
    [preferences setInteger:[convertSymbolFontSwitch intValue] forKey:@"ShouldConvertSymbolFont"];

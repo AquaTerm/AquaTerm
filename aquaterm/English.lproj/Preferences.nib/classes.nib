@@ -14,6 +14,7 @@
                 closeWindowSwitch = NSButton; 
                 confirmCloseWindowSwitch = NSButton; 
                 convertSymbolFontSwitch = NSButton; 
+                crosshairCursorColor = NSPopUpButton; 
                 imageInterpolateLevel = NSPopUpButton; 
                 linewidthDisplay = NSTextField; 
                 minimumLinewidthSlider = NSSlider; 

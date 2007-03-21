@@ -8,6 +8,7 @@
 {
    IBOutlet NSWindow *prefWindow;
    IBOutlet NSPopUpButton *imageInterpolateLevel;
+   IBOutlet NSPopUpButton *crosshairCursorColor;
    IBOutlet NSButton *shouldAntialiasSwitch;
    IBOutlet NSSlider *minimumLinewidthSlider;
    IBOutlet NSButton *convertSymbolFontSwitch;
