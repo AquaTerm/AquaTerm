@@ -61,6 +61,11 @@ extern void aqtLineDrawingTest(id sender);
          @"ConfirmCloseWindowWhenClosingPlot",
          nil]];
    [defaults registerDefaults:appDefaults];
+   
+   // Make landscape printing the default
+   NSPrintInfo *pi = [NSPrintInfo sharedPrintInfo];
+   [pi setOrientation:NSLandscapeOrientation];
+   [NSPrintInfo setSharedPrintInfo:pi];
 }
 
 -(id)init
