@@ -142,7 +142,8 @@
 
 - (void)setColor:(AQTColor)newColor
 {
-   if ((newColor.red != _color.red) || (newColor.green != _color.green) || (newColor.blue != _color.blue))
+   // FIXME: Use AQTEqualColor instead
+   if ((newColor.red != _color.red) || (newColor.green != _color.green) || (newColor.blue != _color.blue) || (newColor.alpha != _color.alpha))
    {
       [self _flushBuffers];
       _color = newColor;
@@ -152,7 +153,8 @@
 - (void)setBackgroundColor:(AQTColor)newColor
 {
    AQTColor oldColor = [_model color];
-   if ((newColor.red != oldColor.red) || (newColor.green != oldColor.green) || (newColor.blue != oldColor.blue))
+   // FIXME: Use AQTEqualColor instead
+   if ((newColor.red != oldColor.red) || (newColor.green != oldColor.green) || (newColor.blue != oldColor.blue) || (newColor.alpha != oldColor.alpha))
    {
       [_model setColor:newColor];
       [self _aqtPlotBuilderSetModelIsDirty:YES];

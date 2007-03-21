@@ -238,23 +238,38 @@ _{43:%{x,y}:%key Error } "*/
 }
 
 /*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
-- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b
+- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b alpha:(float)a
 {
    AQTColor tmpColor;
    tmpColor.red = r;
    tmpColor.green = g;
    tmpColor.blue = b;
+   tmpColor.alpha = a;
    [_selectedBuilder setColor:tmpColor forColormapEntry:entryIndex];
 }
 
+- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b 
+{
+   [self setColormapEntry:entryIndex red:r green:g blue:b alpha:1.0];
+}
+
+
 /*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
-- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b
+- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a
 {
    AQTColor tmpColor = [_selectedBuilder colorForColormapEntry:entryIndex];
    *r = tmpColor.red;
    *g = tmpColor.green;
    *b = tmpColor.blue;
+   *a = tmpColor.alpha;
 }
+
+- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b
+{
+   float dummyAlpha;
+   [self getColormapEntry:entryIndex red:r green:g blue:b alpha:&dummyAlpha];
+}
+
 
 /*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the colormap. "*/
 - (void)takeColorFromColormapEntry:(int)index
@@ -269,26 +284,42 @@ _{43:%{x,y}:%key Error } "*/
 }
 
 /*" Set the current color, used for all subsequent items, using explicit RGB components. "*/
-- (void)setColorRed:(float)r green:(float)g blue:(float)b
+- (void)setColorRed:(float)r green:(float)g blue:(float)b alpha:(float)a
 {
-   AQTColor newColor;
-   newColor.red = r;
-   newColor.green = g;
-   newColor.blue = b;
+   AQTColor newColor = (AQTColor){r, g, b, a};
    [_selectedBuilder setColor:newColor];
 }
 
-/*" Set the background color, overriding any previous color, using explicit RGB components. "*/
-- (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b
+- (void)setColorRed:(float)r green:(float)g blue:(float)b
 {
-   AQTColor newColor;
-   newColor.red = r;
-   newColor.green = g;
-   newColor.blue = b;
+   [self setColorRed:r green:g blue:b alpha:1.0];
+}
+
+
+/*" Set the background color, overriding any previous color, using explicit RGB components. "*/
+- (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b alpha:(float)a
+{
+   AQTColor newColor = (AQTColor){r, g, b, a};
    [_selectedBuilder setBackgroundColor:newColor];
 }
 
+- (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b
+{
+   [self setBackgroundColorRed:r green:g blue:b alpha:1.0];
+}
+
+
 /*" Get current RGB color components by reference. "*/
+- (void)getColorRed:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a
+{
+   AQTColor tmpColor = [_selectedBuilder color];
+   *r = tmpColor.red;
+   *g = tmpColor.green;
+   *b = tmpColor.blue;
+   *a = tmpColor.alpha;
+}
+
+
 - (void)getColorRed:(float *)r green:(float *)g blue:(float *)b
 {
    AQTColor tmpColor = [_selectedBuilder color];
@@ -298,12 +329,20 @@ _{43:%{x,y}:%key Error } "*/
 }
 
 /*" Get background color components by reference. "*/
+- (void)getBackgroundColorRed:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a
+{
+    AQTColor tmpColor = [_selectedBuilder backgroundColor];
+    *r = tmpColor.red;
+    *g = tmpColor.green;
+    *b = tmpColor.blue;
+    *a = tmpColor.alpha;
+}
+
+
 - (void)getBackgroundColorRed:(float *)r green:(float *)g blue:(float *)b
 {
-   AQTColor tmpColor = [_selectedBuilder backgroundColor];
-   *r = tmpColor.red;
-   *g = tmpColor.green;
-   *b = tmpColor.blue;
+   float dummyAlpha;
+   [self getBackgroundColorRed:r green:g blue:b alpha:&dummyAlpha];
 }
 
 

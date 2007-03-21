@@ -26,7 +26,7 @@ static float _aqtMinimumLinewidth;
       [[NSColor colorWithCalibratedRed:_color.red
                                  green:_color.green
                                   blue:_color.blue
-                                 alpha:1.0] set];
+                                 alpha:_color.alpha] set];
       currentColor = _color;
    }
 }

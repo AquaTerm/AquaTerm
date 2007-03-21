@@ -14,6 +14,7 @@ typedef struct _AQTColor {
    float red;
    float green;
    float blue;
+   float alpha;
 } AQTColor;
 
 @interface AQTGraphic : NSObject <NSCoding>

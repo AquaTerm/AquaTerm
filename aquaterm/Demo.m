@@ -251,14 +251,27 @@ for (i=0; i<8; i++)
 }
 [adapter takeColorFromColormapEntry:4];
 [adapter addPolygonWithVertexPoints:points pointCount:8];
-for (i=0; i<32; i++)
-{
-  double radians=(double)i*pi/16.0, r=20.0;
-  points[i]=NSMakePoint(520.0+r*cos(radians), 255.0+r*sin(radians));
-}
-[adapter takeColorFromColormapEntry:5];
-[adapter addPolygonWithVertexPoints:points pointCount:32];
 
+// Circles with alpha transparency
+[adapter takeColorFromColormapEntry:1];
+[adapter addLabel:@"Alpha channel" atPoint:NSMakePoint(530, 290) angle:0.0 align:AQTAlignCenter];
+{
+   float x[] = {520.0, 540.0, 540.0};
+   float y[] = {255.0, 245.0, 265.0};
+   float red[] = {1.0, 0.0, 0.0};
+   float green[] = {0.0, 1.0, 0.0};
+   float blue[] = {0.0, 0.0, 1.0};
+   int j;
+   
+   for (j=0; j<3; j++) {
+      for (i=0; i<32; i++) {
+         double radians=(double)i*pi/16.0, r=20.0;
+         points[i]=NSMakePoint(x[j]+r*cos(radians), y[j]+r*sin(radians));
+      }
+      [adapter setColorRed:red[j] green:green[j] blue:blue[j] alpha:0.5];
+      [adapter addPolygonWithVertexPoints:points pointCount:32];
+   }
+}
 // Images
 [adapter takeColorFromColormapEntry:1];
 [adapter addLabel:@"Images" atPoint:NSMakePoint(320, 220) angle:0.0 align:AQTAlignLeft];

@@ -23,7 +23,7 @@
 /* Color utilities */
 static inline BOOL AQTEqualColors(AQTColor c1, AQTColor c2) {
    // return (c1.red == c2.red && c1.green == c2.green && c1.blue == c2.blue);
-   return (EQ(c1.red, c2.red) && EQ(c1.green, c2.green) && EQ(c1.blue, c2.blue));
+   return (EQ(c1.red, c2.red) && EQ(c1.green, c2.green) && EQ(c1.blue, c2.blue) && EQ(c1.alpha, c2.alpha));
 }
 
 /* Geometry extensions */

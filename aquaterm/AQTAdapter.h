@@ -62,12 +62,18 @@ extern const int AQTAlignTop;
 
 /*" Colormap (utility) "*/
 - (int)colormapSize;
+- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b alpha:(float)a;
+- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a;
 - (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b;
 - (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b;
 - (void)takeColorFromColormapEntry:(int)index;
 - (void)takeBackgroundColorFromColormapEntry:(int)index;
 
   /*" Color handling "*/
+- (void)setColorRed:(float)r green:(float)g blue:(float)b alpha:(float)a;
+- (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b alpha:(float)a;
+- (void)getColorRed:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a;
+- (void)getBackgroundColorRed:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a;
 - (void)setColorRed:(float)r green:(float)g blue:(float)b;
 - (void)setBackgroundColorRed:(float)r green:(float)g blue:(float)b;
 - (void)getColorRed:(float *)r green:(float *)g blue:(float *)b;

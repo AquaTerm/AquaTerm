@@ -8,6 +8,12 @@
 
 #import "AQTGraphic.h"
 
+typedef struct _AQTColor_v100 {
+   float red;
+   float green;
+   float blue;
+} AQTColor_v100;
+
 @implementation AQTGraphic
     /**"
     *** An abstract class to derive model objects from
@@ -27,6 +33,7 @@
        _color.red = 1.;
        _color.green = 1.;
        _color.blue = 1.;
+       _color.alpha = 1.;
     }
     return self; 
 }
@@ -51,12 +58,20 @@
 
 -(id)initWithCoder:(NSCoder *)coder
 {
-  self = [super init];
-  [coder decodeValueOfObjCType:@encode(AQTColor) at:&_color];
-  [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
-  [coder decodeValueOfObjCType:@encode(NSRect) at:&_clipRect];
-  [coder decodeValueOfObjCType:@encode(BOOL) at:&_isClipped];
-  return self;
+   self = [super init];
+#if 1
+   [coder decodeValueOfObjCType:@encode(AQTColor) at:&_color];
+#else
+   {
+      AQTColor_v100 color_v100; 
+      [coder decodeValueOfObjCType:@encode(AQTColor) at:&color_v100];
+      _color = (AQTColor){color_v100.red, color_v100.green, color_v100.blue, 1.0};
+   }  
+#endif   
+   [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
+   [coder decodeValueOfObjCType:@encode(NSRect) at:&_clipRect];
+   [coder decodeValueOfObjCType:@encode(BOOL) at:&_isClipped];
+   return self;
 }
 
 -(AQTColor)color
