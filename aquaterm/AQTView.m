@@ -17,7 +17,7 @@
 {
   NSString *cursorImageName;
   int cursorIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"CrosshairCursorColor"];
-  NSLog(@"cursorIndex = %d", cursorIndex);
+
   switch (cursorIndex) {
     case 0: 
       cursorImageName = @"crossRed";
@@ -38,7 +38,6 @@
       cursorImageName = @"crossWhite";
       break;
     default:
-      NSLog(@"Using default cursor");
       cursorImageName = @"crossRed";
       break;
   }
