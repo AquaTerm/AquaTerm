@@ -119,6 +119,7 @@ int aqtGetLastEvent(char *buffer) // FIXME: retval?
    int copyLen = MIN(AQT_EVENTBUF_SIZE - 1, strlen(cStr));
    strncpy(buffer, cStr, copyLen);
    buffer[copyLen] = '\0';
+   [eventStr release];
    return 0;
 }
 
@@ -132,6 +133,7 @@ int aqtWaitNextEvent(char *buffer) // FIXME: retval?
   int copyLen = MIN(AQT_EVENTBUF_SIZE - 1, strlen(cStr));
   strncpy(buffer, cStr, copyLen);
   buffer[copyLen] = '\0';
+  [eventStr release];
   return 0;
 }
 
