@@ -112,18 +112,27 @@ void aqtSetAcceptingEvents(int flag)
 int aqtGetLastEvent(char *buffer) // FIXME: retval?
 {
    NSString *event = [_adapter lastEvent];
-   strncpy(buffer, [event UTF8String], MIN(AQT_EVENTBUF_SIZE - 1, [event length]));
-   buffer[MIN(AQT_EVENTBUF_SIZE - 1, [event length])] = '\0';
+   // Perform a lossy conversion from UTF8 to ASCII
+   NSString *eventStr = [[NSString alloc] initWithData:[event dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]
+                                          encoding:NSASCIIStringEncoding];
+   const char *cStr = [eventStr cStringUsingEncoding:NSASCIIStringEncoding];
+   int copyLen = MIN(AQT_EVENTBUF_SIZE - 1, strlen(cStr));
+   strncpy(buffer, cStr, copyLen);
+   buffer[copyLen] = '\0';
    return 0;
 }
 
 int aqtWaitNextEvent(char *buffer) // FIXME: retval?
 {
    NSString *event  = [_adapter waitNextEvent];
-   
-   strncpy(buffer, [event UTF8String], MIN(AQT_EVENTBUF_SIZE - 1, [event length]));
-   buffer[MIN(AQT_EVENTBUF_SIZE - 1, [event length])] = '\0';
-   return 0;
+  // Perform a lossy conversion from UTF8 to ASCII
+  NSString *eventStr = [[NSString alloc] initWithData:[event dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]
+                                             encoding:NSASCIIStringEncoding];
+  const char *cStr = [eventStr cStringUsingEncoding:NSASCIIStringEncoding];
+  int copyLen = MIN(AQT_EVENTBUF_SIZE - 1, strlen(cStr));
+  strncpy(buffer, cStr, copyLen);
+  buffer[copyLen] = '\0';
+  return 0;
 }
 
 void aqtEventProcessingMode()

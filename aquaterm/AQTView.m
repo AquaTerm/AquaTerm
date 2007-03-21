@@ -135,7 +135,6 @@
       NSString *eventString;
       NSPoint pos = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
       NSRect viewBounds = [self bounds];
-      char aKey = [[theEvent characters] UTF8String][0];;
       if (!NSPointInRect(pos, viewBounds))
       {
          // Just crop it to be inside [self bounds];
@@ -148,7 +147,10 @@
          else if (pos.y > NSHeight(viewBounds))
             pos.y = NSHeight(viewBounds);
       }
-      eventString = [NSString stringWithFormat:@"2:%@:%c", NSStringFromPoint([self convertPointToCanvasCoordinates:pos]), aKey];
+      eventString = [NSString stringWithFormat:@"2:%@:%@:%d", 
+        NSStringFromPoint([self convertPointToCanvasCoordinates:pos]), 
+        [theEvent characters], 
+        [theEvent keyCode]];
       [[[self window] delegate] processEvent:eventString];
    }
 }
