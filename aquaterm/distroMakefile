@@ -3,7 +3,7 @@ BUILD_DIR=$(BUILT_PRODUCTS_DIR)
 endif
 
 PACKAGE=AquaTerm
-VERSION=1.0.1
+VERSION=1.1.0
 ##RELEASENAME=AquaTerm1.0.b3
 RELEASENAME=$(PACKAGE)$(VERSION)
 
@@ -18,16 +18,19 @@ ADAPT_DEST=$(EXTRAS_DEST)/adapters
 APPSRCDIR=$(SRCROOT)
 HELPDIR=$(SRCROOT)/Help
 ADAPTSRCDIR=$(SRCROOT)/../adapters
+## Tools
+## --------------------------
+FREEZE=/usr/local/bin/freeze
 
 all:pre dmg post
 
 pkg: app lib fwk headers
-	freeze -v $(APPSRCDIR)/installer/installer.packproj
+	$(FREEZE) -v $(APPSRCDIR)/installer/installer.packproj
 
 dmg: adapters info doc pkg
 	#hdiutil create -volname AquaTerm -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
-	#hdiutil create -volname $(RELEASENAME) -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
-	dropdmg -v $(RELEASENAME) -b $(RELEASENAME) -o $(BUILD_DIR) $(DMG_ROOT)
+	hdiutil create -verbose -volname $(RELEASENAME) -fs HFS+ -srcfolder $(DMG_ROOT) $(BUILD_DIR)/$(RELEASENAME).dmg
+	#dropdmg -v $(RELEASENAME) -b $(RELEASENAME) -o $(BUILD_DIR) $(DMG_ROOT)
 
 pre: clean
 	@echo "SYMROOT is " $(SYMROOT) ", cleaning out..."

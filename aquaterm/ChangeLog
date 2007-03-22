@@ -1,3 +1,115 @@
+2007-03-22 18:26  persquare
+
+	* aquaterm.h, aquaterm.m: Add the RGBA methods to C API too.
+
+2007-03-21 21:46  persquare
+
+	* AQTController.m: Make landscape printing the default.
+
+2007-03-21 21:27  persquare
+
+	* AQTView.m: Removing log statements.
+
+2007-03-21 21:20  persquare
+
+	* AQTController.m, AQTPrefController.h, AQTPrefController.m,
+	  AQTView.m, English.lproj/crossBlack.tiff,
+	  English.lproj/crossBlue.tiff, English.lproj/crossGreen.tiff,
+	  English.lproj/crossRed.tiff, English.lproj/crossWhite.tiff,
+	  English.lproj/crossYellow.tiff,
+	  English.lproj/Preferences.nib/classes.nib,
+	  English.lproj/Preferences.nib/info.nib,
+	  English.lproj/Preferences.nib/objects.nib: Make crosshair color a
+	  user pref.
+
+2007-03-21 21:18  persquare
+
+	* English.lproj/Cross.tiff: Not used.
+
+2007-03-21 19:40  persquare
+
+	* aquaterm.m: Release temp string.
+
+2007-03-21 19:38  persquare
+
+	* AQTView.m, aquaterm.m: Better handling of event strings. Add
+	  keyCode to event string for key presses.
+
+2007-03-21 18:35  persquare
+
+	* AQTAdapter.h, AQTAdapter.m, AQTFunctions.h, AQTGraphic.h,
+	  AQTGraphic.m, AQTGraphicDrawingMethods.m, AQTPlotBuilder.m,
+	  Demo.m: Adding alpha channel handling.
+
+2006-10-31 22:05  persquare
+
+	* installer/postflight: Adding the missing link. Time to deprecate
+	  libaquaterm altogether.
+
+2006-08-23 20:01  persquare
+
+	* AQTPlotBuilder.m: Fixing size method left out when renaming size
+	  to canvasSize, reported by Will Ware. Only affected debug builds.
+
+2006-08-01 00:59  persquare
+
+	* AquaTerm.xcodeproj/: per.mode1, per.pbxuser: Preparing for source
+	  release.
+
+2006-08-01 00:55  persquare
+
+	* distroMakefile: hdiutil is wreaking havoc on the installer
+	  package, using DropDMG as a fix.
+
+2006-07-31 23:49  persquare
+
+	* AquaTerm.xcodeproj/per.mode1, AquaTerm.xcodeproj/per.pbxuser,
+	  AquaTerm.xcodeproj/project.pbxproj, ReadMe.rtf,
+	  English.lproj/Credits.rtf: Targeting Universal Binary. Bumping
+	  version to 1.0.1
+
+2006-07-31 23:27  persquare
+
+	* AQTController.m, AquaTerm.app-Info.plist,
+	  AquaTerm.framework-Info.plist, INSTALL, ReadMe.rtf, ReleaseNotes,
+	  distroMakefile, installer/installer.packproj,
+	  installer/postflight, installer/preflight: Targeting Universal
+	  Binary. Bumping version to 1.0.1
+
+2005-11-10 22:07  persquare
+
+	* AQTGraphicDrawingMethods.m: Try to be smart about paths that
+	  should have been closed.
+
+2005-11-10 22:05  persquare
+
+	* AQTPlotBuilder.m: Changing line cap style implies end of current
+	  path.
+
+2005-09-14 17:56  persquare
+
+	* installer/postflight: Fixing broken script.
+
+2005-07-26 03:03  persquare
+
+	* AquaTerm.xcodeproj/project.pbxproj: Turn off debug logging.
+
+2005-07-26 03:02  persquare
+
+	* AQTController.m: Minor changes pending 1.0.0 release.
+
+2005-07-26 02:24  persquare
+
+	* distroMakefile: Minor changes pending 1.0.0 release.
+
+2005-07-26 02:03  persquare
+
+	* Help/AQTAdapter.html: Some developer documentation.
+
+2005-07-26 02:02  persquare
+
+	* ChangeLog, AQTAdapter.m: Minor changes pending 1.0.0 release.
+
 2005-07-26 00:04  persquare
 
 	* Help/DevDocs.rtfd/: Pasted Graphic.tiff, TXT.rtf: Some developer

@@ -366,6 +366,54 @@
 				<key>Split Forks</key>
 				<true/>
 			</dict>
+			<key>Plugins</key>
+			<dict>
+				<key>PluginsList</key>
+				<array>
+					<dict>
+						<key>Path</key>
+						<string>Introduction</string>
+						<key>Type</key>
+						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>Path</key>
+						<string>ReadMe</string>
+						<key>Type</key>
+						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>Path</key>
+						<string>License</string>
+						<key>Type</key>
+						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>Path</key>
+						<string>Target</string>
+						<key>Type</key>
+						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>Path</key>
+						<string>PackageSelection</string>
+						<key>Type</key>
+						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>Path</key>
+						<string>Install</string>
+						<key>Type</key>
+						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>Path</key>
+						<string>FinishUp</string>
+						<key>Type</key>
+						<integer>0</integer>
+					</dict>
+				</array>
+			</dict>
 			<key>Scripts</key>
 			<dict>
 				<key>Additional Resources</key>
@@ -434,17 +482,17 @@
 						<key>IFPkgDescriptionDeleteWarning</key>
 						<string></string>
 						<key>IFPkgDescriptionDescription</key>
-						<string>This package will install AquaTerm 1.0.1, including supporting library and header files.</string>
+						<string>This package will install AquaTerm 1.1.0, including supporting library and header files.</string>
 						<key>IFPkgDescriptionTitle</key>
 						<string>AquaTerm</string>
 						<key>IFPkgDescriptionVersion</key>
-						<string>1.0.1</string>
+						<string>1.1.0</string>
 					</dict>
 				</dict>
 				<key>Display Information</key>
 				<dict>
 					<key>CFBundleGetInfoString</key>
-					<string>AquaTerm 1.0.1 Copyrights © 2006 Aquaterm Project</string>
+					<string>AquaTerm 1.1.0 Copyrights © 2007 Aquaterm Project</string>
 					<key>CFBundleIconFile</key>
 					<string></string>
 					<key>CFBundleIconFile Path Type</key>
@@ -454,7 +502,7 @@
 					<key>CFBundleName</key>
 					<string>AquaTerm</string>
 					<key>CFBundleShortVersionString</key>
-					<string>1.0.1</string>
+					<string>1.1.0</string>
 				</dict>
 				<key>Options</key>
 				<dict>
@@ -464,8 +512,6 @@
 					<integer>2</integer>
 					<key>IFPkgFlagFollowLinks</key>
 					<true/>
-					<key>IFPkgFlagInstallFat</key>
-					<false/>
 					<key>IFPkgFlagIsRequired</key>
 					<false/>
 					<key>IFPkgFlagOverwritePermissions</key>
@@ -484,7 +530,7 @@
 					<key>IFMajorVersion</key>
 					<integer>1</integer>
 					<key>IFMinorVersion</key>
-					<integer>0</integer>
+					<integer>1</integer>
 				</dict>
 			</dict>
 		</dict>

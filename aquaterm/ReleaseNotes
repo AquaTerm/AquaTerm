@@ -1,3 +1,13 @@
+AquaTerm 1.1.0
+  Added alpha channel handling to API, see AQTAdapter.h and aquaterm.h. (#1605002)
+  Made crosshair color user selectable in Preferences. (Michael Buzzi)
+  Appended virtual keycode enumerator to event string for key presses. (Michael Buzzi)
+	Non-printing and non-ASCII key events will return an empty string, e.g.:
+	Pressing 'q' will return event string "2:{58, 170}:q:12" whereas 
+	pressing right arrow will return event string "2:{66, 162}::124", where
+	12 and 124 are the virtual keycodes for 'q' and right arrow, respectively.   
+  Made landscape printing the default layout. (Jeremy Conlin)
+
 AquaTerm 1.0.1
   AquaTerm is now a universal binary.
   Added Lisp bindings contributed by Hazen Babcock. 

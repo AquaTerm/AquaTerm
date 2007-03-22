@@ -46,6 +46,12 @@
 		CB9B70CD065A0AD100563010 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = CB9B70CB065A0AD100563010 /* Preferences.nib */; };
 		CB9B70D3065A0B9C00563010 /* AQTPrefController.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9B70D1065A0B9C00563010 /* AQTPrefController.h */; };
 		CB9B70D4065A0B9C00563010 /* AQTPrefController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9B70D2065A0B9C00563010 /* AQTPrefController.m */; };
+		CB9C491B0BB1C3D700FDF03C /* crossBlack.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CB9C490F0BB1C3D700FDF03C /* crossBlack.tiff */; };
+		CB9C491C0BB1C3D700FDF03C /* crossBlue.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CB9C49110BB1C3D700FDF03C /* crossBlue.tiff */; };
+		CB9C491D0BB1C3D700FDF03C /* crossGreen.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CB9C49130BB1C3D700FDF03C /* crossGreen.tiff */; };
+		CB9C491E0BB1C3D700FDF03C /* crossRed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CB9C49150BB1C3D700FDF03C /* crossRed.tiff */; };
+		CB9C491F0BB1C3D700FDF03C /* crossWhite.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CB9C49170BB1C3D700FDF03C /* crossWhite.tiff */; };
+		CB9C49200BB1C3D700FDF03C /* crossYellow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CB9C49190BB1C3D700FDF03C /* crossYellow.tiff */; };
 		CBB800C80723A4740068A0C9 /* AQTStringDrawingAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CBB800C60723A4740068A0C9 /* AQTStringDrawingAdditions.h */; };
 		CBB800C90723A4740068A0C9 /* AQTStringDrawingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CBB800C70723A4740068A0C9 /* AQTStringDrawingAdditions.m */; };
 		CBC4B42A05E4C784001BE8D7 /* AQTView.h in Headers */ = {isa = PBXBuildFile; fileRef = F5E3AFA9026D80D2012F88DF /* AQTView.h */; };
@@ -62,7 +68,6 @@
 		CBC4B43705E4C784001BE8D7 /* ExtendSavePanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = F54B0FE601FF5CDC014110A7 /* ExtendSavePanel.nib */; };
 		CBC4B43805E4C784001BE8D7 /* AQTWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F5E70370026D8645012F88DF /* AQTWindow.nib */; };
 		CBC4B43905E4C784001BE8D7 /* AquaTerm.icns in Resources */ = {isa = PBXBuildFile; fileRef = F55BA2E303589FD301D20925 /* AquaTerm.icns */; };
-		CBC4B43A05E4C784001BE8D7 /* Cross.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CB05377C04DEA3A300EBD329 /* Cross.tiff */; };
 		CBC4B43C05E4C784001BE8D7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		CBC4B43D05E4C784001BE8D7 /* AQTView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E3AFAA026D80D2012F88DF /* AQTView.m */; };
 		CBC4B43E05E4C784001BE8D7 /* AQTController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5B187204A9A49E00EBD329 /* AQTController.m */; };
@@ -105,7 +110,6 @@
 		29B97319FDCFA39411CA2CEA /* MainMenu1.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MainMenu1.nib; path = English.lproj/MainMenu1.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		CB05377C04DEA3A300EBD329 /* Cross.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Cross.tiff; path = English.lproj/Cross.tiff; sourceTree = SOURCE_ROOT; };
 		CB0C496E065ABF7C00AC22F7 /* INSTALL */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
 		CB12640507CB5F5A00EF1763 /* AquaTerm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AquaTerm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB2CC10D0677017B0042863D /* AQTModelAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQTModelAdditions.h; sourceTree = "<group>"; };
@@ -132,6 +136,12 @@
 		CB9B70CC065A0AD100563010 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		CB9B70D1065A0B9C00563010 /* AQTPrefController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AQTPrefController.h; sourceTree = "<group>"; };
 		CB9B70D2065A0B9C00563010 /* AQTPrefController.m */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.objc; path = AQTPrefController.m; sourceTree = "<group>"; };
+		CB9C49100BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossBlack.tiff; sourceTree = "<group>"; };
+		CB9C49120BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossBlue.tiff; sourceTree = "<group>"; };
+		CB9C49140BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossGreen.tiff; sourceTree = "<group>"; };
+		CB9C49160BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossRed.tiff; sourceTree = "<group>"; };
+		CB9C49180BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossWhite.tiff; sourceTree = "<group>"; };
+		CB9C491A0BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossYellow.tiff; sourceTree = "<group>"; };
 		CBAA608305E7AFF0009B33CD /* distroMakefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 30; path = distroMakefile; sourceTree = "<group>"; };
 		CBB06FE805740EB900D208BA /* AQTFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQTFunctions.h; sourceTree = "<group>"; };
 		CBB06FE905740EB900D208BA /* AQTFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQTFunctions.m; sourceTree = "<group>"; };
@@ -275,13 +285,18 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CB9C490F0BB1C3D700FDF03C /* crossBlack.tiff */,
+				CB9C49110BB1C3D700FDF03C /* crossBlue.tiff */,
+				CB9C49130BB1C3D700FDF03C /* crossGreen.tiff */,
+				CB9C49150BB1C3D700FDF03C /* crossRed.tiff */,
+				CB9C49170BB1C3D700FDF03C /* crossWhite.tiff */,
+				CB9C49190BB1C3D700FDF03C /* crossYellow.tiff */,
 				F5FEAC2701A7219B0143D50D /* Credits.rtf */,
 				29B97318FDCFA39411CA2CEA /* MainMenu1.nib */,
 				F51551CC01FE762E01000102 /* ColorInspector.nib */,
 				F54B0FE601FF5CDC014110A7 /* ExtendSavePanel.nib */,
 				F5E70370026D8645012F88DF /* AQTWindow.nib */,
 				F55BA2E303589FD301D20925 /* AquaTerm.icns */,
-				CB05377C04DEA3A300EBD329 /* Cross.tiff */,
 				CB9B70CB065A0AD100563010 /* Preferences.nib */,
 			);
 			name = Resources;
@@ -559,12 +574,17 @@
 				CBC4B43705E4C784001BE8D7 /* ExtendSavePanel.nib in Resources */,
 				CBC4B43805E4C784001BE8D7 /* AQTWindow.nib in Resources */,
 				CBC4B43905E4C784001BE8D7 /* AquaTerm.icns in Resources */,
-				CBC4B43A05E4C784001BE8D7 /* Cross.tiff in Resources */,
 				CB72184906072CF6008DCEAD /* ReleaseNotes in Resources */,
 				CB9B70CD065A0AD100563010 /* Preferences.nib in Resources */,
 				CB58A20006F9A60900AF8A5E /* AQTAdapter.html in Resources */,
 				CB58A20106F9A60900AF8A5E /* help.html in Resources */,
 				CB58A23B06FA0FB600AF8A5E /* ReadMe.rtf in Resources */,
+				CB9C491B0BB1C3D700FDF03C /* crossBlack.tiff in Resources */,
+				CB9C491C0BB1C3D700FDF03C /* crossBlue.tiff in Resources */,
+				CB9C491D0BB1C3D700FDF03C /* crossGreen.tiff in Resources */,
+				CB9C491E0BB1C3D700FDF03C /* crossRed.tiff in Resources */,
+				CB9C491F0BB1C3D700FDF03C /* crossWhite.tiff in Resources */,
+				CB9C49200BB1C3D700FDF03C /* crossYellow.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,6 +654,54 @@
 				CB9B70CC065A0AD100563010 /* English */,
 			);
 			name = Preferences.nib;
+			sourceTree = "<group>";
+		};
+		CB9C490F0BB1C3D700FDF03C /* crossBlack.tiff */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB9C49100BB1C3D700FDF03C /* English */,
+			);
+			name = crossBlack.tiff;
+			sourceTree = "<group>";
+		};
+		CB9C49110BB1C3D700FDF03C /* crossBlue.tiff */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB9C49120BB1C3D700FDF03C /* English */,
+			);
+			name = crossBlue.tiff;
+			sourceTree = "<group>";
+		};
+		CB9C49130BB1C3D700FDF03C /* crossGreen.tiff */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB9C49140BB1C3D700FDF03C /* English */,
+			);
+			name = crossGreen.tiff;
+			sourceTree = "<group>";
+		};
+		CB9C49150BB1C3D700FDF03C /* crossRed.tiff */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB9C49160BB1C3D700FDF03C /* English */,
+			);
+			name = crossRed.tiff;
+			sourceTree = "<group>";
+		};
+		CB9C49170BB1C3D700FDF03C /* crossWhite.tiff */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB9C49180BB1C3D700FDF03C /* English */,
+			);
+			name = crossWhite.tiff;
+			sourceTree = "<group>";
+		};
+		CB9C49190BB1C3D700FDF03C /* crossYellow.tiff */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CB9C491A0BB1C3D700FDF03C /* English */,
+			);
+			name = crossYellow.tiff;
 			sourceTree = "<group>";
 		};
 		F55BA2E303589FD301D20925 /* AquaTerm.icns */ = {

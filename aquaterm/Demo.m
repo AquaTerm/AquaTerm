@@ -58,6 +58,7 @@ AQTAdapter *adapter = [sender sharedAdapter];
 [adapter openPlotWithIndex:1];
 [adapter setPlotSize:NSMakeSize(620,420)];
 [adapter setPlotTitle:@"Testview"];
+[adapter setAcceptingEvents:YES];
 // Set colormap
 [adapter setColormapEntry:0 red:1.0 green:1.0 blue:1.0]; // white
 [adapter setColormapEntry:1 red:0.0 green:0.0 blue:0.0]; // black
