@@ -163,6 +163,16 @@ int aqtColormapSize(void)
    return [_adapter colormapSize];
 }
 
+void aqtSetColormapEntryRGBA(int entryIndex, float r, float g, float b, float a)
+{
+  [_adapter setColormapEntry:entryIndex red:r green:g blue:b alpha:a];
+}
+
+void aqtGetColormapEntryRGBA(int entryIndex, float *r, float *g, float *b, float *a)
+{
+  [_adapter getColormapEntry:entryIndex red:r green:g blue:b alpha:a];
+}
+
 void aqtSetColormapEntry(int entryIndex, float r, float g, float b)
 {
    [_adapter setColormapEntry:entryIndex red:r green:g blue:b];
@@ -184,6 +194,26 @@ void aqtTakeBackgroundColorFromColormapEntry(int index)
 }
 
 /*" Color handling "*/
+void aqtSetColorRGBA(float r, float g, float b, float a)
+{
+  [_adapter setColorRed:r green:g blue:b alpha:a];
+}
+
+void aqtSetBackgroundColorRGBA(float r, float g, float b, float a)
+{
+  [_adapter setBackgroundColorRed:r green:g blue:b alpha:a];
+}
+
+void aqtGetColorRGBA(float *r, float *g, float *b, float *a)
+{
+  [_adapter getColorRed:r green:g blue:b alpha:a];
+}
+
+void aqtGetBackgroundColorRGBA(float *r, float *g, float *b, float *a)
+{
+  [_adapter getBackgroundColorRed:r green:g blue:b alpha:a];
+}
+
 void aqtSetColor(float r, float g, float b)
 {
    [_adapter setColorRed:r green:g blue:b];

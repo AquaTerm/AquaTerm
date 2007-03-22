@@ -53,12 +53,18 @@ void aqtSetDefaultClipRect(void);
 
 /*" Colormap (utility  "*/
 int aqtColormapSize(void);
+void aqtSetColormapEntryRGBA(int entryIndex, float r, float g, float b, float a);
+void aqtGetColormapEntryRGBA(int entryIndex, float *r, float *g, float *b, float *a);
 void aqtSetColormapEntry(int entryIndex, float r, float g, float b);
 void aqtGetColormapEntry(int entryIndex, float *r, float *g, float *b);
 void aqtTakeColorFromColormapEntry(int index);
 void aqtTakeBackgroundColorFromColormapEntry(int index);
 
 /*" Color handling "*/
+void aqtSetColorRGBA(float r, float g, float b, float a);
+void aqtSetBackgroundColorRGBA(float r, float g, float b, float a);
+void aqtGetColorRGBA(float *r, float *g, float *b, float *a);
+void aqtGetBackgroundColorRGBA(float *r, float *g, float *b, float *a);
 void aqtSetColor(float r, float g, float b);
 void aqtSetBackgroundColor(float r, float g, float b);
 void aqtGetColor(float *r, float *g, float *b);
