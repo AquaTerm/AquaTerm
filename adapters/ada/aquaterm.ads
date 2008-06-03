@@ -1,11 +1,13 @@
 with Ada.Numerics.Generic_Complex_Types;
+with Ada.Strings.Unbounded;
 with AquaTerm_C;
 with Interfaces.C.Strings;
 
 package AquaTerm is
-
    --  This package approximates Ada.Text_IO in structure
-
+ 
+   use Ada.Strings.Unbounded;
+ 
    type Plot_Type is limited private;
    --  "plot" is AquaTerm parlance for window, canvas;
    --  a plot is either created or closed;
@@ -42,8 +44,8 @@ package AquaTerm is
    -- Alignment types --
    ---------------------
    
-   type Horizontal_Alignment is (Left, Center, Right);
-   type Vertical_Alignment is (Top, Middle, Bottom);
+   type Horizontal_Alignment is (Left, Center, Centre, Right);
+   type Vertical_Alignment is (Top, Middle, Bottom, Baseline);
    
    type Alignment is record
       Horizontal : Horizontal_Alignment;
@@ -61,6 +63,13 @@ package AquaTerm is
       Color : RGB_Color;
       Cap : Line_Cap;
    end record;
+
+   ------------------------
+   -- Font-related types --
+   ------------------------
+
+   subtype Font_Name is Unbounded_String;
+   subtype Font_Size is Real;
    
    --------------------
    -- Default values --
@@ -71,7 +80,7 @@ package AquaTerm is
    Default_Color : RGB_Color := (0.0, 0.0, 0.0);
    
    Default_Horizontal_Alignment : Horizontal_Alignment := Left;
-   Default_Vertical_Alignment : Vertical_Alignment := Top;
+   Default_Vertical_Alignment : Vertical_Alignment := Middle;
    Default_Alignment : Alignment :=
      (Horizontal => Default_Horizontal_Alignment,
       Vertical => Default_Vertical_Alignment);
@@ -83,6 +92,9 @@ package AquaTerm is
        Thickness => Default_Line_Thickness,
        Color => Default_Color);
 
+   Default_Font_Size : Real := 10.0;   
+   Default_Font_Name : Unbounded_String := To_Unbounded_String ("Roman");
+   
    ----------------------
    --  Plot management --
    ----------------------
@@ -124,7 +136,7 @@ package AquaTerm is
    -- Line drawing --
    ------------------
    
-   procedure Put_Line
+   procedure Draw_Line
      (Plot : in out Plot_Type;
       Vertices : Vector_Array;
       Color : RGB_Color := Default_Color;
@@ -133,12 +145,27 @@ package AquaTerm is
    --  flag Show controls whether Show_Plot (Plot)
    --  is called automatically after the new drawing
 
-   procedure Put_Line
+   procedure Draw_Line
      (Vertices : Vector_Array;
       Color : RGB_Color := Default_Color;
       Style : Line_Style := Default_Line_Style;
       Show : Boolean := True);
 
+   ----------
+   -- Text --
+   ----------
+
+   procedure Put_Text
+     (Plot : in out Plot_Type;
+      Text : String;
+      Base : Vector;
+      Angle: Real := 0.0;
+      Align: Alignment := Default_Alignment;
+      Color: RGB_Color := Default_Color;
+      Font : String := To_String (Default_Font_Name);
+      Size : Font_Size := Default_Font_Size;
+      Show : Boolean := True);
+   
    ----------------
    -- Exceptions --
    ----------------

@@ -13,6 +13,18 @@ package body AquaTerm is
        Round => C_AQTRoundLineCapStyle,
        Square => C_AQTSquareLineCapStyle);
 
+   Horizontal_Alignment_Code : array (Horizontal_Alignment) of C_INT :=
+      (Left => C_AQTAlignLeft,
+       Center => C_AQTAlignCenter,
+       Centre => C_AQTAlignCenter,
+       Right => C_AQTAlignRight);
+
+   Vertical_Alignment_Code : array (Vertical_Alignment) of C_INT :=
+      (Middle => C_AQTAlignMiddle,
+       Baseline => C_AQTAlignBaseline,
+       Bottom => C_AQTAlignBottom,
+       Top => C_AQTAlignTop);
+
    -------------------
    -- Abbreviations --
    -------------------
@@ -157,7 +169,7 @@ package body AquaTerm is
    -- Line drawing --
    ------------------
          
-   procedure Put_Line
+   procedure Draw_Line
      (Plot : in out Plot_Type;
       Vertices : Vector_Array;
       Color : RGB_Color := Default_Color;
@@ -166,7 +178,7 @@ package body AquaTerm is
    is
       V : array (1 .. 2, Vertices'Range) of C_FLOAT;
    begin
-      Check (Plot, "Put_Line");
+      Check (Plot, "Draw_Line");
       aqtSelectPlot (Plot.Nr);
       aqtSetColor (Style.Color);
       C_aqtSetLinewidth (C_FLOAT(Style.Thickness));
@@ -178,7 +190,7 @@ package body AquaTerm is
       C_aqtAddPolyline
         (V (1, V'First(1))'Address,
          V (2, V'First(2))'Address,
-         C_INT (V'Length));
+         C_INT (Vertices'Length));
       if Show then Show_Plot (Plot); end if;
    end;
 
@@ -206,14 +218,42 @@ package body AquaTerm is
       Close_Plot (Default_Plot);
    end;
 
-   procedure Put_Line
+   procedure Draw_Line
      (Vertices : Vector_Array;
       Color : RGB_Color := Default_Color;
       Style : Line_Style := Default_Line_Style;
       Show : Boolean := True) is
    begin
-      Put_Line (Default_Plot, Vertices, Color, Style, Show);
+      Draw_Line (Default_Plot, Vertices, Color, Style, Show);
    end;
+
+   procedure Put_Text
+     (Plot : in out Plot_Type;
+      Text : String;
+      Base : Vector;
+      Angle: Real := 0.0;
+      Align: Alignment := Default_Alignment;
+      Color: RGB_Color := Default_Color;
+      Font : String := To_String (Default_Font_Name);
+      Size : Font_Size := Default_Font_Size;
+      Show : Boolean := True)
+   is
+      use Interfaces.C.Strings;
+      use type Interfaces.C.int;
+   begin
+      aqtSelectPlot (Plot.Nr);
+      C_aqtSetFontname (New_String (Font & Character'Val(0)));
+      C_aqtSetFontsize (C_FLOAT(Size));
+      C_aqtAddLabel
+        (text => New_String (Text),
+         x => C_FLOAT (Base.Re),
+         y => C_FLOAT (Base.Im),
+         angle => C_FLOAT (Angle),
+         align => Horizontal_Alignment_Code (Align.Horizontal)
+                + Vertical_Alignment_Code (Align.Vertical));
+      if Show then Show_Plot (Plot); end if;
+   end;
+   
 
 begin
    Initialize_Package;

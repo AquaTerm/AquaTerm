@@ -25,8 +25,26 @@ procedure Demo is
        Yellow     => (1.0, 1.0, 0.5),
        Dark_Green => (0.0, 0.5, 0.5)  );
 begin
-   Create_Plot (Plot);
-   Put_Line (Plot, ((0.0,0.0), (10.0,10.0)));
+   Create_Plot
+     (Plot,
+      Size => (620.0,420.0),
+      Title => "Testview (using the thick Ada binding)");
+   Put_Text
+     (Plot => Plot,
+      Text => "Testview 620x420 pt",
+      Font => "Helvetica",
+      Base => (4.0, 412.0),
+      Align => (Horizontal => Left,
+                Vertical => Default_Vertical_Alignment),
+      Size => 12.0);
+   Draw_Line
+     (Plot => Plot,
+      Vertices => (( 20.0,  20.0),
+                   (600.0,  20.0),
+                   (600.0, 400.0),
+                   ( 20.0, 400.0),
+                   ( 20.0,  20.0)),
+      Color => (0.0, 0.0, 0.0));
    Show_Plot;
    Close_Plot;
 end;
