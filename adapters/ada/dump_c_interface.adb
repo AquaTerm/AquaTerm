@@ -3,7 +3,7 @@ with Ada.Strings.Unbounded;
 
 procedure Dump_C_Interface is
 
--- This program is used to generate Aquaterm.C_Interface
+-- This program is used to generate Aquaterm_C
 -- The main part is an edit of "aquaterm.h"
 
 use Ada.Strings.Unbounded;
@@ -23,11 +23,11 @@ procedure Start is begin
    Put_Line ("with Interfaces.C.Strings;");
    Put_Line ("with System;");
    New_Line;
-   Put_Line ("package AquaTerm.C_Interface is");
+   Put_Line ("package AquaTerm_C is");
    New_Line;
-   Put_Line ("   -- thin binding to the AquaTerm C API");
-   Put_Line ("   -- this is the output of Dump_C_Interface");
-   Put_Line ("   -- consider editing that to make changes to this");
+   Put_Line ("   --  thin binding to the AquaTerm C API;");
+   Put_Line ("   --  this is the output of Dump_C_Interface;");
+   Put_Line ("   --  consider editing that to make changes to this");
    New_Line;
    Put_Line ("   subtype C_CHAR_PTR is Interfaces.C.Strings.chars_ptr;");
    Put_Line ("   subtype C_CONST_CHAR_PTR is Interfaces.C.Strings.chars_ptr;");

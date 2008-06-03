@@ -2,7 +2,11 @@ with Interfaces.C;
 with Interfaces.C.Strings;
 with System;
 
-package AquaTerm.C_Interface is
+package AquaTerm_C is
+
+   -- thin binding to the AquaTerm C API
+   -- this is the output of Dump_C_Interface
+   -- consider editing that to make changes to this
 
    subtype C_CHAR_PTR is Interfaces.C.Strings.chars_ptr;
    subtype C_CONST_CHAR_PTR is Interfaces.C.Strings.chars_ptr;
@@ -154,3 +158,4 @@ package AquaTerm.C_Interface is
    procedure C_aqtAddTransformedImageWithBitmap (bitmap : C_CONST_VOID_PTR; pixWide : C_INT; pixHigh : C_INT; clipX : C_FLOAT; clipY : C_FLOAT; clipWidth : C_FLOAT; clipHeight : C_FLOAT);
    pragma Import (C, C_aqtAddTransformedImageWithBitmap, "aqtAddTransformedImageWithBitmap");
 end;
+-- (C) 2008 Marius Amado-Alves
