@@ -1,6 +1,6 @@
 with Ada.Numerics;
 with Ada.Numerics.Elementary_Functions;
-with Aquaterm.C_Interface;
+with Aquaterm_C;
 with Interfaces.C;
 with Interfaces.C.Strings;
 
@@ -29,7 +29,7 @@ procedure Demo_Thin is
 --: #include "aquaterm/aquaterm.h"
 --: #include <math.h>
 
-   use AquaTerm.C_Interface;
+   use AquaTerm_C;
    use type Interfaces.C.int;
    use type Interfaces.C.C_Float;
    use Interfaces.C.Strings;
@@ -221,8 +221,8 @@ begin
          --: xPtr[i] = 340.0+r*cos(radians);
          --: yPtr[i] = 255.0+r*sin(radians);
          radians := double(i)*pi/2.0;
-         xPtr (i) := AquaTerm.C_Interface.C_FLOAT (340.0+Float(r)*cos(Float(radians)));
-         yPtr (i) := AquaTerm.C_Interface.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
+         xPtr (i) := AquaTerm_C.C_FLOAT (340.0+Float(r)*cos(Float(radians)));
+         yPtr (i) := AquaTerm_C.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
       end loop;
       C_aqtTakeColorFromColormapEntry(2);
       C_aqtAddPolygon(xPtr(0)'Address, yPtr(0)'Address, 4);
@@ -232,8 +232,8 @@ begin
          --: xPtr[i] = 400.0+r*cos(radians);
          --: yPtr[i] = 255.0+r*sin(radians);
          radians := double(i)*pi*0.8;
-         xPtr (i) := AquaTerm.C_Interface.C_FLOAT (400.0+Float(r)*cos(Float(radians)));
-         yPtr (i) := AquaTerm.C_Interface.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
+         xPtr (i) := AquaTerm_C.C_FLOAT (400.0+Float(r)*cos(Float(radians)));
+         yPtr (i) := AquaTerm_C.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
       end loop;
       C_aqtTakeColorFromColormapEntry(3);
       C_aqtAddPolygon(xPtr(0)'Address, yPtr(0)'Address, 5);
@@ -248,8 +248,8 @@ begin
          --: xPtr[i] = 460.0+r*cos(radians);
          --: yPtr[i] = 255.0+r*sin(radians);
          radians := double(i)*pi/4.0;
-         xPtr (i) := AquaTerm.C_Interface.C_FLOAT (460.0+Float(r)*cos(Float(radians)));
-         yPtr (i) := AquaTerm.C_Interface.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
+         xPtr (i) := AquaTerm_C.C_FLOAT (460.0+Float(r)*cos(Float(radians)));
+         yPtr (i) := AquaTerm_C.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
       end loop;
       C_aqtTakeColorFromColormapEntry(4);
       C_aqtAddPolygon(xPtr(0)'Address, yPtr(0)'Address, 8);
@@ -259,8 +259,8 @@ begin
          --: xPtr[i] = 520.0+r*cos(radians);
          --: yPtr[i] = 255.0+r*sin(radians);
          radians := double(i)*pi/16.0;
-         xPtr (i) := AquaTerm.C_Interface.C_FLOAT (520.0+Float(r)*cos(Float(radians)));
-         yPtr (i) := AquaTerm.C_Interface.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
+         xPtr (i) := AquaTerm_C.C_FLOAT (520.0+Float(r)*cos(Float(radians)));
+         yPtr (i) := AquaTerm_C.C_FLOAT (255.0+Float(r)*sin(Float(radians)));
       end loop;
       C_aqtTakeColorFromColormapEntry(5);
       C_aqtAddPolygon(xPtr(0)'Address, yPtr(0)'Address, 32);
