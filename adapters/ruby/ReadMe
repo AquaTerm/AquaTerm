@@ -1,0 +1,7 @@
+With RubyCocoa (default install on 10.5) you can use AquaTerm directly from Ruby.
+All features are exposed via BridgeSupport.
+
+Run the demo files with:
+ruby demo_bridgesupport.rb
+
+See documentation for AQTAdapter and RubyCocoa to find out the syntax.
