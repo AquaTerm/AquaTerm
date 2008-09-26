@@ -1,6 +1,8 @@
 With PyObjC <http://pyobjc.sourceforge.net> you can use AquaTerm directly from Python.
+All features are exposed via BridgeSupport.
 
-Run the demo file with:
-python demo.py
+Run the demo files with:
+python demo_bridgesupport.py
+python demo.py -- obsolete if BridgeSupport is available (10.5)
 
 See documentation for AQTAdapter and PyObjC to find out the syntax.
