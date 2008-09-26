@@ -10,6 +10,7 @@
 		CB12640607CB5F5A00EF1763 /* AquaTerm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB12640507CB5F5A00EF1763 /* AquaTerm.framework */; };
 		CB2CC10F0677017B0042863D /* AQTModelAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CB2CC10D0677017B0042863D /* AQTModelAdditions.h */; };
 		CB2CC1100677017B0042863D /* AQTModelAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2CC10E0677017B0042863D /* AQTModelAdditions.m */; };
+		CB3949DA0E8D7A5B00BA7404 /* AquaTerm.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = CB3949D90E8D7A5B00BA7404 /* AquaTerm.bridgesupport */; };
 		CB58A20006F9A60900AF8A5E /* AQTAdapter.html in Resources */ = {isa = PBXBuildFile; fileRef = CB58A1FE06F9A60900AF8A5E /* AQTAdapter.html */; };
 		CB58A20106F9A60900AF8A5E /* help.html in Resources */ = {isa = PBXBuildFile; fileRef = CB58A1FF06F9A60900AF8A5E /* help.html */; };
 		CB58A20206F9A62300AF8A5E /* help.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = CB58A1FF06F9A60900AF8A5E /* help.html */; };
@@ -115,6 +116,7 @@
 		CB2CC10D0677017B0042863D /* AQTModelAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQTModelAdditions.h; sourceTree = "<group>"; };
 		CB2CC10E0677017B0042863D /* AQTModelAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQTModelAdditions.m; sourceTree = "<group>"; };
 		CB2DDBAB056D10FB00D208BA /* AQTEventProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQTEventProtocol.h; sourceTree = "<group>"; };
+		CB3949D90E8D7A5B00BA7404 /* AquaTerm.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AquaTerm.bridgesupport; sourceTree = "<group>"; };
 		CB58A1FE06F9A60900AF8A5E /* AQTAdapter.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = AQTAdapter.html; path = Help/AQTAdapter.html; sourceTree = SOURCE_ROOT; };
 		CB58A1FF06F9A60900AF8A5E /* help.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = help.html; path = Help/help.html; sourceTree = SOURCE_ROOT; };
 		CB58A23A06FA0FB600AF8A5E /* ReadMe.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = ReadMe.rtf; sourceTree = SOURCE_ROOT; };
@@ -129,9 +131,9 @@
 		CB7217FB06072ABA008DCEAD /* help.html_old */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = help.html_old; path = English.lproj/help.html_old; sourceTree = SOURCE_ROOT; };
 		CB72184806072CF6008DCEAD /* ReleaseNotes */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ReleaseNotes; sourceTree = "<group>"; };
 		CB77583A056B83E300D208BA /* AQTConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQTConstants.m; sourceTree = "<group>"; };
-		CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "AquaTerm.framework-Info.plist"; sourceTree = "<group>"; };
+		CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AquaTerm.framework-Info.plist"; sourceTree = "<group>"; };
 		CB91259C07CB4A92001D5EAF /* AquaTerm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AquaTerm.framework; path = build/AquaTerm.framework; sourceTree = "<group>"; };
-		CB96E43F06634622001B32F9 /* adapters.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; name = adapters.html; path = ../../../../../Users/per/Documents/Source/aquaterm_help/build/adapters.html; sourceTree = SOURCE_ROOT; };
+		CB96E43F06634622001B32F9 /* adapters.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = adapters.html; path = ../../../../../Users/per/Documents/Source/aquaterm_help/build/adapters.html; sourceTree = SOURCE_ROOT; };
 		CB96E44006634622001B32F9 /* releasenotes.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = releasenotes.html; path = /Users/per/Documents/Source/aquaterm_help/build/releasenotes.html; sourceTree = "<absolute>"; };
 		CB9B70CC065A0AD100563010 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		CB9B70D1065A0B9C00563010 /* AQTPrefController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AQTPrefController.h; sourceTree = "<group>"; };
@@ -149,7 +151,7 @@
 		CBB800C70723A4740068A0C9 /* AQTStringDrawingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AQTStringDrawingAdditions.m; sourceTree = "<group>"; };
 		CBB8466E056C0A4B00D208BA /* AQTClientManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQTClientManager.h; sourceTree = "<group>"; };
 		CBB8466F056C0A4B00D208BA /* AQTClientManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQTClientManager.m; sourceTree = "<group>"; };
-		CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "AquaTerm.app-Info.plist"; sourceTree = "<group>"; };
+		CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AquaTerm.app-Info.plist"; sourceTree = "<group>"; };
 		CBC4B44B05E4C784001BE8D7 /* AquaTerm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaTerm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD51DED04EB839F00EBD329 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		CBD51E0004EB84FA00EBD329 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -277,6 +279,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				CB3949D90E8D7A5B00BA7404 /* AquaTerm.bridgesupport */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -543,9 +546,11 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = CB699C8C08953AAD00C4B248 /* Build configuration list for PBXProject "AquaTerm" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* AquaTerm */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				F5DB1B640219BFD2014110D6 /* Docs */,
 				CBC4B42705E4C784001BE8D7 /* AquaTerm */,
@@ -561,6 +566,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB699CA408953CF300C4B248 /* AquaTerm.framework-Info.plist in Resources */,
+				CB3949DA0E8D7A5B00BA7404 /* AquaTerm.bridgesupport in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -739,7 +745,6 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -825,7 +830,6 @@
 				INFOPLIST_FILE = "AquaTerm.framework-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.1;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -969,7 +973,6 @@
 				INSTALL_PATH = "$(USER_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = /tmp/AquaTerm.dst/usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.1;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1108,7 +1111,6 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";

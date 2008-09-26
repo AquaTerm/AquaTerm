@@ -57,7 +57,7 @@ lib:
 headers:
 	@echo "headers are just links to framework..."
 
-adapters:c fortran gnuplot pgplot plplot python perl lisp
+adapters:ada c fortran gnuplot pgplot plplot python perl lisp ruby
 
 info:
 	cp $(APPSRCDIR)/{ReadMe.rtf,ReleaseNotes} $(DMG_ROOT)/.
@@ -76,6 +76,10 @@ clean:
 ## -------------------------
 ## - adapters
 ## -------------------------
+ada:
+	mkdir -p $(ADAPT_DEST)/ada
+	cp $(ADAPTSRCDIR)/ada/{aquaterm.adb,aquaterm.ads,aquaterm_c.ads,demo.adb,demo_thin.adb,dump_c_interface.adb,hello.adb} $(ADAPT_DEST)/ada/.
+
 c:
 	mkdir -p $(ADAPT_DEST)/c
 	cp $(ADAPTSRCDIR)/c/{demo.c,eventdemo1.c,eventdemo2.c,Makefile,ReadMe,ReleaseNotes} $(ADAPT_DEST)/c/.
@@ -98,7 +102,7 @@ plplot:
 
 python:
 	mkdir -p $(ADAPT_DEST)/python
-	cp $(ADAPTSRCDIR)/python/{demo.py,ReadMe,ReleaseNotes} $(ADAPT_DEST)/python/.
+	cp $(ADAPTSRCDIR)/python/{demo.py,demo_bridgesupport.py,ReadMe,ReleaseNotes} $(ADAPT_DEST)/python/.
 
 perl:
 	mkdir -p $(ADAPT_DEST)/perl
@@ -107,3 +111,8 @@ perl:
 lisp:
 	mkdir -p $(ADAPT_DEST)/lisp
 	cp $(ADAPTSRCDIR)/lisp/{cl-aqt.asd,cl-aqt.lisp,README} $(ADAPT_DEST)/lisp/.
+	
+ruby:
+	mkdir -p $(ADAPT_DEST)/ruby
+	cp $(ADAPTSRCDIR)/ruby/{demo_bridgesupport.rb,ReadMe} $(ADAPT_DEST)/ruby/.
+	

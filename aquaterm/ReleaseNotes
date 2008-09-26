@@ -7,6 +7,8 @@ AquaTerm 1.1.0
 	pressing right arrow will return event string "2:{66, 162}::124", where
 	12 and 124 are the virtual keycodes for 'q' and right arrow, respectively.   
   Made landscape printing the default layout. (Jeremy Conlin)
+  Ada bindings (Contributed by Marius Amado-Alves)
+  BridgeSupport for Python, Ruby, and others. (Contributed by Kristofer Henriksson)
 
 AquaTerm 1.0.1
   AquaTerm is now a universal binary.
