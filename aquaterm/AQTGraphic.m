@@ -50,28 +50,30 @@ typedef struct _AQTColor_v100 {
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+  AQTRect r;
   [coder encodeValueOfObjCType:@encode(AQTColor) at:&_color];
-  [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
-  [coder encodeValueOfObjCType:@encode(NSRect) at:&_clipRect];
+  r.origin.x = _bounds.origin.x; r.origin.y = _bounds.origin.y;
+  r.size.width = _bounds.size.width; r.size.height = _bounds.size.height;
+  [coder encodeValueOfObjCType:@encode(AQTRect) at:&r];
+  r.origin.x = _clipRect.origin.x; r.origin.y = _clipRect.origin.y;
+  r.size.width = _clipRect.size.width; r.size.height = _clipRect.size.height;
+  [coder encodeValueOfObjCType:@encode(AQTRect) at:&r];
   [coder encodeValueOfObjCType:@encode(BOOL) at:&_isClipped];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
-   self = [super init];
-#if 1
-   [coder decodeValueOfObjCType:@encode(AQTColor) at:&_color];
-#else
-   {
-      AQTColor_v100 color_v100; 
-      [coder decodeValueOfObjCType:@encode(AQTColor) at:&color_v100];
-      _color = (AQTColor){color_v100.red, color_v100.green, color_v100.blue, 1.0};
-   }  
-#endif   
-   [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
-   [coder decodeValueOfObjCType:@encode(NSRect) at:&_clipRect];
-   [coder decodeValueOfObjCType:@encode(BOOL) at:&_isClipped];
-   return self;
+  AQTRect r;
+  self = [super init];
+  [coder decodeValueOfObjCType:@encode(AQTColor) at:&_color];
+  [coder decodeValueOfObjCType:@encode(AQTRect) at:&r];
+  _bounds.origin.x = r.origin.x; _bounds.origin.y = r.origin.y;
+  _bounds.size.width = r.size.width; _bounds.size.height = r.size.height;
+  [coder decodeValueOfObjCType:@encode(AQTRect) at:&r];
+  _clipRect.origin.x = r.origin.x; _clipRect.origin.y = r.origin.y;
+  _clipRect.size.width = r.size.width; _clipRect.size.height = r.size.height;
+  [coder decodeValueOfObjCType:@encode(BOOL) at:&_isClipped];
+  return self;
 }
 
 -(AQTColor)color

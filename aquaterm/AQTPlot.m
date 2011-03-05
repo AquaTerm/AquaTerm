@@ -97,6 +97,7 @@ static inline void NOOP_(id x, ...) {;}
 #ifdef MEM_DEBUG
 - (void)release
 {
+#warning 64BIT: Check formatting arguments
    NSLog(@"in --> %@ %s line %d, rc=%d", NSStringFromSelector(_cmd), __FILE__, __LINE__, [self retainCount]);
    [super release];
 }
@@ -105,6 +106,7 @@ static inline void NOOP_(id x, ...) {;}
 -(void)dealloc
 {
 #ifdef MEM_DEBUG
+#warning 64BIT: Check formatting arguments
    NSLog(@"[%@(0x%x) %@] %s:%d", NSStringFromClass([self class]), self, NSStringFromSelector(_cmd), __FILE__, __LINE__);
 #endif
    [model release];
@@ -236,7 +238,7 @@ static inline void NOOP_(id x, ...) {;}
    }
 }
 
--(void)aqtClosePanelDidEnd:(id)sheet returnCode:(int)retCode contextInfo:(id)contextInfo
+-(void)aqtClosePanelDidEnd:(id)sheet returnCode:(int32_t)retCode contextInfo:(id)contextInfo
 {
    LOG(@"", NSStringFromSelector(_cmd));
    if (retCode == NSAlertAlternateReturn) {
@@ -284,7 +286,7 @@ static inline void NOOP_(id x, ...) {;}
 }
 
 
--(void)setClientInfoName:(NSString *)name pid:(int)pid
+-(void)setClientInfoName:(NSString *)name pid:(int32_t)pid
 {
    [name retain];
    [_clientName release];
@@ -431,7 +433,7 @@ static inline void NOOP_(id x, ...) {;}
       ];
 }
 
-- (void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int)returnCode contextInfo:(NSPopUpButton *)formatPopUp
+- (void)savePanelDidEnd:(NSSavePanel *)theSheet returnCode:(int32_t)returnCode contextInfo:(NSPopUpButton *)formatPopUp
 {
    NSData *data;
    NSString *filename;
@@ -466,7 +468,7 @@ static inline void NOOP_(id x, ...) {;}
 }
 
 #pragma mark ==== Testing methods ====
-- (void)timingTestWithTag:(unsigned int)tag
+- (void)timingTestWithTag:(uint32_t)tag
 {
    static float totalTime = 0.0;
    float thisTime;

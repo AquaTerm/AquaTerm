@@ -14,10 +14,10 @@ typedef AQTColor *AQTColorPtr;
 @interface AQTColorMap : NSObject	
 {
    AQTColorPtr colormap; // NB. Not an object but a pointer to a struct
-   int size; 
+   int32_t size; 
 }
--(id)initWithColormapSize:(int)size;
--(int)size;
--(void)setColor:(AQTColor)newColor forIndex:(int)index;
--(AQTColor)colorForIndex:(int)index;
+-(id)initWithColormapSize:(int32_t)size;
+-(int32_t)size;
+-(void)setColor:(AQTColor)newColor forIndex:(int32_t)index;
+-(AQTColor)colorForIndex:(int32_t)index;
 @end

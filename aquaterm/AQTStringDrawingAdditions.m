@@ -8,7 +8,7 @@
 
 #import "AQTStringDrawingAdditions.h"
 
-NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int *i, int sublevel, NSPoint pos, float fontScale);
+NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int32_t *i, int32_t sublevel, NSPoint pos, float fontScale);
 
 
 
@@ -49,9 +49,9 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 @implementation NSString (AQTStringDrawingAdditions)
 -(NSBezierPath *)aqtBezierPathInFont:(NSFont *)aFont
 {
-   int i;
-   int firstChar = 0;
-   int strLen = [self length];
+   int32_t i;
+   int32_t firstChar = 0;
+   int32_t strLen = [self length];
    NSPoint pos = NSZeroPoint;
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
    BOOL convertSymbolFontToUnicode = [[aFont fontName] isEqualToString:@"Symbol"] 
@@ -90,11 +90,11 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
 -(NSBezierPath *)aqtBezierPathInFont:(NSFont *)defaultFont
 {
    NSString *text = [self string]; // Yuck!
-   int strLen = [text length];
+   int32_t strLen = [text length];
    NSBezierPath *tmpPath = [NSBezierPath bezierPath];
    NSPoint pos = NSZeroPoint;
-   int firstChar = 0;
-   int index = 0;
+   int32_t firstChar = 0;
+   int32_t index = 0;
    
    // 
    // Remove leading spaces FIXME: trailing as well?, need better solution
@@ -120,7 +120,7 @@ unichar _aqtMapAdobeSymbolEncodingToUnicode(unichar theChar)
  *
  * If Symbol font is specified (defaultFont or as attribute), automatic conversion to Unicode is performed. 
 */
-NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int *i, int sublevel, NSPoint pos, float fontScale)
+NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSString *defaultFontName, float defaultFontSize, int32_t *i, int32_t sublevel, NSPoint pos, float fontScale)
 {
    static float maxRight = 0.0;
    static NSPoint underlineLeftPoint;
@@ -128,9 +128,9 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
    NSPoint subPos = pos;
    BOOL extendsRight = NO;
    BOOL underlining = NO;
-   int strLen = [text length];
+   int32_t strLen = [text length];
    float glyphHeight = defaultFontSize * fontScale;
-   int attributedSublevel = 0;
+   int32_t attributedSublevel = 0;
    float baselineOffset = 0.0;
    BOOL convertSymbolFontToUnicode = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShouldConvertSymbolFont"];
     
@@ -141,18 +141,18 @@ NSPoint recurse(NSBezierPath *path, const NSAttributedString *attrString, NSStri
          [attributes objectForKey:@"AQTFontname"]:
          defaultFontName; 
       float attributedFontsize = ([attributes objectForKey:@"AQTFontsize"] != nil)?
-         [[attributes objectForKey:@"AQTFontsize"] intValue]:
+         [[attributes objectForKey:@"AQTFontsize"] integerValue]:
          defaultFontSize;
       attributedSublevel = ([attributes objectForKey:NSSuperscriptAttributeName] != nil)?
-         [[attributes objectForKey:NSSuperscriptAttributeName] intValue]:
+         [[attributes objectForKey:NSSuperscriptAttributeName] integerValue]:
          0;
       float baselineAdjust = ([attributes objectForKey:@"AQTBaselineAdjust"] != nil)?
-         [[attributes objectForKey:@"AQTBaselineAdjust"] floatValue]:
+         [[attributes objectForKey:@"AQTBaselineAdjust"] doubleValue]:
          0.0;
       BOOL isVisible = ([attributes objectForKey:@"AQTNonPrintingChar"] == nil 
-         || [[attributes objectForKey:@"AQTNonPrintingChar"] intValue] == 0);
+         || [[attributes objectForKey:@"AQTNonPrintingChar"] integerValue] == 0);
       BOOL newUnderlining = ([attributes objectForKey:@"NSUnderline"] != nil 
-                        && [[attributes objectForKey:@"NSUnderline"] intValue] == 1);
+                        && [[attributes objectForKey:@"NSUnderline"] integerValue] == 1);
       if (attributedSublevel == sublevel) {
          NSFont *aFont;
          unichar theChar;

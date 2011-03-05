@@ -141,7 +141,7 @@
 }
 
 
--(void)_aqtHandleMouseDownAtLocation:(NSPoint)point button:(int)button
+-(void)_aqtHandleMouseDownAtLocation:(NSPoint)point button:(int32_t)button
 {
    if ([self isProcessingEvents])
    {

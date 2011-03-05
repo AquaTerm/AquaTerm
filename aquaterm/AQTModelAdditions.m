@@ -41,8 +41,8 @@
     NSRect testRect;
     NSRect clipRect = AQTRectFromSize([self canvasSize]);
     NSRect newBounds = NSZeroRect;
-    int i;
-    int  objectCount = [self count];
+    int32_t i;
+    int32_t  objectCount = [self count];
     
     // check for nothing to remove or disjoint modelBounds <--> targetRect
     if (objectCount == 0 || AQTIntersectsRect(targetRect, [self bounds]) == NO)

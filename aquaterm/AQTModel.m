@@ -42,18 +42,24 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+  AQTSize s;
+
   [super encodeWithCoder:coder];
   [coder encodeObject:modelObjects];
   [coder encodeObject:title];
-  [coder encodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
+  // 64bit compatibility
+  s.width = canvasSize.width; s.height = canvasSize.height;
+  [coder encodeValueOfObjCType:@encode(AQTSize) at:&s];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
+  AQTSize s;
   self = [super initWithCoder:coder];
   modelObjects = [[coder decodeObject] retain];
   title = [[coder decodeObject] retain];
-  [coder decodeValueOfObjCType:@encode(NSSize) at:&canvasSize];
+  [coder decodeValueOfObjCType:@encode(AQTSize) at:&s];
+  canvasSize.width = s.width; canvasSize.height = s.height;
   return self;
 }
 
@@ -83,7 +89,7 @@
 }
 
 
--(int)count
+-(int32_t)count
 {
   return [modelObjects count];
 }
@@ -111,7 +117,7 @@
    [modelObjects removeAllObjects];
 }
 
--(void)removeObjectAtIndex:(unsigned)i
+-(void)removeObjectAtIndex:(uint32_t)i
 {
    [modelObjects removeObjectAtIndex:i];
 }

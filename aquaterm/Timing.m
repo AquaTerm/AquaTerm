@@ -27,7 +27,7 @@
 void aqtStringDrawingTest(AQTAdapter *adapter);
 void aqtLineDrawingTest(AQTAdapter *adapter);
 
-int main(void)
+int32_t main(void)
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   AQTAdapter *adapter = [[AQTAdapter alloc] init];
@@ -57,22 +57,22 @@ void aqtLineDrawingTest(id sender)
 #ifndef AQT_STANDALONE
    AQTAdapter *adapter = [sender sharedAdapter];
 #endif
-   int lineCount = 2;
-   int maxLineLength = 64;
-   int c, l;
-   unsigned int index = 0; 
+   int32_t lineCount = 2;
+   int32_t maxLineLength = 64;
+   int32_t c, l;
+   uint32_t index = 0; 
 
    // test 1
    for (l = 2; l <= maxLineLength; l *= 2)
    {
       index++;
-      int cMax = (64*16)/l;
+      int32_t cMax = (64*16)/l;
       [adapter openPlotWithIndex:l];
       [adapter setPlotSize:NSMakeSize(620,420)];
       [adapter setPlotTitle:[NSString stringWithFormat:@"Line test l = %d, cMax = %d", l, cMax]];
       for (c = 0; c < cMax; c++)
       {
-         int i;
+         int32_t i;
          [adapter moveToPoint:NSMakePoint(drand48()*600+10, drand48()*400+10)];
          for (i = 1; i <= l; i++)
          {
@@ -90,7 +90,7 @@ void aqtLineDrawingTest(id sender)
    }
    // test 2
    index = 1;
-   int x;
+   int32_t x;
    [adapter openPlotWithIndex:1];
    [adapter setPlotSize:NSMakeSize(620,420)];
    [adapter setPlotTitle:@"Test 2"];

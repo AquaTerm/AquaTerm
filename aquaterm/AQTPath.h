@@ -20,20 +20,20 @@
    NSPointArray path;
    NSPoint staticPathStore[STATIC_POINT_STORAGE];
    NSPointArray dynamicPathStore;
-   int pointCount;
+   int32_t pointCount;
    float linewidth;
-   int lineCapStyle;
+   int32_t lineCapStyle;
    BOOL isFilled;
    BOOL hasPattern;
    float pattern[MAX_PATTERN_COUNT];
-   int patternCount;
+   int32_t patternCount;
    float patternPhase;
 }
-- (id)initWithPoints:(NSPointArray)points pointCount:(int)pointCount;
+- (id)initWithPoints:(NSPointArray)points pointCount:(int32_t)pointCount;
 - (void)setLinewidth:(float)lw;
-- (void)setLineCapStyle:(int)capStyle;
+- (void)setLineCapStyle:(int32_t)capStyle;
 - (void)setIsFilled:(BOOL)flag;
 - (BOOL)isFilled;
 - (BOOL)hasPattern;
-- (void)setLinestylePattern:(const float *)newPattern count:(int)newCount phase:(float)newPhase;
+- (void)setLinestylePattern:(const float *)newPattern count:(int32_t)newCount phase:(float)newPhase;
 @end

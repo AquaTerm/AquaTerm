@@ -17,6 +17,21 @@ typedef struct _AQTColor {
    float alpha;
 } AQTColor;
 
+typedef struct _AQTPoint {
+  float x;
+  float y;
+} AQTPoint;
+
+typedef struct _AQTSize {
+  float width;
+  float height;
+} AQTSize;
+
+typedef struct _AQTRect {
+  AQTPoint origin;
+  AQTSize size;
+} AQTRect;
+
 @interface AQTGraphic : NSObject <NSCoding>
 {
     AQTColor _color;

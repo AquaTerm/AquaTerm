@@ -8,6 +8,7 @@
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSAttributedString.h>
+#import <AppKit/AppKit.h>
 
 /* Using an undocumented method in NSFont. */
 @interface NSFont (NSFontHiddenMethods)

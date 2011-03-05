@@ -14,7 +14,7 @@
     return [self initWithColormapSize:1]; // Black
 }
 
--(id)initWithColormapSize:(int)mapsize
+-(id)initWithColormapSize:(int32_t)mapsize
 {
   if (self = [super init])
   {
@@ -38,12 +38,12 @@
    [super dealloc];
 }
 
--(int)size
+-(int32_t)size
 {
    return size;
 }
 
--(void)setColor:(AQTColor)newColor forIndex:(int)index
+-(void)setColor:(AQTColor)newColor forIndex:(int32_t)index
 {
    if (index >= 0 && index < size)
    {
@@ -51,7 +51,7 @@
    }
 }
 
--(AQTColor)colorForIndex:(int)index
+-(AQTColor)colorForIndex:(int32_t)index
 {
   if (index < 0 || index >= size)
   {

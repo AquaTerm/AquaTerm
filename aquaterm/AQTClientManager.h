@@ -6,7 +6,9 @@
 //  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
 //
 
+#import <stdint.h>
 #import <Foundation/Foundation.h>
+#import "AQTEventProtocol.h"
 
 @class AQTPlotBuilder;
 @protocol AQTEventProtocol;
@@ -17,9 +19,9 @@
    NSMutableDictionary *_plots; /* The objects responsible for assembling a model object from client's calls. */
    id _activePlotKey;
    void (*_errorHandler)(NSString *msg);	/* A callback function optionally installed by the client */
-   void (*_eventHandler)(int index, NSString *event); /* A callback function optionally installed by the client */
+   void (*_eventHandler)(int32_t index, NSString *event); /* A callback function optionally installed by the client */
    id _eventBuffer;
-   int _logLimit;
+   int32_t _logLimit;
    BOOL errorState;
 }
 + (AQTClientManager *)sharedManager;
@@ -30,12 +32,12 @@
 - (void)terminateConnection;
 - (void)setActivePlotKey:(id)newActivePlotKey;
 - (void)setErrorHandler:(void (*)(NSString *errMsg))fPtr;
-- (void)setEventHandler:(void (*)(int index, NSString *event))fPtr;
+- (void)setEventHandler:(void (*)(int32_t index, NSString *event))fPtr;
 
-- (void)logMessage:(NSString *)msg logLevel:(int)level;
+- (void)logMessage:(NSString *)msg logLevel:(int32_t)level;
 
-- (AQTPlotBuilder *)newPlotWithIndex:(int)refNum;
-- (AQTPlotBuilder *)selectPlotWithIndex:(int)refNum;
+- (AQTPlotBuilder *)newPlotWithIndex:(int32_t)refNum;
+- (AQTPlotBuilder *)selectPlotWithIndex:(int32_t)refNum;
 - (void)closePlot; 
 
 - (void)renderPlot; 
@@ -46,5 +48,5 @@
 - (NSString *)lastEvent;
 
 /* testing methods */
-- (void)timingTestWithTag:(unsigned int)tag;
+- (void)timingTestWithTag:(uint32_t)tag;
 @end

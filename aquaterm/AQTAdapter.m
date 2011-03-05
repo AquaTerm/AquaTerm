@@ -51,7 +51,6 @@ Event handling of user input is provided through an optional callback function.
    if(self = [super init]) {
       BOOL serverIsOK = YES;
       _clientManager = [AQTClientManager sharedManager];
-      
       if (localServer) {
          [_clientManager setServer:localServer];
       } else {
@@ -105,7 +104,7 @@ _{1:%{x,y}:%button MouseDownEvent }
 _{2:%{x,y}:%key KeyDownEvent } 
 _{42:%{x,y}:%key ServerError }
 _{43:%{x,y}:%key Error } "*/
-- (void)setEventHandler:(void (*)(int index, NSString *event))fPtr
+- (void)setEventHandler:(void (*)(int32_t index, NSString *event))fPtr
 {
    [_clientManager setEventHandler:fPtr];
 }
@@ -121,13 +120,13 @@ _{43:%{x,y}:%key Error } "*/
 
 /* Creates a new builder instance, adds it to the list of builders and makes it the selected builder. If the referenced builder exists, it is selected and cleared. */
 /*" Open up a new plot with internal reference number refNum and make it the target for subsequent commands. If the referenced plot already exists, it is selected and cleared. Disables event handling for previously targeted plot. "*/
-- (void)openPlotWithIndex:(int)refNum
+- (void)openPlotWithIndex:(int32_t)refNum
 {
    _selectedBuilder = [_clientManager newPlotWithIndex:refNum];
 }
 
 /*" Get the plot referenced by refNum and make it the target for subsequent commands. If no plot exists for refNum, the currently targeted plot remain unchanged. Disables event handling for previously targeted plot. Returns YES on success. "*/
-- (BOOL)selectPlotWithIndex:(int)refNum
+- (BOOL)selectPlotWithIndex:(int32_t)refNum
 {
    BOOL didChangePlot = NO;
    AQTPlotBuilder *tmpBuilder = [_clientManager selectPlotWithIndex:refNum];
@@ -222,9 +221,9 @@ _{43:%{x,y}:%key Error } "*/
 }
 
 /*" Return the number of color entries available in the currently active colormap. "*/
-- (int)colormapSize
+- (int32_t)colormapSize
 {
-   int size = AQT_COLORMAP_SIZE; // Default size
+   int32_t size = AQT_COLORMAP_SIZE; // Default size
    if (_selectedBuilder)
    {
       size = [_selectedBuilder colormapSize];
@@ -238,7 +237,7 @@ _{43:%{x,y}:%key Error } "*/
 }
 
 /*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
-- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b alpha:(float)a
+- (void)setColormapEntry:(int32_t)entryIndex red:(float)r green:(float)g blue:(float)b alpha:(float)a
 {
    AQTColor tmpColor;
    tmpColor.red = r;
@@ -248,14 +247,14 @@ _{43:%{x,y}:%key Error } "*/
    [_selectedBuilder setColor:tmpColor forColormapEntry:entryIndex];
 }
 
-- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b 
+- (void)setColormapEntry:(int32_t)entryIndex red:(float)r green:(float)g blue:(float)b 
 {
    [self setColormapEntry:entryIndex red:r green:g blue:b alpha:1.0];
 }
 
 
 /*" Set an RGB entry in the colormap, at the position given by entryIndex. "*/
-- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a
+- (void)getColormapEntry:(int32_t)entryIndex red:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a
 {
    AQTColor tmpColor = [_selectedBuilder colorForColormapEntry:entryIndex];
    *r = tmpColor.red;
@@ -264,7 +263,7 @@ _{43:%{x,y}:%key Error } "*/
    *a = tmpColor.alpha;
 }
 
-- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b
+- (void)getColormapEntry:(int32_t)entryIndex red:(float *)r green:(float *)g blue:(float *)b
 {
    float dummyAlpha;
    [self getColormapEntry:entryIndex red:r green:g blue:b alpha:&dummyAlpha];
@@ -272,13 +271,13 @@ _{43:%{x,y}:%key Error } "*/
 
 
 /*" Set the current color, used for all subsequent items, using the color stored at the position given by index in the colormap. "*/
-- (void)takeColorFromColormapEntry:(int)index
+- (void)takeColorFromColormapEntry:(int32_t)index
 {
    [_selectedBuilder takeColorFromColormapEntry:index];
 }
 
 /*" Set the background color, overriding any previous color, using the color stored at the position given by index in the colormap. "*/
-- (void)takeBackgroundColorFromColormapEntry:(int)index
+- (void)takeBackgroundColorFromColormapEntry:(int32_t)index
 {
    [_selectedBuilder takeBackgroundColorFromColormapEntry:index];
 }
@@ -374,13 +373,13 @@ _{Attribute value}
 _{@"NSSuperScript" raise-level}
 _{@"NSUnderline" 0or1}
 "*/
-- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle align:(int)just
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle align:(int32_t)just
 {
    [_selectedBuilder addLabel:text position:pos angle:angle shearAngle:shearAngle justification:just];
 }
 
 /*" Same as #addLabel:atPoint:angle:shearAngle:align: except that shearAngle defaults to 0."*/
-- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int32_t)just
 {
    [_selectedBuilder addLabel:text position:pos angle:angle shearAngle:0.0 justification:just];
 }
@@ -400,7 +399,7 @@ _{@"NSUnderline" 0or1}
 }
 
 /*" Set the current line style to pattern style, used for all subsequent lines. The linestyle is specified as a pattern, an array of at most 8 float, where even positions correspond to dash-lengths and odd positions correspond to gap-lengths. To produce e.g. a dash-dotted line, use the pattern {4.0, 2.0, 1.0, 2.0}."*/
-- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase
+- (void)setLinestylePattern:(float *)newPattern count:(int32_t)newCount phase:(float)newPhase
 {
    [_selectedBuilder setLinestylePattern:newPattern count:newCount phase:newPhase];
 }
@@ -417,7 +416,7 @@ _{AQTButtLineCapStyle ButtLineCapStyle}
 _{AQTRoundLineCapStyle RoundLineCapStyle}
 _{AQTSquareLineCapStyle SquareLineCapStyle}
 Default is RoundLineCapStyle. "*/
-- (void)setLineCapStyle:(int)capStyle
+- (void)setLineCapStyle:(int32_t)capStyle
 {
    [_selectedBuilder setLineCapStyle:capStyle];
 }
@@ -435,7 +434,7 @@ Default is RoundLineCapStyle. "*/
 }
 
 /*" Add a sequence of line segments specified by a list of start-, end-, and joinpoint(s) in points. Parameter pc is number of line segments + 1."*/
-- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
+- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int32_t)pc
 {
    [_selectedBuilder addPolylineWithPoints:points pointCount:pc];
 }
@@ -451,7 +450,7 @@ Default is RoundLineCapStyle. "*/
 }
 
 /*" Add a polygon specified by a list of corner points. Number of corners is passed in pc."*/
-- (void)addPolygonWithVertexPoints:(NSPoint *)points pointCount:(int)pc
+- (void)addPolygonWithVertexPoints:(NSPoint *)points pointCount:(int32_t)pc
 {
    [_selectedBuilder addPolygonWithPoints:points pointCount:pc];
 }
@@ -519,7 +518,7 @@ Default is RoundLineCapStyle. "*/
 /*******************************************
 * Private methods                         *
 *******************************************/
-- (void)timingTestWithTag:(unsigned int)tag
+- (void)timingTestWithTag:(uint32_t)tag
 {
    [_clientManager timingTestWithTag:tag];
 }

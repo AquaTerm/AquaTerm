@@ -1,6 +1,7 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeArchitecturePreference = x86_64;
 		activeBuildConfigurationName = Deployment;
 		activeExecutable = CB699C6708953A9400C4B248 /* AquaTerm */;
 		activeTarget = CBC4B42705E4C784001BE8D7 /* AquaTerm */;
@@ -42,7 +43,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					689,
+					830,
 					20,
 					48,
 					43,
@@ -64,8 +65,8 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					200,
-					287,
+					790,
+					60,
 					20,
 					48,
 					43,
@@ -81,25 +82,12 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 176079510;
-			PBXWorkspaceStateSaveDate = 176079510;
+			PBXPerProjectTemplateStateSaveDate = 321009060;
+			PBXWorkspaceStateSaveDate = 321009060;
 		};
 		perUserProjectItems = {
-			CB2820720A7EC181001DCA49 /* PBXTextBookmark */ = CB2820720A7EC181001DCA49 /* PBXTextBookmark */;
-			CB28207F0A7EC2A7001DCA49 /* PBXTextBookmark */ = CB28207F0A7EC2A7001DCA49 /* PBXTextBookmark */;
-			CB5718850A7EA04D00FF8E2F /* PBXTextBookmark */ = CB5718850A7EA04D00FF8E2F /* PBXTextBookmark */;
-			CB5718870A7EA04D00FF8E2F /* PBXTextBookmark */ = CB5718870A7EA04D00FF8E2F /* PBXTextBookmark */;
-			CB5718880A7EA04D00FF8E2F /* PBXTextBookmark */ = CB5718880A7EA04D00FF8E2F /* PBXTextBookmark */;
-			CB5718900A7EA39700FF8E2F /* PBXTextBookmark */ = CB5718900A7EA39700FF8E2F /* PBXTextBookmark */;
-			CB5718910A7EA39700FF8E2F /* PBXTextBookmark */ = CB5718910A7EA39700FF8E2F /* PBXTextBookmark */;
-			CB5718920A7EA39700FF8E2F /* PBXTextBookmark */ = CB5718920A7EA39700FF8E2F /* PBXTextBookmark */;
-			CB5718950A7EA39700FF8E2F /* PBXTextBookmark */ = CB5718950A7EA39700FF8E2F /* PBXTextBookmark */;
-			CB5718960A7EA39700FF8E2F /* PBXTextBookmark */ = CB5718960A7EA39700FF8E2F /* PBXTextBookmark */;
-			CB5718970A7EA39700FF8E2F /* PBXTextBookmark */ = CB5718970A7EA39700FF8E2F /* PBXTextBookmark */;
-			CB699C9A08953B5400C4B248 /* PBXTextBookmark */ = CB699C9A08953B5400C4B248 /* PBXTextBookmark */;
-			CB699CA608953D2200C4B248 /* PBXTextBookmark */ = CB699CA608953D2200C4B248 /* PBXTextBookmark */;
-			CB699CA908953D2200C4B248 /* PBXTextBookmark */ = CB699CA908953D2200C4B248 /* PBXTextBookmark */;
-			CB699CBF08953D8E00C4B248 /* PBXTextBookmark */ = CB699CBF08953D8E00C4B248 /* PBXTextBookmark */;
+			CBADBE4A13223600006A2592 /* PBXTextBookmark */ = CBADBE4A13223600006A2592 /* PBXTextBookmark */;
+			CBADBE4B13223600006A2592 /* PBXTextBookmark */ = CBADBE4B13223600006A2592 /* PBXTextBookmark */;
 		};
 		sourceControlManager = CB699C9108953AAD00C4B248 /* Source Control */;
 		userBuildSettings = {
@@ -111,26 +99,6 @@
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRect = "{{0, 66}, {776, 480}}";
 		};
-	};
-	CB2820720A7EC181001DCA49 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBAA608305E7AFF0009B33CD /* distroMakefile */;
-		name = "distroMakefile: 30";
-		rLen = 0;
-		rLoc = 873;
-		rType = 0;
-		vrLen = 996;
-		vrLoc = 59;
-	};
-	CB28207F0A7EC2A7001DCA49 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBAA608305E7AFF0009B33CD /* distroMakefile */;
-		name = "distroMakefile: 30";
-		rLen = 0;
-		rLoc = 873;
-		rType = 0;
-		vrLen = 996;
-		vrLoc = 59;
 	};
 	CB2CC10D0677017B0042863D /* AQTModelAdditions.h */ = {
 		uiCtxt = {
@@ -145,96 +113,6 @@
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRect = "{{0, 470}, {1064, 594}}";
 		};
-	};
-	CB5718850A7EA04D00FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CB5B187204A9A49E00EBD329 /* AQTController.m */;
-		name = "AQTController.m: 188";
-		rLen = 0;
-		rLoc = 5885;
-		rType = 0;
-		vrLen = 1155;
-		vrLoc = 12263;
-	};
-	CB5718870A7EA04D00FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBAA608305E7AFF0009B33CD /* distroMakefile */;
-		name = "distroMakefile: 36";
-		rLen = 0;
-		rLoc = 1048;
-		rType = 0;
-		vrLen = 952;
-		vrLoc = 1295;
-	};
-	CB5718880A7EA04D00FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CB5B187204A9A49E00EBD329 /* AQTController.m */;
-		name = "AQTController.m: 188";
-		rLen = 0;
-		rLoc = 5885;
-		rType = 0;
-		vrLen = 1155;
-		vrLoc = 12263;
-	};
-	CB5718900A7EA39700FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBDC2B2206F06E8C000F0A8D /* installer.packproj */;
-		name = 1.0;
-		rLen = 3;
-		rLoc = 11750;
-		rType = 0;
-		vrLen = 696;
-		vrLoc = 12453;
-	};
-	CB5718910A7EA39700FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBDC2B2306F06E8C000F0A8D /* postflight */;
-		name = "postflight: 8";
-		rLen = 0;
-		rLoc = 313;
-		rType = 0;
-		vrLen = 570;
-		vrLoc = 0;
-	};
-	CB5718920A7EA39700FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBDC2B2406F06E8C000F0A8D /* preflight */;
-		name = 1.0;
-		rLen = 3;
-		rLoc = 191;
-		rType = 0;
-		vrLen = 530;
-		vrLoc = 0;
-	};
-	CB5718950A7EA39700FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBDC2B2206F06E8C000F0A8D /* installer.packproj */;
-		name = 1.0;
-		rLen = 3;
-		rLoc = 11750;
-		rType = 0;
-		vrLen = 696;
-		vrLoc = 12453;
-	};
-	CB5718960A7EA39700FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBDC2B2306F06E8C000F0A8D /* postflight */;
-		name = "postflight: 8";
-		rLen = 0;
-		rLoc = 313;
-		rType = 0;
-		vrLen = 570;
-		vrLoc = 0;
-	};
-	CB5718970A7EA39700FF8E2F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBDC2B2406F06E8C000F0A8D /* preflight */;
-		name = 1.0;
-		rLen = 3;
-		rLoc = 191;
-		rType = 0;
-		vrLen = 530;
-		vrLoc = 0;
 	};
 	CB58A1FE06F9A60900AF8A5E /* AQTAdapter.html */ = {
 		uiCtxt = {
@@ -280,15 +158,18 @@
 	};
 	CB699C6708953A9400C4B248 /* AquaTerm */ = {
 		isa = PBXExecutable;
-		activeArgIndex = 2147483647;
 		activeArgIndices = (
 		);
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
 		debuggerPlugin = GDBDebugging;
 		disassemblyDisplayState = 0;
 		dylibVariantSuffix = "";
@@ -299,6 +180,9 @@
 		executableUserSymbolLevel = 0;
 		libgmallocEnabled = 0;
 		name = AquaTerm;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
 		sourceDirectories = (
 		);
 	};
@@ -307,66 +191,15 @@
 		fallbackIsa = XCSourceControlManager;
 		isSCMEnabled = 0;
 		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = AquaTerm;
+			};
 		};
 		scmType = "";
 	};
 	CB699C9208953AAD00C4B248 /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
-	};
-	CB699C9A08953B5400C4B248 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */;
-		name = "AquaTerm.app-Info.plist: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1090;
-		vrLoc = 0;
-	};
-	CB699CA608953D2200C4B248 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CB699CA708953D2200C4B248 /* AquaTermFwk-Info.plist */;
-		name = "(null): 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 625;
-		vrLoc = 0;
-	};
-	CB699CA708953D2200C4B248 /* AquaTermFwk-Info.plist */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text.xml;
-		name = "AquaTermFwk-Info.plist";
-		path = "/Volumes/Ior/Source/aquaterm/AquaTermFwk-Info.plist";
-		sourceTree = "<absolute>";
-	};
-	CB699CA908953D2200C4B248 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CB699CAA08953D2200C4B248 /* AquaTermFwk-Info.plist */;
-		name = "(null): 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 625;
-		vrLoc = 0;
-	};
-	CB699CAA08953D2200C4B248 /* AquaTermFwk-Info.plist */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text.xml;
-		name = "AquaTermFwk-Info.plist";
-		path = "/Volumes/Ior/Source/aquaterm/AquaTermFwk-Info.plist";
-		sourceTree = "<absolute>";
-	};
-	CB699CBF08953D8E00C4B248 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */;
-		name = "AquaTerm.framework-Info.plist: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 625;
-		vrLoc = 0;
 	};
 	CB71321105444AEC00D208BA /* AQTGraphicDrawingMethods.h */ = {
 		uiCtxt = {
@@ -429,6 +262,26 @@
 			sepNavSelRange = "{873, 0}";
 			sepNavVisRect = "{{0, 56}, {881, 480}}";
 		};
+	};
+	CBADBE4A13223600006A2592 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = F5E3AFA9026D80D2012F88DF /* AQTView.h */;
+		name = "AQTView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 211;
+		vrLoc = 0;
+	};
+	CBADBE4B13223600006A2592 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = F5E3AFA9026D80D2012F88DF /* AQTView.h */;
+		name = "AQTView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 211;
+		vrLoc = 0;
 	};
 	CBB06FE805740EB900D208BA /* AQTFunctions.h */ = {
 		uiCtxt = {
@@ -638,8 +491,9 @@
 	};
 	F5E3AFA9026D80D2012F88DF /* AQTView.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {659, 545}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1008, 476}}";
 			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 211}";
 			sepNavVisRect = "{{0, 0}, {659, 545}}";
 		};
 	};

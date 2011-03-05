@@ -9,5 +9,5 @@
 - (void)close;
 // Testing methods 
 // FIXME: move into separate protocol?
-- (void)timingTestWithTag:(unsigned int)tag;
+- (void)timingTestWithTag:(uint32_t)tag;
 @end

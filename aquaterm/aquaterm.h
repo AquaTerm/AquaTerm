@@ -6,34 +6,36 @@
 //  Copyright (c) 2003-2004 AquaTerm. 
 //
 
+#include <stdint.h>
+
 #define AQT_EVENTBUF_SIZE 128
 
 /*" Constants that specify linecap styles. "*/
-extern const int AQTButtLineCapStyle;
-extern const int AQTRoundLineCapStyle;
-extern const int AQTSquareLineCapStyle;
+extern const int32_t AQTButtLineCapStyle;
+extern const int32_t AQTRoundLineCapStyle;
+extern const int32_t AQTSquareLineCapStyle;
 
 /*" Constants that specify horizontal alignment for labels. "*/
-extern const int AQTAlignLeft;
-extern const int AQTAlignCenter;
-extern const int AQTAlignRight;
+extern const int32_t AQTAlignLeft;
+extern const int32_t AQTAlignCenter;
+extern const int32_t AQTAlignRight;
 /*" Constants that specify vertical alignment for labels. "*/
-extern const int AQTAlignMiddle;
-extern const int AQTAlignBaseline;
-extern const int AQTAlignBottom;
-extern const int AQTAlignTop;
+extern const int32_t AQTAlignMiddle;
+extern const int32_t AQTAlignBaseline;
+extern const int32_t AQTAlignBottom;
+extern const int32_t AQTAlignTop;
 
 /*" Class initialization etc."*/
-int aqtInit(void);
+int32_t aqtInit(void);
 void aqtTerminate(void);
 /* The event handler callback functionality should be used with caution, it may 
    not be safe to use in all circumstances. It is certainly _not_ threadsafe. 
    If in doubt, use aqtWaitNextEvent() instead. */
-void aqtSetEventHandler(void (*func)(int ref, const char *event));
+void aqtSetEventHandler(void (*func)(int32_t ref, const char *event));
 
 /*" Control operations "*/
-void aqtOpenPlot(int refNum);
-int aqtSelectPlot(int refNum);
+void aqtOpenPlot(int32_t refNum);
+int32_t aqtSelectPlot(int32_t refNum);
 void aqtSetPlotSize(float width, float height);
 void aqtSetPlotTitle(const char *title);
 void aqtRenderPlot(void);
@@ -41,9 +43,9 @@ void aqtClearPlot(void);
 void aqtClosePlot(void);
 
 /*" Event handling "*/
-void aqtSetAcceptingEvents(int flag);
-int aqtGetLastEvent(char *buffer);
-int aqtWaitNextEvent(char *buffer);
+void aqtSetAcceptingEvents(int32_t flag);
+int32_t aqtGetLastEvent(char *buffer);
+int32_t aqtWaitNextEvent(char *buffer);
 
 /*" Plotting related commands "*/
 
@@ -52,13 +54,13 @@ void aqtSetClipRect(float originX, float originY, float width, float height);
 void aqtSetDefaultClipRect(void);
 
 /*" Colormap (utility  "*/
-int aqtColormapSize(void);
-void aqtSetColormapEntryRGBA(int entryIndex, float r, float g, float b, float a);
-void aqtGetColormapEntryRGBA(int entryIndex, float *r, float *g, float *b, float *a);
-void aqtSetColormapEntry(int entryIndex, float r, float g, float b);
-void aqtGetColormapEntry(int entryIndex, float *r, float *g, float *b);
-void aqtTakeColorFromColormapEntry(int index);
-void aqtTakeBackgroundColorFromColormapEntry(int index);
+int32_t aqtColormapSize(void);
+void aqtSetColormapEntryRGBA(int32_t entryIndex, float r, float g, float b, float a);
+void aqtGetColormapEntryRGBA(int32_t entryIndex, float *r, float *g, float *b, float *a);
+void aqtSetColormapEntry(int32_t entryIndex, float r, float g, float b);
+void aqtGetColormapEntry(int32_t entryIndex, float *r, float *g, float *b);
+void aqtTakeColorFromColormapEntry(int32_t index);
+void aqtTakeBackgroundColorFromColormapEntry(int32_t index);
 
 /*" Color handling "*/
 void aqtSetColorRGBA(float r, float g, float b, float a);
@@ -73,28 +75,28 @@ void aqtGetBackgroundColor(float *r, float *g, float *b);
 /*" Text handling "*/
 void aqtSetFontname(const char *newFontname);
 void aqtSetFontsize(float newFontsize);
-void aqtAddLabel(const char *text, float x, float y, float angle, int align);
-void aqtAddShearedLabel(const char *text, float x, float y, float angle, float shearAngle, int align);
+void aqtAddLabel(const char *text, float x, float y, float angle, int32_t align);
+void aqtAddShearedLabel(const char *text, float x, float y, float angle, float shearAngle, int32_t align);
 
 /*" Line handling "*/
 void aqtSetLinewidth(float newLinewidth);
-void aqtSetLinestylePattern(float *newPattern, int newCount, float newPhase);
+void aqtSetLinestylePattern(float *newPattern, int32_t newCount, float newPhase);
 void aqtSetLinestyleSolid(void);
-void aqtSetLineCapStyle(int capStyle);
+void aqtSetLineCapStyle(int32_t capStyle);
 void aqtMoveTo(float x, float y);
 void aqtAddLineTo(float x, float y);
-void aqtAddPolyline(float *x, float *y, int pointCount);
+void aqtAddPolyline(float *x, float *y, int32_t pointCount);
 
 /*" Rect and polygon handling"*/
 void aqtMoveToVertex(float x, float y);
 void aqtAddEdgeToVertex(float x, float y);
-void aqtAddPolygon(float *x, float *y, int pointCount);
+void aqtAddPolygon(float *x, float *y, int32_t pointCount);
 void aqtAddFilledRect(float originX, float originY, float width, float height);
 void aqtEraseRect(float originX, float originY, float width, float height);
 
 /*" Image handling "*/
 void aqtSetImageTransform(float m11, float m12, float m21, float m22, float tX, float tY);
 void aqtResetImageTransform(void);
-void aqtAddImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float destX, float destY, float destWidth, float destHeight);
-void aqtAddTransformedImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float clipX, float clipY, float clipWidth, float clipHeight);
+void aqtAddImageWithBitmap(const void *bitmap, int32_t pixWide, int32_t pixHigh, float destX, float destY, float destWidth, float destHeight);
+void aqtAddTransformedImageWithBitmap(const void *bitmap, int32_t pixWide, int32_t pixHigh, float clipX, float clipY, float clipWidth, float clipHeight);
 

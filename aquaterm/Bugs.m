@@ -24,7 +24,7 @@
 #import <AquaTerm/AQTAdapter.h>
 
 // Testing the use of a callback function to handle errors in the server
-static void customEventHandler(int index, NSString *event)
+static void customEventHandler(int32_t index, NSString *event)
 {
   NSLog(@"Custom event handler --- %@ from %d", event, index);
 }
@@ -33,7 +33,7 @@ static void customEventHandler(int index, NSString *event)
 #ifdef AQT_STANDALONE
 void aqtDebug(AQTAdapter *adapter);
 
-int main(void)
+int32_t main(void)
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   AQTAdapter *adapter = [[AQTAdapter alloc] init];

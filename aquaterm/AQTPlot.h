@@ -19,15 +19,17 @@
   BOOL _isWindowLoaded;
   BOOL _acceptingEvents;
   id <NSObject, AQTEventProtocol> _client;
-  int _clientPID;
+  int32_t _clientPID;
   NSString *_clientName;
   // interface additions
   IBOutlet NSBox *extendSavePanelView;
   IBOutlet NSPopUpButton *saveFormatPopUp;
 }
+- (void)cascadeWindowOrderFront:(BOOL)orderFront;
+- (void)constrainWindowToFrame:(NSRect)tileFrame;
 - (id)canvas;
 - (void)setClient:(id)client;
-- (void)setClientInfoName:(NSString *)name pid:(int)pid;
+- (void)setClientInfoName:(NSString *)name pid:(int32_t)pid;
 - (BOOL)clientValidAndResponding;
 - (BOOL)invalidateClient; 
 - (BOOL)acceptingEvents;
@@ -37,5 +39,5 @@
 - (IBAction)refreshView:(id)sender;
 
 // testing methods
-- (void)timingTestWithTag:(unsigned int)tag;
+- (void)timingTestWithTag:(uint32_t)tag;
 @end

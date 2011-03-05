@@ -22,11 +22,12 @@
 #import "AQTController.h"
 #endif
 #import <AquaTerm/AQTAdapter.h>
+#include <tgmath.h>
 
 #ifdef AQT_STANDALONE
 void aqtTestview(AQTAdapter *adapter);
 
-int main(void)
+int32_t main(void)
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   AQTAdapter *adapter = [[AQTAdapter alloc] init];
@@ -41,7 +42,7 @@ void aqtTestview(id sender)
 {
 NSPoint points[128];
   NSPoint pos;
-int i;
+int32_t i;
 float f;
 double pi = 4.0*atan(1.0);
 unsigned char rgbImage[12]={
@@ -119,8 +120,8 @@ static float pat[4][4]={{4,2,4,2},{4,2,2,2},{8,4,8,4},{2,2,2,2}};
 for (f=1.0; f<13.0; f+=2.0)
 {
   float lw = f/2.0;
-  [adapter setLinewidth:roundf(lw-.5)];
-  [adapter setLinestylePattern:pat[((int)f)%3] count:4 phase:0.0];
+  [adapter setLinewidth:round(lw-.5)];
+  [adapter setLinestylePattern:pat[((int32_t)f)%3] count:4 phase:0.0];
   [adapter moveToPoint:NSMakePoint(30, 200.5+f*10)];
   [adapter addLineToPoint:NSMakePoint(180, 200.5+f*10)];
 }
@@ -340,9 +341,9 @@ pos = NSMakePoint(540.5, 75.5);
 // Some styling is possible
 {
   NSMutableAttributedString *attrStr = [[[NSMutableAttributedString alloc] initWithString:@"Underline, super- and subscript123"] autorelease];
-  [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInt:1] range:NSMakeRange(0,9)];
-  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(31,1)];
-  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(32,2)];
+  [attrStr addAttribute:@"NSUnderline" value:[NSNumber numberWithInteger:1] range:NSMakeRange(0,9)];
+  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInteger:-1] range:NSMakeRange(31,1)];
+  [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInteger:1] range:NSMakeRange(32,2)];
   [adapter addLabel:attrStr atPoint:NSMakePoint(320, 75) angle:0.0 align:AQTAlignLeft];  
 }
 [adapter takeColorFromColormapEntry:2];
@@ -369,21 +370,21 @@ pos = NSMakePoint(540.5, 75.5);
 
    attrStr = [[[NSMutableAttributedString alloc] initWithString:@"e-ip+1= 0"] autorelease];
    [attrStr addAttribute:@"AQTFontname" value:@"Symbol" range:NSMakeRange(3,1)]; // Greek
-   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(1,3)]; // eponent
-   [attrStr addAttribute:@"AQTFontsize" value:[NSNumber numberWithFloat:6.0] range:NSMakeRange(7,1)]; // extra spacing
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInteger:1] range:NSMakeRange(1,3)]; // eponent
+   [attrStr addAttribute:@"AQTFontsize" value:[NSNumber numberWithDouble:6.0] range:NSMakeRange(7,1)]; // extra spacing
    
    [adapter addLabel:attrStr atPoint:NSMakePoint(260, 75) angle:0.0 align:AQTAlignCenter];
 
    attrStr = [[[NSMutableAttributedString alloc] initWithString:@"mSke-wk2"] autorelease];
    [attrStr addAttribute:@"AQTFontname" value:@"Symbol" range:NSMakeRange(0,2)];
-   [attrStr addAttribute:@"AQTFontsize" value:[NSNumber numberWithFloat:20.0] range:NSMakeRange(1,1)];
-   [attrStr addAttribute:@"AQTBaselineAdjust" value:[NSNumber numberWithFloat:-0.25] range:NSMakeRange(1,1)]; // Lower symbol 25%
-   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-1] range:NSMakeRange(2,1)];
+   [attrStr addAttribute:@"AQTFontsize" value:[NSNumber numberWithDouble:20.0] range:NSMakeRange(1,1)];
+   [attrStr addAttribute:@"AQTBaselineAdjust" value:[NSNumber numberWithDouble:-0.25] range:NSMakeRange(1,1)]; // Lower symbol 25%
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInteger:-1] range:NSMakeRange(2,1)];
    [attrStr addAttribute:@"AQTFontname" value:@"Times-Roman" range:NSMakeRange(3,1)];
-   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:1] range:NSMakeRange(4,2)];
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInteger:1] range:NSMakeRange(4,2)];
    [attrStr addAttribute:@"AQTFontname" value:@"Symbol" range:NSMakeRange(5,1)];
-   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:-2] range:NSMakeRange(6,1)];
-   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInt:2] range:NSMakeRange(7,1)];
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInteger:-2] range:NSMakeRange(6,1)];
+   [attrStr addAttribute:@"NSSuperScript" value:[NSNumber numberWithInteger:2] range:NSMakeRange(7,1)];
 
    [adapter addLabel:attrStr atPoint:NSMakePoint(260, 45) angle:0.0 align:AQTAlignCenter];
 

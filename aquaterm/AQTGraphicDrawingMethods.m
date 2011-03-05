@@ -196,6 +196,7 @@ static float _aqtMinimumLinewidth;
 @implementation AQTPath (AQTPathDrawing)
 -(void)_aqtPathUpdateCache
 {
+   int32_t i;
    float lw = [self isFilled]?1.0:linewidth; // FIXME: this is a hack to avoid tiny gaps between filled patches
    NSBezierPath *scratch = [NSBezierPath bezierPath];
    [scratch appendBezierPathWithPoints:path count:pointCount];
@@ -203,7 +204,9 @@ static float _aqtMinimumLinewidth;
    [scratch setLineCapStyle:lineCapStyle];
    [scratch setLineWidth:(lw<_aqtMinimumLinewidth)?_aqtMinimumLinewidth:lw];
    if([self hasPattern]) {
-      [scratch setLineDash:pattern count:patternCount phase:patternPhase];
+       CGFloat temppat[patternCount];
+       for( i = 0; i < patternCount; i++) temppat[i] = pattern[i];
+      [scratch setLineDash:temppat count:patternCount phase:patternPhase];
    }
    if([self isFilled]) {
       [scratch closePath];
@@ -286,10 +289,10 @@ static float _aqtMinimumLinewidth;
    if (AQTIntersectsRect(boundsRect, clippedBounds)) {
       if (![self _cache]) {
          // Install an NSImage in _cache
-         const unsigned char *theBytes = [bitmap bytes];
+         unsigned char *theBytes = (unsigned char*) [bitmap bytes];
          NSImage *tmpImage = [[NSImage alloc] initWithSize:bitmapSize];
          NSBitmapImageRep *tmpBitmap =
-            [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&theBytes
+            [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&(theBytes)
                                                     pixelsWide:bitmapSize.width
                                                     pixelsHigh:bitmapSize.height
                                                  bitsPerSample:8

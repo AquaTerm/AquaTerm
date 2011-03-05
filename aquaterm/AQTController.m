@@ -37,15 +37,15 @@ extern void aqtLineDrawingTest(id sender);
       [NSArray arrayWithObjects:
          NSHomeDirectory(), 
          @"PDF", 
-         [NSNumber numberWithInt:0], 
-         [NSNumber numberWithInt:0], 
-         [NSNumber numberWithFloat:0.0], 
-         [NSNumber numberWithInt:1],
-         [NSNumber numberWithInt:1], 
-         [NSNumber numberWithInt:1],
-         [NSNumber numberWithInt:0], 
-         [NSNumber numberWithInt:0], 
-         [NSNumber numberWithInt:1], 
+         [NSNumber numberWithInteger:0], 
+         [NSNumber numberWithInteger:0], 
+         [NSNumber numberWithDouble:0.0], 
+         [NSNumber numberWithInteger:1],
+         [NSNumber numberWithInteger:1], 
+         [NSNumber numberWithInteger:1],
+         [NSNumber numberWithInteger:0], 
+         [NSNumber numberWithInteger:0], 
+         [NSNumber numberWithInteger:1], 
          nil]
       forKeys:[NSArray arrayWithObjects:
          @"CurrentSaveFolder", 
@@ -82,6 +82,7 @@ extern void aqtLineDrawingTest(id sender);
 -(void)dealloc
 {
    [[NSNotificationCenter defaultCenter] removeObserver:self];
+   [super dealloc];
 }
 
 /**"
@@ -98,7 +99,7 @@ extern void aqtLineDrawingTest(id sender);
 
   if([doConnection registerName:@"aquatermServer"] == NO)
   {
-    int retCode = NSRunCriticalAlertPanel(@"Could not establish service",
+    int32_t retCode = NSRunCriticalAlertPanel(@"Could not establish service",
                                        @"Another application has already registered the service \"aquatermServer\".\nYou may leave AquaTerm running by pressing Cancel, but no clients will be able to use it.\nPress Quit to close this copy of AquaTerm.",
                                        @"Quit", @"Cancel", nil);
     if (retCode == NSAlertDefaultReturn)
@@ -126,7 +127,7 @@ extern void aqtLineDrawingTest(id sender);
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
    // Warn if active clients and refuse(?) if events are active
-   int terminateDecision = NSTerminateNow;
+   int32_t terminateDecision = NSTerminateNow;
    BOOL validClients = NO;
    BOOL eventsActive = NO;
    NSEnumerator *enumObjects = [handlerList objectEnumerator];
@@ -145,7 +146,7 @@ extern void aqtLineDrawingTest(id sender);
 
    if(validClients)
    {
-      int retCode;
+      int32_t retCode;
       if(eventsActive)
       {
          retCode = NSRunCriticalAlertPanel(@"Clients still awaiting events",
@@ -187,14 +188,14 @@ extern void aqtLineDrawingTest(id sender);
    return;
 }
 
-- (void)getServerVersionMajor:(int *)major minor:(int *)minor rev:(int *)rev
+- (void)getServerVersionMajor:(int32_t *)major minor:(int32_t *)minor rev:(int32_t *)rev
 {
    *major = 1;
    *minor = 1;
    *rev = 0;
 }
 
--(id)addAQTClient:(id)client name:(NSString *)name pid:(int)procId
+-(id)addAQTClient:(id)client name:(NSString *)name pid:(int32_t)procId
 {
   id newPlot;
    newPlot = [[AQTPlot alloc] init];
@@ -244,14 +245,14 @@ extern void aqtLineDrawingTest(id sender);
    NSSize tileSize;
    NSPoint tileOrigin;
    
-   int i, row, col, nRow, nCol;
-   int n = [handlerList count];
+   int32_t i, row, col, nRow, nCol;
+   int32_t n = [handlerList count];
    
    if (n==0)
       return;
    
-   nRow = nCol = 1 + (int)sqrt(n-1);
-   tileSize = NSMakeSize((int)screenFrame.size.width/nCol, (int)screenFrame.size.height/nRow);
+   nRow = nCol = 1 + (int32_t)sqrt(n-1);
+   tileSize = NSMakeSize((int32_t)screenFrame.size.width/nCol, (int32_t)screenFrame.size.height/nRow);
    tileOrigin = NSMakePoint(NSMinX(screenFrame), NSMaxY(screenFrame)-tileSize.height);
    for(i=0;i<[handlerList count];i++) {
       row = i/nCol;
@@ -265,7 +266,7 @@ extern void aqtLineDrawingTest(id sender);
 -(IBAction)cascadeWindows:(id)sender
 {
    // FIXME: Cascading point should be reset (moved) when a window hits screen bottom
-   int i;
+   int32_t i;
    NSRect screenFrame = [[NSScreen mainScreen] visibleFrame];
    cascadingPoint = NSMakePoint(NSMinX(screenFrame), NSMaxY(screenFrame));
    for(i=0;i<[handlerList count];i++) {
@@ -284,8 +285,8 @@ extern void aqtLineDrawingTest(id sender);
 
 -(IBAction)showAvailableFonts:(id)sender
 {
-   int row = 10;
-   int col = 10;
+   int32_t row = 10;
+   int32_t col = 10;
    NSFontManager *fontManager = [NSFontManager sharedFontManager];
    NSString *systemFont = [[NSFont systemFontOfSize:10.0] fontName];
    NSMutableArray *allFontnames = [NSMutableArray arrayWithCapacity:1024];
@@ -396,7 +397,7 @@ Configuration (please do not edit this section):\n\
   NSString *address = @"persquare@users.sourceforge.net";
   NSString *subject = @"AquaTerm bugreport";
   NSString *mailto = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", address, subject, msg]; 
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapes]]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapesUsingEncoding: NSASCIIStringEncoding]]];
 }
 
 -(NSString *)_aqtMailMsg
@@ -412,7 +413,7 @@ Feedback:\n-----------------------\n\n\
   NSString *address = @"persquare@users.sourceforge.net";
   NSString *subject = @"AquaTerm feedback";
   NSString *mailto = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", address, subject, msg];
-  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapes]]];
+  [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[mailto stringByAddingPercentEscapesUsingEncoding: NSASCIIStringEncoding]]];
 }
 
 #pragma mark === Debug Actions ===

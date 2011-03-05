@@ -10,7 +10,7 @@
 @implementation AQTPath
 
 /*" A private method to provide storage for an NSPointArray "*/
-- (int)_aqtSetupPathStoreForPointCount:(int)pc
+- (int32_t)_aqtSetupPathStoreForPointCount:(int32_t)pc
 {
    // Use static store as default (efficient for small paths)
    path = staticPathStore;
@@ -36,9 +36,9 @@
 *** Since the app is a viewer we do three things with the object:
 *** create (once), draw (any number of times) and (eventually) dispose of it.
 "**/
--(id)initWithPoints:(NSPointArray)points pointCount:(int)pc;
+-(id)initWithPoints:(NSPointArray)points pointCount:(int32_t)pc;
 {
-  int i;
+  int32_t i;
   if (self = [super init])
   {
      pc = [self _aqtSetupPathStoreForPointCount:pc];
@@ -70,13 +70,21 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+  AQTPoint p;
+  uint32_t i;
+
   [super encodeWithCoder:coder];
   [coder encodeValueOfObjCType:@encode(BOOL) at:&isFilled];
-  [coder encodeValueOfObjCType:@encode(int) at:&lineCapStyle];
+  [coder encodeValueOfObjCType:@encode(int32_t) at:&lineCapStyle];
   [coder encodeValueOfObjCType:@encode(float) at:&linewidth];
-  [coder encodeValueOfObjCType:@encode(int) at:&pointCount];
-  [coder encodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path];
-  [coder encodeValueOfObjCType:@encode(int) at:&patternCount];
+  [coder encodeValueOfObjCType:@encode(int32_t) at:&pointCount];
+  // Fix for 64bit interoperability: NSPoint is of type GCFloat which is double on 64 bit and float on 32
+  for( i = 0; i < pointCount; i++ )
+  {
+    p.x = path[i].x; p.y = path[i].y;
+    [coder encodeValueOfObjCType:@encode(AQTPoint) at:&p];
+  }
+  [coder encodeValueOfObjCType:@encode(int32_t) at:&patternCount];
   [coder encodeArrayOfObjCType:@encode(float) count:patternCount at:pattern];
   [coder encodeValueOfObjCType:@encode(float) at:&patternPhase];
   [coder encodeValueOfObjCType:@encode(BOOL) at:&hasPattern];
@@ -84,15 +92,23 @@
 
 -(id)initWithCoder:(NSCoder *)coder
 {
+  AQTPoint p;
+  uint32_t i;
+
   self = [super initWithCoder:coder];
   [coder decodeValueOfObjCType:@encode(BOOL) at:&isFilled];
-  [coder decodeValueOfObjCType:@encode(int) at:&lineCapStyle];
+  [coder decodeValueOfObjCType:@encode(int32_t) at:&lineCapStyle];
   [coder decodeValueOfObjCType:@encode(float) at:&linewidth];
-  [coder decodeValueOfObjCType:@encode(int) at:&pointCount];
+  [coder decodeValueOfObjCType:@encode(int32_t) at:&pointCount];
   // path might be malloc'd or on heap depending on pointCount
   pointCount = [self _aqtSetupPathStoreForPointCount:pointCount];
-  [coder decodeArrayOfObjCType:@encode(NSPoint) count:pointCount at:path]; 
-  [coder decodeValueOfObjCType:@encode(int) at:&patternCount];
+  // Fix for 64bit interoperability: NSPoint is of type GCFloat which is double on 64 bit and float on 32
+  for( i = 0; i < pointCount; i++ )
+  {
+    [coder decodeValueOfObjCType:@encode(AQTPoint) at:&p];
+    path[i].x = p.x; path[i].y = p.y;
+  }
+  [coder decodeValueOfObjCType:@encode(int32_t) at:&patternCount];
   [coder decodeArrayOfObjCType:@encode(float) count:patternCount at:pattern];
   [coder decodeValueOfObjCType:@encode(float) at:&patternPhase];
   [coder decodeValueOfObjCType:@encode(BOOL) at:&hasPattern];
@@ -100,10 +116,10 @@
   return self;
 }
 
-- (void)setLinestylePattern:(const float *)newPattern count:(int)newCount phase:(float)newPhase 
+- (void)setLinestylePattern:(const float *)newPattern count:(int32_t)newCount phase:(float)newPhase 
 {
   // Create a local copy of the pattern.
-   int i;
+   int32_t i;
    if (newCount <= 0) // Sanity check
       return;
    // constrain count to MAX_PATTERN_COUNT
@@ -121,7 +137,7 @@
   linewidth = lw;
 }
 
-- (void)setLineCapStyle:(int)capStyle
+- (void)setLineCapStyle:(int32_t)capStyle
 {
   lineCapStyle = capStyle;
 }

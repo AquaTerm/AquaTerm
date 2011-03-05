@@ -6,6 +6,7 @@
 //  Copyright (c) 2003 AquaTerm. All rights reserved.
 //
 
+#import <stdint.h>
 #import "AQTPlotBuilder.h"
 #import "AQTGraphic.h"
 #import "AQTModel.h"
@@ -40,6 +41,7 @@
 #ifdef DEBUG
    if (_modelIsDirty && NSEqualSizes(NSZeroSize, [_model canvasSize]))
    {
+#warning 64BIT: Check formatting arguments
       [NSException raise:@"AQTDebugException" format:NSStringFromSelector(_cmd)];
    }
 #endif
@@ -91,6 +93,7 @@
 - (void)dealloc
 {
 #ifdef MEM_DEBUG
+#warning 64BIT: Check formatting arguments
    NSLog(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
 #endif
    [_model release];
@@ -166,27 +169,27 @@
    return [_model color];
 }
 
-- (void)takeColorFromColormapEntry:(int)index
+- (void)takeColorFromColormapEntry:(int32_t)index
 {
    [self setColor:[_colormap colorForIndex:index]];
 }
 
-- (void)takeBackgroundColorFromColormapEntry:(int)index
+- (void)takeBackgroundColorFromColormapEntry:(int32_t)index
 {
    [self setBackgroundColor:[_colormap colorForIndex:index]];
 }
 
-- (int)colormapSize
+- (int32_t)colormapSize
 {
    return [_colormap size];
 }
 
-- (void)setColor:(AQTColor)newColor forColormapEntry:(int)entryIndex
+- (void)setColor:(AQTColor)newColor forColormapEntry:(int32_t)entryIndex
 {
    [_colormap setColor:newColor forIndex:entryIndex];
 }
 
-- (AQTColor)colorForColormapEntry:(int)entryIndex
+- (AQTColor)colorForColormapEntry:(int32_t)entryIndex
 {
    return [_colormap colorForIndex:entryIndex];
 }
@@ -217,11 +220,11 @@
    }
 }
 
-- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase //CM
+- (void)setLinestylePattern:(float *)newPattern count:(int32_t)newCount phase:(float)newPhase //CM
 {
    [self _flushBuffers]; // FIXME: expose flush methods in API?
    // Copy the pattern
-   int i;
+   int32_t i;
    if (newCount <= 0) // Sanity check
       return;
    // constrain count to MAX_PATTERN_COUNT
@@ -240,7 +243,7 @@
    _hasPattern = NO;
 }
 
-- (void)setLineCapStyle:(int)capStyle
+- (void)setLineCapStyle:(int32_t)capStyle
 {
    [self _flushBuffers];
    _capStyle = capStyle;
@@ -254,7 +257,7 @@
 //
 // AQTLabel
 //
-- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle justification:(int)just;
+- (void)addLabel:(id)text position:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle justification:(int32_t)just;
 {
    AQTLabel *lb = nil;
    if ([text isKindOfClass:[NSString class]])
@@ -331,7 +334,7 @@
 }
 
    // This is where all line-drawing  ends up eventually. 
-- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc
+- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int32_t)pc
 {
    AQTPath *tmpPath;
    // Create a path
@@ -386,7 +389,7 @@
    [self _aqtPlotBuilderSetModelIsDirty:YES];
 }
 
-- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int)pc
+- (void)addPolygonWithPoints:(NSPoint *)points pointCount:(int32_t)pc
 {
    AQTPath *tmpPath;
    tmpPath = [[AQTPath alloc] initWithPoints:points pointCount:pc];

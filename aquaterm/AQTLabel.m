@@ -15,7 +15,7 @@
     *** create (once), draw (any number of times) and (eventually) dispose of it.
     "**/
 
--(id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)beta justification:(int)justify  
+-(id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)beta justification:(int32_t)justify  
 {
   if (self=[super init])
   {
@@ -30,7 +30,7 @@
   return self; 
 }
 
--(id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)beta justification:(int)justify
+-(id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)beta justification:(int32_t)justify
 {
   
  /* return [self initWithAttributedString:[[[NSAttributedString alloc] initWithString:aString] autorelease]
@@ -82,25 +82,32 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+  AQTPoint p;
+
   [super encodeWithCoder:coder];
   [coder encodeObject:string];
   [coder encodeObject:fontName];
   [coder encodeValueOfObjCType:@encode(float) at:&fontSize];
-  [coder encodeValueOfObjCType:@encode(NSPoint) at:&position];
+  // 64bit safe
+  p.x = position.x; p.y = position.y;
+  [coder encodeValueOfObjCType:@encode(AQTPoint) at:&p];
   [coder encodeValueOfObjCType:@encode(float) at:&angle];
-  [coder encodeValueOfObjCType:@encode(int) at:&justification];
+  [coder encodeValueOfObjCType:@encode(int32_t) at:&justification];
   [coder encodeValueOfObjCType:@encode(float) at:&shearAngle];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
+  AQTPoint p;
+
   self = [super initWithCoder:coder];
   string = [[coder decodeObject] retain];
   fontName = [[coder decodeObject] retain];
   [coder decodeValueOfObjCType:@encode(float) at:&fontSize];
-  [coder decodeValueOfObjCType:@encode(NSPoint) at:&position];
+  [coder decodeValueOfObjCType:@encode(AQTPoint) at:&p];
+  position.x = p.x; position.y = p.y;
   [coder decodeValueOfObjCType:@encode(float) at:&angle];
-  [coder decodeValueOfObjCType:@encode(int) at:&justification];
+  [coder decodeValueOfObjCType:@encode(int32_t) at:&justification];
   [coder decodeValueOfObjCType:@encode(float) at:&shearAngle];
   return self;
 }

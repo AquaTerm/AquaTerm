@@ -10,19 +10,19 @@
 #import <Foundation/NSGeometry.h>
 
 /*" Constants that specify linecap styles. "*/
-extern const int AQTButtLineCapStyle;
-extern const int AQTRoundLineCapStyle;
-extern const int AQTSquareLineCapStyle;
+extern const int32_t AQTButtLineCapStyle;
+extern const int32_t AQTRoundLineCapStyle;
+extern const int32_t AQTSquareLineCapStyle;
 
 /*" Constants that specify horizontal and vertical alignment for labels. See #addLabel:atPoint:angle:align: for definitions and use."*/
-extern const int AQTAlignLeft;
-extern const int AQTAlignCenter;
-extern const int AQTAlignRight;
+extern const int32_t AQTAlignLeft;
+extern const int32_t AQTAlignCenter;
+extern const int32_t AQTAlignRight;
 /* Constants that specify vertical alignment for labels. */
-extern const int AQTAlignMiddle;
-extern const int AQTAlignBaseline;
-extern const int AQTAlignBottom;
-extern const int AQTAlignTop;
+extern const int32_t AQTAlignMiddle;
+extern const int32_t AQTAlignBaseline;
+extern const int32_t AQTAlignBottom;
+extern const int32_t AQTAlignTop;
 
 @class AQTPlotBuilder, AQTClientManager;
 @interface AQTAdapter : NSObject
@@ -38,11 +38,11 @@ extern const int AQTAlignTop;
 - (id)init;
 - (id)initWithServer:(id)localServer;
 - (void)setErrorHandler:(void (*)(NSString *msg))fPtr;
-- (void)setEventHandler:(void (*)(int index, NSString *event))fPtr;
+- (void)setEventHandler:(void (*)(int32_t index, NSString *event))fPtr;
 
   /*" Control operations "*/
-- (void)openPlotWithIndex:(int)refNum; 
-- (BOOL)selectPlotWithIndex:(int)refNum;
+- (void)openPlotWithIndex:(int32_t)refNum; 
+- (BOOL)selectPlotWithIndex:(int32_t)refNum;
 - (void)setPlotSize:(NSSize)canvasSize;
 - (void)setPlotTitle:(NSString *)title;
 - (void)renderPlot;
@@ -61,13 +61,13 @@ extern const int AQTAlignTop;
 - (void)setDefaultClipRect;
 
 /*" Colormap (utility) "*/
-- (int)colormapSize;
-- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b alpha:(float)a;
-- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a;
-- (void)setColormapEntry:(int)entryIndex red:(float)r green:(float)g blue:(float)b;
-- (void)getColormapEntry:(int)entryIndex red:(float *)r green:(float *)g blue:(float *)b;
-- (void)takeColorFromColormapEntry:(int)index;
-- (void)takeBackgroundColorFromColormapEntry:(int)index;
+- (int32_t)colormapSize;
+- (void)setColormapEntry:(int32_t)entryIndex red:(float)r green:(float)g blue:(float)b alpha:(float)a;
+- (void)getColormapEntry:(int32_t)entryIndex red:(float *)r green:(float *)g blue:(float *)b alpha:(float *)a;
+- (void)setColormapEntry:(int32_t)entryIndex red:(float)r green:(float)g blue:(float)b;
+- (void)getColormapEntry:(int32_t)entryIndex red:(float *)r green:(float *)g blue:(float *)b;
+- (void)takeColorFromColormapEntry:(int32_t)index;
+- (void)takeBackgroundColorFromColormapEntry:(int32_t)index;
 
   /*" Color handling "*/
 - (void)setColorRed:(float)r green:(float)g blue:(float)b alpha:(float)a;
@@ -83,22 +83,22 @@ extern const int AQTAlignTop;
 - (void)setFontname:(NSString *)newFontname;
 - (void)setFontsize:(float)newFontsize;
 - (void)addLabel:(id)text atPoint:(NSPoint)pos;
-- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int)just;
-- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle align:(int)just;
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle align:(int32_t)just;
+- (void)addLabel:(id)text atPoint:(NSPoint)pos angle:(float)angle shearAngle:(float)shearAngle align:(int32_t)just;
 
   /*" Line handling "*/
 - (void)setLinewidth:(float)newLinewidth;
-- (void)setLinestylePattern:(float *)newPattern count:(int)newCount phase:(float)newPhase;
+- (void)setLinestylePattern:(float *)newPattern count:(int32_t)newCount phase:(float)newPhase;
 - (void)setLinestyleSolid;
-- (void)setLineCapStyle:(int)capStyle;
+- (void)setLineCapStyle:(int32_t)capStyle;
 - (void)moveToPoint:(NSPoint)point;  
 - (void)addLineToPoint:(NSPoint)point; 
-- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int)pc;
+- (void)addPolylineWithPoints:(NSPoint *)points pointCount:(int32_t)pc;
 
   /*" Rect and polygon handling"*/
 - (void)moveToVertexPoint:(NSPoint)point;
 - (void)addEdgeToVertexPoint:(NSPoint)point; 
-- (void)addPolygonWithVertexPoints:(NSPoint *)points pointCount:(int)pc;
+- (void)addPolygonWithVertexPoints:(NSPoint *)points pointCount:(int32_t)pc;
 - (void)addFilledRect:(NSRect)aRect;
 - (void)eraseRect:(NSRect)aRect;
 
@@ -108,4 +108,7 @@ extern const int AQTAlignTop;
 - (void)addImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize bounds:(NSRect)destBounds; 
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize clipRect:(NSRect)destBounds;
 - (void)addTransformedImageWithBitmap:(const void *)bitmap size:(NSSize)bitmapSize;
+
+  /*"Private methods"*/
+- (void)timingTestWithTag:(uint32_t)tag;
 @end

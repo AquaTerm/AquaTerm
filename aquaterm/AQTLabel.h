@@ -16,11 +16,11 @@
    float fontSize;
    NSPoint position;		/*" The position of the text "*/
    float angle;
-   int justification;		/*" Justification with respect to the position of the text "*/
+   int32_t justification;		/*" Justification with respect to the position of the text "*/
    float shearAngle;
 }
-- (id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)shearAngle justification:(int)justify;
-- (id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)shearAngle justification:(int)justify;
+- (id)initWithAttributedString:(NSAttributedString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)shearAngle justification:(int32_t)justify;
+- (id)initWithString:(NSString *)aString position:(NSPoint)aPoint angle:(float)textAngle shearAngle:(float)shearAngle justification:(int32_t)justify;
 - (void)setFontName:(NSString *)newFontName;
 - (void)setFontSize:(float)newFontSize;
 @end

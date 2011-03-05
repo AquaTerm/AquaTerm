@@ -7,10 +7,11 @@
 //
 #include "aquaterm.h"
 
+#import <stdint.h>
 #import <Foundation/Foundation.h>
 #import "AQTAdapter.h"
 
-static void (*_aqtEventHandlerPtr)(int, const char *);
+static void (*_aqtEventHandlerPtr)(int32_t, const char *);
 static NSAutoreleasePool *_pool;
 static AQTAdapter *_adapter;
 static BOOL _mayCleanPool = YES;
@@ -30,7 +31,7 @@ void _aqtCleanPool(void)
 }
 
 /*" Class initialization etc."*/
-int aqtInit(void) // FIXME: retval?
+int32_t aqtInit(void) // FIXME: retval?
 {
    if (!_pool)
    {
@@ -52,7 +53,7 @@ void aqtTerminate(void)
    _pool = nil;
 }
 
-void _aqtEventTranslator(int index, NSString *event)
+void _aqtEventTranslator(int32_t index, NSString *event)
 {
    // NSLog(@"_aqtEventTranslator --- %@ from %d", event, index);
    _mayCleanPool = NO;
@@ -60,19 +61,19 @@ void _aqtEventTranslator(int index, NSString *event)
    _mayCleanPool = YES;
 }
 
-void aqtSetEventHandler(void (*func)(int ref, const char *event))
+void aqtSetEventHandler(void (*func)(int32_t ref, const char *event))
 {
    _aqtEventHandlerPtr = func;
    [_adapter setEventHandler:_aqtEventTranslator];
 }
 
 /*" Control operations "*/
-void aqtOpenPlot(int refNum) // FIXME: retval?
+void aqtOpenPlot(int32_t refNum) // FIXME: retval?
 {
    [_adapter openPlotWithIndex:refNum];
 }
 
-int aqtSelectPlot(int refNum) // FIXME: retval?
+int32_t aqtSelectPlot(int32_t refNum) // FIXME: retval?
 {
    return [_adapter selectPlotWithIndex:refNum]?1:0;
 }
@@ -84,7 +85,7 @@ void aqtSetPlotSize(float width, float height)
 
 void aqtSetPlotTitle(const char *title)
 {
-   [_adapter setPlotTitle:title?[NSString stringWithCString:title]:@"Untitled"];
+    [_adapter setPlotTitle:title?[NSString stringWithCString:title encoding: NSISOLatin1StringEncoding]:@"Untitled"];
 }
 
 void aqtRenderPlot(void)
@@ -104,12 +105,12 @@ void aqtClosePlot(void)
 }
 
 /*" Event handling "*/
-void aqtSetAcceptingEvents(int flag)
+void aqtSetAcceptingEvents(int32_t flag)
 {
    [_adapter setAcceptingEvents:flag?YES:NO];
 }
 
-int aqtGetLastEvent(char *buffer) // FIXME: retval?
+int32_t aqtGetLastEvent(char *buffer) // FIXME: retval?
 {
    NSString *event = [_adapter lastEvent];
    // Perform a lossy conversion from UTF8 to ASCII
@@ -123,7 +124,7 @@ int aqtGetLastEvent(char *buffer) // FIXME: retval?
    return 0;
 }
 
-int aqtWaitNextEvent(char *buffer) // FIXME: retval?
+int32_t aqtWaitNextEvent(char *buffer) // FIXME: retval?
 {
    NSString *event  = [_adapter waitNextEvent];
   // Perform a lossy conversion from UTF8 to ASCII
@@ -158,37 +159,37 @@ void aqtSetDefaultClipRect(void)
 }
 
 /*" Colormap (utility  "*/
-int aqtColormapSize(void)
+int32_t aqtColormapSize(void)
 {
    return [_adapter colormapSize];
 }
 
-void aqtSetColormapEntryRGBA(int entryIndex, float r, float g, float b, float a)
+void aqtSetColormapEntryRGBA(int32_t entryIndex, float r, float g, float b, float a)
 {
   [_adapter setColormapEntry:entryIndex red:r green:g blue:b alpha:a];
 }
 
-void aqtGetColormapEntryRGBA(int entryIndex, float *r, float *g, float *b, float *a)
+void aqtGetColormapEntryRGBA(int32_t entryIndex, float *r, float *g, float *b, float *a)
 {
   [_adapter getColormapEntry:entryIndex red:r green:g blue:b alpha:a];
 }
 
-void aqtSetColormapEntry(int entryIndex, float r, float g, float b)
+void aqtSetColormapEntry(int32_t entryIndex, float r, float g, float b)
 {
    [_adapter setColormapEntry:entryIndex red:r green:g blue:b];
 }
 
-void aqtGetColormapEntry(int entryIndex, float *r, float *g, float *b)
+void aqtGetColormapEntry(int32_t entryIndex, float *r, float *g, float *b)
 {
    [_adapter getColormapEntry:entryIndex red:r green:g blue:b];
 }
 
-void aqtTakeColorFromColormapEntry(int index)
+void aqtTakeColorFromColormapEntry(int32_t index)
 {
    [_adapter takeColorFromColormapEntry:index];
 }
 
-void aqtTakeBackgroundColorFromColormapEntry(int index)
+void aqtTakeBackgroundColorFromColormapEntry(int32_t index)
 {
    [_adapter takeBackgroundColorFromColormapEntry:index];
 }
@@ -239,7 +240,7 @@ void aqtGetBackgroundColor(float *r, float *g, float *b)
 {
     if (newFontname != nil)
     {
-       [_adapter setFontname:[NSString stringWithCString:newFontname]];
+       [_adapter setFontname:[NSString stringWithCString:newFontname encoding: NSISOLatin1StringEncoding]];
     }
 }
 
@@ -248,19 +249,19 @@ void aqtSetFontsize(float newFontsize)
    [_adapter setFontsize:newFontsize];
 }
 
-void aqtAddLabel(const char *text, float x, float y, float angle, int align)
+void aqtAddLabel(const char *text, float x, float y, float angle, int32_t align)
 {
    if (text != nil)
    {
-      [_adapter addLabel:[NSString stringWithCString:text] atPoint:NSMakePoint(x,y) angle:angle align:align];
+      [_adapter addLabel:[NSString stringWithCString:text encoding: NSISOLatin1StringEncoding] atPoint:NSMakePoint(x,y) angle:angle align:align];
    }
 }
 
-void aqtAddShearedLabel(const char *text, float x, float y, float angle, float shearAngle, int align)
+void aqtAddShearedLabel(const char *text, float x, float y, float angle, float shearAngle, int32_t align)
 {
    if (text != nil)
    {
-      [_adapter addLabel:[NSString stringWithCString:text] atPoint:NSMakePoint(x,y) angle:angle shearAngle:shearAngle align:align];
+      [_adapter addLabel:[NSString stringWithCString:text encoding: NSISOLatin1StringEncoding] atPoint:NSMakePoint(x,y) angle:angle shearAngle:shearAngle align:align];
    }
 }
 
@@ -271,7 +272,7 @@ void aqtSetLinewidth(float newLinewidth)
    [_adapter setLinewidth:newLinewidth];
 }
 
-void aqtSetLineCapStyle(int capStyle)
+void aqtSetLineCapStyle(int32_t capStyle)
 {
    [_adapter setLineCapStyle:capStyle];
 }
@@ -286,9 +287,9 @@ void aqtAddLineTo(float x, float y)
    [_adapter addLineToPoint:NSMakePoint(x, y)];
 }
 
-void aqtAddPolyline(float *x, float *y, int pc)
+void aqtAddPolyline(float *x, float *y, int32_t pc)
 {
-   int i; 
+   int32_t i; 
    if (pc > 1)
    {
       [_adapter moveToPoint:NSMakePoint(x[0], y[0])];
@@ -299,7 +300,7 @@ void aqtAddPolyline(float *x, float *y, int pc)
    }   
 }
 
-void aqtSetLinestylePattern(float *newPattern, int newCount, float newPhase)
+void aqtSetLinestylePattern(float *newPattern, int32_t newCount, float newPhase)
 {
    [_adapter setLinestylePattern:newPattern count:newCount phase:newPhase];
 }
@@ -320,9 +321,9 @@ void aqtAddEdgeToVertex(float x, float y)
    [_adapter addEdgeToVertexPoint:NSMakePoint(x,y)];
 }
 
-void aqtAddPolygon(float *x, float *y, int pc)
+void aqtAddPolygon(float *x, float *y, int32_t pc)
 {
-   int i;
+   int32_t i;
    if (pc > 1)
    {
       [_adapter moveToVertexPoint:NSMakePoint(x[0], y[0])];
@@ -354,13 +355,13 @@ void aqtResetImageTransform(void)
    [_adapter resetImageTransform];
 }
 
-void aqtAddImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float originX, float originY, float width, float height)
+void aqtAddImageWithBitmap(const void *bitmap, int32_t pixWide, int32_t pixHigh, float originX, float originY, float width, float height)
 {
    [_adapter addImageWithBitmap:bitmap size:NSMakeSize(pixWide, pixHigh) bounds:NSMakeRect(originX, originY, width, height)];
 }
 
 // FIXME: This function maps to a deprecated method in AQTAdapter. It overrides the global clipRect setting.
-void aqtAddTransformedImageWithBitmap(const void *bitmap, int pixWide, int pixHigh, float originX, float originY, float width, float height)
+void aqtAddTransformedImageWithBitmap(const void *bitmap, int32_t pixWide, int32_t pixHigh, float originX, float originY, float width, float height)
 {
    [_adapter addTransformedImageWithBitmap:bitmap size:NSMakeSize(pixWide, pixHigh) clipRect:NSMakeRect(originX, originY, width, height)];
 }

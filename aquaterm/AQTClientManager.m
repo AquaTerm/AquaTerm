@@ -66,7 +66,7 @@
       // Read environment variable(s)
       envPtr = getenv("AQUATERM_LOGLEVEL");
       if (envPtr != (char *)NULL) {
-         _logLimit = (int)strtol(envPtr, (char **)NULL, 10);
+         _logLimit = (int32_t)strtol(envPtr, (char **)NULL, 10);
       }
       [self logMessage:[NSString stringWithFormat:@"Warning: Logging at level %d", _logLimit] logLevel:1];
    }
@@ -96,6 +96,7 @@
 
 - (BOOL)connectToServerWithName:(NSString *)registeredName
 {
+[self logMessage:@"Trying to connect..." logLevel:2];
    // FIXME: Check to see if _server exists.
    BOOL didConnect = NO;
    _server = [NSConnection rootProxyForConnectionWithRegisteredName:registeredName host:nil];
@@ -105,7 +106,7 @@
          [self logMessage:@"Launching failed." logLevel:2];
       } else {
          // Wait for server to start up
-         int timer = 10;
+         int32_t timer = 10;
          while (--timer && !_server) {
             // sleep 1s
             [self logMessage:[NSString stringWithFormat:@"Waiting... %d", timer] logLevel:2];
@@ -118,8 +119,8 @@
    if (_server) {
       NS_DURING
          if ([_server conformsToProtocol:@protocol(AQTConnectionProtocol)]) {
-            int a,b,c;
-            [_server retain];
+            int32_t a,b,c;
+             [_server retain];
             [_server setProtocolForProxy:@protocol(AQTConnectionProtocol)];
             [_server getServerVersionMajor:&a minor:&b rev:&c];
             [self logMessage:[NSString stringWithFormat:@"Server version %d.%d.%d", a, b, c] logLevel:2];
@@ -143,8 +144,8 @@
    NSURL *appURL;
    OSStatus status;
    
-   if (getenv("AQUATERM_PATH") != (char *)NULL) {
-      appURL = [NSURL fileURLWithPath:[NSString stringWithCString:getenv("AQUATERM_PATH")]];
+    if (getenv("AQUATERM_PATH") != (char *)NULL) {
+       appURL = [NSURL fileURLWithPath:[NSString stringWithCString:getenv("AQUATERM_PATH") encoding: NSUTF8StringEncoding]];
       status = LSOpenCFURLRef((CFURLRef)appURL, NULL);
    } else {
       // Look for AquaTerm at default location
@@ -186,7 +187,7 @@
    [newActivePlotKey retain];
    [_activePlotKey release];
    _activePlotKey = newActivePlotKey;
-   [self logMessage:_activePlotKey?[NSString stringWithFormat:@"Active plot: %d", [_activePlotKey intValue]]:@"**** plot invalid ****"
+   [self logMessage:_activePlotKey?[NSString stringWithFormat:@"Active plot: %d", [_activePlotKey integerValue]]:@"**** plot invalid ****"
            logLevel:3];
 }
 
@@ -195,12 +196,12 @@
    _errorHandler = fPtr;
 }
 
-- (void)setEventHandler:(void (*)(int index, NSString *event))fPtr
+- (void)setEventHandler:(void (*)(int32_t index, NSString *event))fPtr
 {
    _eventHandler = fPtr;
 }
 
-- (void)logMessage:(NSString *)msg logLevel:(int)level
+- (void)logMessage:(NSString *)msg logLevel:(int32_t)level
 {
    // _logLimit: 0 -- output off
    //            1 -- severe errors
@@ -213,10 +214,10 @@
 
 #pragma mark === Plot/builder methods ===
 
-- (AQTPlotBuilder *)newPlotWithIndex:(int)refNum
+- (AQTPlotBuilder *)newPlotWithIndex:(int32_t)refNum
 {
    AQTPlotBuilder *newBuilder = nil;
-   NSNumber *key = [NSNumber numberWithInt:refNum];;
+   NSNumber *key = [NSNumber numberWithInteger:refNum];;
    id <AQTClientProtocol> newPlot;
 
    if (errorState == YES) {
@@ -256,14 +257,14 @@
    return newBuilder;
 }
 
-- (AQTPlotBuilder *)selectPlotWithIndex:(int)refNum
+- (AQTPlotBuilder *)selectPlotWithIndex:(int32_t)refNum
 {
    NSNumber *key;
    AQTPlotBuilder *aBuilder;
  
    if (errorState == YES) return nil; // FIXME: Clear error state here too???
 
-   key = [NSNumber numberWithInt:refNum];
+   key = [NSNumber numberWithInteger:refNum];
    aBuilder = [_builders objectForKey:key];
 
    if(aBuilder != nil) {
@@ -406,13 +407,13 @@
    key = [keys objectAtIndex:0];
 
    if (_eventHandler != nil) {
-      _eventHandler([key intValue], event);
+      _eventHandler([key integerValue], event);
    }
    [_eventBuffer setObject:event forKey:key];
 }
 
 #pragma mark ==== Testing methods ====
-- (void)timingTestWithTag:(unsigned int)tag
+- (void)timingTestWithTag:(uint32_t)tag
 {
    AQTPlotBuilder *pb;
    

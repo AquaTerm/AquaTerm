@@ -22,12 +22,12 @@
 -(NSSize)canvasSize;
 -(NSRect)dirtyRect;
 -(BOOL)isDirty;
--(int)count;
+-(int32_t)count;
 -(void)addObject:(AQTGraphic *)graphic;
 -(void)addObjectsFromArray:(NSArray *)graphics;
 -(NSArray *)modelObjects;
 -(void)removeAllObjects;
--(void)removeObjectAtIndex:(unsigned)i;
+-(void)removeObjectAtIndex:(uint32_t)i;
 -(void)setTitle:(NSString *)newTitle;
 -(NSString *)title;
 @end
