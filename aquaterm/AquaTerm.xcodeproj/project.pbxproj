@@ -6,6 +6,21 @@
 	objectVersion = 42;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		CB2F5A2E1322D53F00228657 /* Package */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = CB2F5A351322D56F00228657 /* Build configuration list for PBXAggregateTarget "Package" */;
+			buildPhases = (
+				CB2F5A2D1322D53F00228657 /* ShellScript */,
+			);
+			dependencies = (
+				CB2F5A321322D54A00228657 /* PBXTargetDependency */,
+			);
+			name = Package;
+			productName = Package;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		CB12640607CB5F5A00EF1763 /* AquaTerm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB12640507CB5F5A00EF1763 /* AquaTerm.framework */; };
 		CB2CC10F0677017B0042863D /* AQTModelAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CB2CC10D0677017B0042863D /* AQTModelAdditions.h */; };
@@ -83,6 +98,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		CB2F5A311322D54A00228657 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC4B42705E4C784001BE8D7 /* AquaTerm */;
+			remoteInfo = AquaTerm;
+		};
 		CB9125B607CB4C15001D5EAF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -563,6 +585,7 @@
 				CBC4B42705E4C784001BE8D7 /* AquaTerm */,
 				CBAA608105E7AFA7009B33CD /* Distro */,
 				CB91251207CB3BDE001D5EAF /* AQTFwk */,
+				CB2F5A2E1322D53F00228657 /* Package */,
 			);
 		};
 /* End PBXProject section */
@@ -602,6 +625,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CB2F5A2D1322D53F00228657 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here\n/Developer/usr/bin/packagemaker --doc $SRCROOT/AquaTerm10.5+.pmdoc --out $BUILT_PRODUCTS_DIR/AquaTermInstaller.pkg";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CB91251007CB3BDE001D5EAF /* Sources */ = {
@@ -645,6 +684,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		CB2F5A321322D54A00228657 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC4B42705E4C784001BE8D7 /* AquaTerm */;
+			targetProxy = CB2F5A311322D54A00228657 /* PBXContainerItemProxy */;
+		};
 		CB9125B707CB4C15001D5EAF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CB91251207CB3BDE001D5EAF /* AQTFwk */;
@@ -744,6 +788,27 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CB2F5A2F1322D53F00228657 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Package;
+			};
+			name = Development;
+		};
+		CB2F5A301322D53F00228657 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Package;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
 		CB699C7908953AAD00C4B248 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -994,6 +1059,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CB2F5A351322D56F00228657 /* Build configuration list for PBXAggregateTarget "Package" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB2F5A2F1322D53F00228657 /* Development */,
+				CB2F5A301322D53F00228657 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
 		CB699C7808953AAD00C4B248 /* Build configuration list for PBXLegacyTarget "Docs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
