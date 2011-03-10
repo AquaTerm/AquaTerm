@@ -43,20 +43,33 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+  AQTRect r;
+  AQTSize s;
+
   [super encodeWithCoder:coder];
   [coder encodeObject:bitmap];
-  [coder encodeValueOfObjCType:@encode(NSSize) at:&bitmapSize];
-  [coder encodeValueOfObjCType:@encode(NSRect) at:&_bounds];
+  // 64bit compatibility
+  s.width = bitmapSize.width; s.height = bitmapSize.height;
+  [coder encodeValueOfObjCType:@encode(AQTSize) at:&s];
+  r.origin.x = _bounds.origin.x; r.origin.y = _bounds.origin.y;
+  r.size.width = _bounds.size.width; r.size.height = _bounds.size.height;
+  [coder encodeValueOfObjCType:@encode(AQTRect) at:&r];
   [coder encodeValueOfObjCType:@encode(AQTAffineTransformStruct) at:&transform];
   [coder encodeValueOfObjCType:@encode(BOOL) at:&fitBounds];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
+  AQTRect r;
+  AQTSize s;
+
   self = [super initWithCoder:coder];
   bitmap = [[coder decodeObject] retain];
-  [coder decodeValueOfObjCType:@encode(NSSize) at:&bitmapSize];
-  [coder decodeValueOfObjCType:@encode(NSRect) at:&_bounds];
+  [coder decodeValueOfObjCType:@encode(AQTSize) at:&s];
+  bitmapSize.width = s.width; bitmapSize.height = s.height;
+  [coder decodeValueOfObjCType:@encode(AQTRect) at:&r];
+  _bounds.origin.x = r.origin.x; _bounds.origin.y = r.origin.y;
+  _bounds.size.width = r.size.width; _bounds.size.height = r.size.height;
   [coder decodeValueOfObjCType:@encode(AQTAffineTransformStruct) at:&transform];
   [coder decodeValueOfObjCType:@encode(BOOL) at:&fitBounds];
   return self;
