@@ -19,7 +19,7 @@
 
 #define TITLEBAR_HEIGHT 22.0
 #define WINDOW_MIN_WIDTH 200.0
-#define WINDOW_MAX_WIDTH 1000.0
+#define WINDOW_MAX_WIDTH 4096.0
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
