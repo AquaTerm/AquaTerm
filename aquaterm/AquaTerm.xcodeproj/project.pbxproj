@@ -581,10 +581,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F5DB1B640219BFD2014110D6 /* Docs */,
 				CBC4B42705E4C784001BE8D7 /* AquaTerm */,
-				CBAA608105E7AFA7009B33CD /* Distro */,
 				CB91251207CB3BDE001D5EAF /* AQTFwk */,
+				F5DB1B640219BFD2014110D6 /* Docs */,
+				CBAA608105E7AFA7009B33CD /* Distro */,
 				CB2F5A2E1322D53F00228657 /* Package */,
 			);
 		};
