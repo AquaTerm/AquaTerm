@@ -102,7 +102,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = CBC4B42705E4C784001BE8D7 /* AquaTerm */;
+			remoteGlobalIDString = CBC4B42705E4C784001BE8D7;
 			remoteInfo = AquaTerm;
 		};
 		CB9125B607CB4C15001D5EAF /* PBXContainerItemProxy */ = {
@@ -931,7 +931,7 @@
 				BUILD_VARIANTS = normal;
 				COPY_PHASE_STRIP = NO;
 				DEPLOYMENT_POSTPROCESSING = NO;
-				FRAMEWORK_SEARCH_PATHS = /Volumes/Ior/Source/aquaterm/build;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -941,7 +941,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
 				INSTALL_PATH = "$(USER_APPS_DIR)";
-				LIBRARY_SEARCH_PATHS = /tmp/AquaTerm.dst/usr/local/lib;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -1056,6 +1056,133 @@
 			};
 			name = Deployment;
 		};
+		E8D19EF91335594E00B4ECDD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SDKROOT = "";
+			};
+			name = Default;
+		};
+		E8D19EFA1335594E00B4ECDD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				BUILD_VARIANTS = normal;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
+				INSTALL_PATH = "$(USER_APPS_DIR)";
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PRODUCT_NAME = AquaTerm;
+				SDKROOT = "";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
+		E8D19EFB1335594E00B4ECDD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "AquaTerm.framework-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AquaTerm;
+				SDKROOT = "";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
+		E8D19EFC1335594E00B4ECDD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Docs;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
+		E8D19EFD1335594E00B4ECDD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Distro;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
+		E8D19EFE1335594E00B4ECDD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Package;
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1064,54 +1191,60 @@
 			buildConfigurations = (
 				CB2F5A2F1322D53F00228657 /* Development */,
 				CB2F5A301322D53F00228657 /* Deployment */,
+				E8D19EFE1335594E00B4ECDD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Default;
 		};
 		CB699C7808953AAD00C4B248 /* Build configuration list for PBXLegacyTarget "Docs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB699C7908953AAD00C4B248 /* Development */,
 				CB699C7A08953AAD00C4B248 /* Deployment */,
+				E8D19EFC1335594E00B4ECDD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Default;
 		};
 		CB699C7D08953AAD00C4B248 /* Build configuration list for PBXNativeTarget "AQTFwk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB699C7E08953AAD00C4B248 /* Development */,
 				CB699C7F08953AAD00C4B248 /* Deployment */,
+				E8D19EFB1335594E00B4ECDD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Default;
 		};
 		CB699C8208953AAD00C4B248 /* Build configuration list for PBXNativeTarget "AquaTerm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB699C8308953AAD00C4B248 /* Development */,
 				CB699C8408953AAD00C4B248 /* Deployment */,
+				E8D19EFA1335594E00B4ECDD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Default;
 		};
 		CB699C8708953AAD00C4B248 /* Build configuration list for PBXLegacyTarget "Distro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB699C8808953AAD00C4B248 /* Development */,
 				CB699C8908953AAD00C4B248 /* Deployment */,
+				E8D19EFD1335594E00B4ECDD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Default;
 		};
 		CB699C8C08953AAD00C4B248 /* Build configuration list for PBXProject "AquaTerm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB699C8D08953AAD00C4B248 /* Development */,
 				CB699C8E08953AAD00C4B248 /* Deployment */,
+				E8D19EF91335594E00B4ECDD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Default;
 		};
 /* End XCConfigurationList section */
 	};
