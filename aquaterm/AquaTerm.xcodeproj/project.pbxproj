@@ -167,6 +167,7 @@
 		CB9C49180BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossWhite.tiff; sourceTree = "<group>"; };
 		CB9C491A0BB1C3D700FDF03C /* English */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = English; path = English.lproj/crossYellow.tiff; sourceTree = "<group>"; };
 		CBAA608305E7AFF0009B33CD /* distroMakefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 30; path = distroMakefile; sourceTree = "<group>"; };
+		CBAD39C913A2BAF100DA13A1 /* postflight */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = postflight; path = pmscripts/postflight; sourceTree = "<group>"; };
 		CBB06FE805740EB900D208BA /* AQTFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQTFunctions.h; sourceTree = "<group>"; };
 		CBB06FE905740EB900D208BA /* AQTFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQTFunctions.m; sourceTree = "<group>"; };
 		CBB800C60723A4740068A0C9 /* AQTStringDrawingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AQTStringDrawingAdditions.h; sourceTree = "<group>"; };
@@ -294,6 +295,7 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				CBC4B44A05E4C784001BE8D7 /* AquaTerm.app-Info.plist */,
 				CB91251407CB3BDE001D5EAF /* AquaTerm.framework-Info.plist */,
+				CBAD39C913A2BAF100DA13A1 /* postflight */,
 			);
 			name = AquaTerm;
 			sourceTree = "<group>";
@@ -638,7 +640,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# shell script goes here\n/Developer/usr/bin/packagemaker --doc $SRCROOT/AquaTerm10.5+.pmdoc --out $BUILT_PRODUCTS_DIR/AquaTermInstaller.pkg";
+			shellScript = "# shell script goes here\n\nif [ -e $BUILT_PRODUCTS_DIR/stage ]; then\n\trm -rf $BUILT_PRODUCTS_DIR/stage\nfi\nmkdir $BUILT_PRODUCTS_DIR/stage\n\n/Developer/usr/bin/packagemaker --doc $SRCROOT/AquaTerm10.5+.pmdoc --out $BUILT_PRODUCTS_DIR/stage/AquaTermInstaller.pkg\n\ncp $SRCROOT/{ChangeLog,ReleaseNotes,README} $BUILT_PRODUCTS_DIR/stage/.\ncp -R $SRCROOT/../adapters $BUILT_PRODUCTS_DIR/stage/.\nfind $BUILT_PRODUCTS_DIR/stage/adapters -name 'CVS' -type d -exec rm -rf {} \\;\n\nhdiutil create $BUILT_PRODUCTS_DIR/AquaTerm1.1.0.dmg -volname \"AquaTerm1.1.0\" -fs HFS+ -srcfolder \"$BUILT_PRODUCTS_DIR/stage\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

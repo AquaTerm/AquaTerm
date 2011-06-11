@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# Installer postflight script
+
+VERSIONS=".1.0.0 .1.0.1 .1.1.0"
+PREFIX=/usr/local
+
+LIBDIR=$PREFIX/lib
+HEADERDIR=$PREFIX/include/aquaterm
+
+## Symlinks to framework in /usr/local/lib
+if [ ! -e $LIBDIR ]; then
+    mkdir -p $LIBDIR
+    echo "[Created] $LIBDIR"
+fi
+
+for version in "" $VERSIONS
+do
+    link=$LIBDIR/libaquaterm${version}.dylib
+    echo "[Checking] $link"
+
+    if [ -e $link ]; then
+        rm $link
+        echo "[Deleted] $link"
+    fi
+    ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm $link
+    echo "[Updated] $link"
+done
+
+## Symlinks to framework in /usr/local/include/aquaterm
+if [ -e $HEADERDIR ]; then
+    rm -rf $HEADERDIR
+    echo "[Removed old] $HEADERDIR"
+fi
+mkdir -p $HEADERDIR
+ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/Headers/* $HEADERDIR/.
+echo "[Created] $HEADERDIR"
+
+exit 0

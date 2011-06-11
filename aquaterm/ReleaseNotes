@@ -1,4 +1,5 @@
 AquaTerm 1.1.0
+  Fixes for bugs on 64bit systems (10.5 and 10.6). Contributed by Mojca Miklavec and Alexander Wittig.
   Added alpha channel handling to API, see AQTAdapter.h and aquaterm.h. (#1605002)
   Made crosshair color user selectable in Preferences. (Michael Buzzi)
   Appended virtual keycode enumerator to event string for key presses. (Michael Buzzi)

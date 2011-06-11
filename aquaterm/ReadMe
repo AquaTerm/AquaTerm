@@ -1,9 +1,13 @@
-* How to use AquaTerm
-AquaTerm is a graphics viewer that can be used to easily add aqua graphics to (primarily scientific) legacy applications written in C, FORTRAN or any other language that can call C or Objective-C library functions.
 
-AquaTerm.app register with the system and responds to a (small) set of remote messages. The connection between the client and the server (AquaTerm.app) is handled by a shared lib (libaquaterm.dylib). The library exposes small and simple C and Objective-C interfaces (use either according to taste) which is tailored to suit procedural code. See AQTAdapter.h and aquaterm.h for details.     
 
-* Documentation
-The Objctive-C API is detailed in AQTAdapter.html which is generated from AQTAdapter.h using AutoDoc.
-The only documentation for the C API is aquaterm.h together with AQTAdapter.html.
-More documentation is, or will be, available at http://aquaterm.sourceforge.net
+AquaTerm 1.1.0 is a release mainly to fix compatibility problems with 64bit systems. It is an Intel-mac only release, and Mac OS X 10.5 or later is required to install. This version is not tested with Mac OS 10.7 (Lion).
+
+As far as we know, this is a fully backwards compatible release, i.e. no need to recompile programs using AquaTerm.
+
+The various language adapters (bindings) have not been tested with this release.
+
+Bridgesupport is availble (demos for python and ruby in adapters folder), but have not been tested with this release.
+
+
+
+
