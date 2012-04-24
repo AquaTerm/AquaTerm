@@ -222,7 +222,7 @@ static inline void NOOP_(id x, ...) {;}
 }
 
 /* This is a "housekeeping" method, to avoid buildup of hidden objects, does not imply redraw(?) */
-- (void)removeGraphicsInRect:(NSRect)targetRect
+- (void)removeGraphicsInRect:(AQTRect)targetRect
 {
    LOG(@"in --> %@ %s line %d", NSStringFromSelector(_cmd), __FILE__, __LINE__);
    [model removeGraphicsInRect:targetRect];

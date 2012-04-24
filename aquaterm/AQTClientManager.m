@@ -327,6 +327,7 @@
 - (void)clearPlotRect:(NSRect)aRect 
 {
    AQTPlotBuilder *pb;
+   AQTRect aqtRect;
    id <NSObject, AQTClientProtocol> thePlot;
 
    if (errorState == YES || _activePlotKey == nil) return;
@@ -345,7 +346,12 @@
             
       }
       // FIXME make sure in server that this combo doesn't draw unnecessarily
-      [thePlot removeGraphicsInRect:aRect];
+      // 64 bit compatibility
+      aqtRect.origin.x = aRect.origin.x;
+      aqtRect.origin.y = aRect.origin.y;
+      aqtRect.size.width = aRect.size.width;
+      aqtRect.size.height = aRect.size.height;
+      [thePlot removeGraphicsInRect:aqtRect];
       // [thePlot draw];
    NS_HANDLER
       // [localException raise];

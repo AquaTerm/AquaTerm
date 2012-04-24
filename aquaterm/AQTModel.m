@@ -43,6 +43,7 @@
 - (void)encodeWithCoder:(NSCoder *)coder
 {
   AQTSize s;
+  AQTRect r;
 
   [super encodeWithCoder:coder];
   [coder encodeObject:modelObjects];
@@ -50,16 +51,27 @@
   // 64bit compatibility
   s.width = canvasSize.width; s.height = canvasSize.height;
   [coder encodeValueOfObjCType:@encode(AQTSize) at:&s];
+  r.origin.x = dirtyRect.origin.x; r.origin.x = dirtyRect.origin.y;
+  r.size.width = dirtyRect.size.width; r.size.height = dirtyRect.size.height;
+  [coder encodeValueOfObjCType:@encode(AQTRect) at:&r];
+  [coder encodeValueOfObjCType:@encode(BOOL) at:&isDirty];
 }
 
 -(id)initWithCoder:(NSCoder *)coder
 {
   AQTSize s;
+  AQTRect r;
+
   self = [super initWithCoder:coder];
   modelObjects = [[coder decodeObject] retain];
   title = [[coder decodeObject] retain];
   [coder decodeValueOfObjCType:@encode(AQTSize) at:&s];
   canvasSize.width = s.width; canvasSize.height = s.height;
+  [coder decodeValueOfObjCType:@encode(AQTRect) at:&r];
+  dirtyRect.origin.x = r.origin.x; dirtyRect.origin.x = r.origin.y;
+  dirtyRect.size.width = r.size.width; dirtyRect.size.height = r.size.height;
+  [coder decodeValueOfObjCType:@encode(BOOL) at:&isDirty];
+
   return self;
 }
 

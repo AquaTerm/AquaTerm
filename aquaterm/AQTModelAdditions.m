@@ -36,14 +36,17 @@
 
 
 
-- (void)removeGraphicsInRect:(NSRect)targetRect
+- (void)removeGraphicsInRect:(AQTRect)aRect
 {
+    NSRect targetRect;
     NSRect testRect;
     NSRect clipRect = AQTRectFromSize([self canvasSize]);
     NSRect newBounds = NSZeroRect;
     int32_t i;
     int32_t  objectCount = [self count];
-    
+
+    targetRect.origin.x = aRect.origin.x; targetRect.origin.y = aRect.origin.y;
+    targetRect.size.width = aRect.size.width; targetRect.size.height = aRect.size.height;
     // check for nothing to remove or disjoint modelBounds <--> targetRect
     if (objectCount == 0 || AQTIntersectsRect(targetRect, [self bounds]) == NO)
     return;

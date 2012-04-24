@@ -13,5 +13,5 @@
 -(void)invalidate;
 -(void)clearDirtyRect;
 -(void)appendModel:(AQTModel *)newModel;
--(void)removeGraphicsInRect:(NSRect)targetRect;
+-(void)removeGraphicsInRect:(AQTRect)targetRect;
 @end
