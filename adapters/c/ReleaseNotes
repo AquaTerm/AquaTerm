@@ -1,9 +1,12 @@
 ---
+AquaTerm 1.1.1
+    Fix compiler warnings.
+
 AquaTerm 1.0.b1
     Correcting misuse of moveTo/addLineTo in demo.c
-    
+
 AquaTerm 1.0.a2
-   
+
 AquaTerm 1.0.a1
     Moved all common code into libaquaterm.dylib, all adapters link with this.
     Complete rewrite of common code, no reliance on AppKit (#605549)
@@ -11,7 +14,7 @@ AquaTerm 1.0.a1
 AquaTerm 0.3.1
     Minor fixes
     Added makefile that uses matwrap to create an adapter for octave from the C example
-    
+
 AquaTerm 0.3.0
     Updated drivers
 ===

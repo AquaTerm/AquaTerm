@@ -1,5 +1,7 @@
+#include <AquaTerm/aquaterm.h>
 #include <stdio.h>
-#include <aquaterm/aquaterm.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define TRUE 1
 #define FALSE 0

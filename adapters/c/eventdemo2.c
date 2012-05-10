@@ -1,5 +1,7 @@
+#include <AquaTerm/aquaterm.h>
 #include <stdio.h>
-#include <aquaterm/aquaterm.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -66,7 +68,7 @@ int main(void)
 void evth(int refNum, const char *event)
 {
    printf("cli:%d evt:%s\n", refNum, event);
-   switch (decodeEvent(event))
+   switch (decodeEvent((char *)event))
    {
       case 0: // Nil event
          printf("No action (ignoring)\n");

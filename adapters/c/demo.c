@@ -3,18 +3,19 @@
 //  AquaTerm
 //
 //  Created by Per Persson on Fri Nov 07 2003.
-//  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2003-2012 AquaTerm team. All rights reserved.
 //
 
 //
 // This file contains an example of what can be done with
-// AquaTerm and the corresponding library: libaqt.dylib
+// AquaTerm and the corresponding AquaTerm.framework
 //
 // This code can be build as a stand-alone executable (tool)
 // from the command line:
-// gcc -o demo demo.c -laquaterm -lobjc
+// gcc demo.c -o demo -framework AquaTerm
 
-#include "aquaterm/aquaterm.h"
+#include "AquaTerm/aquaterm.h"
+#include <stdio.h>
 #include <math.h>
 
 int main(void)
