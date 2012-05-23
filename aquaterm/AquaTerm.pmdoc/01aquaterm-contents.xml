@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<pkg-contents spec="1.12">
+	<f n="AquaTerm.app" o="root" g="admin" p="16893" pt="build/Deployment/AquaTerm.app" m="true" t="file">
+		<f n="Contents" o="root" g="admin" p="16893">
+			<f n="Info.plist" o="root" g="admin" p="33204">
+				<mod>mode</mod>
+			</f>
+			<f n="MacOS" o="root" g="admin" p="16893">
+				<f n="AquaTerm" o="root" g="admin" p="33277">
+					<mod>mode</mod>
+				</f>
+				<mod>mode</mod>
+			</f>
+			<f n="PkgInfo" o="root" g="admin" p="33204">
+				<mod>mode</mod>
+			</f>
+			<f n="Resources" o="root" g="admin" p="16893">
+				<f n="AQTAdapter.html" o="root" g="admin" p="33204">
+					<mod>mode</mod>
+				</f>
+				<f n="ColorInspector.nib" o="root" g="admin" p="16893">
+					<f n="objects.nib" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<mod>mode</mod>
+				</f>
+				<f n="English.lproj" o="root" g="admin" p="16893">
+					<f n="AQTWindow.nib" o="root" g="admin" p="16893">
+						<f n="objects.nib" o="root" g="admin" p="33204">
+							<mod>mode</mod>
+						</f>
+						<mod>mode</mod>
+					</f>
+					<f n="AquaTerm.icns" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="Credits.rtf" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="crossBlack.tiff" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="crossBlue.tiff" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="crossGreen.tiff" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="crossRed.tiff" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="crossWhite.tiff" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="crossYellow.tiff" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<f n="MainMenu1.nib" o="root" g="admin" p="16893">
+						<f n="objects.nib" o="root" g="admin" p="33204">
+							<mod>mode</mod>
+						</f>
+						<mod>mode</mod>
+					</f>
+					<f n="Preferences.nib" o="root" g="admin" p="16893">
+						<f n="objects.nib" o="root" g="admin" p="33204">
+							<mod>mode</mod>
+						</f>
+						<mod>mode</mod>
+					</f>
+					<mod>mode</mod>
+				</f>
+				<f n="ExtendSavePanel.nib" o="root" g="admin" p="16893">
+					<f n="objects.nib" o="root" g="admin" p="33204">
+						<mod>mode</mod>
+					</f>
+					<mod>mode</mod>
+				</f>
+				<f n="help.html" o="root" g="admin" p="33204">
+					<mod>mode</mod>
+				</f>
+				<f n="ReadMe.rtf" o="root" g="admin" p="33204">
+					<mod>mode</mod>
+				</f>
+				<f n="ReleaseNotes" o="root" g="admin" p="33204">
+					<mod>mode</mod>
+				</f>
+				<mod>mode</mod>
+			</f>
+			<mod>mode</mod>
+		</f>
+		<mod>mode</mod>
+	</f>
+</pkg-contents>

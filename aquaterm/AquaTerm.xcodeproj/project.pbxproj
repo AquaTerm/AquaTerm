@@ -640,7 +640,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# shell script goes here\n\nif [ -e $BUILT_PRODUCTS_DIR/stage ]; then\n\trm -rf $BUILT_PRODUCTS_DIR/stage\nfi\nmkdir $BUILT_PRODUCTS_DIR/stage\n\n/Developer/usr/bin/packagemaker --doc $SRCROOT/AquaTerm10.5+.pmdoc --out $BUILT_PRODUCTS_DIR/stage/AquaTermInstaller.pkg\n\ncp $SRCROOT/{ChangeLog,ReleaseNotes,README} $BUILT_PRODUCTS_DIR/stage/.\ncp -R $SRCROOT/../adapters $BUILT_PRODUCTS_DIR/stage/.\nfind $BUILT_PRODUCTS_DIR/stage/adapters -name 'CVS' -type d -exec rm -rf {} \\;\n\nhdiutil create $BUILT_PRODUCTS_DIR/AquaTerm1.1.0.dmg -volname \"AquaTerm1.1.0\" -fs HFS+ -srcfolder \"$BUILT_PRODUCTS_DIR/stage\"";
+			shellScript = "# shell script goes here\n\nif [ -e $BUILT_PRODUCTS_DIR/stage ]; then\n\trm -rf $BUILT_PRODUCTS_DIR/stage\nfi\nmkdir $BUILT_PRODUCTS_DIR/stage\n\n/Developer/usr/bin/packagemaker --doc $SRCROOT/AquaTerm.pmdoc --out $BUILT_PRODUCTS_DIR/stage/AquaTermInstaller.pkg\n\ncp $SRCROOT/{ChangeLog,ReleaseNotes,README} $BUILT_PRODUCTS_DIR/stage/.\ncp -R $SRCROOT/../adapters $BUILT_PRODUCTS_DIR/stage/.\nfind $BUILT_PRODUCTS_DIR/stage/adapters -name 'CVS' -type d -exec rm -rf {} \\;\n\nhdiutil create $BUILT_PRODUCTS_DIR/AquaTerm1.1.1.dmg -volname \"AquaTerm1.1.1\" -fs HFS+ -srcfolder \"$BUILT_PRODUCTS_DIR/stage\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

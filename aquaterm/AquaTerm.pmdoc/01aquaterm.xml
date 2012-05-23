@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<pkgref spec="1.12" uuid="4CB154B2-D189-4440-A366-77EB7D248377">
+	<config>
+		<identifier>net.sourceforge.aquaterm.aquaterm.AquaTerm.pkg</identifier>
+		<version>1.0</version>
+		<description/>
+		<post-install type="none"/>
+		<requireAuthorization/>
+		<installFrom relative="true" includeRoot="true">build/Deployment/AquaTerm.app</installFrom>
+		<installTo>/Applications</installTo>
+		<flags>
+			<followSymbolicLinks/>
+		</flags>
+		<packageStore type="internal"/>
+		<mod>installFrom.isRelativeType</mod>
+		<mod>relocatable</mod>
+		<mod>parent</mod>
+		<mod>installTo</mod>
+	</config>
+	<contents>
+		<file-list>01aquaterm-contents.xml</file-list>
+		<component id="net.sourceforge.aquaterm" path="build/Deployment/AquaTerm.app" version="1.1.1">
+			<mod>isRelocatable</mod>
+			<mod>isDowngradeable</mod>
+		</component>
+		<filter>/CVS$</filter>
+		<filter>/\.svn$</filter>
+		<filter>/\.cvsignore$</filter>
+		<filter>/\.cvspass$</filter>
+		<filter>/\.DS_Store$</filter>
+	</contents>
+</pkgref>
