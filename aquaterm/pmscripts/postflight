@@ -8,12 +8,7 @@ PREFIX=/usr/local
 LIBDIR=$PREFIX/lib
 HEADERDIR=$PREFIX/include/aquaterm
 
-## Symlinks to framework in /usr/local/lib
-if [ ! -e $LIBDIR ]; then
-    mkdir -p $LIBDIR
-    echo "[Created] $LIBDIR"
-fi
-
+## Remove symlinks to framework in /usr/local/lib
 for version in "" $VERSIONS
 do
     link=$LIBDIR/libaquaterm${version}.dylib
@@ -23,17 +18,12 @@ do
         rm $link
         echo "[Deleted] $link"
     fi
-    ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/AquaTerm $link
-    echo "[Updated] $link"
 done
 
-## Symlinks to framework in /usr/local/include/aquaterm
+## Remove symlinks to framework in /usr/local/include/aquaterm
 if [ -e $HEADERDIR ]; then
     rm -rf $HEADERDIR
     echo "[Removed old] $HEADERDIR"
 fi
-mkdir -p $HEADERDIR
-ln -s /Library/Frameworks/AquaTerm.framework/Versions/A/Headers/* $HEADERDIR/.
-echo "[Created] $HEADERDIR"
 
 exit 0
