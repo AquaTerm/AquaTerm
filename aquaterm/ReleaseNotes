@@ -1,12 +1,23 @@
+AquaTerm 1.1.1
+  User visible changes (only visible in binary release):
+  * Symbolic links $PREFIX/lib/libaquaterm*.dylib have been removed.
+    Use '-framework AquaTerm' instead of '-laquaterm'
+  * Headers have been removed from $PREFIX/include/aquaterm.
+    Use '#import <AquaTerm/AQTAdapter.h>' instead of '#import <aquaterm/AQTAdapter.h>' combined with '-framework Aquaterm'.
+  Bugfixes:
+  * Text labels were initially transparent due to wrong initialization.
+  * Some 64-bit compatibility leftovers prevented cleaning the plots.
+  Source code repository has been moved from SourceForge to https://github.com/AquaTerm.
+
 AquaTerm 1.1.0
   Fixes for bugs on 64bit systems (10.5 and 10.6). Contributed by Mojca Miklavec and Alexander Wittig.
   Added alpha channel handling to API, see AQTAdapter.h and aquaterm.h. (#1605002)
   Made crosshair color user selectable in Preferences. (Michael Buzzi)
   Appended virtual keycode enumerator to event string for key presses. (Michael Buzzi)
-	Non-printing and non-ASCII key events will return an empty string, e.g.:
-	Pressing 'q' will return event string "2:{58, 170}:q:12" whereas 
-	pressing right arrow will return event string "2:{66, 162}::124", where
-	12 and 124 are the virtual keycodes for 'q' and right arrow, respectively.   
+      Non-printing and non-ASCII key events will return an empty string, e.g.:
+      Pressing 'q' will return event string "2:{58, 170}:q:12" whereas
+      pressing right arrow will return event string "2:{66, 162}::124", where
+      12 and 124 are the virtual keycodes for 'q' and right arrow, respectively.
   Made landscape printing the default layout. (Jeremy Conlin)
   Ada bindings (Contributed by Marius Amado-Alves)
   BridgeSupport for Python, Ruby, and others. (Contributed by Kristofer Henriksson)

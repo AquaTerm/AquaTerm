@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by Bob Savage on Mon Jan 28 2002.
-//  Copyright (c) 2002-2003 Aquaterm. All rights reserved.
+//  Copyright (c) 2002-2012 The AquaTerm Team. All rights reserved.
 //
 
 #import "AQTColorMap.h"

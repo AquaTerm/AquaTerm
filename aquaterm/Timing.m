@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by Per Persson on Fri Nov 07 2003.
-//  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2003-2012 The AquaTerm Team. All rights reserved.
 //
 
 //

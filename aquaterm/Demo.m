@@ -3,12 +3,11 @@
 //  AquaTerm
 //
 //  Created by Per Persson on Fri Nov 07 2003.
-//  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2003-2012 The AquaTerm Team. All rights reserved.
 //
 
 //
-// This file contains an example of what can be done with
-// AquaTerm and the corresponding library: libaqt.dylib
+// This file contains an example of what can be done with AquaTerm
 //
 // This code can be build as a stand-alone executable (tool)
 // from the command line:

@@ -1,13 +1,8 @@
 
-
-AquaTerm 1.1.0 is a release mainly to fix compatibility problems with 64bit systems. It is an Intel-mac only release, and Mac OS X 10.5 or later is required to install. This version is not tested with Mac OS 10.7 (Lion).
+AquaTerm 1.1.1 is a release mainly to fix compatibility problems with 64bit systems. It is an Intel-mac only release, and Mac OS X 10.5 or later is required to install.
 
 As far as we know, this is a fully backwards compatible release, i.e. no need to recompile programs using AquaTerm.
 
 The various language adapters (bindings) have not been tested with this release.
 
 Bridgesupport is availble (demos for python and ruby in adapters folder), but have not been tested with this release.
-
-
-
-

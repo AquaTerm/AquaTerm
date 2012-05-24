@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by per on Fri Nov 02 2001.
-//  Copyright (c) 2001 Aquaterm. All rights reserved.
+//  Copyright (c) 2001-2012 The AquaTerm Team. All rights reserved.
 //
 
 #import "AQTModel.h"

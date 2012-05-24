@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by Per Persson on Sat Jul 12 2003.
-//  Copyright (c) 2003-2004 AquaTerm. 
+//  Copyright (c) 2003-2012 The AquaTerm team.
 //
 
 #include <stdint.h>

@@ -3,7 +3,7 @@
 //  AquaTerm
 //
 //  Created by ppe on Wed May 16 2001.
-//  Copyright (c) 2001, 2002 Aquaterm. All rights reserved.
+//  Copyright (c) 2001-2012 The AquaTerm Team. All rights reserved.
 //
 
 #import "AQTGraphic.h"
