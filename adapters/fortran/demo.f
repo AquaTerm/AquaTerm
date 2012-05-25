@@ -20,7 +20,7 @@ C     output strings
       parameter (pi = 3.14152692)
       integer middle, baseline, bottom, top, left, center, right
 C     Declare the image: it will be 2x2 in size.
-      integer*1 rgbImage(6,2)
+      character rgbImage(6,2)
 C     
 C     labels (probably better ways to do this...)
 C     
@@ -247,21 +247,21 @@ C     Alternative to polyline:
 
 C     Images
 C     Pixel(1,1) RGB (red)
-      rgbImage(1,1) = 255
-      rgbImage(2,1) = 0
-      rgbImage(3,1) = 0
+      rgbImage(1,1) = achar(255)
+      rgbImage(2,1) = achar(0)
+      rgbImage(3,1) = achar(0)
 C     Pixel(2,1) RGB (green)
-      rgbImage(4,1) = 0
-      rgbImage(5,1) = 255
-      rgbImage(6,1) = 0
+      rgbImage(4,1) = achar(0)
+      rgbImage(5,1) = achar(255)
+      rgbImage(6,1) = achar(0)
 C     Pixel(1,2) RGB (blue)
-      rgbImage(1,2) = 0
-      rgbImage(2,2) = 0
-      rgbImage(3,2) = 255
+      rgbImage(1,2) = achar(0)
+      rgbImage(2,2) = achar(0)
+      rgbImage(3,2) = achar(255)
 C     Pixel(2,2) RGB (black)
-      rgbImage(4,2) = 0
-      rgbImage(5,2) = 0
-      rgbImage(6,2) = 0
+      rgbImage(4,2) = achar(0)
+      rgbImage(5,2) = achar(0)
+      rgbImage(6,2) = achar(0)
       call aqtTakeColorFromColormapEntry(1)
       call aqtAddLabel('Images', 320., 220., 0.0, left)
       call aqtAddImageWithBitmap(rgbImage, 2, 2, 328., 200., 4., 4.)
