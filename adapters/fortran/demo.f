@@ -114,7 +114,8 @@ C     Continuous colors
  20   end do
 C     Lines
       call aqtTakeColorFromColormapEntry(1)
-      do 30 f = 1.0, 12.0, 2.0
+      do 30 i = 1, 12, 2
+         f = i
          call aqtSetLinewidth(f/2.0)
          call aqtMoveTo(30., 200.5+f*10.)
          call aqtAddLineTo(200., 200.5+f*10.)
