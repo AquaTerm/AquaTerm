@@ -1,0 +1,26 @@
+This adapter provides a FreePascal wrapper unit for the AquaTerm Graphics Terminal.
+All sub-routines listed in aquaterm/aquaterm.h are supported.
+
+To test the Pascal examples, just run the makefile:
+
+  make
+
+then test by
+
+  ./demo
+  ./eventdemo1
+  ./eventdemo2
+
+The files have been tested with FreePascal, which can be obtained from
+www.freepascal.org. They may also work with other Pascal compilers, in
+particular GNU Pascal, but this is untested.
+
+Add aquaterm to your "uses" section. You can place aquaterm.pp next to your own
+sources, or compile it separately. If fpc cannot find the unit files, you may
+have to pass the corresponding path to fpc by the  option "-FuPathToUnit"
+
+If the linker cannot find the AquaTerm library, you may have to pass the
+corresponding path from fpc to the linker by the fpc option "-FlPathToLibrary"
+
+The examples are based on the Fortran examples.
+For questions contact karl-michael.schindler{at}web.de

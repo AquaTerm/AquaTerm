@@ -1,5 +1,6 @@
 AquaTerm 1.1.1
-  User visible changes (only visible in binary release):
+  * Added Pascal adapter contributed by Karl-Michael Schindler.
+  Only visible in binary release:
   * Symbolic links $PREFIX/lib/libaquaterm*.dylib have been removed.
     Use '-framework AquaTerm' instead of '-laquaterm'
   * Headers have been removed from $PREFIX/include/aquaterm.

@@ -1,0 +1,8 @@
+2012-05-24 23:30  kms
+
+	* README: add details about how to use the unit.
+
+2010-07-07 10:30  kms
+
+	* ChangeLog, README, Makefile, aquaterm.pp, demo.pp,
+	  eventdemo1.pp, eventdemo2.pp: Initial import.
