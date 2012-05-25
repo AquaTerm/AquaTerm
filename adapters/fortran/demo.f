@@ -3,11 +3,11 @@ C     AquaTerm
 C     
 C     Created by Per Persson on Fri Nov 07 2003.
 C     Modified by Joe Koski on Mon Feb 09 2004.
-C     Copyright (c) 2003-2004 AquaTerm Project. All rights reserved.
+C     Copyright (c) 2003-2012 The AquaTerm Team. All rights reserved.
 C     
 C     
 C     This file contains an example of what can be done with
-C     AquaTerm and the corresponding library: libaquaterm.dylib
+C     AquaTerm and the corresponding AquaTerm.framework
 C     
       program demo
       integer i
