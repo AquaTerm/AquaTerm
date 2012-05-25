@@ -18,56 +18,56 @@ void _f2aqtconvertstring(char *dst, int dstLen, const char *src, int srcLen)
 /*" Class initialization etc."*/
 int aqtinit_(void) // FIXME: retval?
 {
-   return aqtInit();
+	return aqtInit();
 }
 
 void aqtterminate_(void)
 {
-   aqtTerminate();
+	aqtTerminate();
 }
 
 /*" Control operations "*/
 void aqtopenplot_(int *refNum) // FIXME: retval?
 {
-   aqtOpenPlot(*refNum);
+	aqtOpenPlot(*refNum);
 }
 
 int aqtselectplot_(int *refNum) // FIXME: retval?
 {
-   return aqtSelectPlot(*refNum);
+	return aqtSelectPlot(*refNum);
 }
 
 void aqtsetplotsize_(float *width, float *height)
 {
-   aqtSetPlotSize(*width, *height);
+	aqtSetPlotSize(*width, *height);
 }
 
 void aqtsetplottitle_(const char *title, int strLen) // FIXME: Fortran calling conventions
 {
-   char strBuf[32];
-   _f2aqtconvertstring(strBuf, sizeof(strBuf), title, strLen);
-   aqtSetPlotTitle(strBuf);
+	char strBuf[32];
+	_f2aqtconvertstring(strBuf, sizeof(strBuf), title, strLen);
+	aqtSetPlotTitle(strBuf);
 }
 
 void aqtrenderplot_(void)
 {
-   aqtRenderPlot();
+	aqtRenderPlot();
 }
 
 void aqtclearplot_(void)
 {
-   aqtClearPlot();
+	aqtClearPlot();
 }
 
 void aqtcloseplot_(void)
 {
-   aqtClosePlot();
+	aqtClosePlot();
 }
 
 /*" Event handling "*/
 int aqtwaitnextevent_(char *buffer) // FIXME: retval?
 {
-   return aqtWaitNextEvent(buffer);
+	return aqtWaitNextEvent(buffer);
 }
 
 /*" Plotting related commands "*/
@@ -75,135 +75,135 @@ int aqtwaitnextevent_(char *buffer) // FIXME: retval?
 /*" Colormap (utility  "*/
 int aqtcolormapsize_(void)
 {
-   return aqtColormapSize();
+	return aqtColormapSize();
 }
 
 void aqtsetcolormapentry_(int *entryIndex, float *r, float *g, float *b)
 {
-   aqtSetColormapEntry(*entryIndex, *r, *g, *b);
+	aqtSetColormapEntry(*entryIndex, *r, *g, *b);
 }
 
 void aqtgetcolormapentry_(int *entryIndex, float *r, float *g, float *b)
 {
-   aqtGetColormapEntry(*entryIndex, r, g, b);
+	aqtGetColormapEntry(*entryIndex, r, g, b);
 }
 
 void aqttakecolorfromcolormapentry_(int *index)
 {
-   aqtTakeColorFromColormapEntry(*index);
+	aqtTakeColorFromColormapEntry(*index);
 }
 
 void aqttakebackgroundcolorfromcolormapentry_(int *index)
 {
-   aqtTakeBackgroundColorFromColormapEntry(*index);
+	aqtTakeBackgroundColorFromColormapEntry(*index);
 }
 
 /*" Color handling "*/
 void aqtsetcolor_(float *r, float *g, float *b)
 {
-   aqtSetColor(*r, *g, *b);
+	aqtSetColor(*r, *g, *b);
 }
 
 void aqtsetbackgroundcolor_(float *r, float *g, float *b)
 {
-   aqtSetBackgroundColor(*r, *g, *b);
+	aqtSetBackgroundColor(*r, *g, *b);
 }
 
 void aqtgetcolor_(float *r, float *g, float *b)
 {
-   aqtGetColor(r, g, b);
+	aqtGetColor(r, g, b);
 }
 
 /*" Text handling "*/
- void aqtsetfontname_(const char *newFontname, int strLen)
+void aqtsetfontname_(const char *newFontname, int strLen)
 {
-    char strBuf[64];
-    _f2aqtconvertstring(strBuf, sizeof(strBuf), newFontname, strLen);
-    aqtSetFontname(strBuf);
+	char strBuf[64];
+	_f2aqtconvertstring(strBuf, sizeof(strBuf), newFontname, strLen);
+	aqtSetFontname(strBuf);
 }
 
 void aqtsetfontsize_(float *newFontsize)
 {
-   aqtSetFontsize(*newFontsize);
+	aqtSetFontsize(*newFontsize);
 }
 
 void aqtaddlabel_(const char *text, float *x, float *y, float *angle, int *align, int strLen)
 {
-   char strBuf[64];
-   _f2aqtconvertstring(strBuf, sizeof(strBuf), text, strLen);
-   aqtAddLabel(strBuf, *x, *y, *angle, *align);
+	char strBuf[64];
+	_f2aqtconvertstring(strBuf, sizeof(strBuf), text, strLen);
+	aqtAddLabel(strBuf, *x, *y, *angle, *align);
 }
 
 /*" Line handling "*/
 void aqtsetlinewidth_(float *newLinewidth)
 {
-   aqtSetLinewidth(*newLinewidth);
+	aqtSetLinewidth(*newLinewidth);
 }
 
 void aqtsetlinecapstyle_(int *capStyle)
 {
-   aqtSetLineCapStyle(*capStyle);
+	aqtSetLineCapStyle(*capStyle);
 }
 
 void aqtmoveto_(float *x, float *y)
 {
-   aqtMoveTo(*x, *y);
+	aqtMoveTo(*x, *y);
 }
 
 void aqtaddlineto_(float *x, float *y)
 {
-   aqtAddLineTo(*x, *y);
+	aqtAddLineTo(*x, *y);
 }
 
 void aqtaddpolyline_(float *x, float *y, int *pc)
 {
-   aqtAddPolyline(x, y, *pc);
+	aqtAddPolyline(x, y, *pc);
 }
 
 /*" Rect and polygon handling"*/
- void aqtmovetovertex_(float *x, float *y)
+void aqtmovetovertex_(float *x, float *y)
 {
-    aqtMoveToVertex(*x, *y);
+	aqtMoveToVertex(*x, *y);
 }
 
 void aqtaddedgetovertex_(float *x, float *y)
 {
-   aqtAddEdgeToVertex(*x, *y);
+	aqtAddEdgeToVertex(*x, *y);
 }
 
 void aqtaddpolygon_(float *x, float *y, int *pc)
 {
-   aqtAddPolygon(x, y, *pc);
+	aqtAddPolygon(x, y, *pc);
 }
 
 void aqtaddfilledrect_(float *originX, float *originY, float *width, float *height)
 {
-   aqtAddFilledRect(*originX, *originY, *width, *height);
+	aqtAddFilledRect(*originX, *originY, *width, *height);
 }
 
 void aqteraserect_(float *originX, float *originY, float *width, float *height)
 {
-   aqtEraseRect(*originX, *originY, *width, *height);
+	aqtEraseRect(*originX, *originY, *width, *height);
 }
 
 /*" Image handling "*/
- void aqtsetimagetransform_(float *m11, float *m12, float *m21, float *m22, float *tX, float *tY)
+void aqtsetimagetransform_(float *m11, float *m12, float *m21, float *m22, float *tX, float *tY)
 {
-    aqtSetImageTransform(*m11, *m12, *m21, *m22, *tX, *tY);
+	aqtSetImageTransform(*m11, *m12, *m21, *m22, *tX, *tY);
 }
 
 void aqtresetimagetransform_(void)
 {
-   aqtResetImageTransform();
+	aqtResetImageTransform();
 }
 
 void aqtaddimagewithbitmap_(const void *bitmap, int *pixWide, int *pixHigh, float *originX, float *originY, float *width, float *height)
 {
-   aqtAddImageWithBitmap(bitmap, *pixWide, *pixHigh, *originX, *originY, *width, *height);
+	aqtAddImageWithBitmap(bitmap, *pixWide, *pixHigh, *originX, *originY, *width, *height);
 }
 
 void aqtaddtransformedimagewithbitmap_(const void *bitmap, int *pixWide, int *pixHigh, float *originX, float *originY, float *width, float *height)
 {
-   aqtAddTransformedImageWithBitmap(bitmap, *pixWide, *pixHigh, *originX, *originY, *width, *height);
+	aqtAddTransformedImageWithBitmap(bitmap, *pixWide, *pixHigh, *originX, *originY, *width, *height);
 }
 
