@@ -14,7 +14,7 @@ unit aquaterm;
     aquaterm.h
 }
 
-{$linklib aquaterm}
+{$LINKFRAMEWORK AquaTerm}
 
 interface
 
