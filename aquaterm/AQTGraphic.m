@@ -17,7 +17,7 @@ typedef struct _AQTColor_v100 {
 @implementation AQTGraphic
     /**"
     *** An abstract class to derive model objects from
-    *** (Overkill at present but could come in handy if the app grows…)
+    *** (Overkill at present but could come in handy if the app grows)
     "**/
 - (id)replacementObjectForPortCoder:(NSPortCoder *)portCoder
 {
