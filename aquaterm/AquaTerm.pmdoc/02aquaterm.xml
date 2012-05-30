@@ -18,7 +18,7 @@
 	</config>
 	<contents>
 		<file-list>02aquaterm-contents.xml</file-list>
-		<component id="net.sourceforge.AquaTerm_Framework" path="build/Deployment/AquaTerm.framework" version="1.1.1"/>
+		<component id="net.sourceforge.aquaterm.framework" path="build/Deployment/AquaTerm.framework" version="1.1.1"/>
 		<filter>/CVS$</filter>
 		<filter>/\.svn$</filter>
 		<filter>/\.cvsignore$</filter>
