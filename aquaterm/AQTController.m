@@ -190,9 +190,10 @@ extern void aqtLineDrawingTest(id sender);
 
 - (void)getServerVersionMajor:(int32_t *)major minor:(int32_t *)minor rev:(int32_t *)rev
 {
+   // 1.1.1
    *major = 1;
    *minor = 1;
-   *rev = 0;
+   *rev   = 1;
 }
 
 -(id)addAQTClient:(id)client name:(NSString *)name pid:(int32_t)procId
