@@ -374,7 +374,7 @@ extern void aqtLineDrawingTest(id sender);
 
 -(NSString *)_aqtBugMsg
 {
-    NSString *bugString = @"Bug report for AquaTerm 1.1.0\n\n\
+    NSString *bugString = @"Bug report for AquaTerm 1.1.1\n\n\
 Description:\n-----------------------\n\n\
 *\tPlease replace this item with a detailed description of the \n\
 \tproblem.  Suggestions or general comments are also welcome.\n\n\
@@ -402,7 +402,7 @@ Configuration (please do not edit this section):\n\
 
 -(NSString *)_aqtMailMsg
 {
-    return @"Feedback report for AquaTerm 1.1.0\n\n\
+    return @"Feedback report for AquaTerm 1.1.1\n\n\
 Feedback:\n-----------------------\n\n\
 *\tPlease replace this item with suggestions or general comments.\n\n";
 }
