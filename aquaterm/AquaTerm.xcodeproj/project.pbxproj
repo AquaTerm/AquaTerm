@@ -862,7 +862,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "AquaTerm.framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LOCAL_FRAMEWORKS_DIR = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "$(LOCAL_FRAMEWORKS_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -896,7 +897,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "AquaTerm.framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LOCAL_FRAMEWORKS_DIR = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "$(LOCAL_FRAMEWORKS_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -934,7 +936,7 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
-				INSTALL_PATH = "$(USER_APPS_DIR)";
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
@@ -971,7 +973,7 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
-				INSTALL_PATH = "$(USER_APPS_DIR)";
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
@@ -1067,7 +1069,7 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "AquaTerm.app-Info.plist";
-				INSTALL_PATH = "$(USER_APPS_DIR)";
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = "";
 				OTHER_CFLAGS = "";
@@ -1101,7 +1103,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "AquaTerm.framework-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LOCAL_FRAMEWORKS_DIR = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "$(LOCAL_FRAMEWORKS_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
