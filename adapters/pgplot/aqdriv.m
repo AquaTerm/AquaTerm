@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "aquaterm/AQTAdapter.h"
+#import <AquaTerm/AQTAdapter.h>
 
 /* Debugging extras */
 static inline void NOOP_(id x, ...) {;}
