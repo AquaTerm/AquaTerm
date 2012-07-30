@@ -1,2565 +1,2945 @@
-2011-03-10 17:18  abgandar
+2012-07-30  Mojca Miklavec <mmiklavec@users.sourceforge.net>
 
-	* AQTImage.m: Add missing 64bit encoding/decoding fixes to the
-	  AQTImage class (same as for the other AQTGraphics objects).  This
-	  should fix the 32/64bit interoperability problems between client
-	  and server. Tested to work with Demo.m/Aquaterm.app in all
+	* Version 1.1.1 released.
+
+	* aquaterm/ChangeLog, aquaterm/gitlog2changelog.py: Update ChangeLog
+	  and release version 1.1.1.
+
+2012-07-01  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* adapters/pgplot/aqdriv.m, adapters/pgplot/g77_gcc_AQT.conf,
+	  adapters/pgplot/xlf_gcc_AQT.conf: use -framework AquaTerm instead
+	  of -laquaterm in pgplot
+
+2012-06-01  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.xcodeproj/project.pbxproj: Define
+	  LOCAL_FRAMEWORKS_DIR, change USER_APPS_DIR->LOCAL_APPS_DIR
+
+2012-05-30  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.pmdoc/02aquaterm-contents.xml,
+	  aquaterm/AquaTerm.pmdoc/02aquaterm.xml,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj: Resolve some Xcode
+	  warnings  - Info.plist was duplicated in AquaTerm.framework removed
+	  from xcodeproject and pmdoc - component.id changed from
+	  net.sourceforge.AquaTerm_Framework to
+	  net.sourceforge.aquaterm.framework in pmdoc - remove
+	  'GCC_ENABLE_FIX_AND_CONTINUE = NO' from xcodeproject
+
+	* aquaterm/AQTController.m: yet another place for a version bump from
+	  1.1.0 to 1.1.1
+
+	* aquaterm/English.lproj/Credits.rtf, aquaterm/InstallerLicense.rtf:
+	  update copyright year to 2012 and use the same licence file for
+	  Credits.rtf than for InstallerLicense.rtf
+
+	* aquaterm/AQTController.m, aquaterm/AquaTerm.pmdoc/02aquaterm.xml:
+	  change a few occurencies of 1.1.0 with 1.1.1
+
+	* aquaterm/AquaTerm.framework-Info.plist: rename CFBundleIdentifier
+	  to avoid 'warning: invalid character '_' in Bundle Identifier'
+
+2012-05-25  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.xcodeproj/project.pbxproj: rename AquaTerm1.1.1
+	  into AquaTerm-1.1.1
+
+	* adapters/fortran/f2aquaterm.m: formatting only
+
+	* adapters/fortran/Makefile, adapters/fortran/demo.f,
+	  adapters/fortran/eventdemo1.f, adapters/fortran/f2aquaterm.m:
+	  fortran: lowercase function names, use framework  * downcase
+	  function names to make compilers happy * use AquaTerm.framework
+	  instead of libaquaterm.dylib & include/aqaterm (mostly changes in
+	  Makefile) * minor changes in copyright notices (updated year, ...)
+
+	* adapters/fortran/demo.f: replace signed integer*1 with unsigned
+	  char for colors whose values have to run up to 255
+
+	* adapters/fortran/demo.f, adapters/fortran/f2aquaterm.m: fortran:
+	  fix two compiler warnings
+
+	* aquaterm/AQTGraphic.m: typo
+
+	* adapters/pascal/ChangeLog, adapters/pascal/aquaterm.pp: Pascal:
+	  link against framework, not libaquaterm  use {$LINKFRAMEWORK
+	  AquaTerm} instead of {$linklib aquaterm} to avoid dependency on
+	  libaquaterm.dylib
+
+2012-05-25  Karl-Michael Schindler <karl-michael.schindler@web.de>
+
+	* adapters/pascal/ChangeLog, adapters/pascal/Makefile,
+	  adapters/pascal/README, adapters/pascal/aquaterm.pp,
+	  adapters/pascal/demo.pp, adapters/pascal/eventdemo1.pp,
+	  adapters/pascal/eventdemo2.pp, aquaterm/ReleaseNotes: New Pascal
+	  adapter by Karl-Michael Schindler
+
+2012-05-24  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/pmscripts/postflight: postflight should only remove
+	  symlinks, if anything
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientManager.h, aquaterm/AQTClientManager.m,
+	  aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTFunctions.h, aquaterm/AQTFunctions.m,
+	  aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m,
+	  aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTImage.h,
+	  aquaterm/AQTImage.m, aquaterm/AQTLabel.h, aquaterm/AQTLabel.m,
+	  aquaterm/AQTModel.h, aquaterm/AQTModel.m,
+	  aquaterm/AQTModelAdditions.h, aquaterm/AQTModelAdditions.m,
+	  aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTPlot.h,
+	  aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m, aquaterm/AQTStringDrawingAdditions.h,
+	  aquaterm/AQTStringDrawingAdditions.m, aquaterm/AQTView.h,
+	  aquaterm/AQTView.m, aquaterm/AquaTerm.app-Info.plist,
+	  aquaterm/AquaTerm.framework-Info.plist, aquaterm/Bugs.m,
+	  aquaterm/Demo.m, aquaterm/Docs/ReadMe.txt, aquaterm/INSTALL,
+	  aquaterm/ReadMe, aquaterm/ReadMe.rtf, aquaterm/ReleaseNotes,
+	  aquaterm/Timing.m, aquaterm/aquaterm.h, aquaterm/aquaterm.m,
+	  aquaterm/makeHelp: copyright strings, version update, minor changes
+	  in notes
+
+	* aquaterm/AquaTerm.pmdoc/01aquaterm-contents.xml,
+	  aquaterm/AquaTerm.pmdoc/01aquaterm.xml,
+	  aquaterm/AquaTerm.pmdoc/02aquaterm-contents.xml,
+	  aquaterm/AquaTerm.pmdoc/02aquaterm.xml,
+	  aquaterm/AquaTerm.pmdoc/index.xml,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj,
+	  aquaterm/AquaTerm10.5+.pmdoc/01aquaterm-contents.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/01aquaterm.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/02aquaterm-contents.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/02aquaterm.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/index.xml, aquaterm/distroMakefile,
+	  aquaterm/installer/installer.packproj,
+	  aquaterm/installer/postflight, aquaterm/installer/preflight:
+	  trivial changes for PackageMaker  changes for PackageMaker: *
+	  update version to 1.1.1 * rename AquaTerm10.5+.pmdoc into
+	  AquaTerm.pmdoc * run xml files through tidy * remove absolute paths
+	  pointing to per's home directory * remove support for creating a
+	  package with Freeze
+
+2012-05-10  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* adapters/c/Makefile, adapters/c/ReleaseNotes, adapters/c/demo.c,
+	  adapters/c/eventdemo1.c, adapters/c/eventdemo2.c: Fix compiler
+	  warnings in C adapter
+
+2012-04-25  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/AQTPlotBuilder.m: initialization of alpha channel: bugfix
+	  for a nasty bug which lead to empty labels
+
+2012-04-24  Alexander Wittig <abgandar@users.sourceforge.net>
+
+	* aquaterm/AQTClientManager.m, aquaterm/AQTClientProtocol.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTModelAdditions.h,
+	  aquaterm/AQTModelAdditions.m, aquaterm/AQTPlot.m: Use AQTRect
+	  instead of NSRect to overcome a problem with 32 vs. 64-bit
+	  incompatibilities
+
+2012-01-20  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.xcodeproj/per.mode1,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj: remove 10.4u SDK,
+	  remove per's personal project
+
+2011-06-11  Per Persson <persquare@users.sourceforge.net>
+
+	* Version 1.1.0 released.
+
+	* aquaterm/AquaTerm.xcodeproj/per.pbxuser,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj, aquaterm/ReadMe,
+	  aquaterm/ReleaseNotes, aquaterm/pmscripts/postflight: New target to
+	  build a release disk image, Update notes and readme
+
+2011-03-20  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Remove obsolete files for
+	  Project Builder; we have XCode now.
+
+	* aquaterm/AquaTerm.xcodeproj/project.pbxproj: Create a new
+	  configuration "Default" that uses native SDK/architecture/compiler.
+	  Make it default for command-line users.
+
+2011-03-18  Mojca Miklavec <mmiklavec@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.xcodeproj/project.pbxproj, aquaterm/ChangeLog:
+	  Make AquaTerm the default target instead of Docs.
+
+2011-03-10  Alexander Wittig <abgandar@users.sourceforge.net>
+
+	* aquaterm/AQTImage.m: Add missing 64bit encoding/decoding fixes to
+	  the AQTImage class (same as for the other AQTGraphics objects).
+	  This should fix the 32/64bit interoperability problems between
+	  client and server. Tested to work with Demo.m/Aquaterm.app in all
 	  possible 32/64 bit combinations on 10.6
 
-2011-03-10 04:43  mmiklavec
+2011-03-10  Mojca Miklavec <mmiklavec@users.sourceforge.net>
 
-	* AQTPlot.m: Increase the maximum allowed window width
+	* aquaterm/AQTPlot.m: Increase the maximum allowed window width
 	  (1000->4096).
 
-2011-03-05 21:56  persquare
+2011-03-05  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.xcodeproj/per.pbxuser: Don't track my personal UI
-	  settings.
+	* aquaterm/AquaTerm.xcodeproj/project.pbxproj: Added a new target
+	  Package that creates an installer .pkg
 
-2011-03-05 21:52  persquare
+	* aquaterm/AquaTerm10.5+.pmdoc/01aquaterm-contents.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/01aquaterm.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/02aquaterm-contents.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/02aquaterm.xml,
+	  aquaterm/AquaTerm10.5+.pmdoc/index.xml,
+	  aquaterm/InstallerLicense.rtf, aquaterm/InstallerReadMe.rtf: Adding
+	  PackageMaker project file to create installer
 
-	* AquaTerm.xcodeproj/project.pbxproj: Added a new target Package
-	  that creates an installer .pkg
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientManager.h, aquaterm/AQTClientManager.m,
+	  aquaterm/AQTClientProtocol.h, aquaterm/AQTColorMap.h,
+	  aquaterm/AQTColorMap.m, aquaterm/AQTConnectionProtocol.h,
+	  aquaterm/AQTConstants.m, aquaterm/AQTController.m,
+	  aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTLabel.h,
+	  aquaterm/AQTLabel.m, aquaterm/AQTModel.h, aquaterm/AQTModel.m,
+	  aquaterm/AQTModelAdditions.m, aquaterm/AQTPath.h,
+	  aquaterm/AQTPath.m, aquaterm/AQTPlot.h, aquaterm/AQTPlot.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AQTPrefController.m, aquaterm/AQTStringDrawingAdditions.h,
+	  aquaterm/AQTStringDrawingAdditions.m, aquaterm/AQTView.m,
+	  aquaterm/AquaTerm.xcodeproj/per.pbxuser,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj, aquaterm/Bugs.m,
+	  aquaterm/Demo.m, aquaterm/Timing.m, aquaterm/aquaterm.h,
+	  aquaterm/aquaterm.m: Major patch for 64-bit compatibility.
 
-2011-03-05 10:27  persquare
+2008-09-26  Per Persson <persquare@users.sourceforge.net>
 
-	* InstallerLicense.rtf, InstallerReadMe.rtf,
-	  AquaTerm10.5+.pmdoc/01aquaterm-contents.xml,
-	  AquaTerm10.5+.pmdoc/01aquaterm.xml,
-	  AquaTerm10.5+.pmdoc/02aquaterm-contents.xml,
-	  AquaTerm10.5+.pmdoc/02aquaterm.xml,
-	  AquaTerm10.5+.pmdoc/index.xml: Adding PackageMaker project file
-	  to create installer
+	* aquaterm/AquaTerm.bridgesupport,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj, aquaterm/ReadMe.rtf,
+	  aquaterm/ReleaseNotes, aquaterm/distroMakefile: Adding
+	  BridgeSupport
 
-2011-03-05 10:14  persquare
+	* adapters/python/ReadMe, adapters/python/ReleaseNotes,
+	  adapters/python/demo_bridgesupport.py: Python supported via
+	  BridgeSupport
 
-	* AQTAdapter.h, AQTAdapter.m, AQTClientManager.h,
-	  AQTClientManager.m, AQTClientProtocol.h, AQTColorMap.h,
-	  AQTColorMap.m, AQTConnectionProtocol.h, AQTConstants.m,
-	  AQTController.m, AQTGraphic.h, AQTGraphic.m,
-	  AQTGraphicDrawingMethods.m, AQTLabel.h, AQTLabel.m, AQTModel.h,
-	  AQTModel.m, AQTModelAdditions.m, AQTPath.h, AQTPath.m, AQTPlot.h,
-	  AQTPlot.m, AQTPlotBuilder.h, AQTPlotBuilder.m,
-	  AQTPrefController.m, AQTStringDrawingAdditions.h,
-	  AQTStringDrawingAdditions.m, AQTView.m, Bugs.m, Demo.m, Timing.m,
-	  aquaterm.h, aquaterm.m, AquaTerm.xcodeproj/per.pbxuser,
-	  AquaTerm.xcodeproj/project.pbxproj: Major patch for 64-bit
-	  compatibility.
+	* adapters/ruby/ReadMe, adapters/ruby/demo_bridgesupport.rb: Ruby
+	  supported via BridgeSupport
 
-2008-09-26 23:35  persquare
+2008-06-03  Marius Amado-Alves <amado-alves@users.sourceforge.net>
 
-	* AquaTerm.xcodeproj/project.pbxproj, AquaTerm.bridgesupport,
-	  ReadMe.rtf, ReleaseNotes, distroMakefile: Adding BridgeSupport
+	* adapters/ada/aquaterm.adb, adapters/ada/aquaterm.ads,
+	  adapters/ada/demo.adb, adapters/ada/hello.adb: added text handling
+	  to the thick binding; advanced Demo; created Hello; renamed
+	  Put_Line to Draw_Line (to avoid confusion with the many Ada
+	  standard Put_Line functions)
 
-2007-03-22 19:53  persquare
+	* adapters/ada/demo_thin.adb: minor bug fix (renamed C interface)
 
-	* AQTController.m, AquaTerm.app-Info.plist,
-	  AquaTerm.framework-Info.plist, ChangeLog, Demo.m, ReadMe.rtf,
-	  ReleaseNotes, distroMakefile, English.lproj/Credits.rtf,
-	  installer/installer.packproj, installer/postflight,
-	  installer/preflight, AquaTerm.xcodeproj/project.pbxproj: Final
+	* adapters/ada/aquaterm-c_interface.ads, adapters/ada/aquaterm.adb,
+	  adapters/ada/aquaterm.ads, adapters/ada/aquaterm_c.ads,
+	  adapters/ada/demo.adb, adapters/ada/dump_c_interface.adb: renamed
+	  the c interface; added thick binding (work in progress)
+	  ------------
+
+2007-03-22  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTController.m, aquaterm/AquaTerm.app-Info.plist,
+	  aquaterm/AquaTerm.framework-Info.plist,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj, aquaterm/ChangeLog,
+	  aquaterm/Demo.m, aquaterm/English.lproj/Credits.rtf,
+	  aquaterm/ReadMe.rtf, aquaterm/ReleaseNotes,
+	  aquaterm/distroMakefile, aquaterm/installer/installer.packproj,
+	  aquaterm/installer/postflight, aquaterm/installer/preflight: Final
 	  changes before 1.1.0 release.
 
-2007-03-22 18:26  persquare
+	* aquaterm/aquaterm.h, aquaterm/aquaterm.m: Add the RGBA methods to C
+	  API too.
 
-	* aquaterm.h, aquaterm.m: Add the RGBA methods to C API too.
+2007-03-21  Per Persson <persquare@users.sourceforge.net>
 
-2007-03-21 21:46  persquare
+	* aquaterm/AQTController.m: Make landscape printing the default.
 
-	* AQTController.m: Make landscape printing the default.
+	* aquaterm/AQTView.m: Removing log statements.
 
-2007-03-21 21:27  persquare
-
-	* AQTView.m: Removing log statements.
-
-2007-03-21 21:20  persquare
-
-	* AQTController.m, AQTPrefController.h, AQTPrefController.m,
-	  AQTView.m, English.lproj/crossBlack.tiff,
-	  English.lproj/crossBlue.tiff, English.lproj/crossGreen.tiff,
-	  English.lproj/crossRed.tiff, English.lproj/crossWhite.tiff,
-	  English.lproj/crossYellow.tiff,
-	  English.lproj/Preferences.nib/classes.nib,
-	  English.lproj/Preferences.nib/info.nib,
-	  English.lproj/Preferences.nib/objects.nib: Make crosshair color a
+	* aquaterm/AQTController.m, aquaterm/AQTPrefController.h,
+	  aquaterm/AQTPrefController.m, aquaterm/AQTView.m,
+	  aquaterm/English.lproj/Preferences.nib/classes.nib,
+	  aquaterm/English.lproj/Preferences.nib/info.nib,
+	  aquaterm/English.lproj/Preferences.nib/objects.nib,
+	  aquaterm/English.lproj/crossBlack.tiff,
+	  aquaterm/English.lproj/crossBlue.tiff,
+	  aquaterm/English.lproj/crossGreen.tiff,
+	  aquaterm/English.lproj/crossRed.tiff,
+	  aquaterm/English.lproj/crossWhite.tiff,
+	  aquaterm/English.lproj/crossYellow.tiff: Make crosshair color a
 	  user pref.
 
-2007-03-21 21:18  persquare
+	* aquaterm/English.lproj/Cross.tiff: Not used.
 
-	* English.lproj/Cross.tiff: Not used.
+	* aquaterm/aquaterm.m: Release temp string.
 
-2007-03-21 19:40  persquare
+	* aquaterm/AQTView.m, aquaterm/aquaterm.m: Better handling of event
+	  strings. Add keyCode to event string for key presses.
 
-	* aquaterm.m: Release temp string.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTFunctions.h, aquaterm/AQTGraphic.h,
+	  aquaterm/AQTGraphic.m, aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/AQTPlotBuilder.m, aquaterm/Demo.m: Adding alpha channel
+	  handling.
 
-2007-03-21 19:38  persquare
+2006-10-31  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTView.m, aquaterm.m: Better handling of event strings. Add
-	  keyCode to event string for key presses.
+	* aquaterm/installer/postflight: Adding the missing link. Time to
+	  deprecate libaquaterm altogether.
 
-2007-03-21 18:35  persquare
+2006-08-23  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTFunctions.h, AQTGraphic.h,
-	  AQTGraphic.m, AQTGraphicDrawingMethods.m, AQTPlotBuilder.m,
-	  Demo.m: Adding alpha channel handling.
+	* aquaterm/AQTPlotBuilder.m: Fixing size method left out when
+	  renaming size to canvasSize, reported by Will Ware. Only affected
+	  debug builds.
 
-2006-10-31 22:05  persquare
+2006-07-31  Per Persson <persquare@users.sourceforge.net>
 
-	* installer/postflight: Adding the missing link. Time to deprecate
-	  libaquaterm altogether.
-
-2006-08-23 20:01  persquare
-
-	* AQTPlotBuilder.m: Fixing size method left out when renaming size
-	  to canvasSize, reported by Will Ware. Only affected debug builds.
-
-2006-08-01 00:59  persquare
-
-	* AquaTerm.xcodeproj/: per.mode1, per.pbxuser: Preparing for source
+	* aquaterm/AquaTerm.xcodeproj/per.mode1,
+	  aquaterm/AquaTerm.xcodeproj/per.pbxuser: Preparing for source
 	  release.
 
-2006-08-01 00:55  persquare
-
-	* distroMakefile: hdiutil is wreaking havoc on the installer
+	* aquaterm/distroMakefile: hdiutil is wreaking havoc on the installer
 	  package, using DropDMG as a fix.
 
-2006-07-31 23:49  persquare
+	* aquaterm/AquaTerm.xcodeproj/per.mode1,
+	  aquaterm/AquaTerm.xcodeproj/per.pbxuser,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj,
+	  aquaterm/English.lproj/Credits.rtf, aquaterm/ReadMe.rtf: Targeting
+	  Universal Binary. Bumping version to 1.0.1
 
-	* AquaTerm.xcodeproj/per.mode1, AquaTerm.xcodeproj/per.pbxuser,
-	  AquaTerm.xcodeproj/project.pbxproj, ReadMe.rtf,
-	  English.lproj/Credits.rtf: Targeting Universal Binary. Bumping
-	  version to 1.0.1
+	* aquaterm/AQTController.m, aquaterm/AquaTerm.app-Info.plist,
+	  aquaterm/AquaTerm.framework-Info.plist, aquaterm/INSTALL,
+	  aquaterm/ReadMe.rtf, aquaterm/ReleaseNotes,
+	  aquaterm/distroMakefile, aquaterm/installer/installer.packproj,
+	  aquaterm/installer/postflight, aquaterm/installer/preflight:
+	  Targeting Universal Binary. Bumping version to 1.0.1
 
-2006-07-31 23:27  persquare
+2006-05-16  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* AQTController.m, AquaTerm.app-Info.plist,
-	  AquaTerm.framework-Info.plist, INSTALL, ReadMe.rtf, ReleaseNotes,
-	  distroMakefile, installer/installer.packproj,
-	  installer/postflight, installer/preflight: Targeting Universal
-	  Binary. Bumping version to 1.0.1
+	* adapters/lisp/README: updated the installation instructions
 
-2005-11-10 22:07  persquare
+2006-02-21  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* AQTGraphicDrawingMethods.m: Try to be smart about paths that
-	  should have been closed.
+	* adapters/lisp/cl-aqt.lisp: removed code that was defeating the part
+	  of the purpose of asdf-install
 
-2005-11-10 22:05  persquare
+2006-02-19  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* AQTPlotBuilder.m: Changing line cap style implies end of current
-	  path.
+	* adapters/lisp/cl-aqt.lisp: Corrected a comment and removed some
+	  lint
 
-2005-09-14 17:56  persquare
+2006-02-14  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* installer/postflight: Fixing broken script.
+	* adapters/lisp/cl-aqt.asd: Modified it look more like a standard
+	  .asd file. Uncertain if these changes improved its functionality
 
-2005-07-26 03:03  persquare
+	* adapters/lisp/README: Expanded & corrected the installation
+	  instructions
 
-	* AquaTerm.xcodeproj/project.pbxproj: Turn off debug logging.
+2006-02-12  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-2005-07-26 03:02  persquare
+	* adapters/lisp/README, adapters/lisp/cl-aqt.asd,
+	  adapters/lisp/cl-aqt.lisp: Added lisp wrapper for aquaterm
 
-	* AQTController.m: Minor changes pending 1.0.0 release.
+2005-11-10  Per Persson <persquare@users.sourceforge.net>
 
-2005-07-26 02:24  persquare
+	* aquaterm/AQTGraphicDrawingMethods.m: Try to be smart about paths
+	  that should have been closed.
 
-	* distroMakefile: Minor changes pending 1.0.0 release.
+	* aquaterm/AQTPlotBuilder.m: Changing line cap style implies end of
+	  current path.
 
-2005-07-26 02:03  persquare
+2005-09-14  Per Persson <persquare@users.sourceforge.net>
 
-	* Help/AQTAdapter.html: Some developer documentation.
+	* aquaterm/installer/postflight: Fixing broken script.
 
-2005-07-26 02:02  persquare
+2005-07-26  Per Persson <persquare@users.sourceforge.net>
 
-	* ChangeLog, AQTAdapter.m: Minor changes pending 1.0.0 release.
+	* Version 1.0.0 released.
 
-2005-07-26 00:04  persquare
+	* aquaterm/AquaTerm.xcodeproj/project.pbxproj: Turn off debug
+	  logging.
 
-	* Help/DevDocs.rtfd/: Pasted Graphic.tiff, TXT.rtf: Some developer
-	  documentation.
+	* aquaterm/AQTController.m: Minor changes pending 1.0.0 release.
 
-2005-07-25 21:11  persquare
+	* aquaterm/distroMakefile: Minor changes pending 1.0.0 release.
 
-	* distroMakefile: Cleaning and updating to XCode 2.
+	* adapters/c/ChangeLog, adapters/fortran/ChangeLog,
+	  adapters/gnuplot/ChangeLog, adapters/perl/ChangeLog,
+	  adapters/pgplot/ChangeLog, adapters/plplot/ChangeLog,
+	  adapters/python/ChangeLog: Minor changes for release.
 
-2005-07-25 21:02  persquare
+	* aquaterm/Help/AQTAdapter.html: Some developer documentation.
 
-	* English.lproj/Credits.rtf: RTF broken by FileMerge.
+	* aquaterm/AQTAdapter.m, aquaterm/ChangeLog: Minor changes pending
+	  1.0.0 release.
 
-2005-07-25 21:00  persquare
+2005-07-25  Per Persson <persquare@users.sourceforge.net>
 
-	* Help/DevDocs.rtfd/: .typeAttributes.dict, Pasted Graphic.tiff,
-	  TXT.rtf: Some developer documentation.
+	* adapters/gnuplot/aquaTerm.trm: Lives in gnuplot nowadays.
 
-2005-07-25 20:17  persquare
+	* adapters/octave/ChangeLog, adapters/octave/Makefile,
+	  adapters/octave/README, adapters/octave/aqt_demo.m: This is
+	  completely out of date.
 
-	* ReadMe.rtf: RTF broken?
+	* adapters/plplot/ReleaseNotes, adapters/plplot/aqtplplot.h,
+	  adapters/plplot/aqtplplot.m, adapters/plplot/plplot531.patch:
+	  PLplot driver lives in PLplot sources nowadays.
 
-2005-07-25 18:13  persquare
+	* adapters/fortran/demo_old.f, adapters/fortran/f2aqt.h,
+	  adapters/fortran/f2aqt.m, adapters/fortran/test.f,
+	  adapters/fortran/tiny.f: Removing ancient examples.
 
-	* AQTClientManager.m, AQTPlotBuilder.m, AquaTerm.app-Info.plist,
-	  AquaTerm.framework-Info.plist, Bugs.m, Demo.m, INSTALL,
-	  ReadMe.rtf, ReleaseNotes, Timing.m,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  English.lproj/Credits.rtf, installer/installer.packproj: Minor
-	  changes pending 1.0.0 release.
+	* aquaterm/Help/DevDocs.rtfd/Pasted Graphic.tiff,
+	  aquaterm/Help/DevDocs.rtfd/TXT.rtf: Some developer documentation.
 
-2005-07-25 17:49  persquare
+	* aquaterm/Help/DevDocs.rtfd/Pasted Graphic.tiff,
+	  aquaterm/Help/DevDocs.rtfd/TXT.rtf: Some developer documentation.
 
-	* AquaTerm.xcodeproj/: project.pbxproj, per.mode1, per.pbxuser:
-	  Creating project file for 10.4.
+	* aquaterm/distroMakefile: Cleaning and updating to XCode 2.
 
-2005-03-23 20:33  persquare
+	* aquaterm/English.lproj/Credits.rtf: RTF broken by FileMerge.
 
-	* AquaTerm.framework-Info.plist, Fwk-Info.plist: Changing name of
-	  framework info file.
+	* aquaterm/Help/DevDocs.rtfd/Pasted Graphic.tiff,
+	  aquaterm/Help/DevDocs.rtfd/TXT.rtf: Some developer documentation.
 
-2005-03-23 20:29  persquare
+	* aquaterm/ReadMe.rtf: RTF broken?
 
-	* AquaTerm.pbproj/project.pbxproj: Bring up-to-date.
+	* aquaterm/AQTClientManager.m, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AquaTerm.app-Info.plist,
+	  aquaterm/AquaTerm.framework-Info.plist, aquaterm/Bugs.m,
+	  aquaterm/Demo.m, aquaterm/English.lproj/Credits.rtf,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib, aquaterm/INSTALL,
+	  aquaterm/ReadMe.rtf, aquaterm/ReleaseNotes, aquaterm/Timing.m,
+	  aquaterm/installer/installer.packproj: Minor changes pending 1.0.0
+	  release.
 
-2005-03-23 20:29  persquare
+	* aquaterm/AquaTerm.xcodeproj/per.mode1,
+	  aquaterm/AquaTerm.xcodeproj/per.pbxuser,
+	  aquaterm/AquaTerm.xcodeproj/project.pbxproj: Creating project file
+	  for 10.4.
 
-	* Bugs.m, Demo.m, Timing.m: Changing the default to be AquaTerm.app
-	  and using -DAQT_STANDALONE to build stand-alone example
-	  executables.
+	* adapters/plplot/ReadMe, adapters/plplot/Readme: Reinstating file.
 
-2005-03-23 20:22  persquare
+	* adapters/plplot/ReadMe, adapters/plplot/Readme: Removing blocking
+	  file.
 
-	* AQTController.m, AQTModelAdditions.h, AQTModelAdditions.m: Minor
-	  clean-ups.
+2005-03-24  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-2005-03-09 04:41  hbabcock
+	* adapters/perl/AquaTerm.pm, adapters/perl/AquaTerm.xs: Added
+	  aqtAddShearedLabel function to perl driver
 
-	* Demo.m: fixed gcc compilation instructions to work with current
-	  configuration of aquaterm
+2005-03-23  Per Persson <persquare@users.sourceforge.net>
 
-2005-03-08 04:08  hbabcock
+	* aquaterm/AquaTerm.framework-Info.plist, aquaterm/Fwk-Info.plist:
+	  Changing name of framework info file.
 
-	* INSTALL: updated install instructions to reflect AquaTerm
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Bring up-to-date.
+
+	* aquaterm/Bugs.m, aquaterm/Demo.m, aquaterm/Timing.m: Changing the
+	  default to be AquaTerm.app and using -DAQT_STANDALONE to build
+	  stand-alone example executables.
+
+	* aquaterm/AQTController.m, aquaterm/AQTModelAdditions.h,
+	  aquaterm/AQTModelAdditions.m: Minor clean-ups.
+
+2005-03-09  Hazen Babcock <hbabcock@users.sourceforge.net>
+
+	* aquaterm/Demo.m: fixed gcc compilation instructions to work with
+	  current configuration of aquaterm
+
+2005-03-08  Hazen Babcock <hbabcock@users.sourceforge.net>
+
+	* aquaterm/INSTALL: updated install instructions to reflect AquaTerm
 	  transition from library to framework
 
-2005-02-22 13:21  persquare
+2005-03-07  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* installer/: installer.packproj, postflight, preflight: Moving
+	* adapters/perl/AquaTerm.pm, adapters/perl/AquaTerm.xs,
+	  adapters/perl/Changes, adapters/perl/HOW_TO_USE: updated driver to
+	  support new AquaTerm functions
+
+2005-02-22  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/python/ReadMe, adapters/python/ReleaseNotes,
+	  adapters/python/demo.py: Adding minimal Python demo.
+
+	* aquaterm/installer/installer.packproj,
+	  aquaterm/installer/postflight, aquaterm/installer/preflight: Moving
 	  libaquaterm to AquaTerm.framework with symlinks in /usr/local for
 	  compatibility.
 
-2005-02-22 13:20  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/ReleaseNotes,
+	  aquaterm/distroMakefile: Moving libaquaterm to AquaTerm.framework.
 
-	* AquaTerm.pbproj/project.pbxproj, distroMakefile, ReleaseNotes:
-	  Moving libaquaterm to AquaTerm.framework.
+	* aquaterm/AQTPath.m: Fix inconsistency.
 
-2005-02-22 10:59  persquare
+2005-02-17  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTPath.m: Fix inconsistency.
+	* aquaterm/ChangeLog, aquaterm/INSTALL, aquaterm/ReleaseNotes: Bring
+	  up-to-date.
 
-2005-02-17 13:51  persquare
+	* aquaterm/Demo.m: Demo unicode handling.
 
-	* ChangeLog, INSTALL, ReleaseNotes: Bring up-to-date.
+	* aquaterm/Demo.m: Display new features.
 
-2005-02-17 13:49  persquare
+	* aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTPlotBuilder.m:
+	  Labels should be clipped too.
 
-	* Demo.m: Demo unicode handling.
+	* aquaterm/aquaterm.h, aquaterm/aquaterm.m: Bringing C API
+	  up-to-date. Discrepancy in image functions compared to ObjC.
 
-2005-02-17 11:43  persquare
+2005-02-14  Per Persson <persquare@users.sourceforge.net>
 
-	* Demo.m: Display new features.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTLabel.h,
+	  aquaterm/AQTLabel.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Adding a shear angle option to labels.
+	  Useful for 3D projections.
 
-2005-02-17 11:22  persquare
+2005-02-12  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTGraphicDrawingMethods.m, AQTPlotBuilder.m: Labels should be
-	  clipped too.
+	* aquaterm/AQTController.m, aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/AQTPrefController.h, aquaterm/AQTPrefController.m,
+	  aquaterm/English.lproj/Preferences.nib/classes.nib,
+	  aquaterm/English.lproj/Preferences.nib/info.nib,
+	  aquaterm/English.lproj/Preferences.nib/objects.nib: Adding a
+	  preference to constrain minimum linewidth to 0.0 - 1.0 pt in steps
+	  of 0.05 pt. Specifying 0.0 turn constraint off.
 
-2005-02-17 11:21  persquare
+2005-02-11  Per Persson <persquare@users.sourceforge.net>
 
-	* aquaterm.h, aquaterm.m: Bringing C API up-to-date. Discrepancy in
-	  image functions compared to ObjC.
+	* aquaterm/AQTController.m, aquaterm/AQTGraphic.h,
+	  aquaterm/AQTGraphic.m, aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/AQTPlot.m: Adding debug support for clip rects. Only
+	  included if DEBUG_BOUNDS is given at build time. Menu Debug->Show
+	  bounds toggles behavior.
 
-2005-02-14 22:50  persquare
+	* aquaterm/ReleaseNotes: Updating.
 
-	* AQTAdapter.h, AQTAdapter.m, AQTGraphicDrawingMethods.m,
-	  AQTLabel.h, AQTLabel.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
-	  Adding a shear angle option to labels. Useful for 3D projections.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Adding clip rect support. (RFE #1094504)
 
-2005-02-12 22:18  persquare
+2005-02-03  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTController.m, AQTGraphicDrawingMethods.m, AQTPrefController.h,
-	  AQTPrefController.m, English.lproj/Preferences.nib/classes.nib,
-	  English.lproj/Preferences.nib/info.nib,
-	  English.lproj/Preferences.nib/objects.nib: Adding a preference to
-	  constrain minimum linewidth to 0.0 - 1.0 pt in steps of 0.05 pt.
-	  Specifying 0.0 turn constraint off.
+	* aquaterm/AQTClientManager.m: Adding missing exception wrapper.
 
-2005-02-11 23:52  persquare
+	* aquaterm/AQTController.m, aquaterm/AQTPrefController.h,
+	  aquaterm/AQTPrefController.m, aquaterm/AQTStringDrawingAdditions.m,
+	  aquaterm/English.lproj/Preferences.nib/classes.nib,
+	  aquaterm/English.lproj/Preferences.nib/objects.nib: Automatic
+	  conversion of Adobe Symbol font encoding to Unicode is now a
+	  preference.
 
-	* AQTController.m, AQTGraphic.h, AQTGraphic.m,
-	  AQTGraphicDrawingMethods.m, AQTPlot.m: Adding debug support for
-	  clip rects. Only included if DEBUG_BOUNDS is given at build time.
-	  Menu Debug->Show bounds toggles behavior.
+	* aquaterm/AQTAdapter.m: Avoid introducing a new bug when fixing
+	  #1108709.
 
-2005-02-11 23:50  persquare
+	* aquaterm/AQTAdapter.m: Fix for bug #1108709. Method -lastEvent now
+	  works as advertised.
 
-	* ReleaseNotes: Updating.
+2005-01-25  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-2005-02-11 21:46  persquare
+	* adapters/perl/README: minor changes made to perl driver README file
 
-	* AQTAdapter.h, AQTAdapter.m, AQTGraphic.h, AQTGraphic.m,
-	  AQTGraphicDrawingMethods.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
-	  Adding clip rect support. (RFE #1094504)
+	* adapters/perl/fallback/const-c.inc,
+	  adapters/perl/fallback/const-xs.inc, adapters/perl/t/1.t: remaining
+	  useless files associated with the perl driver removed
 
-2005-02-03 12:10  persquare
+	* adapters/perl/MANIFEST, adapters/perl/META.yml,
+	  adapters/perl/Makefile.old, adapters/perl/const-c.inc,
+	  adapters/perl/const-xs.inc: removed some files extraneous files
+	  related to the perl adapter
 
-	* AQTClientManager.m: Adding missing exception wrapper.
+2005-01-23  Per Persson <persquare@users.sourceforge.net>
 
-2005-02-03 11:58  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTPath.h,
+	  aquaterm/AQTPath.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m, aquaterm/aquaterm.h,
+	  aquaterm/aquaterm.m: Adding setLinestylePattern method to create
+	  dashed lines and setLinestyleSolid to revert to solid lines. Thanks
+	  to Chris Murphy who took the time to implement it.
 
-	* AQTController.m, AQTPrefController.h, AQTPrefController.m,
-	  AQTStringDrawingAdditions.m,
-	  English.lproj/Preferences.nib/classes.nib,
-	  English.lproj/Preferences.nib/objects.nib: Automatic conversion
-	  of Adobe Symbol font encoding to Unicode is now a preference.
+2005-01-23  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-2005-02-03 11:27  persquare
+	* adapters/perl/fallback/const-c.inc,
+	  adapters/perl/fallback/const-xs.inc, adapters/perl/t/1.t: added
+	  some additional files related to the Perl driver that were missed
+	  in the first attempt
 
-	* AQTAdapter.m: Avoid introducing a new bug when fixing #1108709.
+	* adapters/perl/AquaTerm.pm, adapters/perl/AquaTerm.xs,
+	  adapters/perl/Changes, adapters/perl/HOW_TO_USE,
+	  adapters/perl/MANIFEST, adapters/perl/META.yml,
+	  adapters/perl/Makefile.PL, adapters/perl/Makefile.old,
+	  adapters/perl/README, adapters/perl/const-c.inc,
+	  adapters/perl/const-xs.inc, adapters/perl/ppport.h,
+	  adapters/perl/typemap: Added Perl driver & related documentation
 
-2005-02-03 11:24  persquare
+2005-01-22  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.m: Fix for bug #1108709. Method -lastEvent now works
-	  as advertised.
+	* aquaterm/AQTPrefController.m: Minor change.
 
-2005-01-23 21:55  persquare
+	* aquaterm/AQTClientManager.m, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.m, aquaterm/AQTPrefController.h,
+	  aquaterm/AQTPrefController.m,
+	  aquaterm/English.lproj/Preferences.nib/classes.nib,
+	  aquaterm/English.lproj/Preferences.nib/info.nib,
+	  aquaterm/English.lproj/Preferences.nib/objects.nib: Adding
+	  preference to control window closing behaviour.
 
-	* AQTAdapter.h, AQTAdapter.m, AQTGraphicDrawingMethods.m,
-	  AQTPath.h, AQTPath.m, AQTPlotBuilder.h, AQTPlotBuilder.m,
-	  aquaterm.h, aquaterm.m: Adding setLinestylePattern method to
-	  create dashed lines and setLinestyleSolid to revert to solid
-	  lines. Thanks to Chris Murphy who took the time to implement it.
+	* aquaterm/aquaterm.m: Adding a missing function. D'oh!
 
-2005-01-23 00:46  persquare
+2005-01-18  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* AQTPrefController.m: Minor change.
+	* adapters/plplot/aqtplplot.m: cleaned up mouse event handling
+	  somewhat
 
-2005-01-23 00:40  persquare
+2005-01-16  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* English.lproj/Preferences.nib/classes.nib,
-	  English.lproj/Preferences.nib/info.nib,
-	  English.lproj/Preferences.nib/objects.nib, AQTClientManager.m,
-	  AQTController.m, AQTPlot.m, AQTPrefController.h,
-	  AQTPrefController.m: Adding preference to control window closing
-	  behaviour.
+	* adapters/plplot/aqtplplot.m: Added basic mouse event handling
+	  functionality to the adapter. The user can now click on the plot
+	  and the position of the click will be returned to PLplot
 
-2005-01-22 22:36  persquare
+2005-01-03  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* aquaterm.m: Adding a missing function. D'oh!
+	* adapters/plplot/aqtplplot.m: modified driver to support page
+	  configuration. i.e. the user can now specify how big the graph size
+	  will be (in pixels). tweaked implementation of SCALE so that it is
+	  not assumed to be 10 (or 0.1) by other constants in the driver.
 
-2004-12-13 04:50  hbabcock
+2004-12-13  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* AQTGraphicDrawingMethods.m: fix for bug #1081093, adjusts bounds
-	  for finite line width
+	* aquaterm/AQTGraphicDrawingMethods.m: fix for bug #1081093, adjusts
+	  bounds for finite line width
 
-2004-12-12 21:01  persquare
+2004-12-12  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.m, AQTClientManager.h, AQTClientManager.m,
-	  AQTClientProtocol.h, AQTPlot.h, AQTPlot.m, AQTView.m: Adding
-	  (private) method -timingTestWithTag: to AQTAdapter in order to
-	  make it possible to run drawing speed tests from clients.
+	* aquaterm/AQTAdapter.m, aquaterm/AQTClientManager.h,
+	  aquaterm/AQTClientManager.m, aquaterm/AQTClientProtocol.h,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m, aquaterm/AQTView.m: Adding
+	  (private) method -timingTestWithTag: to AQTAdapter in order to make
+	  it possible to run drawing speed tests from clients.
 
-2004-12-12 19:56  persquare
+	* aquaterm/AQTFunctions.h, aquaterm/AQTGraphicDrawingMethods.m:
+	  Adding CAST_STRUCT_TO macro.
 
-	* AQTFunctions.h, AQTGraphicDrawingMethods.m: Adding CAST_STRUCT_TO
-	  macro.
+2004-11-26  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-2004-11-19 15:29  persquare
+	* adapters/plplot/aqtplplot.m: improved implementation of SCALE so
+	  that saved/printed Aquaterm plots are not 10x too large
 
-	* AQTAdapter.m, AQTPlotBuilder.h, AQTPlotBuilder.m: Report default
-	  size of colormap rather than 0 if builder not initialized.
+	* adapters/plplot/aqtplplot.m: Scale parameter added back in to take
+	  advantage of the higher screen resolution offered by Quartz;
+	  example/c/x10c works properly with this change
 
-2004-11-19 13:27  persquare
+2004-11-22  Hazen Babcock <hbabcock@users.sourceforge.net>
 
-	* AQTColorMap.m: Fixing range checking bug exposed by plplot
+	* adapters/plplot/aqtplplot.m: modified proc_str to improve text
+	  placement
+
+	* adapters/plplot/aqtplplot.m: cleaned up so more debris associated
+	  with color handling
+
+2004-11-21  Hazen Babcock <hbabcock@users.sourceforge.net>
+
+	* adapters/plplot/aqtplplot.m: changed set_color to use the current
+	  plot color _directly_ rather then pulling it from the color table
+
+	* adapters/plplot/aqtplplot.m: removed unused .h files; removed scale
+	  factor so that plplot/example/c/x10c works properly
+
+2004-11-21  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/plplot/aqtplplot.m: Fixing some debris from the new color
+	  handling code.
+
+2004-11-21  Hazen Babcock <hbabcock@users.sourceforge.net>
+
+	* adapters/plplot/ReadMe, adapters/plplot/Readme,
+	  adapters/plplot/plplot531.patch: Added plplot installation
+	  instructions and the plplot531.patch
+
+	* adapters/plplot/aqtplplot.m: Changed how aqtplplot.m handles color;
+	  It now accesses the current color table(s) kept by plplot rather
+	  then using saved copies of its own; A new function called set_color
+	  was added to implement this
+
+2004-11-20  Hazen Babcock <hbabcock@users.sourceforge.net>
+
+	* adapters/plplot/aqtplplot.m: divides coordinates in
+	  moveToVertexPoint and addEdgeToVertexPoint by SCALE; proc_str and
+	  esc_purge declarations added
+
+2004-11-19  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Report default size of colormap rather
+	  than 0 if builder not initialized.
+
+	* aquaterm/AQTColorMap.m: Fixing range checking bug exposed by plplot
 	  driver.
 
-2004-10-29 13:15  persquare
+2004-10-29  Per Persson <persquare@users.sourceforge.net>
 
-	* English.lproj/MainMenu1.nib/objects.nib: Removing unused menu
-	  entry (Get Info).
+	* aquaterm/English.lproj/MainMenu1.nib/objects.nib: Removing unused
+	  menu entry (Get Info).
 
-2004-10-29 13:14  persquare
+	* aquaterm/AQTController.m: Forgot to close font plot.
 
-	* AQTController.m: Forgot to close font plot.
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: Adding menu
+	  option to display available fonts and their names.
 
-2004-10-29 12:42  persquare
+2004-10-27  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTController.h, AQTController.m,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib: Adding menu option to
-	  display available fonts and their names.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Setting compatibility
+	  version to Mac OS X 10.1.
 
-2004-10-27 22:26  persquare
+	* aquaterm/AQTController.m: Adding configuration info to bugreport.
+	  Bumping to version 1.0.b3.
 
-	* AquaTerm.pbproj/project.pbxproj: Setting compatibility version to
-	  Mac OS X 10.1.
-
-2004-10-27 22:26  persquare
-
-	* AQTController.m: Adding configuration info to bugreport. Bumping
+	* aquaterm/AquaTerm.app-Info.plist, aquaterm/distroMakefile: Bumping
 	  to version 1.0.b3.
 
-2004-10-27 22:25  persquare
+	* aquaterm/installer/installer.packproj: Making paths relative.
+	  Bumping to version 1.0.b3.
 
-	* AquaTerm.app-Info.plist, distroMakefile: Bumping to version
-	  1.0.b3.
+2004-10-19  Per Persson <persquare@users.sourceforge.net>
 
-2004-10-27 22:24  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Updating project file.
 
-	* installer/installer.packproj: Making paths relative. Bumping to
-	  version 1.0.b3.
+	* aquaterm/AQTStringDrawingAdditions.m, aquaterm/Demo.m: Nudging
+	  sub/superscript size. Adding example to demo.m
 
-2004-10-19 10:53  persquare
+2004-10-18  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/project.pbxproj: Updating project file.
+	* aquaterm/AQTStringDrawingAdditions.m: Querying current font for
+	  underline position and thickness.
 
-2004-10-19 10:52  persquare
+	* aquaterm/AQTStringDrawingAdditions.m: Removing the old string
+	  drawing code.
 
-	* AQTStringDrawingAdditions.m, Demo.m: Nudging sub/superscript
-	  size. Adding example to demo.m
+	* aquaterm/AQTStringDrawingAdditions.m: Reverting overprint changes.
 
-2004-10-18 20:38  persquare
+	* aquaterm/AQTStringDrawingAdditions.m: recurse(): Adding
+	  overprinting.
 
-	* AQTStringDrawingAdditions.m: Querying current font for underline
-	  position and thickness.
+	* aquaterm/AQTStringDrawingAdditions.m: recurse(): Adding underling.
+	  Adding function documentation.
 
-2004-10-18 20:32  persquare
+	* aquaterm/AQTStringDrawingAdditions.m: Adding improved string
+	  rendering code.
 
-	* AQTStringDrawingAdditions.m: Removing the old string drawing
-	  code.
+2004-10-15  Per Persson <persquare@users.sourceforge.net>
 
-2004-10-18 20:06  persquare
+	* aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/AQTStringDrawingAdditions.h,
+	  aquaterm/AQTStringDrawingAdditions.m: Moving string drawing methods
+	  into a category of their own.
 
-	* AQTStringDrawingAdditions.m: Reverting overprint changes.
+2004-10-14  Per Persson <persquare@users.sourceforge.net>
 
-2004-10-18 18:13  persquare
+	* aquaterm/AQTGraphicDrawingMethods.m: Handle drawing a string
+	  differently than an attributed string. General cleanup as a
+	  consequence
 
-	* AQTStringDrawingAdditions.m: recurse(): Adding overprinting.
+	* aquaterm/AQTLabel.h, aquaterm/AQTLabel.m: Don't convert a string to
+	  an attributed string since the latter can be more efficiently
+	  handled when drawing.
 
-2004-10-18 17:23  persquare
+	* aquaterm/AQTGraphicDrawingMethods.m: _aqtLabelUpdateCache: Better
+	  parsing of attributes (non-printing chars and font). Implicit
+	  conversion from Adobe Symbol encoding to unicode. Cleaning up
+	  attribute parsing code. Preparing for refactoring.
 
-	* AQTStringDrawingAdditions.m: recurse(): Adding underling. Adding
-	  function documentation.
+2004-10-12  Per Persson <persquare@users.sourceforge.net>
 
-2004-10-18 15:52  persquare
+	* aquaterm/ReleaseNotes: Clear destination rect before adding a
+	  bitmap.
 
-	* AQTStringDrawingAdditions.m: Adding improved string rendering
-	  code.
+	* aquaterm/AQTAdapter.m: Clear destination rect before adding a
+	  bitmap. The whole process of eraseRect: need to be cleaned up in
+	  the future.
 
-2004-10-15 11:45  persquare
+2004-09-29  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m,
-	  AQTStringDrawingAdditions.h, AQTStringDrawingAdditions.m: Moving
-	  string drawing methods into a category of their own.
+	* Version 1.0.b2 released.
 
-2004-10-14 22:56  persquare
+	* adapters/c/ChangeLog, adapters/fortran/ChangeLog,
+	  adapters/gnuplot/ChangeLog, adapters/pgplot/ChangeLog,
+	  adapters/plplot/ChangeLog: Bump to 1.0.b2
 
-	* AQTGraphicDrawingMethods.m: Handle drawing a string differently
-	  than an attributed string.  General cleanup as a consequence
+	* aquaterm/AquaTerm.pbproj/per.pbxuser: Remove.
 
-2004-10-14 22:54  persquare
+	* aquaterm/Bugs.m: Bring up to date.
 
-	* AQTLabel.h, AQTLabel.m: Don't convert a string to an attributed
-	  string since the latter can be more efficiently handled when
-	  drawing.
+	* aquaterm/AquaTerm.pbproj/per.pbxuser: Prepare to remove.
 
-2004-10-14 13:56  persquare
+	* aquaterm/AQTController.m, aquaterm/AquaTerm.app-Info.plist,
+	  aquaterm/ChangeLog, aquaterm/Help/AQTAdapter.html,
+	  aquaterm/ReadMe.rtf, aquaterm/ReleaseNotes: Bump to version 1.0.b2.
 
-	* AQTGraphicDrawingMethods.m: _aqtLabelUpdateCache: Better parsing
-	  of attributes (non-printing chars and font).	Implicit conversion
-	  from Adobe Symbol encoding to unicode.  Cleaning up attribute
-	  parsing code.  Preparing for refactoring.
+	* aquaterm/distroMakefile, aquaterm/installer/installer.packproj:
+	  Building .pkg directly in destination because of data loss when
+	  copying.
 
-2004-10-12 14:35  persquare
+	* aquaterm/installer/preflight: Remove library too.
 
-	* ReleaseNotes: Clear destination rect before adding a bitmap.
+	* aquaterm/Fwk-Info.plist: Adding an experimental Framework target.
 
-2004-10-12 14:25  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Adding an experimental
+	  Framework target. Minor changes.
 
-	* AQTAdapter.m: Clear destination rect before adding a bitmap. The
-	  whole process of eraseRect: need to be cleaned up in the future.
+	* aquaterm/AQTClientManager.m: Changing the way launching from client
+	  works.
 
-2004-09-29 15:57  persquare
+2004-09-21  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/per.pbxuser: Remove.
+	* aquaterm/AQTController.m, aquaterm/AQTModelAdditions.m,
+	  aquaterm/AQTPlot.m: Removing stray logging.
 
-2004-09-29 15:56  persquare
+2004-09-16  Per Persson <persquare@users.sourceforge.net>
 
-	* Bugs.m: Bring up to date.
+	* aquaterm/ReadMe.rtf: Using RTF for main ReadMe file (again).
 
-2004-09-29 15:55  persquare
+	* aquaterm/Help/AQTAdapter.html, aquaterm/Help/help.html: Adding help
+	  files to project.
 
-	* AquaTerm.pbproj/per.pbxuser: Prepare to remove.
+	* adapters/c/ReleaseNotes, adapters/fortran/ReleaseNotes,
+	  adapters/gnuplot/ReadMe, adapters/gnuplot/ReleaseNotes,
+	  adapters/plplot/ReadMe, adapters/plplot/Readme: Final changes for
+	  first beta release.
 
-2004-09-29 12:03  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTClientManager.m,
+	  aquaterm/AQTClientProtocol.h, aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/ReleaseNotes,
+	  aquaterm/distroMakefile: Final changes for first beta release.
 
-	* AQTController.m, AquaTerm.app-Info.plist, ReadMe.rtf,
-	  ReleaseNotes, Help/AQTAdapter.html, ChangeLog: Bump to version
-	  1.0.b2.
+	* aquaterm/English.lproj/help.html: This file is now copied to
+	  Resources at build time.
 
-2004-09-29 12:01  persquare
+2004-09-12  Per Persson <persquare@users.sourceforge.net>
 
-	* distroMakefile, installer/installer.packproj: Building .pkg
-	  directly in destination because of data loss when copying.
+	* aquaterm/ChangeLog, aquaterm/ReleaseNotes: Update.
 
-2004-09-29 12:00  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Don't strip deployment
+	  binaries (yet).
 
-	* installer/preflight: Remove library too.
+	* aquaterm/distroMakefile: Minor changes.
 
-2004-09-29 11:59  persquare
+2004-09-10  Per Persson <persquare@users.sourceforge.net>
 
-	* Fwk-Info.plist: Adding an experimental Framework target.
-
-2004-09-29 11:59  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Adding an experimental Framework
-	  target. Minor changes.
-
-2004-09-29 11:57  persquare
-
-	* AQTClientManager.m: Changing the way launching from client works.
-
-2004-09-21 23:12  persquare
-
-	* AQTController.m, AQTPlot.m, AQTModelAdditions.m: Removing stray
-	  logging.
-
-2004-09-16 13:12  persquare
-
-	* ReadMe.rtf: Using RTF for main ReadMe file (again).
-
-2004-09-16 13:11  persquare
-
-	* Help/: AQTAdapter.html, help.html: Adding help files to project.
-
-2004-09-16 13:03  persquare
-
-	* AquaTerm.pbproj/project.pbxproj, AQTAdapter.h,
-	  AQTClientManager.m, AQTClientProtocol.h,
-	  AQTGraphicDrawingMethods.m, ReleaseNotes, distroMakefile: Final
-	  changes for first beta release.
-
-2004-09-16 13:00  persquare
-
-	* English.lproj/help.html: This file is now copied to Resources at
-	  build time.
-
-2004-09-12 23:23  persquare
-
-	* ChangeLog, ReleaseNotes: Update.
-
-2004-09-12 23:22  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Don't strip deployment binaries
-	  (yet).
-
-2004-09-12 23:20  persquare
-
-	* distroMakefile: Minor changes.
-
-2004-09-10 16:33  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Removing absolute file
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Removing absolute file
 	  references.
 
-2004-09-10 15:57  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/distroMakefile,
+	  aquaterm/installer/installer.packproj: Rearranging stuff and
+	  updating
 
-	* distroMakefile, AquaTerm.pbproj/project.pbxproj,
-	  installer/installer.packproj: Rearranging stuff and updating
+2004-09-09  Per Persson <persquare@users.sourceforge.net>
 
-2004-09-09 13:33  persquare
+	* aquaterm/distroMakefile: First steps towards a fully automated
+	  release system.
 
-	* distroMakefile: First steps towards a fully automated release
-	  system.
+	* aquaterm/installer/installer.packproj,
+	  aquaterm/installer/postflight, aquaterm/installer/preflight: Now
+	  using Iceberg to create an installer pkg.
 
-2004-09-09 12:53  persquare
+2004-09-04  Per Persson <persquare@users.sourceforge.net>
 
-	* installer/: installer.packproj, postflight, preflight: Now using
-	  Iceberg to create an installer pkg.
+	* aquaterm/AQTAdapterPrivateMethods.h,
+	  aquaterm/AQTAdapterPrivateMethods.m, aquaterm/AQTClientHandler.h,
+	  aquaterm/AQTClientHandler.m: Removing unused files.
 
-2004-09-04 17:46  persquare
+	* aquaterm/AquaTerm.app-Info.plist,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Bringing project up to
+	  date.
 
-	* AQTClientHandler.h, AQTClientHandler.m: Removing unused files.
+	* aquaterm/AQTController.m, aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/AQTPrefController.h, aquaterm/AQTPrefController.m,
+	  aquaterm/English.lproj/Preferences.nib/classes.nib,
+	  aquaterm/English.lproj/Preferences.nib/info.nib,
+	  aquaterm/English.lproj/Preferences.nib/objects.nib: Adding
+	  preference to constrain minimum line width used in plot to 0.25
+	  pts.
 
-2004-09-04 17:42  persquare
+2004-09-03  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapterPrivateMethods.h, AQTAdapterPrivateMethods.m: Removing
-	  unused files.
-
-2004-09-04 17:36  persquare
-
-	* AquaTerm.pbproj/project.pbxproj, AquaTerm.app-Info.plist:
-	  Bringing project up to date.
-
-2004-09-04 17:33  persquare
-
-	* AQTController.m, AQTGraphicDrawingMethods.m, AQTPrefController.h,
-	  AQTPrefController.m, English.lproj/Preferences.nib/classes.nib,
-	  English.lproj/Preferences.nib/info.nib,
-	  English.lproj/Preferences.nib/objects.nib: Adding preference to
-	  constrain minimum line width used in plot to 0.25 pts.
-
-2004-09-03 23:24  persquare
-
-	* AQTClientManager.m: Catch server errors as gracefully as
+	* aquaterm/AQTClientManager.m: Catch server errors as gracefully as
 	  possible, i.e. don't crash the client. (#1019717)
 
-2004-09-01 11:46  persquare
+2004-09-01  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTClientManager.m: Fixing problems with launch of AquaTerm from
-	  client (#1019712).
+	* aquaterm/AQTClientManager.m: Fixing problems with launch of
+	  AquaTerm from client (#1019712).
 
-2004-08-31 19:26  persquare
+2004-08-31  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTClientManager.m: Remove hardcoded server name. Prefix log
-	  messages with "libaquaterm::".
+	* aquaterm/AQTClientManager.m: Remove hardcoded server name. Prefix
+	  log messages with "libaquaterm::".
 
-2004-08-25 21:11  persquare
+2004-08-25  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTGraphicDrawingMethods.m: Fixing bug where an invalid fontface
-	  request would crash AQT. (#1015888)
+	* aquaterm/AQTGraphicDrawingMethods.m: Fixing bug where an invalid
+	  fontface request would crash AQT. (#1015888)
 
-2004-06-10 16:13  persquare
+2004-06-10  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/project.pbxproj: Updating.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Updating.
 
-2004-06-10 16:10  persquare
+	* aquaterm/AQTModel.m, aquaterm/AQTModelAdditions.m,
+	  aquaterm/AQTPlot.m: Fixing resize bug.
 
-	* AQTModel.m, AQTModelAdditions.m, AQTPlot.m: Fixing resize bug.
+	* aquaterm/AQTController.m: Changing default settings.
 
-2004-06-10 15:54  persquare
+2004-06-09  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTController.m: Changing default settings.
-
-2004-06-09 19:49  persquare
-
-	* AQTGraphicDrawingMethods.m, AQTModel.h, AQTModel.m,
-	  AQTModelAdditions.h, AQTModelAdditions.m, AQTPlot.h, AQTPlot.m:
-	  Cleaning up dirtyRect handling, moving it to AQTModel from
-	  AQTPlot. Moving methods from AQTPlot to a category
+	* aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTModelAdditions.h,
+	  aquaterm/AQTModelAdditions.m, aquaterm/AQTPlot.h,
+	  aquaterm/AQTPlot.m: Cleaning up dirtyRect handling, moving it to
+	  AQTModel from AQTPlot. Moving methods from AQTPlot to a category
 	  AQTModelAdditions.
 
-2004-06-09 19:43  persquare
+	* aquaterm/AQTFunctions.h: Utility function to test for sizes with
+	  equal h/w-ratio.
 
-	* AQTFunctions.h: Utility function to test for sizes with equal
-	  h/w-ratio.
+	* adapters/gnuplot/aquaTerm.trm: Fixing to pm3d colors by Petr
+	  Mikulik.
 
-2004-06-09 10:09  persquare
-
-	* AQTPlot.h, AQTPlot.m: Fixing the broken dirtyRect handling.
-
-2004-06-09 09:54  persquare
-
-	* Demo.m: Correction misuse of line instead of filled rect.
-
-2004-05-22 17:29  persquare
-
-	* AQTView.m: Offset drawing by (0.5, 0.5). to get it properly
-	  aligned.
-
-2004-05-22 17:28  persquare
-
-	* AQTGraphicDrawingMethods.m: Closing holes in surfaces (between
-	  filled areas). I don't understand the cause of this problem,
-	  could be numerical.
-
-2004-05-22 14:44  persquare
-
-	* AQTController.h, AQTController.m, AQTPlot.m: Fix hang when
-	  closing > 4? windows simultaneously, by using a notification to
-	  defer checking client state until all windows are closed (or
-	  moved away).
-
-2004-05-22 11:53  persquare
-
-	* AQTController.h, AQTController.m, AQTPlot.m,
-	  English.lproj/AQTWindow.nib/info.nib,
-	  English.lproj/AQTWindow.nib/objects.nib,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  AquaTerm.pbproj/project.pbxproj: Adding window arranging
-	  (cascade/tile).
-
-2004-05-19 15:56  persquare
-
-	* AquaTerm.app-Info.plist: Bump version.
-
-2004-05-19 15:55  persquare
-
-	* INSTALL, ReadMe, ToDo, distroMakefile, makeHelp: Minor updates.
-
-2004-05-19 15:54  persquare
-
-	* aquaterm.h: Add warning comment to event handler callback.
-
-2004-05-19 15:52  persquare
-
-	* AQTPlotBuilder.h: Add missing prototype.
-
-2004-05-19 15:51  persquare
-
-	* AQTController.m: Be nice and display an error dialog if the
-	  service can't be established.
-
-2004-05-19 15:45  persquare
-
-	* AQTClientManager.h, AQTClientManager.m: Make connectionName a
-	  parameter.
-
-2004-05-19 00:23  persquare
-
-	* distroMakefile: Patch no longer needed.
-
-2004-05-19 00:22  persquare
-
-	* ReleaseNotes: Updating with latest changes.
-
-2004-05-18 23:56  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Updating project.
-
-2004-05-18 23:54  persquare
-
-	* AQTPrefController.h, AQTPrefController.m: Adding preferences.
-
-2004-05-18 23:53  persquare
-
-	* AQTView.m: Utilizing preferences.
-
-2004-05-18 23:52  persquare
-
-	* AQTPlot.m: Utilizing preferences. Remember directory and filetype
-	  for save (#872996).
-
-2004-05-18 23:45  persquare
-
-	* AQTController.h, AQTController.m: Adding preferences to Aquaterm.
-
-2004-05-18 23:43  persquare
-
-	* English.lproj/: AQTWindow.nib/info.nib,
-	  AQTWindow.nib/objects.nib, ExtendSavePanel.nib/info.nib,
-	  ExtendSavePanel.nib/objects.nib, MainMenu1.nib/classes.nib,
-	  MainMenu1.nib/info.nib, MainMenu1.nib/objects.nib,
-	  Preferences.nib/classes.nib, Preferences.nib/info.nib,
-	  Preferences.nib/objects.nib: Adding Preferences nib. Updating all
-	  nibs.
-
-2004-03-30 11:17  persquare
-
-	* ReleaseNotes: Notes.
-
-2004-03-30 11:13  persquare
-
-	* AQTGraphicDrawingMethods.m: Fixing a problem with leading spaces
-	  in labels, causing problems with alignment.
-
-2004-03-29 23:37  persquare
-
-	* AQTPlot.m: Enable Page Setup.
-
-2004-03-17 11:20  persquare
-
-	* distroMakefile: Missing patch file added.
-
-2004-03-17 11:19  persquare
-
-	* INSTALL: Fixing small errors.
-
-2004-03-16 22:54  persquare
-
-	* AquaTerm.app-Info.plist: Preparing for release.
-
-2004-03-16 22:44  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Preparing for release.
-
-2004-03-16 22:23  persquare
-
-	* ChangeLog: Preparing for release.
-
-2004-03-16 22:21  persquare
-
-	* AquaTerm.app-Info.plist: Bumping version number.
-
-2004-03-16 22:09  persquare
-
-	* AQTBaseMethods.h, AQTBuilder.h, AQTBuilder.m,
-	  AQTColorInspector.h, AQTColorInspector.m, AQTExtendedMethods.h,
-	  AQTPlotController.h, AQTPlotController.m, AQTProtocol.h,
-	  AQTProtocol.mdoc: Remove old files.
-
-2004-03-16 22:05  persquare
-
-	* INSTALL, ReadMe, ReleaseNotes, ToDo, makeHelp: Visual appearance
-	  changes.
-
-2004-03-16 15:17  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Changes.
-
-2004-03-16 15:17  persquare
-
-	* ReleaseNotes, makeHelp: Improving visual appearance.
-
-2004-03-16 13:56  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: A little rearranging.  Script
-	  the help file generation.
-
-2004-03-16 13:56  persquare
-
-	* makeHelp: Script the help file generation.
-
-2004-03-16 13:55  persquare
-
-	* ReadMe, ReleaseNotes: Cleanup.
-
-2004-03-16 13:49  persquare
-
-	* ReadMe.txt, INSTALL, English.lproj/Credits.rtf, distroMakefile:
-	  Cleanup.
-
-2004-03-16 10:15  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, aquaterm.h: Minor changes to visible
-	  headers.
-
-2004-03-16 10:14  persquare
-
-	* aquaterm.m: No more errorHandler callback from C API. It couldn't
-	  really handle anything.
-
-2004-03-16 10:04  persquare
-
-	* AQTAdapter.m: Correcting example code.
-
-2004-03-16 09:58  persquare
-
-	* AQTAdapter.m, AQTClientManager.m: Fixing a problem where event
-	  buffer wasn't properly initialized.  An event loop time-out would
-	  give an invalid return value (nil).
-
-2004-03-15 16:41  persquare
-
-	* AQTFunctions.h, AQTFunctions.m: Fixing AQTIntervalContainsFloat()
-	  to include endpoints.  This caused horizontal and vertical
-	  vertical lines starting on the canvas bounds to be skipped when
-	  drwing plot.	Cleaning functions. Using macros for comparison.
-
-2004-03-15 13:27  persquare
-
-	* AQTPlot.m: Apply clipRect (=canvasRect) to graphic bounds before
-	  comparing.  Fixes a bug where plots aren't erased because of
-	  objects extending past canvas bounds.
-
-2004-03-14 21:38  persquare
-
-	* AQTPlot.m: Fixing dirty region handling.
-
-2004-03-07 21:10  persquare
-
-	* AQTModel.m, AQTPlot.m: Minor change to log output format.
-
-2004-03-04 23:35  persquare
-
-	* AQTPlotBuilder.h, AQTPlotBuilder.m: Removing a method and an ivar
-	  that are no longer needed.
-
-2004-03-02 23:43  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Deleted AQTPlotController.
-
-2004-03-02 23:43  persquare
-
-	* AQTAdapter.m, AQTClientManager.h, AQTClientManager.m,
-	  AQTClientProtocol.h, AQTConnectionProtocol.h, AQTController.h,
-	  AQTController.m, AQTEventProtocol.h, AQTPlot.h, AQTPlot.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m: Massive changes to achieve
-	  some code cleanliness.  Deleted AQTPlotController and moved
-	  functionality into AQTClientManager to avoid duplication of work.
-	  No more cyclic dependencies between lib and app.
-
-2004-03-02 23:40  persquare
-
-	* Bugs.m, Demo.m, Timing.m: Fix warnings.
-
-2004-02-29 00:25  persquare
-
-	* AQTClientManager.m:
-	  This is a fix for the bug, reported by Attilio Rivoldini, that
-	  causes a segfault when freeing the autoreleasepool in the code
-	  example in the (auto-) docs.
-
-2004-02-23 16:16  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Adding Install target.  Use
-	  'sudo xcodebuild -target Install' to invoke.
-
-2004-02-23 16:15  persquare
-
-	* AQTController.m: Adding stub text to bug/feedback mail.  Always
-	  use a mail client.
-
-2004-02-23 16:13  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTPlotBuilder.h, AQTPlotBuilder.m,
-	  aquaterm.h, aquaterm.m: Changing name from
-	  getCurrentColorRed:green:blue to getColorRed:green:blue.  Adding
-	  getBackgroundColorRed:green:blue and support.  Similar for C API.
-
-2004-02-21 20:51  persquare
-
-	* INSTALL, distroMakefile: Automating point-releases.
-
-2004-02-21 18:59  persquare
-
-	* AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  AquaTerm.app-Info.plist: Moving to XCode. This might cause
-	  trouble.
-
-2004-02-07 01:52  persquare
-
-	* AQTEventProtocol.h: Fixing(?) the bug that caused a hang when
-	  trying to close a window with active client.
-
-2003-12-29 23:11  persquare
-
-	* ReadMe.txt: Important note.
-
-2003-12-29 23:02  persquare
-
-	* ReadMe.txt: Some more info...
-
-2003-12-29 22:44  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Cleaning.
-
-2003-12-29 22:44  persquare
-
-	* ReadMe.txt: Some more info.
-
-2003-12-29 22:27  persquare
-
-	* ReadMe.txt, ToDo: Updating to AQT1.0.
-
-2003-12-29 16:03  persquare
-
-	* AQTAdapter.m, AQTClientManager.m, AQTPlot.m, AQTPlotBuilder.m,
-	  aquaterm.m: Removing excess logging.
-
-2003-12-29 15:51  persquare
-
-	* ChangeLog: Update.
-
-2003-12-29 15:49  persquare
-
-	* AQTClientProtocol.h, AQTEventProtocol.h: Minor change.
-
-2003-12-29 15:38  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Rearranging stuff.
-
-2003-12-29 15:37  persquare
-
-	* English.lproj/AQTWindow.nib/: classes.nib, info.nib, objects.nib:
-	  Minor cleanup.
-
-2003-12-29 15:37  persquare
-
-	* Demo.m: Adding transdformed image demo. Minor cleanup.
-
-2003-12-29 15:36  persquare
-
-	* aquaterm.h, aquaterm.m: Major rewrite. This is now a wrapper
-	  around the ObjC API.
-
-2003-12-29 15:34  persquare
-
-	* AQTClientManager.m: Adding FIXME note.
-
-2003-12-10 22:50  persquare
-
-	* AQTPlot.m, AQTView.m: Fixing cursor behavior to correctly
-	  indicate event processing state.
-
-2003-12-10 21:38  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Adding a unified C API.
-
-2003-12-10 21:37  persquare
-
-	* aquaterm.h, aquaterm.m: Adding a unified C API. Still needs work.
-
-2003-12-06 23:32  persquare
-
-	* AQTController.h, AQTController.m, AQTPlot.h, AQTPlot.m: Warn
-	  before quitting if clients still connected.  No need for a
-	  doConnection ivar.
-
-2003-12-04 21:30  persquare
-
-	* AQTPlot.h, AQTPlot.m, English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib: Adding a "Refresh view"
-	  entry to debug menu.
-
-2003-12-03 18:46  persquare
-
-	* AQTAdapter.m, AQTClientManager.h, AQTClientManager.m,
-	  AQTPlotController.m: Move error recovery to AQTClientManager.
-
-2003-12-02 23:56  persquare
-
-	* AQTController.m: A reminder to fix stuff.
-
-2003-12-02 23:14  persquare
-
-	* AQTPlotBuilder.m: Log dealloc'ing.
-
-2003-12-02 23:13  persquare
-
-	* AQTClientManager.m: Fixing a bug in -closePlot.  Changing the way
-	  exceptions (i.e. server dies) are handled internally from direct
-	  call to notification. Problem is that notification is received in
-	  subsequent DO call. Just releasing or autoreleasing
-	  builers/plotcontrollers will cause a crash.
-
-2003-12-02 23:12  persquare
-
-	* AQTAdapter.m, AQTPlotController.m: Changing the way exceptions
-	  (i.e. server dies) are handled internally from direct call to
-	  notification. Problem is that notification is received in
-	  subsequent DO call. Just releasing or autoreleasing
-	  builers/plotcontrollers will cause a crash.
-
-2003-12-02 01:56  persquare
-
-	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m: Fixes.
-
-2003-12-02 01:51  persquare
-
-	* Demo.m: Fixing release bug.
-
-2003-12-02 01:50  persquare
-
-	* AQTEventProtocol.h, AQTPlot.m, AQTPlotController.m: Fixes.
-
-2003-12-02 01:49  persquare
-
-	* AQTConnectionProtocol.h, AQTController.h, AQTController.m: Minor
-	  changes.
-
-2003-12-02 01:48  persquare
-
-	* AQTAdapter.m: Logging code.
-
-2003-12-01 21:45  persquare
-
-	* AQTPlotController.m: Forgot to release handler (AQTPlot) when
-	  dealloc'ing plot controller. Added some debug logging for
-	  error-handling test.
-
-2003-12-01 19:04  persquare
-
-	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m: Don't set
-	  color unless necessary (small, 5-10%, speedup of drawing).
-
-2003-12-01 19:00  persquare
-
-	* AQTClientManager.m: Fixing minor bug.
-
-2003-11-28 11:42  persquare
-
-	* AQTFunctions.h, AQTFunctions.m: Adding utility functions.  The
-	  NSIntersectsRect() etc. methods doesn't handle intersection of
-	  hor./vert. lines and area.
-
-2003-11-28 11:38  persquare
-
-	* AQTPlot.h, AQTPlot.m: Moving appendModel: and (temporarily?)
-	  removeObjectsInRect: to AQTPlot.  Many small changes.
-
-2003-11-28 11:24  persquare
-
-	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m: Moving
-	  appendModel: and (temporarily?) removeObjectsInRect: to AQTPlot.
-
-2003-11-28 11:21  persquare
-
-	* AQTGraphic.h, AQTGraphic.m, AQTModel.h, AQTModel.m,
-	  AQTPlotBuilder.m: Clearing up confusion about which model objects
-	  knows the canvas size (AQTModel). Adding some accessors to
-	  AQTModel. Renaming a few methods for clarity.
-
-2003-11-27 11:07  persquare
-
-	* AQTPatch.h, AQTPatch.m: Not used.
-
-2003-11-27 10:53  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTClientManager.h,
-	  AQTClientManager.m, AQTClientProtocol.h, AQTPath.h,
-	  AQTPlotBuilder.m, AQTPlotController.h, AQTPlotController.m:
-	  General cleanup in client code.
-
-2003-11-25 12:46  persquare
-
-	* AQTEventProtocol.h: Whoops, forgot to commit this one.
-
-2003-11-23 23:51  persquare
-
-	* AQTPlotBuilder.h, AQTPlotBuilder.m: Fixing the zero size problem.
-
-2003-11-23 23:00  persquare
-
-	* AQTClientManager.m: Rearrange code to get rid of a warning.
-
-2003-11-23 22:50  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Major restructuring.
-
-2003-11-23 22:48  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTClientManager.h,
-	  AQTClientManager.m, AQTPlotBuilder.h, AQTPlotBuilder.m,
-	  AQTPlotController.h, AQTPlotController.m: Major restructuring.
-	  Moving code from AQTAdapter, AQTAdapterPrivateMethods and
-	  AQTPlotBuilder to new classes AQTClientManager and
-	  AQTPlotController to clean up responsibilities.  Problems with
-	  -eraseRect. Tricky, needs implementation.  Step back wrt
-	  setPlot/appendPlot. Uses setPlot exclusively. Need appendPlot for
-	  efficiency.  Adding env var AQUATERM_LOGLEVEL to control
-	  verbosity: 0=off to 3=max.
-
-2003-11-19 21:16  persquare
-
-	* AquaTerm.pbproj/project.pbxproj, AQTAdapter.h, AQTAdapter.m,
-	  AQTAdapterPrivateMethods.m, AQTConstants.m,
-	  AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m,
-	  AQTPath.h, AQTPath.m, AQTPlot.m, AQTPlotBuilder.h,
-	  AQTPlotBuilder.m, Demo.m: Cleaning.
-
-2003-11-19 00:18  persquare
-
-	* AQTPlot.m: Checking for change in background color.
-
-2003-11-18 23:40  persquare
-
-	* AQTPlotBuilder.m: Respect moveToVertexPoint: at all times.  Flush
-	  more aggressively.
-
-2003-11-18 22:25  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTPatch.m, AQTPath.h, AQTPath.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m: Removing useless X/Y methods.
-
-2003-11-18 22:12  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
-	  Adding moveToVertexPoint: and addEdgeToPoint: instead of kludgy
-	  X/Y vectors.
-
-2003-11-18 21:18  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTPatch.m, AQTPath.h, AQTPath.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m: Disable the new
-	  addPoly{line,gon}WithXCoords:yCoords:pointCount: It probably
-	  wasn't a good idea.
-
-2003-11-18 12:29  persquare
-
-	* AQTAdapter.m, AQTAdapterPrivateMethods.m, AQTPlot.m: Fixing use
-	  of explicit exception names.
-
-2003-11-18 12:19  persquare
-
-	* AQTAdapter.h, AQTAdapter.m: Removing unnecessary instance
-	  variable.
-
-2003-11-18 11:57  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTColorMap.h, AQTColorMap.m,
-	  AQTPatch.m, AQTPath.h, AQTPath.m, AQTPlotBuilder.h,
-	  AQTPlotBuilder.m, Demo.m: Adding three methods (colormapSize,
-	  addPolygonWithXCoord:yCoord:pointCount,
-	  addPolylineWithXCoord:yCoord:pointCount) to AQTAdapter.  Removing
-	  three query methods (fontsize, fontname, linewidth) from
-	  AQTAdapter.  Ripple changes through classes.	Fixing bugs in
-	  AQTPlotBuilder and AQTPatch.	Adding testcase to Demo.m
-
-2003-11-18 10:37  persquare
-
-	* AQTPlot.m: Fix aspect ratio problem when resizing.
-
-2003-11-18 10:35  persquare
-
-	* Bugs.m, Demo.m: Close plot when done.
-
-2003-11-15 16:06  persquare
-
-	* AQTAdapterPrivateMethods.m, AQTController.m,
-	  AQTGraphicDrawingMethods.m, AQTPatch.m, AQTPlot.m, AQTView.h,
-	  AQTView.m: Minor clean-up all over.
-
-2003-11-15 16:05  persquare
-
-	* AQTPlotBuilder.m: Fix problem with embedded adapter.
-
-2003-11-15 16:03  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Minor clean-up all over.
-
-2003-11-13 10:46  persquare
-
-	* AQTController.h, AQTController.m, AQTPlot.m, AQTPlotBuilder.m:
-	  Window cascading.
-
-2003-11-13 10:46  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Path fix.
-
-2003-11-10 23:39  persquare
-
-	* AQTGraphicDrawingMethods.m, Bugs.m: Styled text implemented.
-	  Works but is, ehm, "naive"...
-
-2003-11-10 12:01  persquare
-
-	* AQTGraphicDrawingMethods.m: Adding underlining to string drawing.
-
-2003-11-08 23:07  persquare
-
-	* AQTAdapter.h, AQTGraphicDrawingMethods.m, Demo.m: Adding vertical
-	  alignment of labels. Defining keys in AQTAdapter.h. Examples in
-	  Demo.m.
-
-2003-11-08 23:05  persquare
-
-	* Bugs.m: Hmmm. This was supposed to be a tmplate file. It is now.
-
-2003-11-08 11:24  persquare
-
-	* English.lproj/MainMenu1.nib/: info.nib, objects.nib: Updating
-	  menu item names.
-
-2003-11-08 11:22  persquare
-
-	* AquaTerm.pbproj/project.pbxproj, AQTController.m, Bugs.m, Demo.m,
-	  Timing.m: Moving debug code to separate files.
-
-2003-11-08 02:36  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Adding demo code. Flag AQT_APP
-	  needed when building with demo code.
-
-2003-11-08 02:35  persquare
-
-	* AQTController.h, AQTController.m, AQTGraphicDrawingMethods.m,
-	  Demo.m: Adding demo code. Adding feedback mail.
-
-2003-11-07 20:23  persquare
-
-	* English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib, AQTController.h,
-	  AQTController.m: New menu structure. Adding Debug menu.
-
-2003-11-07 20:23  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: Update.
-
-2003-11-07 18:46  persquare
-
-	* AQTView.m, AQTGraphicDrawingMethods.m, AQTPlot.m, AQTView.h:
-	  Cleaning up code handling dirty rects.
-
-2003-11-07 13:29  persquare
-
-	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m: Changing
-	  AQTLabel's renderInRect to use a Bezier path formed from glyphs
-	  rather than drawing with string methods. Clenaing.
-
-2003-11-06 11:49  persquare
-
-	* AQTAdapter.m, AQTAdapterPrivateMethods.h,
-	  AQTAdapterPrivateMethods.m, AQTConnectionProtocol.h,
-	  AQTController.m, AQTPlotBuilder.m: Improving error/exception
-	  handling in client.
-
-2003-11-06 10:45  persquare
-
-	* AQTPlotBuilder.m: Adding setter for internal state modelIsDirty
-	  to facilitate actions when state changes.
-
-2003-11-06 01:32  persquare
-
-	* AQTAdapter.h, AQTAdapter.m: Adding -waitNextEvent to adapter.
-
-2003-11-06 01:04  persquare
-
-	* AQTAdapter.m, AQTGraphicDrawingMethods.m, AQTPlotBuilder.m:
-	  Cleaning some FIXME's.
-
-2003-11-06 00:13  persquare
-
-	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m,
-	  AQTModel.h, AQTModel.m, AQTPlot.m, AQTView.m: Moving	server code
-	  from AQTModel, and adding some new, to category. Updating AQTPlot
-	  to comply. Minor fix to AQTView.
-
-2003-11-05 22:32  persquare
-
-	* AQTClientProtocol.h, AQTPlot.m, AQTPlotBuilder.m: Moving
-	  eraseRect action to server.
-
-2003-11-05 20:47  persquare
-
-	* AQTController.m, AQTPlot.m, AQTView.m: Conditionalize verbose
-	  logging on DEBUG_BOUNDS.
-
-2003-11-05 20:39  persquare
-
-	* AQTClientProtocol.h, AQTGraphicDrawingMethods.h,
-	  AQTGraphicDrawingMethods.m, AQTLabel.m, AQTModel.h, AQTModel.m,
-	  AQTPath.m, AQTPlot.h, AQTPlot.m, AQTPlotBuilder.h,
-	  AQTPlotBuilder.m, AQTView.h, AQTView.m: Major changes to model
-	  updating. Pass only new data. Respect dirty rect in drawRect:.
-
-2003-11-04 11:29  persquare
-
-	* AQTLabel.h: Minor change.
-
-2003-11-03 18:23  persquare
-
-	* AQTGraphic.m, AQTLabel.m: Fixing minor leak. Cleaning.
-
-2003-10-31 21:57  persquare
-
-	* AQTAdapter.h, AQTAdapter.m: Adding per-plot event buffering,
-	  -lastEvent refers to the currently selected plot.
-
-2003-10-31 13:33  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTClientProtocol.h, AQTPlot.h,
-	  AQTPlot.m, AQTPlotBuilder.h, AQTPlotBuilder.m, AQTView.m: Fixing
-	  up the kludgy lastEvent stuff. Still needs adapter to handle it
-	  on a per client basis.
-
-2003-10-31 10:20  persquare
-
-	* AQTAdapter.m: Changing builder key to NSNumber. Cleaning.
-
-2003-10-30 12:36  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTController.m, AQTPlot.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m, AQTView.m: Cleaning event
+	* aquaterm/AQTPlot.h, aquaterm/AQTPlot.m: Fixing the broken dirtyRect
 	  handling.
 
-2003-10-29 13:09  persquare
+	* aquaterm/Demo.m: Correction misuse of line instead of filled rect.
 
-	* AQTAdapter.m: Shielding methods with return values from
+2004-05-22  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/c/demo.c, adapters/fortran/demo.f: Duh, fixing misuse of
+	  lines in demo.
+
+	* aquaterm/AQTView.m: Offset drawing by (0.5, 0.5). to get it
+	  properly aligned.
+
+	* aquaterm/AQTGraphicDrawingMethods.m: Closing holes in surfaces
+	  (between filled areas). I don't understand the cause of this
+	  problem, could be numerical.
+
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.m: Fix hang when closing > 4? windows
+	  simultaneously, by using a notification to defer checking client
+	  state until all windows are closed (or moved away).
+
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.m, aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: Adding window
+	  arranging (cascade/tile).
+
+2004-05-19  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.app-Info.plist: Bump version.
+
+	* aquaterm/INSTALL, aquaterm/ReadMe, aquaterm/ToDo,
+	  aquaterm/distroMakefile, aquaterm/makeHelp: Minor updates.
+
+	* aquaterm/aquaterm.h: Add warning comment to event handler callback.
+
+	* aquaterm/AQTPlotBuilder.h: Add missing prototype.
+
+	* aquaterm/AQTController.m: Be nice and display an error dialog if
+	  the service can't be established.
+
+	* aquaterm/AQTClientManager.h, aquaterm/AQTClientManager.m: Make
+	  connectionName a parameter.
+
+2004-05-18  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/distroMakefile: Patch no longer needed.
+
+	* aquaterm/ReleaseNotes: Updating with latest changes.
+
+	* adapters/gnuplot/ReadMe, adapters/gnuplot/ReleaseNotes: Updating
+	  status info.
+
+	* adapters/gnuplot/gnuplot_command_c.patch: Not needed anymore.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Updating project.
+
+	* aquaterm/AQTPrefController.h, aquaterm/AQTPrefController.m: Adding
+	  preferences.
+
+	* aquaterm/AQTView.m: Utilizing preferences.
+
+	* aquaterm/AQTPlot.m: Utilizing preferences. Remember directory and
+	  filetype for save (#872996).
+
+	* aquaterm/AQTController.h, aquaterm/AQTController.m: Adding
+	  preferences to Aquaterm.
+
+	* aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/info.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/English.lproj/Preferences.nib/classes.nib,
+	  aquaterm/English.lproj/Preferences.nib/info.nib,
+	  aquaterm/English.lproj/Preferences.nib/objects.nib: Adding
+	  Preferences nib. Updating all nibs.
+
+2004-03-30  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/ReleaseNotes: Notes.
+
+	* aquaterm/AQTGraphicDrawingMethods.m: Fixing a problem with leading
+	  spaces in labels, causing problems with alignment.
+
+2004-03-29  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlot.m: Enable Page Setup.
+
+	* adapters/gnuplot/aquaTerm.trm: Many minor fixes before comitting to
+	  gnuplot CVS. For now, the file will be maintained here and changes
+	  merged into gnuplot CVS.
+
+2004-03-17  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/distroMakefile: Missing patch file added.
+
+	* aquaterm/INSTALL: Fixing small errors.
+
+2004-03-16  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.app-Info.plist: Preparing for release.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Preparing for release.
+
+	* adapters/pgplot/ChangeLog, adapters/pgplot/README,
+	  adapters/pgplot/ReadMe, adapters/pgplot/g77_gcc_AQT.conf: Preparing
+	  for release.
+
+	* aquaterm/ChangeLog: Preparing for release.
+
+	* aquaterm/AquaTerm.app-Info.plist: Bumping version number.
+
+	* adapters/fortran/ReleaseNotes, adapters/gnuplot/ReleaseNotes:
+	  Visual appearance changes.
+
+	* aquaterm/AQTBaseMethods.h, aquaterm/AQTBuilder.h,
+	  aquaterm/AQTBuilder.m, aquaterm/AQTColorInspector.h,
+	  aquaterm/AQTColorInspector.m, aquaterm/AQTExtendedMethods.h,
+	  aquaterm/AQTPlotController.h, aquaterm/AQTPlotController.m,
+	  aquaterm/AQTProtocol.h, aquaterm/AQTProtocol.mdoc: Remove old
+	  files.
+
+	* aquaterm/INSTALL, aquaterm/ReadMe, aquaterm/ReleaseNotes,
+	  aquaterm/ToDo, aquaterm/makeHelp: Visual appearance changes.
+
+	* adapters/pgplot/README, adapters/pgplot/ReadMe,
+	  adapters/pgplot/ReleaseNotes, adapters/plplot/ReleaseNotes: Visual
+	  appearance changes.
+
+	* adapters/fortran/README, adapters/fortran/ReadMe: Minor addition.
+
+	* adapters/gnuplot/ReleaseNotes: Avoiding brackets.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Changes.
+
+	* aquaterm/ReleaseNotes, aquaterm/makeHelp: Improving visual
+	  appearance.
+
+	* adapters/gnuplot/ReadMe, adapters/gnuplot/gnuplot_command_c.patch:
+	  Adding patch for command.c to fix memory problem.
+
+	* adapters/c/README, adapters/c/ReadMe, adapters/fortran/README,
+	  adapters/fortran/ReadMe, adapters/fortran/ReleaseNotes,
+	  adapters/gnuplot/ReadMe, adapters/gnuplot/ReleaseNotes,
+	  adapters/pgplot/README, adapters/pgplot/ReadMe,
+	  adapters/pgplot/ReleaseNotes, adapters/plplot/ReadMe,
+	  adapters/plplot/Readme, adapters/plplot/ReleaseNotes: Cleaning.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: A little rearranging.
+	  Script the help file generation.
+
+	* aquaterm/makeHelp: Script the help file generation.
+
+	* aquaterm/ReadMe, aquaterm/ReleaseNotes: Cleanup.
+
+	* aquaterm/English.lproj/Credits.rtf, aquaterm/INSTALL,
+	  aquaterm/ReadMe.txt, aquaterm/distroMakefile: Cleanup.
+
+	* adapters/c/ReleaseNotes, adapters/gnuplot/README.txt: Cleanup.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m, aquaterm/aquaterm.h:
+	  Minor changes to visible headers.
+
+	* aquaterm/aquaterm.m: No more errorHandler callback from C API. It
+	  couldn't really handle anything.
+
+	* aquaterm/AQTAdapter.m: Correcting example code.
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTClientManager.m: Fixing a
+	  problem where event buffer wasn't properly initialized. An event
+	  loop time-out would give an invalid return value (nil).
+
+2004-03-15  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/gnuplot/aquaTerm.trm: Fixing points to include a dot.
+	  Changing size of points to 1/3 smaller.
+
+	* aquaterm/AQTFunctions.h, aquaterm/AQTFunctions.m: Fixing
+	  AQTIntervalContainsFloat() to include endpoints. This caused
+	  horizontal and vertical vertical lines starting on the canvas
+	  bounds to be skipped when drwing plot. Cleaning functions. Using
+	  macros for comparison.
+
+	* aquaterm/AQTPlot.m: Apply clipRect (=canvasRect) to graphic bounds
+	  before comparing. Fixes a bug where plots aren't erased because of
+	  objects extending past canvas bounds.
+
+	* adapters/gnuplot/aquaTerm.trm: Autoreleasepools should be handled
+	  in command() in gnuplot/src/command.c. Leave a last line of defense
+	  in the driver.
+
+2004-03-14  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlot.m: Fixing dirty region handling.
+
+	* adapters/gnuplot/aquaTerm.trm: Fixing flickering when updating
+	  plot.
+
+2004-03-07  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTModel.m, aquaterm/AQTPlot.m: Minor change to log output
+	  format.
+
+2004-03-04  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Removing a
+	  method and an ivar that are no longer needed.
+
+	* adapters/pgplot/aqdriv.m: Reorder aqt calls to fix problem with
+	  first page not showing and subsequent pages placed at the bottom of
+	  the screen, only titlebar visible. Removing autoreleasepool cruft.
+
+	* adapters/pgplot/g77_gcc_AQT.conf, adapters/pgplot/xlf_gcc_AQT.conf:
+	  Add install_name to shared lib. Unfortunately had to hardcode
+	  /usr/local/lib.
+
+	* adapters/fortran/Makefile: Add target clean.
+
+	* adapters/c/Makefile: Add target clean. Make sure code is debuggable
+	  (-g -O0).
+
+2004-03-02  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Deleted
+	  AQTPlotController.
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTClientManager.h,
+	  aquaterm/AQTClientManager.m, aquaterm/AQTClientProtocol.h,
+	  aquaterm/AQTConnectionProtocol.h, aquaterm/AQTController.h,
+	  aquaterm/AQTController.m, aquaterm/AQTEventProtocol.h,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Massive changes to achieve some code
+	  cleanliness. Deleted AQTPlotController and moved functionality into
+	  AQTClientManager to avoid duplication of work. No more cyclic
+	  dependencies between lib and app.
+
+	* aquaterm/Bugs.m, aquaterm/Demo.m, aquaterm/Timing.m: Fix warnings.
+
+2004-03-01  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/fortran/demo.f: Removing visible FIXME.
+
+2004-02-29  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/fortran/demo.f: Fixes from Ed Zaron: Handle bitmaps
+	  properly.
+
+	* adapters/fortran/f2aquaterm.m: Change name of function call
+	  aqtGetCurrentColor into aqtGetColor to reflect change in C API.
+
+2004-02-28  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTClientManager.m: This is a fix for the bug, reported by
+	  Attilio Rivoldini, that causes a segfault when freeing the
+	  autoreleasepool in the code example in the (auto-) docs.
+
+2004-02-25  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/gnuplot/aquaTerm.trm: Cleaning up pm3d.
+
+	* adapters/gnuplot/aquaTerm.trm: Process a lot more options.
+	  Currently supported options are: <n> title "theTitle" size <x> <y>
+	  fname "fontface" fsize <fontsize> Clean state variables. General
+	  clean-up.
+
+2004-02-23  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/fortran/Makefile: Make a smarter Makefile.
+
+	* adapters/gnuplot/aquaTerm.trm: Fixing window title, plot_point,
+	  boxfill and set_font.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Adding Install target.
+	  Use 'sudo xcodebuild -target Install' to invoke.
+
+	* aquaterm/AQTController.m: Adding stub text to bug/feedback mail.
+	  Always use a mail client.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/aquaterm.h, aquaterm/aquaterm.m: Changing name from
+	  getCurrentColorRed:green:blue to getColorRed:green:blue. Adding
+	  getBackgroundColorRed:green:blue and support. Similar for C API.
+
+2004-02-21  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/INSTALL, aquaterm/distroMakefile: Automating
+	  point-releases.
+
+	* aquaterm/AquaTerm.app-Info.plist,
+	  aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Moving to XCode. This
+	  might cause trouble.
+
+2004-02-09  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/fortran/demo.f: Make sure there is enough space.
+
+	* adapters/fortran/demo.f: Fixes from J. Koski: Number to string
+	  conversion.
+
+2004-02-07  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTEventProtocol.h: Fixing(?) the bug that caused a hang
+	  when trying to close a window with active client.
+
+	* adapters/pgplot/g77_gcc_AQT.conf, adapters/pgplot/xlf_gcc_AQT.conf:
+	  Shaping up .conf files to build shared libpgplot.
+
+	* adapters/fortran/Makefile: Making the Makefile a little more
+	  general.
+
+2003-12-29  Per Persson <persquare@users.sourceforge.net>
+
+	* Version 1.0.a1 released.
+
+	* adapters/c/ChangeLog, adapters/fortran/ChangeLog,
+	  adapters/gnuplot/ChangeLog, adapters/gnuplot/README.txt,
+	  adapters/octave/ChangeLog, adapters/pgplot/ChangeLog,
+	  adapters/plplot/ChangeLog: Update.
+
+	* adapters/gnuplot/aquaTerm.trm, adapters/pgplot/aqdriv.m,
+	  adapters/pgplot/xlf_gcc_AQT.conf, adapters/plplot/aqtplplot.m:
+	  Update to 1.0.a1.
+
+	* aquaterm/ReadMe.txt: Important note.
+
+	* aquaterm/ReadMe.txt: Some more info...
+
+	* adapters/fortran/eventdemo1: Duh.
+
+	* adapters/fortran/f2aquaterm.m: Minor verbose whoops fixed.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Cleaning.
+
+	* aquaterm/ReadMe.txt: Some more info.
+
+	* aquaterm/ReadMe.txt, aquaterm/ToDo: Updating to AQT1.0.
+
+	* adapters/c/c2aqt.h, adapters/c/c2aqt.m, adapters/c/test.c: AQT1.0
+	  exposes a C API.
+
+	* adapters/c/Makefile, adapters/c/demo.c, adapters/c/eventdemo1.c,
+	  adapters/c/eventdemo2.c, adapters/fortran/Makefile,
+	  adapters/fortran/demo.f, adapters/fortran/demo_old.f,
+	  adapters/fortran/eventdemo1, adapters/fortran/eventdemo1.f,
+	  adapters/fortran/f2aqt.m, adapters/fortran/f2aquaterm.m,
+	  adapters/fortran/test.f, adapters/fortran/tiny.f: Updating to
+	  AQT1.0.
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTClientManager.m,
+	  aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.m, aquaterm/aquaterm.m:
+	  Removing excess logging.
+
+	* aquaterm/ChangeLog: Update.
+
+	* aquaterm/AQTClientProtocol.h, aquaterm/AQTEventProtocol.h: Minor
+	  change.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Rearranging stuff.
+
+	* aquaterm/English.lproj/AQTWindow.nib/classes.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib: Minor cleanup.
+
+	* aquaterm/Demo.m: Adding transdformed image demo. Minor cleanup.
+
+	* aquaterm/aquaterm.h, aquaterm/aquaterm.m: Major rewrite. This is
+	  now a wrapper around the ObjC API.
+
+	* aquaterm/AQTClientManager.m: Adding FIXME note.
+
+2003-12-10  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlot.m, aquaterm/AQTView.m: Fixing cursor behavior to
+	  correctly indicate event processing state.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Adding a unified C API.
+
+	* aquaterm/aquaterm.h, aquaterm/aquaterm.m: Adding a unified C API.
+	  Still needs work.
+
+2003-12-06  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m: Warn before quitting if
+	  clients still connected. No need for a doConnection ivar.
+
+2003-12-04  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlot.h, aquaterm/AQTPlot.m,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: Adding a "Refresh
+	  view" entry to debug menu.
+
+2003-12-03  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTClientManager.h,
+	  aquaterm/AQTClientManager.m, aquaterm/AQTPlotController.m: Move
+	  error recovery to AQTClientManager.
+
+2003-12-02  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTController.m: A reminder to fix stuff.
+
+	* aquaterm/AQTPlotBuilder.m: Log dealloc'ing.
+
+	* aquaterm/AQTClientManager.m: Fixing a bug in -closePlot. Changing
+	  the way exceptions (i.e. server dies) are handled internally from
+	  direct call to notification. Problem is that notification is
+	  received in subsequent DO call. Just releasing or autoreleasing
+	  builers/plotcontrollers will cause a crash.
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTPlotController.m: Changing the
+	  way exceptions (i.e. server dies) are handled internally from
+	  direct call to notification. Problem is that notification is
+	  received in subsequent DO call. Just releasing or autoreleasing
+	  builers/plotcontrollers will cause a crash.
+
+	* aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m: Fixes.
+
+	* aquaterm/Demo.m: Fixing release bug.
+
+	* aquaterm/AQTEventProtocol.h, aquaterm/AQTPlot.m,
+	  aquaterm/AQTPlotController.m: Fixes.
+
+	* aquaterm/AQTConnectionProtocol.h, aquaterm/AQTController.h,
+	  aquaterm/AQTController.m: Minor changes.
+
+	* aquaterm/AQTAdapter.m: Logging code.
+
+2003-12-01  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlotController.m: Forgot to release handler (AQTPlot)
+	  when dealloc'ing plot controller. Added some debug logging for
+	  error-handling test.
+
+	* aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m: Don't set color unless
+	  necessary (small, 5-10%, speedup of drawing).
+
+	* aquaterm/AQTClientManager.m: Fixing minor bug.
+
+2003-11-28  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTFunctions.h, aquaterm/AQTFunctions.m: Adding utility
+	  functions. The NSIntersectsRect() etc. methods doesn't handle
+	  intersection of hor./vert. lines and area.
+
+	* aquaterm/AQTPlot.h, aquaterm/AQTPlot.m: Moving appendModel: and
+	  (temporarily?) removeObjectsInRect: to AQTPlot. Many small changes.
+
+	* aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m: Moving appendModel: and
+	  (temporarily?) removeObjectsInRect: to AQTPlot.
+
+	* aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTPlotBuilder.m: Clearing up
+	  confusion about which model objects knows the canvas size
+	  (AQTModel). Adding some accessors to AQTModel. Renaming a few
+	  methods for clarity.
+
+2003-11-27  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPatch.h, aquaterm/AQTPatch.m: Not used.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientManager.h, aquaterm/AQTClientManager.m,
+	  aquaterm/AQTClientProtocol.h, aquaterm/AQTPath.h,
+	  aquaterm/AQTPlotBuilder.m, aquaterm/AQTPlotController.h,
+	  aquaterm/AQTPlotController.m: General cleanup in client code.
+
+2003-11-23  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Fixing the
+	  zero size problem.
+
+	* aquaterm/AQTClientManager.m: Rearrange code to get rid of a
+	  warning.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Major restructuring.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientManager.h, aquaterm/AQTClientManager.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AQTPlotController.h, aquaterm/AQTPlotController.m: Major
+	  restructuring. Moving code from AQTAdapter,
+	  AQTAdapterPrivateMethods and AQTPlotBuilder to new classes
+	  AQTClientManager and AQTPlotController to clean up
+	  responsibilities. Problems with -eraseRect. Tricky, needs
+	  implementation. Step back wrt setPlot/appendPlot. Uses setPlot
+	  exclusively. Need appendPlot for efficiency. Adding env var
+	  AQUATERM_LOGLEVEL to control verbosity: 0=off to 3=max.
+
+2003-11-19  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTAdapterPrivateMethods.m, aquaterm/AQTConstants.m,
+	  aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTPath.h,
+	  aquaterm/AQTPath.m, aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/Demo.m:
+	  Cleaning.
+
+2003-11-18  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlot.m: Checking for change in background color.
+
+	* aquaterm/AQTPlotBuilder.m: Respect moveToVertexPoint: at all times.
+	  Flush more aggressively.
+
+	* adapters/pgplot/aqdriv.m: Use new addEdgeToPoint: method for
+	  building polygons to get rid of malloc'd buffer.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m, aquaterm/AQTPatch.m,
+	  aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Removing useless X/Y methods.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Adding
+	  moveToVertexPoint: and addEdgeToPoint: instead of kludgy X/Y
+	  vectors.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m, aquaterm/AQTPatch.m,
+	  aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Disable the new
+	  addPoly{line,gon}WithXCoords:yCoords:pointCount: It probably wasn't
+	  a good idea.
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTAdapterPrivateMethods.m,
+	  aquaterm/AQTPlot.m: Fixing use of explicit exception names.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m: Removing unnecessary
+	  instance variable.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTPatch.m, aquaterm/AQTPath.h, aquaterm/AQTPath.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/Demo.m: Adding three methods (colormapSize,
+	  addPolygonWithXCoord:yCoord:pointCount,
+	  addPolylineWithXCoord:yCoord:pointCount) to AQTAdapter. Removing
+	  three query methods (fontsize, fontname, linewidth) from
+	  AQTAdapter. Ripple changes through classes. Fixing bugs in
+	  AQTPlotBuilder and AQTPatch. Adding testcase to Demo.m
+
+	* aquaterm/AQTPlot.m: Fix aspect ratio problem when resizing.
+
+	* aquaterm/Bugs.m, aquaterm/Demo.m: Close plot when done.
+
+2003-11-15  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTPlotBuilder.m: Fix problem with embedded adapter.
+
+	* aquaterm/AQTAdapterPrivateMethods.m, aquaterm/AQTController.m,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTPatch.m,
+	  aquaterm/AQTPlot.m, aquaterm/AQTView.h, aquaterm/AQTView.m,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Minor clean-up all over.
+
+2003-11-13  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.m: Window cascading.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Path fix.
+
+2003-11-11  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/pgplot/aqdriv.m: Fixing leaks. Note to self:
+	  create/destroy arpool in _same_ context.
+
+2003-11-10  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTGraphicDrawingMethods.m, aquaterm/Bugs.m: Styled text
+	  implemented. Works but is, ehm, "naive"...
+
+	* aquaterm/AQTGraphicDrawingMethods.m: Adding underlining to string
+	  drawing.
+
+2003-11-08  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/Demo.m: Adding vertical alignment of labels. Defining keys
+	  in AQTAdapter.h. Examples in Demo.m.
+
+	* aquaterm/Bugs.m: Hmmm. This was supposed to be a tmplate file. It
+	  is now.
+
+	* aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: Updating menu
+	  item names.
+
+	* aquaterm/AQTController.m, aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/Bugs.m, aquaterm/Demo.m, aquaterm/Timing.m: Moving debug
+	  code to separate files.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Adding demo code. Flag
+	  AQT_APP needed when building with demo code.
+
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/Demo.m: Adding demo
+	  code. Adding feedback mail.
+
+2003-11-07  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: New menu
+	  structure. Adding Debug menu.
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Update.
+
+	* aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTPlot.m,
+	  aquaterm/AQTView.h, aquaterm/AQTView.m: Cleaning up code handling
+	  dirty rects.
+
+	* aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m: Changing AQTLabel's
+	  renderInRect to use a Bezier path formed from glyphs rather than
+	  drawing with string methods. Clenaing.
+
+2003-11-06  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/pgplot/aqdriv.m: Cleanup. Changing behaviour wrt endplot,
+	  now leaves plot onscreen.
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTAdapterPrivateMethods.h,
+	  aquaterm/AQTAdapterPrivateMethods.m,
+	  aquaterm/AQTConnectionProtocol.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlotBuilder.m: Improving error/exception handling in
+	  client.
+
+	* aquaterm/AQTPlotBuilder.m: Adding setter for internal state
+	  modelIsDirty to facilitate actions when state changes.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m: Adding -waitNextEvent
+	  to adapter.
+
+	* adapters/pgplot/aqdriv.m: Adding -waitNextEvent to adapter.
+
+	* aquaterm/AQTAdapter.m, aquaterm/AQTGraphicDrawingMethods.m,
+	  aquaterm/AQTPlotBuilder.m: Cleaning some FIXME's.
+
+2003-11-05  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTPlot.m, aquaterm/AQTView.m: Moving
+	   server code from AQTModel, and adding some new, to category.
+	  Updating AQTPlot to comply. Minor fix to AQTView.
+
+	* aquaterm/AQTClientProtocol.h, aquaterm/AQTPlot.m,
+	  aquaterm/AQTPlotBuilder.m: Moving eraseRect action to server.
+
+	* aquaterm/AQTController.m, aquaterm/AQTPlot.m, aquaterm/AQTView.m:
+	  Conditionalize verbose logging on DEBUG_BOUNDS.
+
+	* aquaterm/AQTClientProtocol.h, aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTLabel.m,
+	  aquaterm/AQTModel.h, aquaterm/AQTModel.m, aquaterm/AQTPath.m,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m, aquaterm/AQTView.h, aquaterm/AQTView.m:
+	  Major changes to model updating. Pass only new data. Respect dirty
+	  rect in drawRect:.
+
+2003-11-04  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTLabel.h: Minor change.
+
+2003-11-03  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTGraphic.m, aquaterm/AQTLabel.m: Fixing minor leak.
+	  Cleaning.
+
+	* adapters/pgplot/aqdriv.m: Fixing polygon memory allocation.
+	  Cleaning.
+
+	* adapters/pgplot/aqdriv.m: Fixing transformation matrix inversion
+	  and mousing.
+
+2003-10-31  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m: Adding per-plot event
+	  buffering, -lastEvent refers to the currently selected plot.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientProtocol.h, aquaterm/AQTPlot.h,
+	  aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m, aquaterm/AQTView.m: Fixing up the kludgy
+	  lastEvent stuff. Still needs adapter to handle it on a per client
+	  basis.
+
+	* aquaterm/AQTAdapter.m: Changing builder key to NSNumber. Cleaning.
+
+2003-10-30  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTController.m, aquaterm/AQTPlot.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AQTView.m: Cleaning event handling.
+
+2003-10-29  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTAdapter.m: Shielding methods with return values from
 	  nil-target (_selectedBuilder = nil). Generates error msg.
 
-2003-10-28 22:42  persquare
+2003-10-28  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTColorMap.h, AQTColorMap.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m: Pushing colormap down to
-	  plotbuilder. Duh, multiple open plots require multiple colormaps.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Pushing
+	  colormap down to plotbuilder. Duh, multiple open plots require
+	  multiple colormaps.
 
-2003-10-28 11:57  persquare
-
-	* AQTPlot.m, English.lproj/AQTWindow.nib/objects.nib: Handle window
+	* aquaterm/AQTPlot.m,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib: Handle window
 	  closing correctly.
 
-2003-10-28 11:18  persquare
+	* aquaterm/AQTController.m, aquaterm/AQTPlot.h, aquaterm/AQTPlot.m,
+	  aquaterm/AQTView.m, aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/classes.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/info.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/objects.nib: Re-enabling
+	  save format option.
 
-	* AQTController.m, AQTPlot.h, AQTPlot.m, AQTView.m,
-	  AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/ExtendSavePanel.nib/classes.nib,
-	  English.lproj/ExtendSavePanel.nib/info.nib,
-	  English.lproj/ExtendSavePanel.nib/objects.nib: Re-enabling save
-	  format option.
+2003-10-27  Per Persson <persquare@users.sourceforge.net>
 
-2003-10-27 16:26  persquare
+	* aquaterm/AQTImage.m: Fixing forgotten encoding of new instance
+	  variable fitBounds.
 
-	* AQTImage.m: Fixing forgotten encoding of new instance variable
-	  fitBounds.
+	* aquaterm/AQTGraphicDrawingMethods.m: Removing excess logging.
 
-2003-10-27 15:26  persquare
+	* aquaterm/AQTAdapter.m, aquaterm/AQTAdapterPrivateMethods.m,
+	  aquaterm/AQTController.m, aquaterm/AQTModel.m, aquaterm/AQTPlot.m,
+	  aquaterm/AQTPlotBuilder.m: Removing excess logging.
 
-	* AQTGraphicDrawingMethods.m: Removing excess logging.
+	* adapters/pgplot/aqdriv.m: Removing excess logging.
 
-2003-10-27 13:46  persquare
+	* aquaterm/AQTPlotBuilder.m: Make -clearAll honor background color
+	  too.
 
-	* AQTAdapter.m, AQTAdapterPrivateMethods.m, AQTController.m,
-	  AQTModel.m, AQTPlot.m, AQTPlotBuilder.m: Removing excess logging.
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Adding AQTColorMap to
+	  targets.
 
-2003-10-27 12:08  persquare
-
-	* AQTPlotBuilder.m: Make -clearAll honor background color too.
-
-2003-10-27 12:01  persquare
-
-	* AquaTerm.pbproj/: project.pbxproj, per.pbxuser: Adding
-	  AQTColorMap to targets.
-
-2003-10-27 12:00  persquare
-
-	* AQTGraphic.h, AQTAdapter.h, AQTColorMap.m, AQTColorMap.h,
-	  AQTAdapter.m: Shaping up AQTColorMap to provide a minimal
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTGraphic.h: Shaping up AQTColorMap to provide a minimal
 	  colormap support.
 
-2003-10-25 00:32  persquare
+2003-10-24  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTPlotBuilder.m: Fixing bug caused by braindamage+bedtime.
+	* adapters/pgplot/aqdriv.m: Updating syntax. Disabling poolrelease
+	  since it caused segfault.
 
-2003-10-25 00:10  persquare
+	* aquaterm/AQTPlotBuilder.m: Fixing bug caused by
+	  braindamage+bedtime.
 
-	* AQTAdapter.m: Implementing closePlot.
+	* aquaterm/AQTAdapter.m: Implementing closePlot.
 
-2003-10-24 23:11  persquare
+	* aquaterm/AQTPlotBuilder.m: Setting default linewidth to 1pt (as the
+	  docs says;-).
 
-	* AQTPlotBuilder.m: Setting default linewidth to 1pt (as the docs
-	  says;-).
+	* aquaterm/AQTAdapter.m, aquaterm/AQTModel.h, aquaterm/AQTModel.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Implementing
+	  clearPlot properly (retaining size and title).
 
-2003-10-24 23:09  persquare
+	* aquaterm/AQTAdapter.m: Improving the way openPlot and selectPlot
+	  works. Fixing documentation for those methods. Modifying what
+	  happens to isAcceptingEvents when plot changes (Needs testing).
 
-	* AQTModel.m, AQTAdapter.m, AQTModel.h, AQTPlotBuilder.h,
-	  AQTPlotBuilder.m: Implementing clearPlot properly (retaining size
-	  and title).
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m: Change method names
+	  slightly. Provide enums for text alignment.
 
-2003-10-24 22:20  persquare
+	* aquaterm/AQTPlotBuilder.m: Always erase before adding a filled
+	  rect.
 
-	* AQTAdapter.m: Improving the way openPlot and selectPlot works.
-	  Fixing documentation for those methods. Modifying what happens to
-	  isAcceptingEvents when plot changes (Needs testing).
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m: Changing method
+	  naming somewhat for consistency. Bringing autodoc comments up to
+	  date.
 
-2003-10-24 21:52  persquare
+2003-10-23  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m: Change method names slightly. Provide
-	  enums for text alignment.
+	* aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Flush buffers
+	  before rendering. Removing debris from previous refactorings.
 
-2003-10-24 18:48  persquare
+2003-10-22  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTPlotBuilder.m: Always erase before adding a filled rect.
+	* aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Arbitrary pathlength at the penalty of
+	  dynamically allocated memory if path longer than a set length.
 
-2003-10-24 18:47  persquare
+	* aquaterm/AQTPlotBuilder.m: Autoreleasepool cleaning.
 
-	* AQTAdapter.h, AQTAdapter.m: Changing method naming somewhat for
-	  consistency.	Bringing autodoc comments up to date.
+	* adapters/pgplot/aqdriv.m: Autoreleasepool cleaning.
 
-2003-10-23 19:57  persquare
+	* aquaterm/AQTView.m: Fixing event handling.
 
-	* AQTPlotBuilder.h, AQTPlotBuilder.m: Flush buffers before
-	  rendering. Removing debris from previous refactorings.
+	* adapters/pgplot/aqdriv.m: Fixing event handling.
 
-2003-10-22 19:23  persquare
+2003-10-21  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTPath.h, AQTPath.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
-	  Arbitrary pathlength at the penalty of dynamically allocated
-	  memory if path longer than a set length.
+	* adapters/pgplot/aqdriv.m: Basic event handling.
 
-2003-10-22 16:13  persquare
+	* adapters/pgplot/aqdriv.m: Updating to reflect changes in adapter
 
-	* AQTPlotBuilder.m: Autoreleasepool cleaning.
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Update project.
 
-2003-10-22 15:47  persquare
+	* aquaterm/English.lproj/AQTWindow.nib/classes.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib: Renaming outlet
+	  and changing visibility default value.
 
-	* AQTView.m: Fixing event handling.
+	* aquaterm/AQTPlot.h, aquaterm/AQTPlot.m: Window initially hidden.
+	  Init doesn't require a model. Renaming viewOutlet to canvas.
 
-2003-10-21 13:37  persquare
+	* aquaterm/AQTView.m: Fixing leak.
 
-	* AquaTerm.pbproj/: per.pbxuser, project.pbxproj: Update project.
+2003-10-20  Per Persson <persquare@users.sourceforge.net>
 
-2003-10-21 13:36  persquare
+	* aquaterm/AQTPlot.h, aquaterm/AQTPlot.m: Removing dead code.
 
-	* English.lproj/AQTWindow.nib/: classes.nib, info.nib, objects.nib:
-	  Renaming outlet and changing visibility default value.
+	* aquaterm/AQTGraphicDrawingMethods.h,
+	  aquaterm/AQTGraphicDrawingMethods.m, aquaterm/AQTView.m: Moving
+	  code for clarity.
 
-2003-10-21 13:31  persquare
+	* aquaterm/AQTController.m, aquaterm/AQTPlot.h, aquaterm/AQTPlot.m,
+	  aquaterm/AQTView.h, aquaterm/AQTView.m: Beginning cleanup of AQT
+	  internals. Event passing.
 
-	* AQTPlot.h, AQTPlot.m: Window initially hidden. Init doesn't
-	  require a model. Renaming viewOutlet to canvas.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientProtocol.h, aquaterm/AQTPlot.h,
+	  aquaterm/AQTPlot.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m: Adding poor mans event handling, i.e.
+	  poll event.
 
-2003-10-21 13:29  persquare
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.m: Fixing release problem with window.
 
-	* AQTView.m: Fixing leak.
+2003-10-19  Per Persson <persquare@users.sourceforge.net>
 
-2003-10-20 21:08  persquare
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Enabled zombies.
 
-	* AQTPlot.h, AQTPlot.m: Removing dead code.
+	* adapters/plplot/aqtplplot.m: Enabled zombies.
 
-2003-10-20 21:00  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m: Fixing two deallocation
+	  bugs. Still not working properly. Enabled zombies.
 
-	* AQTGraphicDrawingMethods.h, AQTGraphicDrawingMethods.m,
-	  AQTView.m: Moving code for clarity.
+	* aquaterm/English.lproj/Cross.tiff: Correcting alpha-channel in
+	  cursor image.
 
-2003-10-20 16:04  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTAdapterPrivateMethods.h,
+	  aquaterm/AQTAdapterPrivateMethods.m,
+	  aquaterm/AQTConnectionProtocol.h, aquaterm/AQTController.h,
+	  aquaterm/AQTController.m, aquaterm/AQTPlot.h, aquaterm/AQTPlot.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Rearrange
+	  code and responsibility to avoid retain cycles. Cleaning.
 
-	* AQTController.m, AQTPlot.h, AQTPlot.m, AQTView.h, AQTView.m:
-	  Beginning cleanup of AQT internals. Event passing.
+2003-10-17  Per Persson <persquare@users.sourceforge.net>
 
-2003-10-20 15:02  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTController.m, aquaterm/AQTImage.h, aquaterm/AQTImage.m,
+	  aquaterm/AQTLabel.h, aquaterm/AQTLabel.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AQTView.m: Cleaning and improving label and image
+	  handling.
 
-	* AQTAdapter.h, AQTAdapter.m, AQTClientProtocol.h, AQTPlot.h,
-	  AQTPlot.m, AQTPlotBuilder.h, AQTPlotBuilder.m: Adding poor mans
-	  event handling, i.e. poll event.
+	* aquaterm/AQTClientProtocol.h, aquaterm/AQTConnectionProtocol.h:
+	  Changes to allow event handling in client.
 
-2003-10-20 10:58  persquare
+2003-10-16  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTController.h, AQTController.m, AQTPlot.m: Fixing release
-	  problem with window.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTAdapterPrivateMethods.h,
+	  aquaterm/AQTAdapterPrivateMethods.m, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m, aquaterm/AQTView.m: Adding
+	  event handling. Moving private adapter methods to separate files.
+	  Cleaning.
 
-2003-10-19 23:25  persquare
+2003-10-06  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/: per.pbxuser, project.pbxproj: Enabled zombies.
+	* adapters/plplot/aqtplplot.m: Fixing scaling and text rotation.
 
-2003-10-19 23:23  persquare
+2003-09-30  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTController.h, AQTController.m,
-	  AQTPlot.h, AQTPlot.m: Fixing two deallocation bugs. Still not
-	  working properly. Enabled zombies.
+	* adapters/plplot/aqtplplot.m: Initial changes to get plplot working
+	  with the new architecture.
 
-2003-10-19 13:30  persquare
+2003-09-12  Per Persson <persquare@users.sourceforge.net>
 
-	* English.lproj/Cross.tiff: Correcting alpha-channel in cursor
-	  image.
+	* aquaterm/AQTController.m, aquaterm/AQTView.m: Fiddling with image
+	  transformations.
 
-2003-10-19 13:29  persquare
+2003-09-03  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTAdapterPrivateMethods.h,
-	  AQTAdapterPrivateMethods.m, AQTConnectionProtocol.h,
-	  AQTController.h, AQTController.m, AQTPlot.h, AQTPlot.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m: Rearrange code and
-	  responsibility to avoid retain cycles. Cleaning.
-
-2003-10-17 15:23  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTController.m, AQTImage.h,
-	  AQTImage.m, AQTLabel.h, AQTLabel.m, AQTPlotBuilder.h,
-	  AQTPlotBuilder.m, AQTView.m: Cleaning and improving label and
-	  image handling.
-
-2003-10-17 14:23  persquare
-
-	* AQTClientProtocol.h, AQTConnectionProtocol.h: Changes to allow
-	  event handling in client.
-
-2003-10-16 11:17  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTAdapterPrivateMethods.h,
-	  AQTAdapterPrivateMethods.m, AQTController.m, AQTPlot.h,
-	  AQTPlot.m, AQTView.m: Adding event handling. Moving private
-	  adapter methods to separate files. Cleaning.
-
-2003-09-12 15:07  persquare
-
-	* AQTController.m, AQTView.m: Fiddling with image transformations.
-
-2003-09-03 11:39  persquare
-
-	* AQTAdapter.h, AQTAdapter.m, AQTImage.h, AQTImage.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m, AQTView.m: Modifying image
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m, aquaterm/AQTImage.h,
+	  aquaterm/AQTImage.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m, aquaterm/AQTView.m: Modifying image
 	  handling, allowing transformation matrix. FIXME: pgplot specific
 	  code in AQTView for testing.
 
-2003-09-03 09:56  persquare
+	* adapters/pgplot/aqdriv.m: Modifying image handling, allowing
+	  transformation matrix. FIXME: pgplot specific code in AQTView for
+	  testing.
 
-	* AQTAdapter.h, AQTGraphic.m, AQTPatch.m, AQTPath.h, AQTPath.m,
-	  AQTPlotBuilder.m, AQTView.m: Modifying color handling, no change
-	  to adapter. Text color now works.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTGraphic.m, aquaterm/AQTPatch.m,
+	  aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AQTView.m: Modifying color handling, no change to adapter.
+	  Text color now works.
 
-2003-09-01 14:39  persquare
+2003-09-01  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTController.m, AQTLabel.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m, AQTView.m: Getting labels to
-	  work. Kludgy. Must be fixed.
+	* adapters/gnuplot/aquaTerm.trm: Activating font selection.
 
-2003-08-31 21:22  persquare
+	* adapters/gnuplot/aquaTerm.trm: Getting labels to work. Kludgy. Must
+	  be fixed.
 
-	* AQTAdapter.m, AQTController.m: Reenabling local test object.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTController.m, aquaterm/AQTLabel.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AQTView.m: Getting labels to work. Kludgy. Must be fixed.
 
-2003-08-27 11:20  persquare
+2003-08-31  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/project.pbxproj: Minor change.
+	* aquaterm/AQTAdapter.m, aquaterm/AQTController.m: Reenabling local
+	  test object.
 
-2003-08-27 11:12  persquare
+2003-08-27  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTClientProtocol.h, AQTController.m,
-	  AQTModel.m, AQTPlot.h, AQTPlot.m: Simplifying the architecture by
-	  removing one layer (AQTClientHandler) and establishing a 1 to 1
-	  relation between an open plot in the client and an AQTPlot
-	  object.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Minor change.
 
-2003-08-23 21:42  persquare
+	* adapters/pgplot/aqdriv.m: Bugfixes.
 
-	* AQTAdapter.h, AQTAdapter.m: Allow multiple open plots by using
-	  multiple builder objects.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientProtocol.h, aquaterm/AQTController.m,
+	  aquaterm/AQTModel.m, aquaterm/AQTPlot.h, aquaterm/AQTPlot.m:
+	  Simplifying the architecture by removing one layer
+	  (AQTClientHandler) and establishing a 1 to 1 relation between an
+	  open plot in the client and an AQTPlot object.
 
-2003-08-21 13:43  persquare
+2003-08-23  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTClientHandler.m, AQTPlot.h, AQTPlot.m: Fixing mouse feedback.
+	* adapters/pgplot/aqdriv.m: Allow multiple open plots. Temporarily
+	  enable excessive logging to highlight some problems in driver.
 
-2003-08-21 13:13  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m: Allow multiple open
+	  plots by using multiple builder objects.
 
-	* AQTPlot.h, AQTPlot.m, AQTView.h, AQTView.m: Complete mousing
-	  functionality.
+2003-08-21  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-21 00:03  persquare
+	* adapters/pgplot/aqdriv.m: Fixing mouse feedback.
 
-	* AQTView.m: Adding companion method to mouseDown. Either mouseDown
-	  + key for button or key + mouse location.
+	* aquaterm/AQTClientHandler.m, aquaterm/AQTPlot.h,
+	  aquaterm/AQTPlot.m: Fixing mouse feedback.
 
-2003-08-20 21:00  persquare
+	* aquaterm/AQTPlot.h, aquaterm/AQTPlot.m, aquaterm/AQTView.h,
+	  aquaterm/AQTView.m: Complete mousing functionality.
 
-	* AQTAdapter.m: Render dirty model before mouse input.
+2003-08-20  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-20 17:07  persquare
+	* aquaterm/AQTView.m: Adding companion method to mouseDown. Either
+	  mouseDown + key for button or key + mouse location.
 
-	* AQTAdapter.h, AQTAdapter.m, AQTPlotBuilder.m: Line handling in
-	  drivers and adapter done. Added pm3d to gnuplot. Moving
+	* aquaterm/AQTAdapter.m: Render dirty model before mouse input.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTPlotBuilder.m: Line handling in drivers and adapter
+	  done. Added pm3d to gnuplot. Moving "smartness" from drivers to
+	  builder class.
+
+	* adapters/gnuplot/aquaTerm.trm, adapters/pgplot/aqdriv.m: Line
+	  handling in drivers and adapter done. Added pm3d to gnuplot. Moving
 	  "smartness" from drivers to builder class.
 
-2003-08-19 22:05  persquare
+2003-08-19  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
-	  Adding lineCapStyle control to AQTPath. Adding -addFilledRect:,
+	* adapters/gnuplot/aquaTerm.trm: Synchronizing with changes in
+	  adapter.
+
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Adding
+	  lineCapStyle control to AQTPath. Adding -addFilledRect:,
 	  -addPolylineWithPoints: and renaming a few methods.
 
-2003-08-19 22:04  persquare
+	* adapters/pgplot/aqdriv.m: Adding lineCapStyle control to AQTPath.
+	  Adding -addFilledRect:, -addPolylineWithPoints: and renaming a few
+	  methods.
 
-	* AQTPath.h, AQTPath.m, AQTView.m: Adding lineCapStyle control to
-	  AQTPath.
+	* aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTView.m: Adding
+	  lineCapStyle control to AQTPath.
 
-2003-08-19 17:03  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Fixing color handling.
+	  Cleaning.
 
-	* AQTAdapter.h, AQTAdapter.m, AQTPlotBuilder.h, AQTPlotBuilder.m,
-	  AquaTerm.pbproj/project.pbxproj: Fixing color handling. Cleaning.
+	* adapters/pgplot/aqdriv.m: Fixing color handling. Cleaning.
 
-2003-08-19 00:03  persquare
+	* adapters/gnuplot/aquaTerm.trm: Fixing scaling bug.
 
-	* AQTAdapter.h: Shaping up.
+2003-08-18  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-18 17:06  persquare
+	* aquaterm/AQTAdapter.h: Shaping up.
 
-	* AQTPlotBuilder.h, AQTPlotBuilder.m: First fix to flushing. (Bad.
-	  Add -flushAll and let adapter initialize?)
+	* adapters/pgplot/g77_gcc_AQT.conf: Shaping up.
 
-2003-08-17 23:09  persquare
+	* adapters/gnuplot/aquaTerm.trm: Fixes wrt #import. Applied
+	  resolution increase from bugfix branch. Compiles but broken.
 
-	* AQTAdapter.h: Whoops. This was the main reason for the split...
+	* aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: First fix to
+	  flushing. (Bad. Add -flushAll and let adapter initialize?)
 
-2003-08-17 11:42  persquare
+2003-08-17  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTAdapter.h, AQTAdapter.m, AQTModel.h, AQTModel.m,
-	  AQTPlotBuilder.h, AQTPlotBuilder.m,
-	  AquaTerm.pbproj/project.pbxproj: Minor changes due to class
-	  split.
+	* aquaterm/AQTAdapter.h: Whoops. This was the main reason for the
+	  split...
 
-2003-08-17 10:11  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTPlotBuilder.h,
+	  aquaterm/AQTPlotBuilder.m,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Minor changes due to
+	  class split.
 
-	* AquaTerm.pbproj/project.pbxproj: Splitting adapter class in two,
-	  making AQTPlotBuilder responsible for assembling plots
-	  (AQTModel). AQTAdapter acts as a controller and provides a
-	  unified interface.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Splitting adapter class
+	  in two, making AQTPlotBuilder responsible for assembling plots
+	  (AQTModel). AQTAdapter acts as a controller and provides a unified
+	  interface.
 
-2003-08-17 10:05  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTPlotBuilder.h, aquaterm/AQTPlotBuilder.m: Splitting
+	  adapter class in two, making AQTPlotBuilder responsible for
+	  assembling plots (AQTModel). AQTAdapter acts as a controller and
+	  provides a unified interface.
 
-	* AQTAdapter.h, AQTAdapter.m, AQTPlotBuilder.h, AQTPlotBuilder.m:
-	  Splitting adapter class in two, making AQTPlotBuilder responsible
-	  for assembling plots (AQTModel). AQTAdapter acts as a controller
-	  and provides a unified interface.
+2003-08-15  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-15 16:25  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTGraphic.h: Cleaning, commenting and starting to rework
+	  the exposed interface.
 
-	* AQTAdapter.h, AQTGraphic.h, AQTAdapter.m: Cleaning, commenting
-	  and starting to rework the exposed interface.
+2003-08-14  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-14 14:24  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Making libaqt a dynamic
+	  (shared) library.
 
-	* AquaTerm.pbproj/project.pbxproj: Making libaqt a dynamic (shared)
-	  library.
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m: Adding error handling
+	  in the adapter. Optional error handler callback function in client.
+	  Adapter checks for server compatibility.
 
-2003-08-14 14:23  persquare
+	* adapters/pgplot/aqdriv.m: Adding error handling in the adapter.
+	  Optional error handler callback function in client. Adapter checks
+	  for server compatibility.
 
-	* AQTAdapter.h, AQTAdapter.m: Adding error handling in the adapter.
-	  Optional error handler callback function in client. Adapter
-	  checks for server compatibility.
+2003-08-07  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-07 10:56  persquare
+	* adapters/pgplot/g77_gcc_AQT.conf: Minor change.
 
-	* English.lproj/AQTWindow.nib/objects.nib: Adding cursor image.
+	* aquaterm/English.lproj/AQTWindow.nib/objects.nib: Adding cursor
+	  image.
 
-2003-08-07 10:56  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Minor changes to project.
 
-	* AquaTerm.pbproj/project.pbxproj: Minor changes to project.
+2003-08-05  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-01 18:12  persquare
+	* adapters/gnuplot/aquaTerm.trm: Now using libaqt and revised
+	  AquaTerm. Needs hack in gnuplot to work.
 
-	* AQTAdapter.h, AQTAdapter.m, AQTClientHandler.m,
-	  AQTClientProtocol.h, AQTPlot.h, AQTPlot.m, AQTView.h, AQTView.m:
-	  Adding mouse support.
+2003-08-01  Per Persson <persquare@users.sourceforge.net>
 
-2003-08-01 18:11  persquare
+	* adapters/pgplot/g77_gcc_AQT.conf: New config file.
 
-	* English.lproj/AQTWindow.nib/objects.nib,
-	  AquaTerm.pbproj/project.pbxproj: Adding cursor image.
+	* adapters/pgplot/aqdriv.m: Now using libaqt and revised AquaTerm.
 
-2003-07-30 15:27  persquare
+	* aquaterm/AQTAdapter.h, aquaterm/AQTAdapter.m,
+	  aquaterm/AQTClientHandler.m, aquaterm/AQTClientProtocol.h,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m, aquaterm/AQTView.h,
+	  aquaterm/AQTView.m: Adding mouse support.
 
-	* AQTPath.h, AQTPath.m: Reasonable path size, security checks.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib: Adding cursor
+	  image.
 
-2003-07-30 15:26  persquare
+2003-07-30  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTModel.m: Better default capacity.
+	* aquaterm/AQTPath.h, aquaterm/AQTPath.m: Reasonable path size,
+	  security checks.
 
-2003-07-30 13:00  persquare
+	* aquaterm/AQTModel.m: Better default capacity.
 
-	* AQTView.m: Minor debug addition.
+	* aquaterm/AQTView.m: Minor debug addition.
 
-2003-07-30 12:59  persquare
+	* aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m: Fixing -removeObjectsInRect: and cleaning up.
 
-	* AQTGraphic.h, AQTGraphic.m, AQTModel.h, AQTModel.m: Fixing
-	  -removeObjectsInRect: and cleaning up.
+2003-07-29  Per Persson <persquare@users.sourceforge.net>
 
-2003-07-29 12:21  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Adding libaqt target.
 
-	* AquaTerm.pbproj/project.pbxproj: Adding libaqt target.
+	* aquaterm/AQTGraphic.h, aquaterm/AQTImage.h: Minor changes.
 
-2003-07-29 12:21  persquare
-
-	* AQTGraphic.h, AQTImage.h: Minor changes.
-
-2003-07-29 12:20  persquare
-
-	* AQTConnectionProtocol.h: Use unique id rather than self as
+	* aquaterm/AQTConnectionProtocol.h: Use unique id rather than self as
 	  identifier.
 
-2003-07-29 12:18  persquare
+	* aquaterm/AQTClientHandler.h, aquaterm/AQTClientHandler.m,
+	  aquaterm/AQTView.m: Minor change to fit into new app structure.
 
-	* AQTClientHandler.h, AQTClientHandler.m, AQTView.m: Minor change
-	  to fit into new app structure.
+	* aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/AQTPlot.h, aquaterm/AQTPlot.m,
+	  aquaterm/English.lproj/AQTWindow.nib/classes.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/GPTWindowController.h, aquaterm/GPTWindowController.m:
+	  Major rework of application structure, it now has a proper(?)
+	  responder chain.
 
-2003-07-29 12:13  persquare
+2003-07-17  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTController.h, AQTController.m, AQTPlot.h, AQTPlot.m,
-	  English.lproj/AQTWindow.nib/classes.nib,
-	  English.lproj/AQTWindow.nib/info.nib,
-	  English.lproj/AQTWindow.nib/objects.nib,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib, GPTWindowController.h,
-	  GPTWindowController.m: Major rework of application structure, it
-	  now has a proper(?) responder chain.
+	* aquaterm/AQTGraphic.m, aquaterm/AQTPath.m: Minor changes to default
+	  values.
 
-2003-07-17 14:49  persquare
+	* aquaterm/AQTController.m: Extending tests.
 
-	* AQTGraphic.m, AQTPath.m: Minor changes to default values.
-
-2003-07-17 14:49  persquare
-
-	* AQTController.m: Extending tests.
-
-2003-07-17 14:48  persquare
-
-	* AQTView.m: Scale the view coordinate system rather than
+	* aquaterm/AQTView.m: Scale the view coordinate system rather than
 	  individual graphic objects.
 
-2003-07-16 22:45  persquare
+2003-07-16  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTPath.h, AQTPath.m, AQTView.m, AQTGraphic.h, AQTGraphic.m,
-	  AQTImage.h, AQTImage.m, AQTModel.m: More changes towards an
+	* aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTImage.h,
+	  aquaterm/AQTImage.m, aquaterm/AQTModel.m, aquaterm/AQTPath.h,
+	  aquaterm/AQTPath.m, aquaterm/AQTView.m: More changes towards an
 	  AppKit free model.
 
-2003-07-16 22:44  persquare
+	* aquaterm/AQTPatch.h, aquaterm/AQTPatch.m: Splitting AQTPath into
+	  AQTPath and AQTPatch (filled polygon).
 
-	* AQTPatch.h, AQTPatch.m: Splitting AQTPath into AQTPath and
-	  AQTPatch (filled polygon).
+2003-07-15  Per Persson <persquare@users.sourceforge.net>
 
-2003-07-16 01:01  persquare
+	* aquaterm/AQTController.h, aquaterm/AQTController.m: Adding internal
+	  test code.
 
-	* AQTController.h, AQTController.m: Adding internal test code.
+	* aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTLabel.h,
+	  aquaterm/AQTLabel.m, aquaterm/AQTPath.m, aquaterm/AQTView.m: Adding
+	  cache isa of type id for view use.
 
-2003-07-16 01:01  persquare
+	* aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: More changes.
 
-	* AQTGraphic.h, AQTGraphic.m, AQTLabel.h, AQTLabel.m, AQTPath.m,
-	  AQTView.m: Adding cache isa of type id for view use.
+2003-06-29  Per Persson <persquare@users.sourceforge.net>
 
-2003-07-16 00:59  persquare
-
-	* English.lproj/MainMenu1.nib/: classes.nib, info.nib, objects.nib:
-	  More changes.
-
-2003-06-29 13:15  persquare
-
-	* AQTClientHandler.m, AQTColorMap.h, AQTGraphic.h, AQTGraphic.m,
-	  AQTImage.m, AQTModel.h, AQTModel.m, AQTPath.h, AQTPath.m,
-	  AQTView.m, AquaTerm.pbproj/project.pbxproj: Removing colormap and
+	* aquaterm/AQTClientHandler.m, aquaterm/AQTColorMap.h,
+	  aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTImage.m,
+	  aquaterm/AQTModel.h, aquaterm/AQTModel.m, aquaterm/AQTPath.h,
+	  aquaterm/AQTPath.m, aquaterm/AQTView.m,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Removing colormap and
 	  indexed colors.
 
-2003-06-29 13:14  persquare
+	* aquaterm/AQTController.h, aquaterm/AQTController.m: Disabling
+	  inspector window for now.
 
-	* AQTController.h, AQTController.m: Disabling inspector window for
-	  now.
+2003-06-26  Per Persson <persquare@users.sourceforge.net>
 
-2003-06-26 23:41  persquare
+	* aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTView.m:
+	  Removing (most) AppKit dependency from AQTPath. Adding coding.
 
-	* AQTPath.h, AQTPath.m, AQTView.m: Removing (most) AppKit
-	  dependency from AQTPath. Adding coding.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Put project in debug
+	  mode.
 
-2003-06-26 16:59  persquare
+	* aquaterm/AQTColorInspector.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTPath.h, aquaterm/AQTView.m: Minor
+	  changes
 
-	* AquaTerm.pbproj/project.pbxproj: Put project in debug mode.
+	* aquaterm/AQTClientHandler.m, aquaterm/AQTColorMap.h,
+	  aquaterm/AQTImage.m, aquaterm/AQTLabel.h, aquaterm/AQTPath.h,
+	  aquaterm/AQTView.h, aquaterm/AQTView.m: Minor changes
 
-2003-06-26 16:57  persquare
+	* aquaterm/AQTClientProtocol.h, aquaterm/AQTGraphic.h,
+	  aquaterm/AQTGraphic.m, aquaterm/AQTLabel.m, aquaterm/AQTModel.m:
+	  Partial implementation of model encoding.
 
-	* AQTColorInspector.m, AQTModel.h, AQTModel.m, AQTPath.h,
-	  AQTView.m: Minor changes
+	* aquaterm/AQTView.m: SHaping up #define macro
 
-2003-06-26 15:55  persquare
+	* aquaterm/AQTClientHandler.m, aquaterm/AQTGraphic.h,
+	  aquaterm/AQTGraphic.m, aquaterm/AQTImage.h, aquaterm/AQTImage.m,
+	  aquaterm/AQTLabel.h, aquaterm/AQTLabel.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTPath.h, aquaterm/AQTPath.m,
+	  aquaterm/AQTView.m: Moving drawing code from model classes to
+	  categories of view class.
 
-	* AQTClientHandler.m, AQTColorMap.h, AQTImage.m, AQTLabel.h,
-	  AQTPath.h, AQTView.h, AQTView.m: Minor changes
+2003-06-25  Per Persson <persquare@users.sourceforge.net>
 
-2003-06-26 15:54  persquare
+	* aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: Fixes to comply
+	  with new controller classes.
 
-	* AQTClientProtocol.h, AQTGraphic.h, AQTGraphic.m, AQTLabel.m,
-	  AQTModel.m: Partial implementation of model encoding.
+	* aquaterm/AQTBuilder.h, aquaterm/AQTBuilder.m: Fixes to comply with
+	  new controller classes. Kept to provide backwards compatibility.
 
-2003-06-26 12:33  persquare
+	* aquaterm/AQTColorInspector.m: Fixes to comply with new controller
+	  classes.
 
-	* AQTView.m: SHaping up #define macro
+	* aquaterm/AQTClientHandler.h, aquaterm/AQTClientHandler.m,
+	  aquaterm/AQTClientProtocol.h, aquaterm/AQTConnectionProtocol.h,
+	  aquaterm/AQTController.h, aquaterm/AQTController.m,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m: Beginnings of
+	  rewrite for next release version.
 
-2003-06-26 12:11  persquare
+2003-03-17  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTClientHandler.m, AQTGraphic.h, AQTGraphic.m, AQTImage.h,
-	  AQTImage.m, AQTLabel.h, AQTLabel.m, AQTModel.h, AQTModel.m,
-	  AQTPath.h, AQTPath.m, AQTView.m: Moving drawing code from model
-	  classes to categories of view class.
+	* adapters/fortran/f2aqt.m: Fixing old type bug
 
-2003-06-25 15:55  persquare
+2003-02-09  Per Persson <persquare@users.sourceforge.net>
 
-	* English.lproj/: AQTWindow.nib/info.nib,
-	  AQTWindow.nib/objects.nib, MainMenu1.nib/classes.nib,
-	  MainMenu1.nib/info.nib, MainMenu1.nib/objects.nib: Fixes to
-	  comply with new controller classes.
+	* Version 0.3.2 released.
 
-2003-06-25 15:49  persquare
+	* aquaterm/ReadMe.txt: Updating ReadMe.
 
-	* AQTBuilder.h, AQTBuilder.m: Fixes to comply with new controller
-	  classes.  Kept to provide backwards compatibility.
+	* aquaterm/ChangeLog: Adding ChangeLog.
 
-2003-06-25 15:48  persquare
+	* adapters/c/ChangeLog, adapters/fortran/ChangeLog,
+	  adapters/gnuplot/ChangeLog, adapters/octave/ChangeLog,
+	  adapters/pgplot/ChangeLog, adapters/plplot/ChangeLog: Adding
+	  ChangeLog
 
-	* AQTColorInspector.m: Fixes to comply with new controller classes.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Project updates.
 
-2003-06-25 15:46  persquare
+	* aquaterm/English.lproj/InfoPlist.strings: Removing excess info.
 
-	* AQTClientHandler.h, AQTClientHandler.m, AQTClientProtocol.h,
-	  AQTConnectionProtocol.h, AQTController.h, AQTController.m,
-	  GPTController.h, GPTController.m: Beginnings of rewrite for next
-	  release version.
+	* aquaterm/makedocs: Clean Docs now possible w/o having autodoc
+	  installed.
 
-2003-02-09 16:31  persquare
+	* aquaterm/English.lproj/Credits.rtf,
+	  aquaterm/English.lproj/help.html: Updating help and other info.
 
-	* ReadMe.txt: Updating ReadMe.
+	* adapters/pgplot/aqdriv.m: Allow pgplot to set size of wiev
 
-2003-02-09 16:09  persquare
+2002-12-18  Per Persson <persquare@users.sourceforge.net>
 
-	* ChangeLog: Adding ChangeLog.
+	* adapters/pgplot/aqdriv.m: Interactive devices _needs_ this to draw
+	  intermediate plots.
 
-2003-02-09 15:59  persquare
+2002-12-09  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/project.pbxproj: Project updates.
+	* aquaterm/ReadMe.txt, aquaterm/ToDo: Updating notes.
 
-2003-02-09 15:59  persquare
+	* aquaterm/GPTController.m: Fixing Help menu entry. Broken by API
+	  change?
 
-	* English.lproj/InfoPlist.strings: Removing excess info.
+2002-12-04  Per Persson <persquare@users.sourceforge.net>
 
-2003-02-09 15:57  persquare
+	* aquaterm/AQTLabel.m, aquaterm/GPTWindowController.m: Fixing scaling
+	  of text, broken sinces addition of plplot. Making window respect
+	  aspect ratio of plot.
 
-	* makedocs: Clean Docs now possible w/o having autodoc installed.
+2002-10-21  Per Persson <persquare@users.sourceforge.net>
 
-2003-02-09 15:56  persquare
+	* aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib: Sync nib
 
-	* English.lproj/: Credits.rtf, help.html: Updating help and other
-	  info.
+	* adapters/plplot/aqtplplot.h, adapters/plplot/aqtplplot.m: Adding
+	  plplot adapter
 
-2002-12-09 10:24  persquare
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Sync project
 
-	* ReadMe.txt, ToDo: Updating notes.
+	* aquaterm/English.lproj/AQTWindow.nib/classes.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib: Changing max size
 
-2002-12-09 10:06  persquare
+	* aquaterm/AQTBuilder.h, aquaterm/AQTBuilder.m,
+	  aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTImage.m,
+	  aquaterm/AQTLabel.h, aquaterm/AQTLabel.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/AQTPath.h, aquaterm/AQTPath.m,
+	  aquaterm/AQTView.h, aquaterm/AQTView.m, aquaterm/GPTController.m,
+	  aquaterm/GPTWindowController.h, aquaterm/GPTWindowController.m:
+	  Adding functionality: client settable canvas size, attributed
+	  strings in preparation for plplot adapter.
 
-	* GPTController.m: Fixing Help menu entry. Broken by API change?
+	* aquaterm/AQTBaseMethods.h, aquaterm/AQTExtendedMethods.h,
+	  aquaterm/AQTProtocol.h: Splitting AQTProtocol into two parts,
+	  separating Foundation and AppKit dependencies. AQTProtocol.h
+	  provides backwards compatibility.
 
-2002-12-04 12:43  persquare
+2002-10-12  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTLabel.m, GPTWindowController.m: Fixing scaling of text, broken
-	  sinces addition of plplot.  Making window respect aspect ratio of
-	  plot.
+	* Version 0.3.1 released.
 
-2002-10-21 16:55  persquare
+	* aquaterm/ReadMe.txt: Updated info
 
-	* English.lproj/MainMenu1.nib/: info.nib, objects.nib: Sync nib
+	* aquaterm/English.lproj/Credits.rtf: Updated info
 
-2002-10-21 16:45  persquare
+	* adapters/gnuplot/README.txt: Added README
 
-	* AquaTerm.pbproj/project.pbxproj: Sync project
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Bump version to 0.3.1
 
-2002-10-21 16:44  persquare
+	* aquaterm/English.lproj/AquaTerm.icns: Adding icons
 
-	* English.lproj/AQTWindow.nib/: classes.nib, info.nib, objects.nib:
-	  Changing max size
+	* aquaterm/AquaTerm.pbproj/bsavage.pbxuser,
+	  aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/ppe.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/GPTInfoWindow.nib/classes.nib,
+	  aquaterm/English.lproj/GPTInfoWindow.nib/info.nib,
+	  aquaterm/English.lproj/GPTInfoWindow.nib/objects.nib,
+	  aquaterm/English.lproj/GPTInfoWindow~.nib/classes.nib,
+	  aquaterm/English.lproj/GPTInfoWindow~.nib/info.nib,
+	  aquaterm/English.lproj/GPTInfoWindow~.nib/objects.nib,
+	  aquaterm/English.lproj/GPTWindow.nib/classes.nib,
+	  aquaterm/English.lproj/GPTWindow.nib/info.nib,
+	  aquaterm/English.lproj/GPTWindow.nib/objects.nib,
+	  aquaterm/English.lproj/GPTWindow~.nib/classes.nib,
+	  aquaterm/English.lproj/GPTWindow~.nib/info.nib,
+	  aquaterm/English.lproj/GPTWindow~.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu1~.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1~.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1~.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu2~.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu2~.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu2~.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu~.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu~.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu~.nib/objects.nib,
+	  aquaterm/English.lproj/Untitled.nib/classes.nib,
+	  aquaterm/English.lproj/Untitled.nib/info.nib,
+	  aquaterm/English.lproj/Untitled.nib/objects.nib: Cleanup, I hope...
 
-2002-10-21 16:38  persquare
+	* aquaterm/GPTController.m: Fixing problem with save/copy drawing
+	  background and border.
 
-	* AQTBuilder.h, AQTBuilder.m, AQTGraphic.h, AQTGraphic.m,
-	  AQTImage.m, AQTLabel.h, AQTLabel.m, AQTModel.h, AQTModel.m,
-	  AQTPath.h, AQTPath.m, AQTView.h, AQTView.m, GPTController.m,
-	  GPTWindowController.h, GPTWindowController.m: Adding
-	  functionality: client settable canvas size, attributed strings in
-	  preparation for plplot adapter.
+2002-10-11  Per Persson <persquare@users.sourceforge.net>
 
-2002-10-21 16:33  persquare
+	* adapters/pgplot/aqdriv.m: Setting default colors 0-15 on driver
+	  init. Fix for bug #593895
 
-	* AQTBaseMethods.h, AQTExtendedMethods.h, AQTProtocol.h: Splitting
-	  AQTProtocol into two parts, separating Foundation and AppKit
-	  dependencies. AQTProtocol.h provides backwards compatibility.
+2002-09-02  Per Persson <persquare@users.sourceforge.net>
 
-2002-10-12 23:38  persquare
+	* adapters/gnuplot/aquaTerm.trm: Making dots independent of linewidth
 
-	* ReadMe.txt: Updated info
+	* adapters/gnuplot/aquaTerm.trm: Fix for pointsize bug. Dots at (x,y)
+	  are implemented as 1x1 square, needs better solution.
 
-2002-10-12 23:33  persquare
+2002-08-12  Per Persson <persquare@users.sourceforge.net>
 
-	* English.lproj/Credits.rtf: Updated info
+	* adapters/pgplot/aqdriv.m: Speeding up adapter by better buffering
 
-2002-10-12 20:44  persquare
+2002-08-04  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/project.pbxproj: Bump version to 0.3.1
+	* adapters/c/test.c: Fixed path to image
 
-2002-10-12 20:36  persquare
+	* adapters/gnuplot/aquaTerm.trm: Added limit to buffer size to
+	  balance message/drawing time
 
-	* English.lproj/AquaTerm.icns: Adding icons
+2002-05-27  Per Persson <persquare@users.sourceforge.net>
 
-2002-10-12 19:52  persquare
+	* adapters/octave/aqt_demo.m: Adding octave script to demonstrate the
+	  use of the octave/aqt binding
 
-	* AquaTerm.pbproj/bsavage.pbxuser, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/ppe.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/GPTInfoWindow.nib/classes.nib,
-	  English.lproj/GPTInfoWindow.nib/info.nib,
-	  English.lproj/GPTInfoWindow.nib/objects.nib,
-	  English.lproj/GPTInfoWindow~.nib/classes.nib,
-	  English.lproj/GPTInfoWindow~.nib/info.nib,
-	  English.lproj/GPTInfoWindow~.nib/objects.nib,
-	  English.lproj/GPTWindow.nib/classes.nib,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
-	  English.lproj/GPTWindow~.nib/classes.nib,
-	  English.lproj/GPTWindow~.nib/info.nib,
-	  English.lproj/GPTWindow~.nib/objects.nib,
-	  English.lproj/MainMenu1~.nib/classes.nib,
-	  English.lproj/MainMenu1~.nib/info.nib,
-	  English.lproj/MainMenu1~.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/classes.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib,
-	  English.lproj/MainMenu2~.nib/classes.nib,
-	  English.lproj/MainMenu2~.nib/info.nib,
-	  English.lproj/MainMenu2~.nib/objects.nib,
-	  English.lproj/MainMenu~.nib/classes.nib,
-	  English.lproj/MainMenu~.nib/info.nib,
-	  English.lproj/MainMenu~.nib/objects.nib,
-	  English.lproj/Untitled.nib/classes.nib,
-	  English.lproj/Untitled.nib/info.nib,
-	  English.lproj/Untitled.nib/objects.nib: Cleanup, I hope...
+	* adapters/c/c2aqt.h, adapters/c/c2aqt.m, adapters/octave/Makefile,
+	  adapters/octave/README: Adding example of how to create an
+	  octave/AQT binding using matwrap and the C example
 
-2002-10-12 17:01  persquare
+2002-05-21  Per Persson <persquare@users.sourceforge.net>
 
-	* GPTController.m: Fixing problem with save/copy drawing background
-	  and border.
+	* adapters/gnuplot/aquaTerm.trm: Fixing bug in AQUA_suspend that
+	  broke subplot() in octave
 
-2002-04-24 17:31  persquare
+2002-05-16  Per Persson <persquare@users.sourceforge.net>
 
-	* ReadMe.txt: Update for 0.3.0 release
+	* adapters/fortran/f2aqt.h, adapters/fortran/f2aqt.m,
+	  adapters/fortran/test.f: Added nil-termination to strings. Improved
+	  string handling. Added aqt_flush() function.
 
-2002-04-24 16:39  persquare
+2002-05-15  Per Persson <persquare@users.sourceforge.net>
 
-	* English.lproj/help.html: Update link to docs.
+	* adapters/fortran/f2aqt.m: Removing debug code
 
-2002-04-19 16:02  persquare
+	* adapters/fortran/f2aqt.h, adapters/fortran/f2aqt.m: Fixing string
+	  handling when passing from Fortran to C (FORTRAN adds string length
+	  as _extra_ parameter when calling C-function...). Path in
+	  aqt_imagefromfile still broken (slash seem to need special care)
 
-	* AQTColorInspector.h, AQTColorInspector.m, GPTController.h,
-	  GPTController.m: Fixing mainWindow tracking and window closing
-	  which in turn fixes print/save/copy bug. Cleaning.
+	* adapters/fortran/test.f: Fixing bug preventing diplaying labels.
+	  Fixing typos.
 
-2002-04-19 16:00  persquare
+2002-04-24  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTView.h, AQTView.m: Fixing dealloc bug, cleaning
+	* Version 0.3.0 released.
 
-2002-04-18 23:44  persquare
+	* aquaterm/ReadMe.txt: Update for 0.3.0 release
 
-	* GPTController.m: Fixing bug when saving or copying due to moving
-	  model ownership from windowcontroller to view
+	* aquaterm/English.lproj/help.html: Update link to docs.
 
-2002-04-18 11:40  persquare
+	* adapters/c/c2aqt.h, adapters/c/c2aqt.m, adapters/c/test.c: Adding a
+	  C example based on a generic adapter. Up-to-date with AQTProtocol
+	  v0.3. This is a first step towards a unified adapter strategy.
 
-	* AquaTerm.pbproj/project.pbxproj: Merging GPTView and AQTPrintView
-	  into AQTView, replacing GPTWindow.nib with AQTWindow
+	* adapters/fortran/example.f, adapters/fortran/f2aqt.h,
+	  adapters/fortran/f2aqt.m, adapters/fortran/test.f: Adding a FORTRAN
+	  example based on a generic adapter. Up-to-date with AQTProtocol
+	  v0.3. This is a first step towards a unified adapter strategy.
 
-2002-04-18 11:23  persquare
+	* adapters/AdapterExample/AQTProtocol.h,
+	  adapters/AdapterExample/AdapterExample.pbproj/ppe.pbxuser,
+	  adapters/AdapterExample/AdapterExample.pbproj/project.pbxproj,
+	  adapters/AdapterExample/English.lproj/InfoPlist.strings,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/classes.nib,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/info.nib,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/objects.nib,
+	  adapters/AdapterExample/MyObject.h,
+	  adapters/AdapterExample/MyObject.m, adapters/AdapterExample/main.m:
+	  Removing the ObjC example
 
-	* AQTBuilder.m, AQTColorInspector.m, GPTController.h,
-	  GPTController.m, GPTWindowController.h, GPTWindowController.m:
+2002-04-23  Per Persson <persquare@users.sourceforge.net>
+
+	* adapters/gnuplot/aquaTerm.trm: Setting cyclic colormap on init
+	  (pm3d colors handled in adapter), added version checking and info
+	  message. Complies with 0.3.0. Hidden line removal option seems to
+	  break current buffering of lines. No buffering for surfaces (pm3d).
+	  Changed -setFont: to -setTextfont: to avoid conflict. Cleaning up
+	  code. Still needs some work.
+
+2002-04-19  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/AQTColorInspector.h, aquaterm/AQTColorInspector.m,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m: Fixing
+	  mainWindow tracking and window closing which in turn fixes
+	  print/save/copy bug. Cleaning.
+
+	* aquaterm/AQTView.h, aquaterm/AQTView.m: Fixing dealloc bug,
+	  cleaning
+
+2002-04-18  Per Persson <persquare@users.sourceforge.net>
+
+	* aquaterm/GPTController.m: Fixing bug when saving or copying due to
+	  moving model ownership from windowcontroller to view
+
+	* adapters/gnuplot/aquaTerm.trm: Adding support for setting
+	  windowname. Syntax: set terminal aqua {<n>} {title "windowtitle"}
+
+	* adapters/pgplot/aqdriv.m: Adding -dotAtPoint: for IFUNC=13, Draw
+	  dot
+
+	* adapters/pgplot/aqdriv.m: Added buffering to polyline and polygon.
+	  An order of magnitude or more in speedup most of the time, still
+	  slow in some cases (don't know why).
+
+	* adapters/gnuplot/aquaTerm.trm: Updating to conform to AQTProtocol
+	  v0.3.0 in preparation for 0.3.0 feature freeze
+
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Merging GPTView and
+	  AQTPrintView into AQTView, replacing GPTWindow.nib with AQTWindow
+
+	* aquaterm/AQTBuilder.m, aquaterm/AQTColorInspector.m,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m,
+	  aquaterm/GPTWindowController.h, aquaterm/GPTWindowController.m:
 	  Changes to use AQTView instead of GPTView/AQTPrintView, some
 	  cleaning up too...
 
-2002-04-18 11:12  persquare
+	* aquaterm/AQTPrintView.h, aquaterm/AQTPrintView.m,
+	  aquaterm/AQTView.h, aquaterm/AQTView.m,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/GPTView.h,
+	  aquaterm/GPTView.m: Merging GPTView and AQTPrintView into AQTView,
+	  replacing GPTWindow.nib with AQTWindow
 
-	* AQTPrintView.h, AQTPrintView.m, AQTView.h, AQTView.m, GPTView.h,
-	  GPTView.m, AquaTerm.pbproj/project.pbxproj: Merging GPTView and
-	  AQTPrintView into AQTView, replacing GPTWindow.nib with AQTWindow
+	* aquaterm/English.lproj/AQTWindow.nib/classes.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/info.nib,
+	  aquaterm/English.lproj/AQTWindow.nib/objects.nib: Merging GPTView
+	  and AQTPrintView into AQTView, replacing GPTWindow.nib with
+	  AQTWindow
 
-2002-04-18 11:05  persquare
+2002-04-17  Per Persson <persquare@users.sourceforge.net>
 
-	* English.lproj/AQTWindow.nib/: classes.nib, info.nib, objects.nib:
-	  Merging GPTView and AQTPrintView into AQTView, replacing
-	  GPTWindow.nib with AQTWindow
+	* aquaterm/GPTController.m: Fixing the long standing bug with DO
+	  calls becoming out of sync.
 
-2002-04-17 11:14  persquare
+2002-03-27  Per Persson <persquare@users.sourceforge.net>
 
-	* GPTController.m: Fixing the long standing bug with DO calls
-	  becoming out of sync.
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: pxproj didn't get updated
 
-2002-03-27 13:09  persquare
-
-	* AquaTerm.pbproj/project.pbxproj: pxproj didn't get updated
-
-2002-03-27 12:57  persquare
-
-	* AQTBuilder.h, AQTBuilder.m, AQTModel.h, AQTModel.m,
-	  GPTController.m, GPTWindowController.h, GPTWindowController.m:
+	* aquaterm/AQTBuilder.h, aquaterm/AQTBuilder.m, aquaterm/AQTModel.h,
+	  aquaterm/AQTModel.m, aquaterm/GPTController.m,
+	  aquaterm/GPTWindowController.h, aquaterm/GPTWindowController.m:
 	  Added setTitle: Added timing functions to ease adapter
 	  optimization, general cleanup
 
-2002-03-27 12:55  persquare
+	* aquaterm/AQTProtocol.h, aquaterm/AQTProtocol.mdoc: Added setTitle:,
+	  removed -addImage::, updated docs
 
-	* AQTProtocol.h, AQTProtocol.mdoc: Added setTitle:, removed
-	  -addImage::, updated docs
+	* aquaterm/AQTImage.m: Cleanup
 
-2002-03-27 12:51  persquare
-
-	* AQTImage.m: Cleanup
-
-2002-03-27 12:49  persquare
-
-	* English.lproj/ColorInspector.nib/classes.nib,
-	  English.lproj/ColorInspector.nib/info.nib,
-	  English.lproj/ColorInspector.nib/objects.nib,
-	  AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.m: Revised
+	* aquaterm/AQTColorInspector.h, aquaterm/AQTColorInspector.m,
+	  aquaterm/AQTColorMap.m,
+	  aquaterm/English.lproj/ColorInspector.nib/classes.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/info.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/objects.nib: Revised
 	  inspector
 
-2002-03-07 18:53  persquare
+2002-03-07  Per Persson <persquare@users.sourceforge.net>
 
-	* GPTView.m: Stylefix. Getting rid of warnings
+	* aquaterm/GPTView.m: Stylefix. Getting rid of warnings
 
-2002-03-07 18:30  persquare
+	* aquaterm/AQTColorInspector.h, aquaterm/AQTColorInspector.m: Color
+	  inspector now updates itself from the colormap of the frontmost
+	  window. Changing colors partly implemented, only 9 linecolors and
+	  back, axis, grid accessible from inspector.
 
-	* AQTColorInspector.h, AQTColorInspector.m: Color inspector now
-	  updates itself from the colormap of the frontmost window.
-	  Changing colors partly implemented, only 9 linecolors and back,
-	  axis, grid accessible from inspector.
+	* aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTModel.h, aquaterm/AQTModel.m, aquaterm/GPTView.m:
+	  Implementing a completely configurable color indexing, most notably
+	  background and other specials.
 
-2002-03-07 18:27  persquare
+	* aquaterm/AQTBuilder.m: Fixing a problem with images not behaving
+	  according to isFlipped: flag
 
-	* AQTColorMap.h, AQTColorMap.m, AQTModel.h, AQTModel.m, GPTView.m:
-	  Implementing a completely configurable color indexing, most
-	  notably background and other specials.
+	* aquaterm/AQTBuilder.m, aquaterm/AQTImage.m, aquaterm/AQTProtocol.h,
+	  aquaterm/AQTProtocol.mdoc: Changes to fix crashing bug when
+	  printing
 
-2002-03-07 18:23  persquare
+2002-02-25  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTBuilder.m: Fixing a problem with images not behaving according
-	  to isFlipped: flag
+	* adapters/pgplot/aqdriv.m: Synching with aquaterm. Not fully
+	  functional, restart AQT to reset default colormap.
 
-2002-03-07 08:28  persquare
+	* aquaterm/AQTColorMap.m: Initial colormap set to 16 colors. Using
+	  yellow to indicate non-initialized color.
 
-	* AQTBuilder.m, AQTImage.m, AQTProtocol.h, AQTProtocol.mdoc:
-	  Changes to fix crashing bug when printing
+	* aquaterm/AQTBuilder.m: Check for valid model before closing
 
-2002-02-25 23:37  persquare
+2002-02-23  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTColorMap.m: Initial colormap set to 16 colors. Using yellow to
-	  indicate non-initialized color.
+	* aquaterm/GPTController.h, aquaterm/GPTController.m,
+	  aquaterm/GPTWindowController.m: Preloading window nib-file to work
+	  around bug that will open multiple windows when plotting repatedly
+	  to AQT with no previously open windows.
 
-2002-02-25 23:36  persquare
+2002-02-20  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTBuilder.m: Check for valid model before closing
+	* aquaterm/AQTBuilder.m, aquaterm/AQTColorMap.m: cleanup
 
-2002-02-23 22:09  persquare
+	* aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTImage.m, aquaterm/AQTModel.h, aquaterm/AQTModel.m,
+	  aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTProtocol.h,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/GPTController.h,
+	  aquaterm/GPTController.m, aquaterm/GPTWindowController.h,
+	  aquaterm/GPTWindowController.m, aquaterm/ToDo: Changes in
+	  anticipation of v0.3.0
 
-	* GPTController.h, GPTController.m, GPTWindowController.m:
-	  Preloading window nib-file to work around bug that will open
-	  multiple windows when plotting repatedly to AQT with no
-	  previously open windows.
+	* aquaterm/AQTBuilder.h, aquaterm/AQTBuilder.m,
+	  aquaterm/GPTReceiverObject.h, aquaterm/GPTReceiverObject.m:
+	  Replacing GPTReceiverObject and moving DO code to GPTController
 
-2002-02-21 00:44  persquare
-
-	* AQTBuilder.m, AQTColorMap.m: cleanup
-
-2002-02-20 23:13  persquare
-
-	* AQTColorMap.h, AQTColorMap.m, AQTImage.m, AQTModel.h, AQTModel.m,
-	  AQTPath.h, AQTPath.m, AQTProtocol.h, GPTController.h,
-	  GPTController.m, GPTWindowController.h, GPTWindowController.m,
-	  ToDo, AquaTerm.pbproj/project.pbxproj: Changes in anticipation of
-	  v0.3.0
-
-2002-02-20 23:08  persquare
-
-	* AQTBuilder.h, AQTBuilder.m, GPTReceiverObject.h,
-	  GPTReceiverObject.m: Replacing GPTReceiverObject and moving DO
-	  code to GPTController
-
-2002-02-20 22:22  persquare
-
-	* AQTProtocol.mdoc: Adding AQTProtocol.mdoc needed for
+	* aquaterm/AQTProtocol.mdoc: Adding AQTProtocol.mdoc needed for
 	  documentation of AQTProtocol
 
-2002-02-20 22:19  persquare
+	* aquaterm/ReadMe.rtf, aquaterm/ReadMe.txt: Moving ReadMe.rtf to
+	  ReadMe.txt
 
-	* ReadMe.rtf, ReadMe.txt: Moving ReadMe.rtf to ReadMe.txt
+	* aquaterm/Docs/AQTColorInspector.html,
+	  aquaterm/Docs/AQTColorMap.html, aquaterm/Docs/AQTGraphic.html,
+	  aquaterm/Docs/AQTLabel.html, aquaterm/Docs/AQTModel.html,
+	  aquaterm/Docs/AQTPath.html, aquaterm/Docs/AQTPrintView.html,
+	  aquaterm/Docs/AQTProtocol.html, aquaterm/Docs/AquaTerm.graffle,
+	  aquaterm/Docs/AquaTerm.jpg, aquaterm/Docs/AquaTermOverview.pdf,
+	  aquaterm/Docs/GPTColorExtras.rtf, aquaterm/Docs/GPTController.html,
+	  aquaterm/Docs/GPTController.rtf, aquaterm/Docs/GPTGraphic.html,
+	  aquaterm/Docs/GPTGraphic.rtf, aquaterm/Docs/GPTInfoDelegate.html,
+	  aquaterm/Docs/GPTInfoDelegate.rtf,
+	  aquaterm/Docs/GPTInfoWindowController.html,
+	  aquaterm/Docs/GPTInfoWindowController.rtf,
+	  aquaterm/Docs/GPTLabel.html, aquaterm/Docs/GPTLabel.rtf,
+	  aquaterm/Docs/GPTModel.html, aquaterm/Docs/GPTModel.rtf,
+	  aquaterm/Docs/GPTPath.html, aquaterm/Docs/GPTPath.rtf,
+	  aquaterm/Docs/GPTReceiverObject.html,
+	  aquaterm/Docs/GPTReceiverObject.rtf, aquaterm/Docs/GPTView.html,
+	  aquaterm/Docs/GPTView.rtf, aquaterm/Docs/GPTWindowController.html,
+	  aquaterm/Docs/GPTWindowController.rtf, aquaterm/Docs/ReadMe.txt,
+	  aquaterm/Docs/gptProtocol.html, aquaterm/Docs/gptProtocol.rtf:
+	  Removing static docs, class docs are generated by target Docs in PB
 
-2002-02-20 22:14  persquare
+2002-02-12  Per Persson <persquare@users.sourceforge.net>
 
-	* Docs/: AQTColorInspector.html, AQTColorMap.html, AQTGraphic.html,
-	  AQTLabel.html, AQTModel.html, AQTPath.html, AQTPrintView.html,
-	  AQTProtocol.html, AquaTerm.graffle, AquaTerm.jpg,
-	  AquaTermOverview.pdf: Removing static docs, class docs are
-	  generated by target Docs in PB
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/makedocs: Adding
+	  docs target and script makedocs. Can't set path to script properly,
+	  darn
 
-2002-02-20 22:10  persquare
+2002-02-12  Bob Savage <bobsavage@users.sourceforge.net>
 
-	* Docs/: GPTColorExtras.rtf, GPTController.html, GPTController.rtf,
-	  GPTGraphic.html, GPTGraphic.rtf, GPTInfoDelegate.html,
-	  GPTInfoDelegate.rtf, GPTInfoWindowController.html,
-	  GPTInfoWindowController.rtf, GPTLabel.html, GPTLabel.rtf,
-	  GPTModel.html, GPTModel.rtf, GPTPath.html, GPTPath.rtf,
-	  GPTReceiverObject.html, GPTReceiverObject.rtf, GPTView.html,
-	  GPTView.rtf, GPTWindowController.html, GPTWindowController.rtf,
-	  ReadMe.txt, gptProtocol.html, gptProtocol.rtf: Removing static
-	  docs, class docs are generated by target Docs in PB
+	* aquaterm/GPTController.h, aquaterm/GPTController.m: fixed the more
+	  severe (freezing) part of BUG #507536. Still can select Save as...,
+	  but now at least it won't lock up
 
-2002-02-12 22:33  persquare
+2002-02-11  Bob Savage <bobsavage@users.sourceforge.net>
 
-	* makedocs, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj: Adding docs target and script
-	  makedocs. Can't set path to script properly, darn
+	* aquaterm/AQTColorInspector.m,
+	  aquaterm/AquaTerm.pbproj/bsavage.pbxuser, aquaterm/aqt-test.py:
+	  fixed colormap not updating bug; adding aqt-test.py (test
+	  automation script)
 
-2002-02-12 18:02  bobsavage
+2002-02-11  Per Persson <persquare@users.sourceforge.net>
 
-	* GPTController.h, GPTController.m: fixed the more severe
-	  (freezing) part of BUG #507536. Still can select Save as..., but
-	  now at least it won't lock up
+	* adapters/pgplot/aqdriv.m: Should not clear plot like this...
 
-2002-02-11 20:46  bobsavage
-
-	* AQTColorInspector.m, aqt-test.py,
-	  AquaTerm.pbproj/bsavage.pbxuser: fixed colormap not updating bug;
-	  adding aqt-test.py (test automation script)
-
-2002-02-11 13:57  persquare
-
-	* GPTReceiverObject.m: Initial support for images in AquaTerm
-
-2002-02-11 13:30  persquare
-
-	* build/.DS_Store: yuck
-
-2002-02-11 13:13  persquare
-
-	* AQTImage.h, AQTImage.m, AQTProtocol.h,
-	  AquaTerm.pbproj/project.pbxproj: Initial support for images in
+	* aquaterm/GPTReceiverObject.m: Initial support for images in
 	  AquaTerm
 
-2002-02-07 08:50  bobsavage
+	* aquaterm/build/.DS_Store: yuck
 
-	* AQTColorInspector.m, AquaTerm.pbproj/bsavage.pbxuser: fixed
-	  colorinspector over everything problem, identified colorinspector
-	  cannot update windows until the first click on a window problem
+	* adapters/pgplot/aqdriv.m, adapters/pgplot/g77_cc_AQT.conf,
+	  adapters/pgplot/iand.c: Adding support for PGPLOT
 
-2002-02-07 08:16  bobsavage
+	* aquaterm/AQTImage.h, aquaterm/AQTImage.m, aquaterm/AQTProtocol.h,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj: Initial support for
+	  images in AquaTerm
 
-	* AQTColorInspector.h, AQTColorInspector.m, AQTPath.m,
-	  AquaTerm.pbproj/bsavage.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/ColorInspector.nib/info.nib,
-	  English.lproj/ColorInspector.nib/objects.nib: Applying Per's
-	  patch, changing line color works, changing gradient color works,
-	  changing grid color works. BG color cannot be set, yet, nor can
-	  text. Click on window once to make it update the first time.
+2002-02-07  Bob Savage <bobsavage@users.sourceforge.net>
 
-2002-02-05 23:31  persquare
+	* aquaterm/AQTColorInspector.m,
+	  aquaterm/AquaTerm.pbproj/bsavage.pbxuser: fixed colorinspector over
+	  everything problem, identified colorinspector cannot update windows
+	  until the first click on a window problem
 
-	* AQTPath.m: Take one on fixing problems with linewidth
+	* aquaterm/AQTColorInspector.h, aquaterm/AQTColorInspector.m,
+	  aquaterm/AQTPath.m, aquaterm/AquaTerm.pbproj/bsavage.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/ColorInspector.nib/info.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/objects.nib: Applying
+	  Per's patch, changing line color works, changing gradient color
+	  works, changing grid color works. BG color cannot be set, yet, nor
+	  can text. Click on window once to make it update the first time.
 
-2002-02-04 09:27  bobsavage
+2002-02-05  Per Persson <persquare@users.sourceforge.net>
 
-	* Docs/: AQTColorInspector.html, AQTColorMap.html, AQTGraphic.html,
-	  AQTLabel.html, AQTModel.html, AQTPath.html, AQTPrintView.html,
-	  AQTProtocol.html: adding the following to Docs/ :
+	* aquaterm/AQTPath.m: Take one on fixing problems with linewidth
+
+	* adapters/gnuplot/aquaTerm.trm: Take one on fixing problems with
+	  linewidth
+
+2002-02-04  Bob Savage <bobsavage@users.sourceforge.net>
+
+	* aquaterm/Docs/AQTColorInspector.html,
+	  aquaterm/Docs/AQTColorMap.html, aquaterm/Docs/AQTGraphic.html,
+	  aquaterm/Docs/AQTLabel.html, aquaterm/Docs/AQTModel.html,
+	  aquaterm/Docs/AQTPath.html, aquaterm/Docs/AQTPrintView.html,
+	  aquaterm/Docs/AQTProtocol.html: adding the following to Docs/ :
 	  AQTProtocol.html AQTPrintView.html AQTPath.html AQTModel.html
 	  AQTLabel.html AQTGraphic.html AQTColorMap.html
 	  AQTColorInspector.html
 
-2002-02-04 09:24  bobsavage
+	* aquaterm/Docs/GPTColorExtras.html,
+	  aquaterm/Docs/GPTController.html,
+	  aquaterm/Docs/GPTReceiverObject.html, aquaterm/Docs/GPTView.html,
+	  aquaterm/Docs/GPTWindowController.html: regenerated html DOCS using
+	  autodoc
 
-	* Docs/: GPTColorExtras.html, GPTController.html,
-	  GPTReceiverObject.html, GPTView.html, GPTWindowController.html:
-	  regenerated html DOCS using autodoc
+	* aquaterm/AQTColorInspector.h, aquaterm/AQTColorInspector.m,
+	  aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTLabel.h,
+	  aquaterm/AQTLabel.m, aquaterm/AQTModel.h, aquaterm/AQTModel.m,
+	  aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/GPTView.m: adding
+	  more autodoc formatted notes, deleting some cruft. Builds clean.
+	  Runs and displays from Gnuplot. Color inspector displays, but it
+	  does not update the colors in the active model
 
-2002-02-04 09:14  bobsavage
+2002-01-31  Bob Savage <bobsavage@users.sourceforge.net>
 
-	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.h,
-	  AQTColorMap.m, AQTGraphic.h, AQTGraphic.m, AQTLabel.h,
-	  AQTLabel.m, AQTModel.h, AQTModel.m, AQTPath.h, AQTPath.m,
-	  GPTView.m: adding more autodoc formatted notes, deleting some
-	  cruft. Builds clean. Runs and displays from Gnuplot. Color
-	  inspector displays, but it does not update the colors in the
-	  active model
+	* aquaterm/AquaTerm.pbproj/bsavage.pbxuser,
+	  aquaterm/Docs/AquaTerm.graffle, aquaterm/Docs/AquaTerm.jpg:
+	  Updating class diagram
 
-2002-01-31 22:38  bobsavage
+2002-01-31  Per Persson <persquare@users.sourceforge.net>
 
-	* AquaTerm.pbproj/bsavage.pbxuser, Docs/AquaTerm.graffle,
-	  Docs/AquaTerm.jpg: Updating class diagram
+	* aquaterm/AquaTerm.pbproj/project.pbxproj: Updating project
+	  (cosmetic)
 
-2002-01-31 17:05  persquare
+	* aquaterm/GPTColorExtras.h, aquaterm/GPTColorExtras.m: Removing
+	  category GPTColorExtras
 
-	* AquaTerm.pbproj/project.pbxproj: Updating project (cosmetic)
-
-2002-01-31 16:58  persquare
-
-	* GPTColorExtras.h, GPTColorExtras.m: Removing category
-	  GPTColorExtras
-
-2002-01-31 16:54  persquare
-
-	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.m,
-	  GPTController.h, GPTController.m, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/ColorInspector.nib/classes.nib,
-	  English.lproj/ColorInspector.nib/info.nib,
-	  English.lproj/ColorInspector.nib/objects.nib,
-	  English.lproj/ExtendSavePanel.nib/info.nib,
-	  English.lproj/ExtendSavePanel.nib/objects.nib,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib: Added live colormap
-	  previewing for inspector. Added menu entry to show info
+	* aquaterm/AQTColorInspector.h, aquaterm/AQTColorInspector.m,
+	  aquaterm/AQTColorMap.m, aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/ColorInspector.nib/classes.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/info.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/objects.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/info.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m: Added live
+	  colormap previewing for inspector. Added menu entry to show info
 	  (inspector) window. Added stubs for notifications to inspector.
 	  Fixed broken nib
 
-2002-01-31 09:32  bobsavage
+2002-01-30  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.h,
-	  AQTColorMap.m, AQTGraphic.h, AQTGraphic.m, AQTLabel.m,
-	  AQTModel.h, AQTModel.m, AQTPath.h, AQTPath.m, GPTColorExtras.m,
-	  GPTReceiverObject.h, GPTReceiverObject.m,
-	  AquaTerm.pbproj/bsavage.pbxuser: committing AQT020129.patch from
-	  Per. Builds and runs cleanly
+	* aquaterm/AQTProtocol.h: Updated comments to reflect the current
+	  state of things
 
-2002-01-30 15:36  persquare
+2002-01-29  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTProtocol.h: Updated comments to reflect the current state of
-	  things
+	* aquaterm/English.lproj/ExtendSavePanel.nib/classes.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/info.nib,
+	  aquaterm/English.lproj/ExtendSavePanel.nib/objects.nib: Add nibs
+	  needed for extended save panel
 
-2002-01-29 13:25  persquare
+2002-01-28  Bob Savage <bobsavage@users.sourceforge.net>
 
-	* English.lproj/ExtendSavePanel.nib/: classes.nib, info.nib,
-	  objects.nib: Add nibs needed for extended save panel
+	* aquaterm/AQTColorInspector.h, aquaterm/AQTColorInspector.m,
+	  aquaterm/AQTColorMap.h, aquaterm/AQTColorMap.m,
+	  aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTLabel.h,
+	  aquaterm/AQTModel.h, aquaterm/AQTModel.m, aquaterm/AQTPath.h,
+	  aquaterm/AQTPath.m, aquaterm/AquaTerm.pbproj/bsavage.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/ColorInspector.nib/classes.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/info.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/objects.nib,
+	  aquaterm/GPTWindowController.h: added first incarnation of
+	  AQTColorInspector, and AQTColorMap. Brought ColorInspector.nib in
+	  line with Per's ideas. Status: Does not use the new colormap code.
+	  Still runs and uses the old methods. Does not build without
+	  warnings -- surface color method is empty (should return color).
+	  Still need to hook up inspector class' show window to something in
+	  main nib.
 
-2002-01-28 21:29  bobsavage
+2002-01-23  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTColorInspector.h, AQTColorInspector.m, AQTColorMap.h,
-	  AQTColorMap.m, AQTGraphic.h, AQTGraphic.m, AQTLabel.h,
-	  AQTModel.h, AQTModel.m, AQTPath.h, AQTPath.m,
-	  GPTWindowController.h, AquaTerm.pbproj/bsavage.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/ColorInspector.nib/classes.nib,
-	  English.lproj/ColorInspector.nib/info.nib,
-	  English.lproj/ColorInspector.nib/objects.nib: added first
-	  incarnation of AQTColorInspector, and AQTColorMap. Brought
-	  ColorInspector.nib in line with Per's ideas. Status: Does not use
-	  the new colormap code. Still runs and uses the old methods. Does
-	  not build without warnings -- surface color method is empty
-	  (should return color). Still need to hook up inspector class'
-	  show window to something in main nib.
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/help.html, aquaterm/help.html: moving files
 
-2002-01-24 00:03  persquare
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/GPTController.h,
+	  aquaterm/GPTController.m: Added user selectable save format
+	  (eps/pdf) to SaveAs dialog
 
-	* help.html, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj, English.lproj/help.html: moving
-	  files
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m,
+	  aquaterm/help.html: Adding HTML help
 
-2002-01-23 23:50  persquare
+2002-01-23  Bob Savage <bobsavage@users.sourceforge.net>
 
-	* GPTController.h, GPTController.m, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj: Added user selectable save
-	  format (eps/pdf) to SaveAs dialog
+	* aquaterm/GPTView.m: minor comment change
 
-2002-01-23 19:27  persquare
-
-	* GPTController.h, GPTController.m, help.html,
-	  AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib: Adding HTML help
-
-2002-01-23 19:20  bobsavage
-
-	* GPTView.m: minor comment change
-
-2002-01-23 17:37  bobsavage
-
-	* GPTInfoDelegate.h, GPTInfoDelegate.m, GPTInfoWindowController.h,
-	  GPTInfoWindowController.m, AquaTerm.pbproj/bsavage.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj: removing GPTInfoXXX and
+	* aquaterm/AquaTerm.pbproj/bsavage.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/GPTInfoDelegate.h, aquaterm/GPTInfoDelegate.m,
+	  aquaterm/GPTInfoWindowController.h,
+	  aquaterm/GPTInfoWindowController.m: removing GPTInfoXXX and
 	  Aquaterm2 target
 
-2002-01-23 08:35  bobsavage
+	* aquaterm/AquaTerm.pbproj/bsavage.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/ColorInspector.nib/classes.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/info.nib,
+	  aquaterm/English.lproj/ColorInspector.nib/objects.nib,
+	  aquaterm/GPTInfoDelegate.h, aquaterm/GPTReceiverObject.m,
+	  aquaterm/GPTView.m, aquaterm/GPTWindowController.h,
+	  aquaterm/GPTWindowController.m: commenting on structure, and adding
+	  rough draft of color inspector
 
-	* GPTInfoDelegate.h, GPTReceiverObject.m, GPTView.m,
-	  GPTWindowController.h, GPTWindowController.m,
-	  AquaTerm.pbproj/bsavage.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/ColorInspector.nib/classes.nib,
-	  English.lproj/ColorInspector.nib/info.nib,
-	  English.lproj/ColorInspector.nib/objects.nib: commenting on
-	  structure, and adding rough draft of color inspector
+2002-01-16  Per Persson <persquare@users.sourceforge.net>
 
-2002-01-23 03:24  bobsavage
+	* Version 0.2.1 released.
 
-	* AQTGraphic.h, AQTGraphic.m, AQTLabel.h, AQTLabel.m, AQTPath.m,
-	  GPTColorExtras.h, GPTColorExtras.m,
-	  AquaTerm.pbproj/bsavage.pbxuser: committing color changes in
-	  preparation for method to change colors at run time
+	* aquaterm/ToDo: More to do in ToDo
 
-2002-01-16 11:44  persquare
+	* aquaterm/GPTView.m: Applied clean up patch from bobsavage
 
-	* ToDo: More to do in ToDo
+2002-01-14  Per Persson <persquare@users.sourceforge.net>
 
-2002-01-16 11:12  persquare
+	* aquaterm/ToDo: Added ToDo
 
-	* GPTView.m: Applied clean up patch from bobsavage
+2002-01-11  Per Persson <persquare@users.sourceforge.net>
 
-2002-01-14 23:37  persquare
+	* aquaterm/AQTPrintView.h, aquaterm/AQTPrintView.m: Adding
+	  print/save/copy view
 
-	* ToDo: Added ToDo
+2002-01-10  Per Persson <persquare@users.sourceforge.net>
 
-2002-01-11 09:52  persquare
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m: Implemented
+	  saveAs and copy, fixed printing
 
-	* AQTPrintView.h, AQTPrintView.m: Adding print/save/copy view
+2001-12-28  Per Persson <persquare@users.sourceforge.net>
 
-2002-01-10 15:12  persquare
+	* aquaterm/ReadMe.rtf: Instructions on how to get gnuplot sources
 
-	* GPTController.h, GPTController.m, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib: Implemented saveAs and
-	  copy, fixed printing
+	* aquaterm/ReadMe.rtf: Adding a readme file
 
-2001-12-28 15:52  persquare
+2001-12-17  Per Persson <persquare@users.sourceforge.net>
 
-	* ReadMe.rtf: Instructions on how to get gnuplot sources
+	* adapters/fortran/example.f, adapters/fortran/f2aqt.m: A simple
+	  FORTRAN example, based on aquaTerm.trm
 
-2001-12-28 15:44  persquare
+2001-12-13  Per Persson <persquare@users.sourceforge.net>
 
-	* ReadMe.rtf: Adding a readme file
+	* Version 0.2.0 released.
 
-2001-12-13 14:26  persquare
+	* aquaterm/AquaTerm.pbproj/ppe.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/GPTReceiverObject.m: Minor changes, prepare for release
 
-	* GPTReceiverObject.m, AquaTerm.pbproj/ppe.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj: Minor changes, prepare for
-	  release
+	* adapters/AdapterExample/AQTProtocol.h,
+	  adapters/AdapterExample/AdapterExample.pbproj/ppe.pbxuser,
+	  adapters/gnuplot/aquaTerm.trm: Minor changes, prepare for release
 
-2001-12-13 01:15  persquare
+	* adapters/gnuplot/aquaTerm.trm: major code clean-up, added font- and
+	  defaulthandling
 
-	* AQTLabel.m, AQTProtocol.h, GPTReceiverObject.m,
-	  AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj:
-	  minor fixes
+	* aquaterm/AQTLabel.m, aquaterm/AQTProtocol.h,
+	  aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/GPTReceiverObject.m: minor fixes
 
-2001-12-10 21:27  persquare
+2001-12-10  Per Persson <persquare@users.sourceforge.net>
 
-	* GPTView.m: fixed a versionbug
+	* aquaterm/GPTView.m: fixed a versionbug
 
-2001-12-10 17:08  persquare
+	* adapters/gnuplot/aquaTerm.trm: Added -(void)clearRect: to remove
+	  graphics inside rect
 
-	* AQTGraphic.h, AQTGraphic.m, AQTLabel.h, AQTLabel.m, AQTModel.h,
-	  AQTModel.m, AQTPath.h, AQTPath.m, AQTProtocol.h, GPTController.h,
-	  GPTController.m, GPTGraphic.h, GPTGraphic.m, GPTLabel.h,
-	  GPTLabel.m, GPTModel.h, GPTModel.m, GPTPath.h, GPTPath.m,
-	  GPTReceiverObject.h, GPTReceiverObject.m, GPTWindowController.h,
-	  GPTWindowController.m, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/GPTWindow.nib/objects.nib: Added -(void)clearRect:
-	  to remove graphics inside rect
+	* aquaterm/AQTGraphic.h, aquaterm/AQTGraphic.m, aquaterm/AQTLabel.h,
+	  aquaterm/AQTLabel.m, aquaterm/AQTModel.h, aquaterm/AQTModel.m,
+	  aquaterm/AQTPath.h, aquaterm/AQTPath.m, aquaterm/AQTProtocol.h,
+	  aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/GPTWindow.nib/objects.nib,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m,
+	  aquaterm/GPTGraphic.h, aquaterm/GPTGraphic.m, aquaterm/GPTLabel.h,
+	  aquaterm/GPTLabel.m, aquaterm/GPTModel.h, aquaterm/GPTModel.m,
+	  aquaterm/GPTPath.h, aquaterm/GPTPath.m,
+	  aquaterm/GPTReceiverObject.h, aquaterm/GPTReceiverObject.m,
+	  aquaterm/GPTWindowController.h, aquaterm/GPTWindowController.m:
+	  Added -(void)clearRect: to remove graphics inside rect
 
-2001-12-07 11:01  persquare
+2001-12-07  Per Persson <persquare@users.sourceforge.net>
 
-	* GPTLabel.m, GPTReceiverObject.m, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj: fixed (scary/daft) typos
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/GPTLabel.m,
+	  aquaterm/GPTReceiverObject.m: fixed (scary/daft) typos
 
-2001-12-04 22:39  persquare
+2001-12-04  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTProtocol.h, GPTLabel.h, GPTLabel.m, GPTReceiverObject.m,
-	  AquaTerm.pbproj/ppe.pbxuser,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib: Added text rotation
-	  capabilities
+	* aquaterm/AQTProtocol.h, aquaterm/AquaTerm.pbproj/ppe.pbxuser,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/objects.nib,
+	  aquaterm/GPTLabel.h, aquaterm/GPTLabel.m,
+	  aquaterm/GPTReceiverObject.m: Added text rotation capabilities
 
-2001-12-04 19:12  persquare
+	* adapters/AdapterExample/AQTProtocol.h,
+	  adapters/AdapterExample/AdapterExample.pbproj/ppe.pbxuser,
+	  adapters/AdapterExample/MyObject.m, adapters/gnuplot/aquaTerm.trm:
+	  Added text rotation capabilities
 
-	* AQTProtocol.h, GPTController.h, GPTController.m,
-	  GPTReceiverObject.h, GPTReceiverObject.m,
-	  AquaTerm.pbproj/ppe.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  build/.DS_Store: Extended protocol and implemented
-	  setFontWithName:size:
+	* adapters/AdapterExample/AQTProtocol.h,
+	  adapters/AdapterExample/AdapterExample.pbproj/ppe.pbxuser,
+	  adapters/AdapterExample/AdapterExample.pbproj/project.pbxproj,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/classes.nib,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/info.nib,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/objects.nib,
+	  adapters/AdapterExample/MyObject.h,
+	  adapters/AdapterExample/MyObject.m: Extended example to show new
+	  features (setFont, getInfo)
 
-2001-11-18 00:15  persquare
+	* adapters/gnuplot/aquaTerm.trm: Added exception handling to detect
+	  disconnected server, some cleaning up
 
-	* GPTController.m, GPTReceiverObject.m, GPTWindowController.m,
-	  AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/project.pbxproj,
-	  English.lproj/Credits.rtf, English.lproj/InfoPlist.strings,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib: Fixed window display
-	  bug, added version info, cosmetic fixes
+	* aquaterm/AQTProtocol.h, aquaterm/AquaTerm.pbproj/ppe.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj, aquaterm/GPTController.h,
+	  aquaterm/GPTController.m, aquaterm/GPTReceiverObject.h,
+	  aquaterm/GPTReceiverObject.m, aquaterm/build/.DS_Store: Extended
+	  protocol and implemented setFontWithName:size:
 
-2001-11-17 16:38  persquare
+2001-11-17  Per Persson <persquare@users.sourceforge.net>
 
-	* AQTProtocol.h, GPTReceiverObject.h, GPTReceiverObject.m,
-	  gptProtocol.h, gptProtocol.mdoc, AquaTerm.pbproj/per.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj: Replaced gptProtocol.h with
+	* Version 0.1.0 released.
+
+	* adapters/gnuplot/aquaTerm.trm: Updated driver to conform to
+	  AQTProtocol, bugfixes and cleanup
+
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/English.lproj/Credits.rtf,
+	  aquaterm/English.lproj/GPTWindow.nib/info.nib,
+	  aquaterm/English.lproj/GPTWindow.nib/objects.nib,
+	  aquaterm/English.lproj/InfoPlist.strings,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/GPTController.m, aquaterm/GPTReceiverObject.m,
+	  aquaterm/GPTWindowController.m: Fixed window display bug, added
+	  version info, cosmetic fixes
+
+	* aquaterm/AQTProtocol.h, aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/GPTReceiverObject.h, aquaterm/GPTReceiverObject.m,
+	  aquaterm/gptProtocol.h, aquaterm/gptProtocol.mdoc: Replaced
+	  gptProtocol.h with AQTProtocol.h
+
+	* adapters/AdapterExample/AQTProtocol.h: Replaced gptProtocol.h with
 	  AQTProtocol.h
 
-2001-11-13 14:08  persquare
+	* adapters/AdapterExample/AdapterExample.pbproj/project.pbxproj,
+	  adapters/AdapterExample/MyObject.m,
+	  adapters/AdapterExample/gptProtocol.h: Changed to DO protocol
+	  defined in AQTProtocol.h
 
-	* GPTColorExtras.h, GPTColorExtras.m, GPTController.h,
-	  GPTController.m, GPTGraphic.h, GPTGraphic.m, GPTInfoDelegate.h,
-	  GPTInfoDelegate.m, GPTInfoWindowController.h,
-	  GPTInfoWindowController.m, GPTLabel.h, GPTLabel.m, GPTModel.h,
-	  GPTModel.m, GPTPath.h, GPTPath.m, GPTReceiverObject.h,
-	  GPTReceiverObject.m, GPTView.h, GPTView.m, GPTWindowController.h,
-	  GPTWindowController.m, gptProtocol.h, gptProtocol.mdoc, main.m,
-	  AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/ppe.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj, Docs/AquaTerm.graffle,
-	  Docs/AquaTermOverview.pdf, Docs/GPTColorExtras.html,
-	  Docs/GPTColorExtras.rtf, Docs/GPTController.html,
-	  Docs/GPTController.rtf, Docs/GPTGraphic.html,
-	  Docs/GPTGraphic.rtf, build/.DS_Store, Docs/GPTInfoDelegate.html,
-	  Docs/GPTInfoDelegate.rtf, Docs/GPTInfoWindowController.html,
-	  Docs/GPTInfoWindowController.rtf, Docs/GPTLabel.html,
-	  Docs/GPTLabel.rtf, Docs/GPTModel.html, Docs/GPTModel.rtf,
-	  Docs/GPTPath.html, Docs/GPTPath.rtf, Docs/GPTReceiverObject.html,
-	  Docs/GPTReceiverObject.rtf, Docs/GPTView.html, Docs/GPTView.rtf,
-	  Docs/GPTWindowController.html, Docs/GPTWindowController.rtf,
-	  Docs/gptProtocol.html, Docs/gptProtocol.rtf,
-	  English.lproj/InfoPlist.strings,
-	  English.lproj/GPTInfoWindow.nib/classes.nib,
-	  English.lproj/GPTInfoWindow.nib/info.nib,
-	  English.lproj/GPTInfoWindow.nib/objects.nib,
-	  English.lproj/GPTInfoWindow~.nib/classes.nib,
-	  English.lproj/GPTInfoWindow~.nib/info.nib,
-	  English.lproj/GPTInfoWindow~.nib/objects.nib,
-	  English.lproj/GPTWindow.nib/classes.nib,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
-	  English.lproj/GPTWindow~.nib/classes.nib,
-	  English.lproj/GPTWindow~.nib/info.nib,
-	  English.lproj/GPTWindow~.nib/objects.nib,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  English.lproj/MainMenu1~.nib/classes.nib,
-	  English.lproj/MainMenu1~.nib/info.nib,
-	  English.lproj/MainMenu1~.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/classes.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib,
-	  English.lproj/MainMenu2~.nib/classes.nib,
-	  English.lproj/MainMenu2~.nib/info.nib,
-	  English.lproj/MainMenu2~.nib/objects.nib,
-	  English.lproj/MainMenu~.nib/classes.nib,
-	  English.lproj/MainMenu~.nib/info.nib,
-	  English.lproj/MainMenu~.nib/objects.nib,
-	  English.lproj/Untitled.nib/classes.nib,
-	  English.lproj/Untitled.nib/info.nib,
-	  English.lproj/Untitled.nib/objects.nib: Initial import
+2001-11-14  Per Persson <persquare@users.sourceforge.net>
 
-2001-11-13 14:08  persquare
+	* adapters/AdapterExample/AdapterExample.pbproj/ppe.pbxuser,
+	  adapters/AdapterExample/AdapterExample.pbproj/project.pbxproj,
+	  adapters/AdapterExample/English.lproj/InfoPlist.strings,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/classes.nib,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/info.nib,
+	  adapters/AdapterExample/English.lproj/MainMenu.nib/objects.nib,
+	  adapters/AdapterExample/MyObject.h,
+	  adapters/AdapterExample/MyObject.m,
+	  adapters/AdapterExample/gptProtocol.h,
+	  adapters/AdapterExample/main.m: Committing example adapter
 
-	* GPTColorExtras.h, GPTColorExtras.m, GPTController.h,
-	  GPTController.m, GPTGraphic.h, GPTGraphic.m, GPTInfoDelegate.h,
-	  GPTInfoDelegate.m, GPTInfoWindowController.h,
-	  GPTInfoWindowController.m, GPTLabel.h, GPTLabel.m, GPTModel.h,
-	  GPTModel.m, GPTPath.h, GPTPath.m, GPTReceiverObject.h,
-	  GPTReceiverObject.m, GPTView.h, GPTView.m, GPTWindowController.h,
-	  GPTWindowController.m, gptProtocol.h, gptProtocol.mdoc, main.m,
-	  AquaTerm.pbproj/per.pbxuser, AquaTerm.pbproj/ppe.pbxuser,
-	  AquaTerm.pbproj/project.pbxproj, Docs/AquaTerm.graffle,
-	  Docs/AquaTermOverview.pdf, Docs/GPTColorExtras.html,
-	  Docs/GPTColorExtras.rtf, Docs/GPTController.html,
-	  Docs/GPTController.rtf, Docs/GPTGraphic.html,
-	  Docs/GPTGraphic.rtf, build/.DS_Store, Docs/GPTInfoDelegate.html,
-	  Docs/GPTInfoDelegate.rtf, Docs/GPTInfoWindowController.html,
-	  Docs/GPTInfoWindowController.rtf, Docs/GPTLabel.html,
-	  Docs/GPTLabel.rtf, Docs/GPTModel.html, Docs/GPTModel.rtf,
-	  Docs/GPTPath.html, Docs/GPTPath.rtf, Docs/GPTReceiverObject.html,
-	  Docs/GPTReceiverObject.rtf, Docs/GPTView.html, Docs/GPTView.rtf,
-	  Docs/GPTWindowController.html, Docs/GPTWindowController.rtf,
-	  Docs/gptProtocol.html, Docs/gptProtocol.rtf,
-	  English.lproj/InfoPlist.strings,
-	  English.lproj/GPTInfoWindow.nib/classes.nib,
-	  English.lproj/GPTInfoWindow.nib/info.nib,
-	  English.lproj/GPTInfoWindow.nib/objects.nib,
-	  English.lproj/GPTInfoWindow~.nib/classes.nib,
-	  English.lproj/GPTInfoWindow~.nib/info.nib,
-	  English.lproj/GPTInfoWindow~.nib/objects.nib,
-	  English.lproj/GPTWindow.nib/classes.nib,
-	  English.lproj/GPTWindow.nib/info.nib,
-	  English.lproj/GPTWindow.nib/objects.nib,
-	  English.lproj/GPTWindow~.nib/classes.nib,
-	  English.lproj/GPTWindow~.nib/info.nib,
-	  English.lproj/GPTWindow~.nib/objects.nib,
-	  English.lproj/MainMenu1.nib/classes.nib,
-	  English.lproj/MainMenu1.nib/info.nib,
-	  English.lproj/MainMenu1.nib/objects.nib,
-	  English.lproj/MainMenu1~.nib/classes.nib,
-	  English.lproj/MainMenu1~.nib/info.nib,
-	  English.lproj/MainMenu1~.nib/objects.nib,
-	  English.lproj/MainMenu2.nib/classes.nib,
-	  English.lproj/MainMenu2.nib/info.nib,
-	  English.lproj/MainMenu2.nib/objects.nib,
-	  English.lproj/MainMenu2~.nib/classes.nib,
-	  English.lproj/MainMenu2~.nib/info.nib,
-	  English.lproj/MainMenu2~.nib/objects.nib,
-	  English.lproj/MainMenu~.nib/classes.nib,
-	  English.lproj/MainMenu~.nib/info.nib,
-	  English.lproj/MainMenu~.nib/objects.nib,
-	  English.lproj/Untitled.nib/classes.nib,
-	  English.lproj/Untitled.nib/info.nib,
-	  English.lproj/Untitled.nib/objects.nib: Initial revision
+2001-11-13  Per Persson <persquare@users.sourceforge.net>
 
+	* adapters/gnuplot/aquaTerm.trm: Initial revision
+
+	* aquaterm/AquaTerm.pbproj/per.pbxuser,
+	  aquaterm/AquaTerm.pbproj/ppe.pbxuser,
+	  aquaterm/AquaTerm.pbproj/project.pbxproj,
+	  aquaterm/Docs/AquaTerm.graffle, aquaterm/Docs/AquaTermOverview.pdf,
+	  aquaterm/Docs/GPTColorExtras.html,
+	  aquaterm/Docs/GPTColorExtras.rtf, aquaterm/Docs/GPTController.html,
+	  aquaterm/Docs/GPTController.rtf, aquaterm/Docs/GPTGraphic.html,
+	  aquaterm/Docs/GPTGraphic.rtf, aquaterm/Docs/GPTInfoDelegate.html,
+	  aquaterm/Docs/GPTInfoDelegate.rtf,
+	  aquaterm/Docs/GPTInfoWindowController.html,
+	  aquaterm/Docs/GPTInfoWindowController.rtf,
+	  aquaterm/Docs/GPTLabel.html, aquaterm/Docs/GPTLabel.rtf,
+	  aquaterm/Docs/GPTModel.html, aquaterm/Docs/GPTModel.rtf,
+	  aquaterm/Docs/GPTPath.html, aquaterm/Docs/GPTPath.rtf,
+	  aquaterm/Docs/GPTReceiverObject.html,
+	  aquaterm/Docs/GPTReceiverObject.rtf, aquaterm/Docs/GPTView.html,
+	  aquaterm/Docs/GPTView.rtf, aquaterm/Docs/GPTWindowController.html,
+	  aquaterm/Docs/GPTWindowController.rtf,
+	  aquaterm/Docs/gptProtocol.html, aquaterm/Docs/gptProtocol.rtf,
+	  aquaterm/English.lproj/GPTInfoWindow.nib/classes.nib,
+	  aquaterm/English.lproj/GPTInfoWindow.nib/info.nib,
+	  aquaterm/English.lproj/GPTInfoWindow.nib/objects.nib,
+	  aquaterm/English.lproj/GPTInfoWindow~.nib/classes.nib,
+	  aquaterm/English.lproj/GPTInfoWindow~.nib/info.nib,
+	  aquaterm/English.lproj/GPTInfoWindow~.nib/objects.nib,
+	  aquaterm/English.lproj/GPTWindow.nib/classes.nib,
+	  aquaterm/English.lproj/GPTWindow.nib/info.nib,
+	  aquaterm/English.lproj/GPTWindow.nib/objects.nib,
+	  aquaterm/English.lproj/GPTWindow~.nib/classes.nib,
+	  aquaterm/English.lproj/GPTWindow~.nib/info.nib,
+	  aquaterm/English.lproj/GPTWindow~.nib/objects.nib,
+	  aquaterm/English.lproj/InfoPlist.strings,
+	  aquaterm/English.lproj/MainMenu1.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu1~.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu1~.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu1~.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu2.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu2~.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu2~.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu2~.nib/objects.nib,
+	  aquaterm/English.lproj/MainMenu~.nib/classes.nib,
+	  aquaterm/English.lproj/MainMenu~.nib/info.nib,
+	  aquaterm/English.lproj/MainMenu~.nib/objects.nib,
+	  aquaterm/English.lproj/Untitled.nib/classes.nib,
+	  aquaterm/English.lproj/Untitled.nib/info.nib,
+	  aquaterm/English.lproj/Untitled.nib/objects.nib,
+	  aquaterm/GPTColorExtras.h, aquaterm/GPTColorExtras.m,
+	  aquaterm/GPTController.h, aquaterm/GPTController.m,
+	  aquaterm/GPTGraphic.h, aquaterm/GPTGraphic.m,
+	  aquaterm/GPTInfoDelegate.h, aquaterm/GPTInfoDelegate.m,
+	  aquaterm/GPTInfoWindowController.h,
+	  aquaterm/GPTInfoWindowController.m, aquaterm/GPTLabel.h,
+	  aquaterm/GPTLabel.m, aquaterm/GPTModel.h, aquaterm/GPTModel.m,
+	  aquaterm/GPTPath.h, aquaterm/GPTPath.m,
+	  aquaterm/GPTReceiverObject.h, aquaterm/GPTReceiverObject.m,
+	  aquaterm/GPTView.h, aquaterm/GPTView.m,
+	  aquaterm/GPTWindowController.h, aquaterm/GPTWindowController.m,
+	  aquaterm/build/.DS_Store, aquaterm/gptProtocol.h,
+	  aquaterm/gptProtocol.mdoc, aquaterm/main.m: Initial revision
