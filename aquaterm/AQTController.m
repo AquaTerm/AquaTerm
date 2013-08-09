@@ -11,7 +11,7 @@
 #import "AQTAdapter.h"
 
 #import "AQTPlot.h"
-#import <Message/NSMailDelivery.h>
+#import <Foundation/Foundation.h>
 
 extern void aqtDebug(id sender);
 extern void aqtTestview(id sender);
