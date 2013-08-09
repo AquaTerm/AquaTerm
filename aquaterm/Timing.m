@@ -57,7 +57,6 @@ void aqtLineDrawingTest(id sender)
 #ifndef AQT_STANDALONE
    AQTAdapter *adapter = [sender sharedAdapter];
 #endif
-   int32_t lineCount = 2;
    int32_t maxLineLength = 64;
    int32_t c, l;
    uint32_t index = 0; 
