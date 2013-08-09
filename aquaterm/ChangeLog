@@ -2,6 +2,9 @@
 
 	* aquaterm/Timing.m: remove unused variable
 
+	* aquaterm/AQTPlot.m: replace deprecated NSSavePanel -filename with
+	  -URL -path
+
 2013-08-09  Jeremy Huddleston Sequoia <jeremyhu@macports.org>
 
 	* aquaterm/AQTController.m,

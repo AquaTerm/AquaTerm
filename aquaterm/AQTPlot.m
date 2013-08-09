@@ -441,7 +441,7 @@ static inline void NOOP_(id x, ...) {;}
    if (NSFileHandlingPanelOKButton == returnCode) {
       printView = [[AQTView alloc] initWithFrame:NSMakeRect(0.0, 0.0, [model canvasSize].width, [model canvasSize].height)];
       [printView setModel:model];
-      filename = [[theSheet filename] stringByDeletingPathExtension];
+      filename = [[[theSheet URL] path] stringByDeletingPathExtension];
       if ([[formatPopUp titleOfSelectedItem] isEqualToString:@"PDF"]) {
          data = [printView dataWithPDFInsideRect: [printView bounds]];
          [data writeToFile:[filename stringByAppendingPathExtension:@"pdf"] atomically: NO];
