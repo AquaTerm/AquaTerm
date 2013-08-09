@@ -154,13 +154,13 @@
          // No, search for it based on creator code, choose latest version
          NSURL *tmpURL;
          status = LSFindApplicationForInfo('AqTS', NULL, NULL, NULL, (CFURLRef *)&tmpURL);
-         [self logMessage:[NSString stringWithFormat:@"LSFindApplicationForInfo = %d", status] logLevel:2];
+         [self logMessage:[NSString stringWithFormat:@"LSFindApplicationForInfo = %ld", (long)status] logLevel:2];
          appURL = (status == noErr)?tmpURL:nil;
          [appURL autorelease];
          status = LSOpenCFURLRef((CFURLRef)appURL, NULL);
       }
    }
-   [self logMessage:[NSString stringWithFormat:@"LSOpenCFURLRef = %d", status] logLevel:2];
+   [self logMessage:[NSString stringWithFormat:@"LSOpenCFURLRef = %ld", (long)status] logLevel:2];
    return (status == noErr);
 }
 
