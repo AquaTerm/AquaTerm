@@ -18,7 +18,7 @@
    {
       // Use dynamic store instead to avoid large memory overhead
       // by having too large static store in all objects
-      if(dynamicPathStore = malloc(pc * sizeof(NSPoint)))
+      if((dynamicPathStore = malloc(pc * sizeof(NSPoint))))
       {
          path = dynamicPathStore;
       }

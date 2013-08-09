@@ -1,5 +1,7 @@
 2013-08-09  Mojca Miklavec <mmiklavec@users.sourceforge.net>
 
+	* aquaterm/AQTPath.m: silence compiler warning with parenthesis
+
 	* aquaterm/AQTClientManager.m: compiler warning - casting to (long)
 
 	* aquaterm/Demo.m: explicit cast to (unichar) to avoid compiler
