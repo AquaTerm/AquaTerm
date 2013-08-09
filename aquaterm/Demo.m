@@ -288,10 +288,10 @@ for (i=0; i<8; i++)
 
 // Text
 [adapter setFontname:@"Times-Roman"];
-NSString *s = [NSString stringWithFormat:@"Unicode: %C %C %C %C%C%C%C%C", 0x2124, 0x2133, 0x5925, 0x2654, 0x2655, 0x2656, 0x2657, 0x2658]; 
+NSString *s = [NSString stringWithFormat:@"Unicode: %C %C %C %C%C%C%C%C", (unichar)0x2124, (unichar)0x2133, (unichar)0x5925, (unichar)0x2654, (unichar)0x2655, (unichar)0x2656, (unichar)0x2657, (unichar)0x2658]; 
 NSMutableAttributedString *as = [[NSMutableAttributedString alloc] initWithString:s];
 [as setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:@"AppleSymbols", @"AQTFontname", nil] range:NSMakeRange(9,11)];
-[as setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:@"Song Regular", @"AQTFontname", nil] range:NSMakeRange(13,1)];
+[as setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:@"STSong", @"AQTFontname", nil] range:NSMakeRange(13,1)];
 
 
 [adapter takeColorFromColormapEntry:1];

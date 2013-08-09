@@ -5,6 +5,9 @@
 	* aquaterm/AQTPlot.m: replace deprecated NSSavePanel -filename with
 	  -URL -path
 
+	* aquaterm/Demo.m: explicit cast to (unichar) to avoid compiler
+	  warnings, replace 'Song Regular' by 'STSong' to display Chinese
+
 2013-08-09  Jeremy Huddleston Sequoia <jeremyhu@macports.org>
 
 	* aquaterm/AQTController.m,
