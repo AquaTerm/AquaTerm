@@ -266,6 +266,19 @@ static float _aqtMinimumLinewidth;
 
 @implementation AQTImage (AQTImageDrawing)
 
+NSAffineTransformStruct AQTConvertTransformStructToNS(AQTAffineTransformStruct t)
+{
+    NSAffineTransformStruct tmp = {
+        .m11 = (CGFloat)t.m11,
+        .m12 = (CGFloat)t.m12,
+        .m21 = (CGFloat)t.m21,
+        .m22 = (CGFloat)t.m22,
+        .tX = (CGFloat)t.tX,
+        .tY = (CGFloat)t.tY
+    };
+    return tmp;
+}
+
 -(NSRect)updateBounds
 {
    NSAffineTransform *transf = [NSAffineTransform transform];
@@ -274,7 +287,7 @@ static float _aqtMinimumLinewidth;
    {
       tmpBounds = [self bounds];
    } else {
-      [transf setTransformStruct:CAST_STRUCT_TO(NSAffineTransformStruct)transform];
+      [transf setTransformStruct:AQTConvertTransformStructToNS(transform)];
       // FIXME: This is lazy beyond any reasonable measure...
       tmpBounds = [[transf transformBezierPath:[NSBezierPath bezierPathWithRect:NSMakeRect(0, 0, bitmapSize.width, bitmapSize.height)]] bounds];
       [self  setBounds:tmpBounds];
@@ -325,7 +338,7 @@ static float _aqtMinimumLinewidth;
             context = [NSGraphicsContext currentContext];
             [context saveGraphicsState];
          }
-         [transf setTransformStruct:CAST_STRUCT_TO(NSAffineTransformStruct)transform];
+         [transf setTransformStruct:AQTConvertTransformStructToNS(transform)];
          [transf concat];
          [_cache drawAtPoint:NSMakePoint(0,0)
                     fromRect:NSMakeRect(0,0,[_cache size].width,[_cache size].height)
