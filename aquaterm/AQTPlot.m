@@ -481,7 +481,7 @@ static inline void NOOP_(id x, ...) {;}
       [testView drawRect:viewRect];
       thisTime = -[startTime timeIntervalSinceNow];
       totalTime += thisTime;
-      NSLog(@"tag:%d time: %f for %d objects.", tag, thisTime, [[model modelObjects] count]);
+      NSLog(@"tag:%d time: %f for %lu objects.", tag, thisTime, (unsigned long)[[model modelObjects] count]);
       [testView unlockFocus];
    } else {
       NSLog(@"Can't draw for tag:%d", tag);

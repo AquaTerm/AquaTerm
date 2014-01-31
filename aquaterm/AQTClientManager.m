@@ -187,7 +187,7 @@
    [newActivePlotKey retain];
    [_activePlotKey release];
    _activePlotKey = newActivePlotKey;
-   [self logMessage:_activePlotKey?[NSString stringWithFormat:@"Active plot: %d", [_activePlotKey integerValue]]:@"**** plot invalid ****"
+   [self logMessage:_activePlotKey?[NSString stringWithFormat:@"Active plot: %ld", (long)[_activePlotKey integerValue]]:@"**** plot invalid ****"
            logLevel:3];
 }
 

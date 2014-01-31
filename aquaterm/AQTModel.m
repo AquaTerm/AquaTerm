@@ -77,7 +77,7 @@
 
 -(NSString *)description
 {
-   return [NSString stringWithFormat:@"[AQTModel description] =\nTitle %@\nCanvasSize %@\nCount %d\nBounds %@", title, NSStringFromSize(canvasSize), [modelObjects count],  NSStringFromRect(_bounds)];
+   return [NSString stringWithFormat:@"[AQTModel description] =\nTitle %@\nCanvasSize %@\nCount %lu\nBounds %@", title, NSStringFromSize(canvasSize), (unsigned long)[modelObjects count],  NSStringFromRect(_bounds)];
 }
 
  -(NSSize)canvasSize
